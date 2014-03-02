@@ -55,7 +55,7 @@ function calculateIntersect(segmentAB,segmentCD){
 	punktE.transponate(ax,ay);
 	//hit kommer man om det är en intersect
 	returArr[0]=true;
-	returArr.push(punktE);
+	returArr.push(punktE);//returnerar även skärningspunkten
 	return returArr;
 }
 

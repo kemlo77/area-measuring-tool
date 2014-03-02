@@ -18,6 +18,22 @@
 			var closePolygonMinimumDistance=5;
 			var firstPolygon= new polygon();
 			var useIntegerCoords=true;
+			
+			//vänsterklick
+			function canvasVansterKlickad(event,rutans_id){
+				var position_x = clamp(event.pageX-document.getElementById(rutans_id).offsetLeft,0,IWIDTH);
+				var position_y = clamp(event.pageY-document.getElementById(rutans_id).offsetTop,0,IHEIGHT);
+				var nyVansterKlickadPunkt=new point(position_x,position_y);
+				handleClick(true,nyVansterKlickadPunkt);
+			}
+			//högerklick
+			function canvasHogerKlickad(event,rutans_id){
+				var position_x = clamp(event.pageX-document.getElementById(rutans_id).offsetLeft,0,IWIDTH);
+				var position_y = clamp(event.pageY-document.getElementById(rutans_id).offsetTop,0,IHEIGHT);
+				var nyHogerKlickadPunkt=new point(position_x,position_y);
+				handleClick(false,nyHogerKlickadPunkt);
+			}			
+			
 		</script>
 	</head>
 	<body oncontextmenu="return false;" onload="init();">
