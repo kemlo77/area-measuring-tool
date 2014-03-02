@@ -1,0 +1,37 @@
+DONE
+	högerklick på segment tar bort segmentet och öppnar polygonen?
+	ändra startpunkt i segmentArray 
+	rensa bort punktArray ur koden  
+	implementera polygon.seedPoint  
+	hantera ifall alla punkter raderas kunna "radera" seedPoint
+	efter vilka förändringar på en redigering på en stängd polygon måste man köra Gauss shoe lace formula?
+	applicera modulotänket i checkIfMovedIntersects på funktionen ejectPoint?
+
+MUST HAVE
+	granska koden
+	testa ordentligt
+	ta bort "console.log"
+	slumpa runt punkter så alla polygoner får en area som ligger närmare genomsnittet (beräkning nyArea endast för polygoner som har flyttad punkt)
+	Skriva kommentarer på engelska
+	ha engelska namn på variabler och funktioner
+	checkbox för att välja om non-complex polygon ska vara tvingande
+	BUG: kolla att det fortfarande är en non-complex polygon när man raderat en punkt. Annars inte tillåta? eller radera båda närliggande segment?
+	Radera funktioner som inte används
+	Lägga testfunktioner separat
+	höger-klick (och vänster-klick) ska fungera i FF, Chrome och IE11
+	byta namn på html-filen
+
+
+NICE TO HAVE
+	_kunna mata in flera polygoner_
+	flagga om man får rita fler än 1 polygon
+	om man har flera polygoner, använda "flagga" för att bestämma om dom får överlappa varandra.
+	polygon som inte är "aktuell" ritas utan punkterna (cirklar)
+	aktuell polygon är blå
+	funktion som delar upp segment (ex i två eller 10 delar)
+	beräkna omkrets på polygon
+	beräkna mass-centrum för polygonen
+
+WONT DO
+	onmousemove rita linje mellan sista segmentets.p2 och muspekaren
+	onmousemove vid flytt av linje rita segmenten som flyttas
