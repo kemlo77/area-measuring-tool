@@ -1,49 +1,68 @@
-
-	function drawPolygon(polygonIn){
-	//AP plottningen hanterar om polygonen √§r √∂ppen eller st√§ngd
-	//AP om polygonen √§r √∂ppen ritas linje mellan sista punkten och muspekaren
-	//AP speciell plottning om man flyttar en punkt
-		var moveColor="255,128,0";
-		var selectedColor="0,80,120";
-		var redColor="255,0,0";
-		var greenColor="0,255,0";
-		var whiteColor="255,255,255";
-		var blackColor="0,0,0";
-
-		//rensar ytan
-		clearTheCanvas();
-		//om polygonen √§r vald ritas den i bl√•tt och med cirklar vid punkterna
-		if(polygonIn.selected){
-			//ritar ring rund vald punkt
-			if(polygonIn.moveMode){
-				drawDot(polygonIn.segments[polygonIn.movePointIndex].p1,4,moveColor);
-			}
-			//ritar alla segment
-			for(r=0;r<polygonIn.segments.length;r++){
-				drawSegmentsInArray(polygonIn.segments,selectedColor);
-			}
-			//rita mittenpunkter, √§ven sista (vita)
-			for(z=0;z<polygonIn.segments.length;z++){
-				drawDubbelDot(polygonIn.segments[z].p2,selectedColor,whiteColor);
-			}
-			//om polygonen √§r st√§ngd
-			if(polygonIn.closed){
-				//f√∂rsta punkten gr√∂n
-				drawDubbelDot(polygonIn.segments[0].p1,selectedColor,greenColor);
-				//sista punkten r√∂d
-				drawDubbelDot(polygonIn.segments[polygonIn.segments.length-1].p1,selectedColor,redColor);
-			}
-			else{
-				//rita f√∂rsta punkten (gr√∂n)
-				if(polygonIn.seed){
-					drawDubbelDot(polygonIn.seed,selectedColor,greenColor);
-				}	
-			}
-		}
-		//om polygonen inte √§r vald ritas den bara enkelt i svart
-		else{
-			for(r=0;r<polygonIn.segments.length;r++){
-				drawSegmentsInArray(polygonIn.segments,blackColor);
-			}	
-		}
+function drawPolygon(polygonIn){
+	var moveColor="255,128,0";
+	var defaultColor="0,80,120";
+	var redColor="255,0,0";
+	var greenColor="0,255,0";
+	var whiteColor="255,255,255";
+	//rensar ytan
+	clearTheCanvas();
+	//ritar ring rund vald punkt
+	if(polygonIn.moveMode){
+		drawDot(polygonIn.segments[polygonIn.movePointIndex].p1,4,moveColor);
 	}
+	//ritar alla segment
+	for(r=0;r<polygonIn.segments.length;r++){
+		drawOneSegment(polygonIn.segments[r],defaultColor);
+	}
+	//rita mittenpunkter, ‰ven sista (vita)
+	for(z=0;z<polygonIn.segments.length;z++){
+		drawDubbelDot(polygonIn.segments[z].p2,defaultColor,whiteColor);
+	}
+	//om polygonen ‰r st‰ngd
+	if(polygonIn.closed){
+		//fˆrsta punkten grˆn
+		drawDubbelDot(polygonIn.segments[0].p1,defaultColor,greenColor);
+		//sista punkten rˆd
+		drawDubbelDot(polygonIn.segments[polygonIn.segments.length-1].p1,defaultColor,redColor);
+	}
+	else{
+		//rita fˆrsta punkten (grˆn)
+		if(polygonIn.seed){
+			drawDubbelDot(polygonIn.seed,defaultColor,greenColor);
+		}	
+	}
+}
+
+
+//tˆmmer canvas
+function clearTheCanvas(){
+	ctx.clearRect(0, 0, IWIDTH, IHEIGHT);
+}
+
+//ritar ifylld punkt
+function drawDubbelDot(dot2paint,outerColor,innerColor){
+	//yttre prick
+	drawDot(dot2paint,2,outerColor);
+	//inre prick
+	drawDot(dot2paint,1,innerColor);
+}
+
+//ritar en punkt
+function drawDot(dot2paint,diam,rgbIN){
+	ctx.fillStyle = "rgba("+rgbIN+",1)";
+	ctx.beginPath();
+	ctx.arc(dot2paint.x,dot2paint.y, diam, 0, Math.PI*2, true);
+	ctx.closePath();
+	ctx.fill();
+}
+
+//ritar ut ett segment (ritar linje mellan 2 punkter)
+function drawOneSegment(segment2draw,lineColor){
+	ctx.strokeStyle = "rgba("+lineColor+",1)";
+	ctx.beginPath();
+	ctx.moveTo(segment2draw.p1.x, segment2draw.p1.y);
+	ctx.lineTo(segment2draw.p2.x, segment2draw.p2.y);
+	ctx.closePath();
+	ctx.stroke();
+}
+

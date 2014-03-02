@@ -1,37 +1,39 @@
 DONE
-	hÃ¶gerklick pÃ¥ segment tar bort segmentet och Ã¶ppnar polygonen?
-	Ã¤ndra startpunkt i segmentArray 
+	högerklick på segment tar bort segmentet och öppnar polygonen?
+	ändra startpunkt i segmentArray 
 	rensa bort punktArray ur koden  
 	implementera polygon.seedPoint  
 	hantera ifall alla punkter raderas kunna "radera" seedPoint
-	efter vilka fÃ¶rÃ¤ndringar pÃ¥ en redigering pÃ¥ en stÃ¤ngd polygon mÃ¥ste man kÃ¶ra Gauss shoe lace formula?
-	applicera modulotÃ¤nket i checkIfMovedIntersects pÃ¥ funktionen ejectPoint?
+	efter vilka förändringar på en redigering på en stängd polygon måste man köra Gauss shoe lace formula?
+	applicera modulotänket i checkIfMovedIntersects på funktionen ejectPoint?
 
 MUST HAVE
 	granska koden
 	testa ordentligt
 	ta bort "console.log"
-	slumpa runt punkter sÃ¥ alla polygoner fÃ¥r en area som ligger nÃ¤rmare genomsnittet (berÃ¤kning nyArea endast fÃ¶r polygoner som har flyttad punkt)
-	Skriva kommentarer pÃ¥ engelska
-	ha engelska namn pÃ¥ variabler och funktioner
-	checkbox fÃ¶r att vÃ¤lja om non-complex polygon ska vara tvingande
-	BUG: kolla att det fortfarande Ã¤r en non-complex polygon nÃ¤r man raderat en punkt. Annars inte tillÃ¥ta? eller radera bÃ¥da nÃ¤rliggande segment?
-	Radera funktioner som inte anvÃ¤nds
-	LÃ¤gga testfunktioner separat
-	hÃ¶ger-klick (och vÃ¤nster-klick) ska fungera i FF, Chrome och IE11
-	byta namn pÃ¥ html-filen
+	Skriva kommentarer på engelska
+	ha engelska namn på variabler och funktioner
+	checkbox för att välja om non-complex polygon ska vara tvingande
+	BUG: kolla att det fortfarande är en non-complex polygon när man raderat en punkt. Annars inte tillåta? eller radera båda närliggande segment?
+	Radera funktioner som inte används
+	Lägga testfunktioner separat
+	höger-klick (och vänster-klick) ska fungera i FF, Chrome och IE11
+	byta namn på html-filen
 
 
 NICE TO HAVE
 	_kunna mata in flera polygoner_
-	flagga om man fÃ¥r rita fler Ã¤n 1 polygon
-	om man har flera polygoner, anvÃ¤nda "flagga" fÃ¶r att bestÃ¤mma om dom fÃ¥r Ã¶verlappa varandra.
-	polygon som inte Ã¤r "aktuell" ritas utan punkterna (cirklar)
-	aktuell polygon Ã¤r blÃ¥
-	funktion som delar upp segment (ex i tvÃ¥ eller 10 delar)
-	berÃ¤kna omkrets pÃ¥ polygon
-	berÃ¤kna mass-centrum fÃ¶r polygonen
+	flagga om man får rita fler än 1 polygon
+	om man har flera polygoner, använda "flagga" för att bestämma om dom får överlappa varandra.
+	polygon som inte är "aktuell" ritas utan punkterna (cirklar)
+	aktuell polygon är blå
+	funktion som delar upp segment (ex i två eller 10 delar)
+	beräkna omkrets på polygon
+	beräkna mass-centrum för polygonen
+	slumpa runt punkter så alla polygoner får en area som ligger närmare genomsnittet (beräkning nyArea endast för polygoner som har flyttad punkt)
 
 WONT DO
-	onmousemove rita linje mellan sista segmentets.p2 och muspekaren
-	onmousemove vid flytt av linje rita segmenten som flyttas
+	om polygonen är öppen ritas linje mellan sista punkten och muspekaren
+	  onmousemove rita linje mellan sista segmentets.p2 och muspekaren
+	speciell plottning om man flyttar en punkt
+	  onmousemove vid flytt av linje rita segmenten som flyttas

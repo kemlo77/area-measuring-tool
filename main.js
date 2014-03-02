@@ -172,9 +172,6 @@
 		this.seed=false;
 		this.moveMode=false;
 		this.movePointIndex=-1;
-		this.selected=true;
-		
-
 		
 		//angränsar till vilka grannar, vid vilket segment
 		//metod för att stänga polygon
