@@ -41,6 +41,13 @@ function testFunk2(){
 	alert("antalet segment i firstPolygon "+firstPolygon.segments.length+"\nclosed: "+firstPolygon.closed);
 }
 
+function testFunk4(){
+	if(firstPolygon.closed){
+		firstPolygon.gShoeLace();
+		alert("Area: "+firstPolygon.area+'\n'+(firstPolygon.clockWise?"Clockwise":"Counter clockwise"));
+	}
+	else{alert("the polygon is not closed")}
+}
 
 
 //testkör project_vector

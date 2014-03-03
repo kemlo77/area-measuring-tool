@@ -18,15 +18,15 @@
 			var firstPolygon= new polygon();
 			var useIntegerCoords=true;
 			
-			//vänsterklick
-			function canvasVansterKlickad(event,rutans_id){
+			//Left click
+			function canvasLeftClicked(event,rutans_id){
 				var position_x = clamp(event.pageX-document.getElementById(rutans_id).offsetLeft,0,IWIDTH);
 				var position_y = clamp(event.pageY-document.getElementById(rutans_id).offsetTop,0,IHEIGHT);
 				var nyVansterKlickadPunkt=new point(position_x,position_y);
 				handleClick(true,nyVansterKlickadPunkt);
 			}
-			//högerklick
-			function canvasHogerKlickad(event,rutans_id){
+			//Right click
+			function canvasRightClicked(event,rutans_id){
 				var position_x = clamp(event.pageX-document.getElementById(rutans_id).offsetLeft,0,IWIDTH);
 				var position_y = clamp(event.pageY-document.getElementById(rutans_id).offsetTop,0,IHEIGHT);
 				var nyHogerKlickadPunkt=new point(position_x,position_y);
@@ -36,20 +36,22 @@
 		</script>
 	</head>
 	<body oncontextmenu="return false;" onload="init();">
-		<canvas id="canvas" width="1000" height="400" onClick="canvasVansterKlickad(event,this.id)" oncontextmenu="canvasHogerKlickad(event,this.id);"></canvas>
+		<canvas id="canvas" width="1000" height="400" onClick="canvasLeftClicked(event,this.id)" oncontextmenu="canvasRightClicked(event,this.id);"></canvas>
 		<BR>
 		<input type="checkbox" id="checkboxEnforceClockwise">Enforce clockwise<br>
-		<button type="button" onClick="firstPolygon.gShoeLace();alert(firstPolygon.area+'\n'+firstPolygon.clockWise)">Gauss shoelace</button>
-		<button type="button" onClick="rensaHelt()">rensa</button>
-
-
-		<button type="button" onClick="testFunk()">test</button>
-		<button type="button" onClick="testFunk2()">längd eller closed</button>
-		<button type="button" onClick="testFunk3()">testfunk3</button>
-		<button type="button" onClick="firstPolygon.reversePolygon();drawPolygon(firstPolygon)">ändra riktning</button>
-		<button type="button" onClick="firstPolygon.revolFirstIndex(3);drawPolygon(firstPolygon)">ändra första</button>
+				
+		<BR>
+		Praktiska<BR>
+		<button type="button" onClick="firstPolygon.reversePolygon();drawPolygon(firstPolygon)">ändra med/motsols</button>
 		<button type="button" onClick="drawPolygon(firstPolygon)">drawPolygon</button>
-
-
+		<button type="button" onClick="clearEntirely()">clear canvas</button>
+		<button type="button" onClick="testFunk2()"># of segments? and closed?</button>
+		<button type="button" onClick="testFunk4()">Gauss shoelace</button>
+		<button type="button" onClick="firstPolygon.revolFirstIndex(3);drawPolygon(firstPolygon)">Change starting point</button>
+		<BR><BR><BR>
+		Test<BR>
+		<button type="button" onClick="testFunk()">test</button>
+		<button type="button" onClick="testFunk3()">testfunk3</button>
+		
 	</body>
 </html>

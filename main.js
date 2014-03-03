@@ -8,7 +8,7 @@ function init() {
 	}
 }
 
-function rensaHelt(){
+function clearEntirely(){
 	firstPolygon.segments=[];
 	firstPolygon.closed=false;
 	firstPolygon.seed=false;
@@ -37,14 +37,13 @@ function handleClick(isLeftClick,theClickedPoint){
 		else{rightClickOpen(handledPolygon)}//RIGHT - OPEN
 	}
 		
-	//beräknar arean och kollar om den är ritad medurs eller moturs
+	//calculate area and check if polygon is drawn clockwise or not
 	handledPolygon.gShoeLace();
-	//om den är moturs vänd till medurs om användaren kryssat i
+	//change to clockwise if checkbox is ticked
 	if(!handledPolygon.clockWise&&document.getElementById("checkboxEnforceClockwise").checked){
 		handledPolygon.reversePolygon();
 	}
 	drawPolygon(handledPolygon);
-//	console.log("antal segment"+handledPolygon.segments.length);
 }
 
 function leftClickClosed(hanteradPolygon,nyKlickadPunkt){
@@ -54,40 +53,40 @@ function leftClickClosed(hanteradPolygon,nyKlickadPunkt){
 		hanteradPolygon.movePointIndex=nearPointIndex;
 	}
 	else{
-		//om klickningen är nära linje, sätt in ny punkt
+		//if the click occured near a segment, insert a new point
 		var tempVar = checkIfCloseToLine(hanteradPolygon.segments,nyKlickadPunkt,minDistance);
 		if(tempVar[0]){
-			//avrundar ev koordinaterna för att få heltal
+			//rounding coordinates to get integers
 			if(useIntegerCoords){
 				tempVar[2].x=Math.round(tempVar[2].x);
 				tempVar[2].y=Math.round(tempVar[2].y);
 			}
-			//lägger till ny punkt inne i segment-arrayen
+			//inserting the point in the segment-array
 			hanteradPolygon.insertPoint(tempVar[2],tempVar[1]);//newPoint,index
 		}
 	}	
 }
 
 function leftClickClosedMoveMode(hanteradPolygon,nyKlickadPunkt){
-	//om punkten inte är för nära nån annan
+	//if the clicked point is not to close to another point
 	if(checkIfCloseToPoint(hanteradPolygon.segments,nyKlickadPunkt,minDistance)<0){
-		//om punktens närmaste linjesegment inte skär nåt annat segment
+		//if the points nearest segments do not intersect with other segments
 		if(!checkIfMovedIntersects(hanteradPolygon.segments,nyKlickadPunkt,hanteradPolygon.movePointIndex)){
-			//flytta movePointIndex till nya punkten
-			hanteradPolygon.segments[hanteradPolygon.movePointIndex].p1.copyValues(nyKlickadPunkt); //kopierar värdena för att det fortfarande ska vara samma objekt
+			//move the point at movePointIndex to the new point
+			hanteradPolygon.segments[hanteradPolygon.movePointIndex].p1.copyValues(nyKlickadPunkt); //copying values so that it is still the same object
 			hanteradPolygon.moveMode=false;
 		}
 	}	
 }
 
 function leftClickOpen(hanteradPolygon,nyKlickadPunkt){
-	//är det första segmentet eller?
+	//check if this is the first segment
 	if(hanteradPolygon.segments.length>0){
-		//klickar användaren nära första punkten?
+		//check if user clicks near the first point (wanting to close the polygon)
 		if(distBetweenPoints(nyKlickadPunkt,hanteradPolygon.segments[0].p1)<closePolygonMinimumDistance){
-			//om polygonen har minst 2 segment redan
+			//if the plygon already has at least 2 segments
 			if(hanteradPolygon.segments.length>=2){
-				//kolla att segmentet mellan sista punkten och första punkten inte skär nån linje
+				//check that the segment between the last point and first point does not intersect with other segments
 				var nyttSegment = new segment(hanteradPolygon.segments[hanteradPolygon.segments.length-1].p2,hanteradPolygon.segments[0].p1);
 				if(!checkIfIntersect(hanteradPolygon.segments,nyttSegment,true)){
 					hanteradPolygon.segments.push(nyttSegment);
@@ -96,7 +95,7 @@ function leftClickOpen(hanteradPolygon,nyKlickadPunkt){
 			}
 		}
 		else{
-			//om linjen inte skär nån annan linje, eller är för nära nån punkt så lägg till punkten
+			//if the new segment does not intersect with other segments or the new point to close to other points, the add the point (+segment)
 			var nyttSegment = new segment(hanteradPolygon.segments[hanteradPolygon.segments.length-1].p2,nyKlickadPunkt);
 			if(!checkIfIntersect(hanteradPolygon.segments,nyttSegment,false)){
 				if(checkIfCloseToPoint(hanteradPolygon.segments,nyKlickadPunkt,minDistance)<0){
@@ -105,15 +104,15 @@ function leftClickOpen(hanteradPolygon,nyKlickadPunkt){
 			}
 		}
 	}
-	else{//om seed eller några segment ännu inte finns
+	else{//if seed does not exist (nor any other elements) Add the first point.
 		if(!hanteradPolygon.seed){
-			console.log("första punkten");
+			console.log("first point");
 			hanteradPolygon.seed=nyKlickadPunkt;
 		}
 		else{
-			//om den inte är för nära första punkten
+			//if it is not to close to the fist point, add the second point
 			if(checkIfCloseToPoint(hanteradPolygon.seed,nyKlickadPunkt,minDistance)<0){
-				console.log("första segmentet");
+				console.log("first segment");
 				var nyttSegment = new segment(hanteradPolygon.seed,nyKlickadPunkt);
 				hanteradPolygon.segments.push(nyttSegment);
 			}
@@ -122,37 +121,37 @@ function leftClickOpen(hanteradPolygon,nyKlickadPunkt){
 }
 
 function rightClickOpen(hanteradPolygon){
-	//ta bort senaste inmatade punkten
+	//removes last added point (+segment)
 	if(hanteradPolygon.segments.length==0){
 		hanteradPolygon.seed=false;
-		console.log("tog bort seed");
+		console.log("removed seed point");
 	}
 	hanteradPolygon.segments.pop();
-	console.log("segment kvar"+hanteradPolygon.segments.length);		
+	console.log("segments left: "+hanteradPolygon.segments.length);		
 }
 
 function rightClickClosed(hanteradPolygon,nyKlickadPunkt){
-	//Om det är på en punkt, ta bort den om det är fler än tre punkter totalt
+	//if the user rightclicked a point, remove it if there are more than 3 sides to the polygon
 	var nearPointIndex=checkIfCloseToPoint(hanteradPolygon.segments,nyKlickadPunkt,minDistance);
 	if(nearPointIndex>-1){
-		//om polygonen har fler än tre sidor går det ta bort en punkt
+		//if polygon has more than 3 sides it is ok to remove point (+segment)
 		if(hanteradPolygon.segments.length>3){
-				//kolla så att det segment som skapas då punkten tas bort inte skär befintliga
+				//check that the segment created to fill the gap does not intersect with other segments
 				if(!checkIfRemovedPointCausesSegmentIntersect(hanteradPolygon.segments,nearPointIndex)){
-					//inga intersects hittade
+					//no intersects found
 					hanteradPolygon.ejectPoint(nearPointIndex);
 				}
 		}
 	}
-	//radera element om högerklicka på på segment
+	//erase segment if user right clicked "on" segment
 	else{
-		//om klickningen är nära linje, sätt in ny punkt
+		//check if click was near segment
 		var tempVar = checkIfCloseToLine(hanteradPolygon.segments,nyKlickadPunkt,minDistance);
-		if(tempVar[0]){//true om det klickades tillräckligt nära ett segment
-			//tempVar[1] berättar vilket segment
-			//flyttar startpunkten
+		if(tempVar[0]){//true if user clicked close enough to segment
+			//tempVar[1] holds what segment
+			//Changing start segment so that the one to be removed is the last one
 			hanteradPolygon.revolFirstIndex(tempVar[1]);
-			//öppnar polygonen och tar bort sista elementet
+			//opening polygon and removing last segment
 			hanteradPolygon.closed=false;
 			hanteradPolygon.segments.pop();
 		}
@@ -160,7 +159,7 @@ function rightClickClosed(hanteradPolygon,nyKlickadPunkt){
 }
 
 function rightClickClosedMoveMode(hanteradPolygon){
-	//Avbryter "flyttläge"
+	//aborting move mode
 	hanteradPolygon.moveMode=false;
 	hanteradPolygon.movePointIndex=-1;
 }
@@ -169,12 +168,13 @@ function rightClickClosedMoveMode(hanteradPolygon){
 
 
 function checkIfRemovedPointCausesSegmentIntersect(segmentArrayIn,deleteAtIndex){
-	//gäller bara för polygoner med 5 sidor eller fler
-	//ex: en fyrasidig som blir av med en punkt blir ju en treangel. Där kan man inte har några skärningar.
+	//needs only to be checked for polygons with 5 sides or more
+	//i.e. a four sided polygon loosing a side becomes a triangle, that can have no sides intersecting.
 	if(segmentArrayIn.length>4){
-		//hitta index för segmentet ett steg före
+		//find index for the segment one step prior
 		var indexBeforeDeleteAtIndex=moduloInPolygon(deleteAtIndex-1,segmentArrayIn.length); //DAI-1
 		//skapa ETT nya segment för valt index och det dessförrinnan
+		//create ONE new segment to replace chosen segment (at deleteAtIndex) and the segment prior
 		var thePotentialNewSegment = new segment(segmentArrayIn[indexBeforeDeleteAtIndex].p1,segmentArrayIn[deleteAtIndex].p2);
 		//skipping the two segments to be replaced plus their neighbouring segments
 		for(p=0;p<segmentArrayIn.length-4;p++){
@@ -187,11 +187,11 @@ function checkIfRemovedPointCausesSegmentIntersect(segmentArrayIn,deleteAtIndex)
 			}
 		
 		}
-		//hit kommer man om det inte hittades nån intersect
+		//if coming this fara, there is no intersect found
 		return false;
 	}
 	else{
-		//om det var 4 sidor eller färre är det automatiskt ok
+		//if polygon had 4 sides or less, it is automatically OK
 		return false;
 	}
 	
@@ -199,17 +199,17 @@ function checkIfRemovedPointCausesSegmentIntersect(segmentArrayIn,deleteAtIndex)
 
 
 
-//kollar om nya punkten är för nära andra punkter
-//returnerar närmaste punkten eller -1 om alla är utom minDistanceIn
+//checks if new point is too close to other points
+//returning the nearest point or -1 if all points are outside minDistanceIn
 function checkIfCloseToPoint(segmentArrayIn,nyPunkt,minDistanceIn){
 	var localMinDistance=minDistanceIn;
 	var isTooClose = -1;
 	var pointDistance=0;
 	for(i=0;i<segmentArrayIn.length;i++){
-		//beräknar avståndet mellan ny punkt och alla punkter i segmentet
+		//calculating distance between new point and all other points in polygon
 		pointDistance=distBetweenPoints(segmentArrayIn[i].p1,nyPunkt);
 		if(pointDistance<localMinDistance){
-			//om den är närmar än minDistanceIn, eller mindre än nån tidigare sparad så sparas den
+			//if it is closer than minDistanceIn, or nearer than any other previously saved, it is saved
 			isTooClose = i;
 			localMinDistance=pointDistance;
 		}
@@ -218,7 +218,7 @@ function checkIfCloseToPoint(segmentArrayIn,nyPunkt,minDistanceIn){
 }
 
 
-//kollar om nya punkten är nära andra linjer
+//checking if new point is near other polygon segments
 function checkIfCloseToLine(segmentArrayIn,nyPunkt,minDistanceIn){
 	var distToLine=-1;
 	var smallestDistance=minDistanceIn;
@@ -226,16 +226,16 @@ function checkIfCloseToLine(segmentArrayIn,nyPunkt,minDistanceIn){
 	var closeEnough=false;
 	var firstPointIndex = 0;
 	var closestPoint = new point();
-	//kollar igenom varje segment
+	//checking with every segment
 	for(j=0;j<segmentArrayIn.length;j++){
-		//projicerar punkten på segmentet
+		//projecting point on segment
 		var proj_svar=project_vector(segmentArrayIn[j],nyPunkt);
-		var distToLine=proj_svar[0]; //negativt om den är för långt bort
-		var projPunkten = proj_svar[1];   //0 om den är för långt bort
-		//om den var mellan 0 och minDistanceIn
+		var distToLine=proj_svar[0]; //negative if it is too far away
+		var projPunkten = proj_svar[1];   //0 if it is too far away
+		//if it was between 0 and minDistanceIn
 		if(distToLine>=0&&distToLine<minDistanceIn){
 			if(distToLine<smallestDistance){
-				//om den är mindre än minDistanceIn och senaste sparade så sparas den
+				//if it is closer than minDistanceIn and closer than last saved, it is saved
 				smallestDistance=distToLine; 
 				closestPoint=projPunkten;
 				firstPointIndex=j;
@@ -243,62 +243,63 @@ function checkIfCloseToLine(segmentArrayIn,nyPunkt,minDistanceIn){
 			closeEnough = true;
 		}
 	}
-	ppReturArray.push(closeEnough); //true om det fanns nån nära nog
-	ppReturArray.push(firstPointIndex); //index för första punkten på segmentet som klickades
-	ppReturArray.push(closestPoint); //den projicerade punkten på segmentet
+	ppReturArray.push(closeEnough); //true, if there was anything close enough
+	ppReturArray.push(firstPointIndex); //index for the first point on segment clicked (index for the segment clicked?)
+	ppReturArray.push(closestPoint); //the point projected on the segment
 	return ppReturArray;
 }
 
 
-//kollar om nytt linjesegmentet skär med nåt befintligt segment i array
+
+//checking if new segment intersects with other segment in array
 function checkIfIntersect(segmentArrayIn,nyttSegmentIn,skipFirstSegment){
 	var startSegm=0;
-	if(skipFirstSegment){startSegm=1;}//skippar första segmentet i de fall då användaren klickat på polygonens första punkt
-	//skippar näst sista linjen
+	if(skipFirstSegment){startSegm=1;}//skipping first segment in case user clicks the polygons first point
+	//skipping the second to last (penultimate segment)
 	for(n=startSegm;n<segmentArrayIn.length-1;n++){
 		result=calculateIntersect(segmentArrayIn[n],nyttSegmentIn);
 		if(result[0]){
-			//returnerar true om det finns nån intersect
+			//returning true if there is a intersect
 			return true;
 		}
 	}
-	//kom vi hit hittades ingen intersect
+	//arriving here, there is no intersect
 	return false;
 }
 
-//kollar om de två segmenten som innehåller en punkt (som flyttas) skär med de andra segmenten i en polygon vid flytt
+//checking if the two segments containing a point (being moved) intersects with the other segments in a polygon (at move)
 function checkIfMovedIntersects(segmentArrayIn,nyPunkt,movedAtIndex){
-	//om polygonen har fler än tre segment, annars returnera falskt
+	// if polygon has more than 3 segments, otherwise return false
 	if(segmentArrayIn.length>3){
-		//hitta index för segmenten tvåsteg före, ett steg före och ett steg efter valt index
+		//find index for segments two steps before, one step before and one step after chosen index
+		//MAI ~ Move At Index
 		var indexBeforeMovedAtIndex=moduloInPolygon(movedAtIndex-1,segmentArrayIn.length); //MAI-1
-		console.log(indexBeforeMovedAtIndex+" jaaaaaaaaa");
 		var indexBeforeBeforeMovedAtIndex=moduloInPolygon(indexBeforeMovedAtIndex-1,segmentArrayIn.length);//MAI-2
 		var indexAfterMovedAtIndex=moduloInPolygon(movedAtIndex+1,segmentArrayIn.length);//MAI+1
-		//skapa två nya segment för valt index och det dessförrinnan
+		//creating two new segments for chosen index and the one prior
 		var firstCheckedSegment  = new segment(segmentArrayIn[indexBeforeMovedAtIndex].p1,nyPunkt);
 		var secondCheckedSegment = new segment(nyPunkt,segmentArrayIn[movedAtIndex].p2);
-		//loopa igenom alla segment i segment-arrayen
-		//allmänt tänk: man behöver inte kolla om angränsande segment skär med aktuellt segment
+		//loop through all segments in segment array
+		//general idea: no need to check if neighbouring segments intersect with current segment (being checked)
 		for(m=0;m<segmentArrayIn.length;m++){
-			//hoppa över de två segment som är onödiga för båda jämförelserna, ligger intill båda segmenten
+			//skip the two unnecessary segments for both comparisons (lying next to both segments)
 			if(m==movedAtIndex||m==indexBeforeMovedAtIndex){continue;} //MAI & MAI-1
-			//hoppa över det segment som ligger före firstCheckedSegment
+			//skip the segment before firstCheckedSegment
 			if(m!==indexBeforeBeforeMovedAtIndex){ //MAI-2
-				//kollar om firstCheckedSegment korsar nåt av de andra intressanta segmenten
+				//checking if firstCheckedSegment intersects with any of the other interesting segments
 				if(calculateIntersect(firstCheckedSegment,segmentArrayIn[m])[0]){return true}
 			}
-			//hoppa över det segment som ligger efter secondCheckedSegment
+			//skip the segment after secondCheckedSegment
 			if(m!==indexAfterMovedAtIndex){ //MAI+1
-				//kollar om secondCheckedSegment korsar nåt av de andra intressanta segmenten
+				//checking if secondCheckedSegment intersects with any of the other interesting segments
 				if(calculateIntersect(secondCheckedSegment,segmentArrayIn[m])[0]){return true}
 			}
 		}
-		//hittas inga intersections är det OK
+		//if arriving here, there are no intersects
 		return false;
 	}
 	else{
-		//om polygonen endast hade 3 segment är det automatiskt OK
+		//if the polygon had only 3 sides, it is automatically ok
 		return false;
 	}
 }
@@ -316,6 +317,7 @@ function checkIfMovedIntersects(segmentArrayIn,nyPunkt,movedAtIndex){
 
 //----------------------------------------------------------------
 //---POLYGON------------------------------------------------------
+//polygon object constructor
 function polygon(){
 	this.segments = new Array();
 	this.closed = false;
@@ -325,11 +327,7 @@ function polygon(){
 	this.moveMode=false;
 	this.movePointIndex=-1;
 	
-	//angränsar till vilka grannar, vid vilket segment
-	//metod för att stänga polygon
-	//metod för att flytta punkt?
-	
-	//metoder
+	//methods
 	this.close=close;
 	this.insertPoint=insertPoint;
 	this.ejectPoint=ejectPoint;
@@ -338,36 +336,37 @@ function polygon(){
 	this.revolFirstIndex=revolFirstIndex;
 }
 
-//stänger polygonen
+//closing polygon
 function close(){
 	this.closed=true;
 }
 
-//ändrar riktning på polygonen. (medurs/moturs)
+
+//changing direction of polygon (clockwise <-> counter clockwise)
 function reversePolygon(){
 	this.segments.reverse();
-	//måste ändra riktning på alla segment som ingår i polygonen
+	//the direction of all segments in polygon must also be reversed
 	for(u=0;u<this.segments.length;u++){
 		this.segments[u].reverseSegment();
 	}
 }
 
-//sätter in en ny punkt (+segment) i en polygons segment-array, vid ett givet index
+//inserting a new point (+segment) in a polygon segment array, at a given index
 function insertPoint(newPointIn,insertAtThisIndex){
-//Delar segmentet (A-B) som fått den nya punkten
-//Nya segmentet går från nypunkt till punktB
-//Det gamla segmentet ändras så att det går från PunktA till nya punkten
-	//nytt segment startar vid brottspunkten, slutar där det delade segmentet slutade
+//splitting a segment (A-B) that is given a new point
+//the new segment goes from breakPoint to point B
+//the old segment is changed so that it goes from point A to the breakPoint
+	//new segment starts at the breaking point, ends where the divided segment ended (B)
 	var tempSegmentToInsert = new segment(newPointIn,this.segments[insertAtThisIndex].p2);
-	//läggs in efter brottet
+	//add new segment after the break
 	this.segments.splice(insertAtThisIndex+1,0,tempSegmentToInsert);
-	//ändrar segmentet före brottet så slutpunkten är brottspunkten
+	//chagning segment before the break so that the end point is now the breakPoint
 	this.segments[insertAtThisIndex].p2=newPointIn;
 }
 
-//beräknar area och om polygonen är ritad medurs/moturs
+//calculating area and checking if polygon is drawn clockwise or not
 function gShoeLace(){
-	//tillämpar Gauss shoelace formula
+	//using the Gauss shoelace formula
 	//http://en.wikipedia.org/wiki/Shoelace_formula
 	if(this.closed){
 		var theSum=0;
@@ -376,7 +375,7 @@ function gShoeLace(){
 		}
 		this.area=theSum/2;
 		console.log("Area: "+this.area);
-		//se även http://en.wikipedia.org/wiki/Curve_orientation
+		//see also http://en.wikipedia.org/wiki/Curve_orientation
 		if(this.area>0){
 			this.clockWise=true;
 		}
@@ -386,53 +385,53 @@ function gShoeLace(){
 	}
 }
 
-//förflyttar startpunkten i en polygon
+//changing the starting point in the polygon (i.e. chaing what segment is the starting segment)
 function revolFirstIndex(newFirstIndex){
 	if(this.closed){
-		//hanterar ifall newFirstIndex skulle råka vara större än antalet segment
+		//handling if newFirstIndex is larger than the number of segments
 		newFirstIndex=moduloInPolygon(newFirstIndex,this.segments.length);
-		//plockar bort stumpen fram tills nytt
+		//removing the group of segments (up until newfirstindex)
 		var tempArray = this.segments.splice(0,newFirstIndex+1);
 		//lägger den stumpen på slutet
+		//adding the group of segments to the end of the other part
 		this.segments=this.segments.concat(tempArray);
-		//ändrar polygonens seed till första punkten
+		//changing the polygon seed point to the first point
 		this.seed=this.segments[0].p1;
 	}
 }
 
-//tar bort en punkt(+segment) ur en polygons segment-array, vid ett givet index
+//removing a point (+segment) from a polygon segment-array, at a given index
 function ejectPoint(removeAtThisIndex){
-	//punkten som ska bort ligger i första punkten i segmentet med removeAtThisIndex
-	//index för segmentet innan segmentet som tas bort. Även om det som tas bort är segment 0.
+	//the point to be removed is the first point in the segment with index=removeAtThisIndex
+	//the index for the segment prior to the segment removed (handled if removeAtThisIndex==0)
 	indexBeforeRemoveAtThisIndex=moduloInPolygon((removeAtThisIndex-1),this.segments.length);
-	//ändrar slutpunkten i sista segmentet till slutpunkten i segmentet som ska bort
+	//changing the "second point in the prior segment" to the second point in the segment to be removed
 	this.segments[indexBeforeRemoveAtThisIndex].p2=this.segments[removeAtThisIndex].p2;
-	//tar bort segmentet
+	//removing the segment
 	this.segments.splice(removeAtThisIndex,1);
 }
 
 //----------------------------------------------------------------
 //---SEGMENT------------------------------------------------------
+//segment object constructor
 function segment(punkt1,punkt2){
 	this.p1=punkt1;
 	this.p2=punkt2;
-	//AP isBorder (om det ligger på randen?)
-	//AP randvärde
-	//AP hantering om punkt1 och punkt2 ej anges (tomt argument)?
+	//TODO error handling if punkt1 and punkt2 are not given or not point objects
 	this.cLength=0; //calculated length
 	this.calculateLength=calculateLength;
 	this.reverseSegment=reverseSegment;
 }
 
-//längden på ett segment
-//AP kolla om den används (skulle kunna användas om man vill ha omkrets/längd)
+//the lenght of a segment
+//TODO check if it is used (could be used to calculate polygon perimeter length)
 function calculateLength(){
 	var segmentLength=Math.sqrt(Math.pow((this.p1.x-this.p2.x),2)+Math.pow((this.p1.y-this.p2.y),2));
 	this.cLength=segmentLength; //save
 	return segmentLength;
 }
 
-//ändrar riktning på segment
+//chance the direction of segment
 function reverseSegment(){
 	var tempReversePoint=this.p1;
 	this.p1=this.p2;
@@ -441,25 +440,26 @@ function reverseSegment(){
 
 //----------------------------------------------------------------
 //---VECTOR-------------------------------------------------------
+//vector object constructor
 function vector(punkt1,punkt2){
 	if(punkt1==undefined||punkt2==undefined){this.x=0;this.y=0;}
 	else{this.x=punkt2.x-punkt1.x;this.y=punkt2.y-punkt1.y;}
 	this.vLength=vLength;
 }
 
-//beräknar längden av en vektor
+//calculate lenght of a vector
 function vLength(){
 	return Math.sqrt(Math.pow(this.x,2)+Math.pow(this.y,2));
 }
 
-//beräknar dot product mellan två vektorer
+//calculate the dot product between to vectors
 function dotProduct(vector1,vector2){
 	return (vector1.x*vector2.x+vector1.y*vector2.y);
 }
 
 //----------------------------------------------------------------
 //--POINT---------------------------------------------------------
-//skapa en punkt
+//point object constructor
 function point(x,y){
 	if(x==undefined||y==undefined){
 		x=0;
@@ -482,13 +482,13 @@ function copyValues(copyFromThisPoint){
 	this.y=copyFromThisPoint.y;
 }
 
-//klonar en punkt
+//clone a point
 function clonePoint(){
 	var copiedPoint = new point(this.x,this.y);
 	return copiedPoint;
 }
 
-//roterar en punkt runt origo
+//rotate a point around the Origin
 function rotate(vinkel){
 	var tempX=this.x
 	var tempY=this.y;
@@ -496,25 +496,26 @@ function rotate(vinkel){
 	this.y=-tempX*Math.sin(vinkel)+tempY*Math.cos(vinkel);
 }
 
-//flyttar en punkt
+//move a point
 function transponate(distX,distY){
 	this.x+=distX;
 	this.y+=distY;
 }
 
-//Returnerar vinkeln mellan x-axeln och en vektor AB (A=origo, B=angiven punkt)
+
+//return the angle between the x-axis and a vector AB (where A is in the Origin and B is the point checked)
 function getTheAngle(){
 	arctanAngle=Math.atan(this.y/this.x);
 	if(this.y>0){
-		// om punkten ligger i q1
+		//if the point is in q1
 		if(this.x>=0){return arctanAngle}
-		// om punkten ligger i q2
+		//if the point is in q2
 		else{return (Math.PI+arctanAngle)}
 	}
 	else{
-		// om punkten ligger i q3
+		//if the point is in q3
 		if(this.x<0){return (Math.PI+arctanAngle)}
-		// om punkten ligger i q4
+		//if the point is in q4
 		else{return (2*Math.PI+arctanAngle)}
 	}
 }
