@@ -1,382 +1,57 @@
 <html>
-<head>
-<style type="text/css">
-      canvas { border: 1px solid black; }
-</style>
+	<head>
+		<style type="text/css">
+			  canvas { border: 1px solid black; }
+		</style>
 
-<script type="text/javascript" src="stabilaFunk.js"></script>
+		<script type="text/javascript" src="main.js"></script>
+		<script type="text/javascript" src="math.js"></script>
+		<script type="text/javascript" src="testFunk.js"></script>
+		<script type="text/javascript" src="drawGraphic.js"></script>
 
-<script type="application/javascript">
-
-//OK högerklick på segment tar bort segmentet och öppnar polygonen?
-//OK ändra startpunkt i segmentArray 
-//OK rensa bort punktArray ur koden  
-//OK implementera polygon.seedPoint  
-//OK hantera ifall alla punkter raderas kunna "radera" seedPoint
-//OK efter vilka förändringar på en redigering på en stängd polygon måste man köra Gauss shoe lace formula?
-//OK applicera modulotänket i checkIfMovedIntersects på funktionen ejectPoint?
-//NOT onmousemove rita linje mellan sista segmentets.p2 och muspekaren
-//NOT onmousemove vid flytt av linje rita segmenten som flyttas
-
-
-//AP granska koden
-//AP testa ordentligt
-//AP funktion som delar upp segment (ex i två eller 10 delar)
-//AP ta bort "console.log"
-//AP slumpa runt punkter så alla polygoner får en area som ligger närmare genomsnittet (beräkning nyArea endast för polygoner som har flyttad punkt)
-//AP kunna mata in flera polygoner
-//AP aktuell polygon är blå
-//AP polygon som inte är "aktuell" ritas utan punkterna (cirklar)
-//AP om man har flera polygoner, använda "flagga" för att bestämma om dom får överlappa varandra.
-//AP flagga om man får rita fler än 1 polygon
-
-var ctx;
-var IWIDTH=0;
-var IHEIGHT=0;
-var minDistance = 10;
-var closePolygonMinimumDistance=5;
-var firstPolygon= new polygon();
-var enforceClockWise=false;
-var useIntegerCoords=true;
-
-var polygonArray = new Array();
-var anyPolygonSelected = false;
-var selectedPolygonIndex = -1;
-
-
-function init() {
-	var canvas = document.getElementById("canvas");
-	IWIDTH=canvas.width;
-	IHEIGHT=canvas.height;
-		if (canvas.getContext) {
-		ctx = canvas.getContext("2d");
-	}
-	
-}
-
-function rensaHelt(){
-	firstPolygon.segments=[];
-	firstPolygon.closed=false;
-	firstPolygon.seed=false;
-	clearTheCanvas();
-	
-	//AP radera alla polygoner
-}
-
-function testFunk(){
-	var testPunkt1 = new point(200,100);
-	handleClick(true,testPunkt1);
-	var testPunkt2 = new point(170,150);
-	handleClick(true,testPunkt2);
-	var testPunkt2b = new point(300,100); //högerklick för att ångra
-	handleClick(false,testPunkt2b);
-	var testPunkt2c = new point(170,180);
-	handleClick(true,testPunkt2c);
-	var testPunkt3 = new point(200,180);
-	handleClick(true,testPunkt3);
-	var testPunkt3a = new point(250,170);
-	handleClick(true,testPunkt3a);
-	var testPunkt3b = new point(240,130);
-	handleClick(true,testPunkt3b);
-	var testPunkt4 = new point(170,130); //skär annan linje
-	handleClick(true,testPunkt4);
-	var testPunkt5 = new point(172,152); //för nära punkt2
-	handleClick(true,testPunkt5);
-	var testPunkt6 = new point(200,100); //stänger
-	handleClick(true,testPunkt6);
-	var testPunkt7 = new point(251,172); //flyttar
-	handleClick(true,testPunkt7);
-	var testPunkt8 = new point(240,180); //flyttar forts
-	handleClick(true,testPunkt8);
-	var testPunkt9 = new point(201,181); //raderar
-	handleClick(false,testPunkt9);
-	var testPunkt10 = new point(185,137); //sätter ny punkt
-	handleClick(true,testPunkt10);
-	var testPunkt9 = new point(201,99); //raderar
-	handleClick(false,testPunkt9);
-	//testa att det inte blir close om sista segmentet korsar ett annat
-	//AP test av flyttad punkt, segment korsar ej
-	//AP test så attpunkter kring nyinmatat punkt går att flytta
-	//AP göra om den här testfunktionen så den blir tydligare
-	//AP test för när segment raderas och polygonen öppnas
-}
-
-function testFunk2(){
-	alert("antalet segment i firstPolygon "+firstPolygon.segments.length+"\nclosed: "+firstPolygon.closed);
-}
-
-
-function handleClick(isLeftClick,nyKlickadPunkt){
-	hanteradPolygon=firstPolygon;
-	//om det var ett vänster-klick
-	if(isLeftClick){
-		//Om polygonen är stängd
-		if(hanteradPolygon.closed){
-			//om punkt markerad för flyttning, dvs moveMode
-			if(hanteradPolygon.moveMode){
-				//om punkten inte är för nära nån annan
-				if(checkIfCloseToPoint(hanteradPolygon.segments,nyKlickadPunkt,minDistance)<0){
-					//om punktens närmaste linjesegment inte skär nåt annat segment
-					if(!checkIfMovedIntersects(hanteradPolygon.segments,nyKlickadPunkt,hanteradPolygon.movePointIndex)){
-						//flytta movePointIndex till nya punkten
-						hanteradPolygon.segments[hanteradPolygon.movePointIndex].p1.copyValues(nyKlickadPunkt); //kopierar värdena för att det fortfarande ska vara samma objekt
-						hanteradPolygon.moveMode=false;
-					}
-				}
-			}
-			else{//om ingen punkt är markerad för flyttning (dvs ej moveMode)
-				var nearPointIndex=checkIfCloseToPoint(hanteradPolygon.segments,nyKlickadPunkt,minDistance);
-				if(nearPointIndex>-1){
-					hanteradPolygon.moveMode=true;
-					hanteradPolygon.movePointIndex=nearPointIndex;
-				}
-				else{
-					//om klickningen är nära linje, sätt in ny punkt
-					var tempVar = checkIfCloseToLine(hanteradPolygon.segments,nyKlickadPunkt,minDistance);
-					if(tempVar[0]){
-						//avrundar ev koordinaterna för att få heltal
-						if(useIntegerCoords){
-							tempVar[2].x=Math.round(tempVar[2].x);
-							tempVar[2].y=Math.round(tempVar[2].y);
-						}
-						//lägger till ny punkt inne i segment-arrayen
-						hanteradPolygon.insertPoint(tempVar[2],tempVar[1]);//newPoint,index
-					}
-				}
-			}
-		}
-		//Om polygonen inte är stängd (eller inte ännu finns)
-		else{
-			//är det första segmentet eller?
-			if(hanteradPolygon.segments.length>0){
-				//klickar användaren nära första punkten?
-				if(distBetweenPoints(nyKlickadPunkt,hanteradPolygon.segments[0].p1)<closePolygonMinimumDistance){
-					//om polygonen har minst 2 segment redan
-					if(hanteradPolygon.segments.length>=2){
-						//kolla att segmentet mellan sista punkten och första punkten inte skär nån linje
-						var nyttSegment = new segment(hanteradPolygon.segments[hanteradPolygon.segments.length-1].p2,hanteradPolygon.segments[0].p1);
-						if(!checkIfIntersect(hanteradPolygon.segments,nyttSegment,true)){
-							hanteradPolygon.segments.push(nyttSegment);
-							hanteradPolygon.close();
-						}
-					}
-				}
-				else{
-					//om linjen inte skär nån annan linje, eller är för nära nån punkt så lägg till punkten
-					console.log("antal segment"+hanteradPolygon.segments.length);
-					var nyttSegment = new segment(hanteradPolygon.segments[hanteradPolygon.segments.length-1].p2,nyKlickadPunkt);
-					if(!checkIfIntersect(hanteradPolygon.segments,nyttSegment,false)){
-						if(checkIfCloseToPoint(hanteradPolygon.segments,nyKlickadPunkt,minDistance)<0){
-							hanteradPolygon.segments.push(nyttSegment);
-						}
-					}
-				}
-			}
-			else{//om seed eller några segment ännu inte finns
-				if(!hanteradPolygon.seed){
-					console.log("första punkten");
-					hanteradPolygon.seed=nyKlickadPunkt;
-				}
-				else{
-					//om den inte är för nära första punkten
-					if(checkIfCloseToPoint(hanteradPolygon.seed,nyKlickadPunkt,minDistance)<0){
-						console.log("första segmentet");
-						var nyttSegment = new segment(hanteradPolygon.seed,nyKlickadPunkt);
-						hanteradPolygon.segments.push(nyttSegment);
-					}
-				}
-			}
-		}
-	}
-	//om det var ett högerklick
-	else{
-		//om polygonen är stängd
-		if(hanteradPolygon.closed){
-			if(hanteradPolygon.moveMode){
-				//avbryter "flyttläge"
-				hanteradPolygon.moveMode=false;
-				hanteradPolygon.movePointIndex=-1;
-			}
-			else{//inte "flyttläge"
-				//Om det är på en punkt, ta bort den om det är fler än tre punkter totalt
-				var nearPointIndex=checkIfCloseToPoint(hanteradPolygon.segments,nyKlickadPunkt,minDistance);
-				if(nearPointIndex>-1){
-					//om polygonen har fler än tre sidor går det ta bort en punkt
-					if(hanteradPolygon.segments.length>3){
-						//plocka ut den valda punkten
-						hanteradPolygon.ejectPoint(nearPointIndex);
-					}
-				}
-				//radera element om högerklicka på på segment
-				else{
-					//om klickningen är nära linje, sätt in ny punkt
-					var tempVar = checkIfCloseToLine(hanteradPolygon.segments,nyKlickadPunkt,minDistance);
-					if(tempVar[0]){//true om det klickades tillräckligt nära ett segment
-						//tempVar[1] berättar vilket segment
-						//flyttar startpunkten
-						hanteradPolygon.revolFirstIndex(tempVar[1]);
-						//öppnar polygonen och tar bort sista elementet
-						hanteradPolygon.closed=false;
-						hanteradPolygon.segments.pop();
-					}
-				}
-			}
-		}
-		//om polygonen är öppen
-		else{
-			//ta bort senaste inmatade punkten
+		<script type="application/javascript">
+			var ctx;
+			var IWIDTH=0;
+			var IHEIGHT=0;
+			var minDistance = 10;
+			var closePolygonMinimumDistance=5;
+			var firstPolygon= new polygon();
+			var useIntegerCoords=true;
 			
-			
-			if(hanteradPolygon.segments.length==0){
-				hanteradPolygon.seed=false;
-				console.log("tog bort seed");
+			//Left click
+			function canvasLeftClicked(event,rutans_id){
+				var position_x = clamp(event.pageX-document.getElementById(rutans_id).offsetLeft,0,IWIDTH);
+				var position_y = clamp(event.pageY-document.getElementById(rutans_id).offsetTop,0,IHEIGHT);
+				var nyVansterKlickadPunkt=new point(position_x,position_y);
+				handleClick(true,nyVansterKlickadPunkt);
 			}
-			hanteradPolygon.segments.pop();
-			console.log("segment kvar"+hanteradPolygon.segments.length);
-		}
-	}
-	hanteradPolygon.gShoeLace();
-	drawPolygon(hanteradPolygon);
-}
-
-//---------------------------------------------------------------------
-//*************************
-//********objekt***********
-
-//---polygon---------------------------
-function polygon(){
-	this.segments = new Array();
-	this.closed = false;
-	this.clockWise = false;
-	this.area = 0;
-	this.seed=false;
-	this.moveMode=false;
-	this.movePointIndex=-1;
-	this.selected=true;
-	
-
-	//värde (temperatur?)
-	//omkrets
-	//viktpunkt
-	//vilka segment (i ordning?)
-	
-	//angränsar till vilka grannar, vid vilket segment
-	//metod för att stänga polygon
-	//metod för att flytta punkt?
-	
-	//metoder
-	this.close=close;
-	this.insertPoint=insertPoint;
-	this.ejectPoint=ejectPoint;
-	this.reversePolygon=reversePolygon;
-	this.gShoeLace=gShoeLace;
-	this.revolFirstIndex=revolFirstIndex;
-}
-
-//stänger polygonen
-function close(){
-	this.closed=true;
-	//beräknar arean och kollar om den är ritad medurs eller moturs
-	this.gShoeLace();
-	//om den är moturs 
-	if(!this.clockWise&&enforceClockWise){
-		this.reversePolygon();
-	}
-}
-
-
-
-
-
-
-
-//---------------------------------------------------------------------
-//*************************
-//********grafik***********
-
-
-function drawPolygon(polygonIn){
-//AP plottningen hanterar om polygonen är öppen eller stängd
-//AP om polygonen är öppen ritas linje mellan sista punkten och muspekaren
-//AP speciell plottning om man flyttar en punkt
-	var moveColor="255,128,0";
-	var selectedColor="0,80,120";
-	var redColor="255,0,0";
-	var greenColor="0,255,0";
-	var whiteColor="255,255,255";
-	var blackColor="0,0,0";
-
-	//rensar ytan
-	clearTheCanvas();
-	//om polygonen är vald ritas den i blått och med cirklar vid punkterna
-	if(polygonIn.selected){
-		//ritar ring rund vald punkt
-		if(polygonIn.moveMode){
-			drawDot(polygonIn.segments[polygonIn.movePointIndex].p1,4,moveColor);
-		}
-		//ritar alla segment
-		for(r=0;r<polygonIn.segments.length;r++){
-			drawSegmentsInArray(polygonIn.segments,selectedColor);
-		}
-		//rita mittenpunkter, även sista (vita)
-		for(z=0;z<polygonIn.segments.length;z++){
-			drawDubbelDot(polygonIn.segments[z].p2,selectedColor,whiteColor);
-		}
-		//om polygonen är stängd
-		if(polygonIn.closed){
-			//första punkten grön
-			drawDubbelDot(polygonIn.segments[0].p1,selectedColor,greenColor);
-			//sista punkten röd
-			drawDubbelDot(polygonIn.segments[polygonIn.segments.length-1].p1,selectedColor,redColor);
-		}
-		else{
-			//rita första punkten (grön)
-			if(polygonIn.seed){
-				drawDubbelDot(polygonIn.seed,selectedColor,greenColor);
-			}	
-		}
-	}
-	//om polygonen inte är vald ritas den bara enkelt i svart
-	else{
-		for(r=0;r<polygonIn.segments.length;r++){
-			drawSegmentsInArray(polygonIn.segments,blackColor);
-		}	
-	}
-}
-
-
-
-
-
-//********slut*grafik******
-//*************************
-
-
-</script>
-</head>
-<body oncontextmenu="return false;" onload="init();">
-<!-- <canvas id="canvas" width="1000" height="400" onClick="canvasKlickad(event,this.id)"></canvas> -->
-<canvas id="canvas" width="1000" height="400" onClick="canvasVansterKlickad(event,this.id)" oncontextmenu="canvasHogerKlickad(event,this.id);"></canvas>
-
-<BR>
-
-
-
-<button type="button" onClick="firstPolygon.gShoeLace();alert(firstPolygon.area+'\n'+firstPolygon.clockWise)">Gauss shoelace</button>
-<button type="button" onClick="rensaHelt()">rensa</button>
-
-
-<button type="button" onClick="testFunk()">test</button>
-<button type="button" onClick="testFunk2()">längd eller closed</button>
-<button type="button" onClick="firstPolygon.reversePolygon();drawPolygon(firstPolygon)">ändra riktning</button>
-<button type="button" onClick="firstPolygon.revolFirstIndex(3);drawPolygon(firstPolygon)">ändra första</button>
-<button type="button" onClick="drawPolygon(firstPolygon)">drawPolygon</button>
-
-
-
-
-
-
-
-</body>
+			//Right click
+			function canvasRightClicked(event,rutans_id){
+				var position_x = clamp(event.pageX-document.getElementById(rutans_id).offsetLeft,0,IWIDTH);
+				var position_y = clamp(event.pageY-document.getElementById(rutans_id).offsetTop,0,IHEIGHT);
+				var nyHogerKlickadPunkt=new point(position_x,position_y);
+				handleClick(false,nyHogerKlickadPunkt);
+			}			
+			
+		</script>
+	</head>
+	<body oncontextmenu="return false;" onload="init();">
+		<canvas id="canvas" width="1000" height="400" onClick="canvasLeftClicked(event,this.id)" oncontextmenu="canvasRightClicked(event,this.id);"></canvas>
+		<BR>
+		<input type="checkbox" id="checkboxEnforceClockwise">Enforce clockwise<br>
+				
+		<BR>
+		Praktiska<BR>
+		<button type="button" onClick="firstPolygon.reversePolygon();drawPolygon(firstPolygon)">ändra med/motsols</button>
+		<button type="button" onClick="drawPolygon(firstPolygon)">drawPolygon</button>
+		<button type="button" onClick="clearEntirely()">clear canvas</button>
+		<button type="button" onClick="testFunk2()"># of segments? and closed?</button>
+		<button type="button" onClick="testFunk4()">Gauss shoelace</button>
+		<button type="button" onClick="firstPolygon.revolFirstIndex(3);drawPolygon(firstPolygon)">Change starting point</button>
+		<BR><BR><BR>
+		Test<BR>
+		<button type="button" onClick="testFunk()">test</button>
+		<button type="button" onClick="testFunk3()">testfunk3</button>
+		
+	</body>
 </html>
