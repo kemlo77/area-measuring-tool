@@ -137,8 +137,11 @@ function rightClickClosed(hanteradPolygon,nyKlickadPunkt){
 	if(nearPointIndex>-1){
 		//om polygonen har fler än tre sidor går det ta bort en punkt
 		if(hanteradPolygon.segments.length>3){
-			//plocka ut den valda punkten
-			hanteradPolygon.ejectPoint(nearPointIndex);
+				//kolla så att det segment som skapas då punkten tas bort inte skär befintliga
+				if(!checkIfRemovedPointCausesSegmentIntersect(hanteradPolygon.segments,nearPointIndex)){
+					//inga intersects hittade
+					hanteradPolygon.ejectPoint(nearPointIndex);
+				}
 		}
 	}
 	//radera element om högerklicka på på segment
@@ -165,7 +168,34 @@ function rightClickClosedMoveMode(hanteradPolygon){
 
 
 
-
+function checkIfRemovedPointCausesSegmentIntersect(segmentArrayIn,deleteAtIndex){
+	//gäller bara för polygoner med 5 sidor eller fler
+	//ex: en fyrasidig som blir av med en punkt blir ju en treangel. Där kan man inte har några skärningar.
+	if(segmentArrayIn.length>4){
+		//hitta index för segmentet ett steg före
+		var indexBeforeDeleteAtIndex=moduloInPolygon(deleteAtIndex-1,segmentArrayIn.length); //DAI-1
+		//skapa ETT nya segment för valt index och det dessförrinnan
+		var thePotentialNewSegment = new segment(segmentArrayIn[indexBeforeDeleteAtIndex].p1,segmentArrayIn[deleteAtIndex].p2);
+		//skipping the two segments to be replaced plus their neighbouring segments
+		for(p=0;p<segmentArrayIn.length-4;p++){
+			//drawOneSegment(segmentArrayIn[moduloInPolygon((p+deleteAtIndex+2),segmentArrayIn.length)],"0,0,255");
+			segmentArrayIn[moduloInPolygon((p+deleteAtIndex+2),segmentArrayIn.length)]
+			if(calculateIntersect(thePotentialNewSegment,segmentArrayIn[moduloInPolygon((p+deleteAtIndex+2),segmentArrayIn.length)])[0]){
+				drawOneSegment(thePotentialNewSegment,"255,0,0");
+				console.log("if that point is removed there will be an intersect");
+				return true;
+			}
+		
+		}
+		//hit kommer man om det inte hittades nån intersect
+		return false;
+	}
+	else{
+		//om det var 4 sidor eller färre är det automatiskt ok
+		return false;
+	}
+	
+}
 
 
 
@@ -242,6 +272,7 @@ function checkIfMovedIntersects(segmentArrayIn,nyPunkt,movedAtIndex){
 	if(segmentArrayIn.length>3){
 		//hitta index för segmenten tvåsteg före, ett steg före och ett steg efter valt index
 		var indexBeforeMovedAtIndex=moduloInPolygon(movedAtIndex-1,segmentArrayIn.length); //MAI-1
+		console.log(indexBeforeMovedAtIndex+" jaaaaaaaaa");
 		var indexBeforeBeforeMovedAtIndex=moduloInPolygon(indexBeforeMovedAtIndex-1,segmentArrayIn.length);//MAI-2
 		var indexAfterMovedAtIndex=moduloInPolygon(movedAtIndex+1,segmentArrayIn.length);//MAI+1
 		//skapa två nya segment för valt index och det dessförrinnan

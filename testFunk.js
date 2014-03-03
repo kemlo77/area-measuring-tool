@@ -63,3 +63,32 @@ function testFunk3(){
 		drawDot(ritpunkt,3,"200,0,0");
 	}
 }
+
+
+
+//---------------------------
+//not used any more
+//-------------------------------
+//ritar linje mellan 2 punkter
+function drawLine(startP,endP,lineColor){
+	ctx.strokeStyle = "rgba("+lineColor+",1)";
+	ctx.beginPath();
+	ctx.moveTo(startP.x, startP.y);
+	ctx.lineTo(endP.x, endP.y);
+	ctx.closePath();
+	ctx.stroke();
+}
+
+//ritar linje för varje segment i en segment-array
+function drawSegmentsInArray(segmentArrayIn,lineColor){
+	ctx.strokeStyle = "rgba("+lineColor+",1)";
+	ctx.beginPath();
+	//sätter startpunkten
+	ctx.moveTo(segmentArrayIn[0].p1.x, segmentArrayIn[0].p1.y);
+	//ritar linje för varje segment
+	for(h=0;h<segmentArrayIn.length;h++){
+		ctx.lineTo(segmentArrayIn[h].p2.x, segmentArrayIn[h].p2.y);
+		console.log("pip");
+	}
+	ctx.stroke();
+}
