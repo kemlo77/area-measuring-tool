@@ -71,10 +71,17 @@ function leftClickClosedMoveMode(hanteradPolygon,nyKlickadPunkt){
 	//if the clicked point is not to close to another point
 	if(checkIfCloseToPoint(hanteradPolygon.segments,nyKlickadPunkt,minDistance)<0){
 		//if the points nearest segments do not intersect with other segments
-		if(!checkIfMovedIntersects(hanteradPolygon.segments,nyKlickadPunkt,hanteradPolygon.movePointIndex)){
+		if(document.getElementById("checkboxEnforceNonComplex").checked){
+			if(!checkIfMovedIntersects(hanteradPolygon.segments,nyKlickadPunkt,hanteradPolygon.movePointIndex)){
+				//move the point at movePointIndex to the new point
+				hanteradPolygon.segments[hanteradPolygon.movePointIndex].p1.copyValues(nyKlickadPunkt); //copying values so that it is still the same object
+				hanteradPolygon.moveMode=false;
+			}
+		}
+		else{
 			//move the point at movePointIndex to the new point
 			hanteradPolygon.segments[hanteradPolygon.movePointIndex].p1.copyValues(nyKlickadPunkt); //copying values so that it is still the same object
-			hanteradPolygon.moveMode=false;
+			hanteradPolygon.moveMode=false;		
 		}
 	}	
 }
@@ -88,18 +95,29 @@ function leftClickOpen(hanteradPolygon,nyKlickadPunkt){
 			if(hanteradPolygon.segments.length>=2){
 				//check that the segment between the last point and first point does not intersect with other segments
 				var nyttSegment = new segment(hanteradPolygon.segments[hanteradPolygon.segments.length-1].p2,hanteradPolygon.segments[0].p1);
-				if(!checkIfIntersect(hanteradPolygon.segments,nyttSegment,true)){
+				if(document.getElementById("checkboxEnforceNonComplex").checked){
+					if(!checkIfIntersect(hanteradPolygon.segments,nyttSegment,true)){
+						hanteradPolygon.segments.push(nyttSegment);
+						hanteradPolygon.close();
+					}
+				}
+				else{
 					hanteradPolygon.segments.push(nyttSegment);
-					hanteradPolygon.close();
+					hanteradPolygon.close();				
 				}
 			}
 		}
 		else{
 			//if the new segment does not intersect with other segments or the new point to close to other points, the add the point (+segment)
 			var nyttSegment = new segment(hanteradPolygon.segments[hanteradPolygon.segments.length-1].p2,nyKlickadPunkt);
-			if(!checkIfIntersect(hanteradPolygon.segments,nyttSegment,false)){
-				if(checkIfCloseToPoint(hanteradPolygon.segments,nyKlickadPunkt,minDistance)<0){
-					hanteradPolygon.segments.push(nyttSegment);
+			if(checkIfCloseToPoint(hanteradPolygon.segments,nyKlickadPunkt,minDistance)<0){
+				if(document.getElementById("checkboxEnforceNonComplex").checked){
+					if(!checkIfIntersect(hanteradPolygon.segments,nyttSegment,false)){
+						hanteradPolygon.segments.push(nyttSegment);
+					}
+				}
+				else{
+					hanteradPolygon.segments.push(nyttSegment);				
 				}
 			}
 		}
@@ -137,9 +155,14 @@ function rightClickClosed(hanteradPolygon,nyKlickadPunkt){
 		//if polygon has more than 3 sides it is ok to remove point (+segment)
 		if(hanteradPolygon.segments.length>3){
 				//check that the segment created to fill the gap does not intersect with other segments
-				if(!checkIfRemovedPointCausesSegmentIntersect(hanteradPolygon.segments,nearPointIndex)){
-					//no intersects found
-					hanteradPolygon.ejectPoint(nearPointIndex);
+				if(document.getElementById("checkboxEnforceNonComplex").checked){
+					if(!checkIfRemovedPointCausesSegmentIntersect(hanteradPolygon.segments,nearPointIndex)){
+						//no intersects found
+						hanteradPolygon.ejectPoint(nearPointIndex);
+					}
+				}
+				else{
+					hanteradPolygon.ejectPoint(nearPointIndex);				
 				}
 		}
 	}
