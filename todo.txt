@@ -6,6 +6,7 @@ DONE
 	hantera ifall alla punkter raderas kunna "radera" seedPoint
 	efter vilka förändringar på en redigering på en stängd polygon måste man köra Gauss shoe lace formula?
 	applicera modulotänket i checkIfMovedIntersects på funktionen ejectPoint?
+	BUG: kolla att det fortfarande är en non-complex polygon när man raderat en punkt. Annars inte tillåta? eller radera båda närliggande segment?
 
 MUST HAVE
 	granska koden
@@ -14,7 +15,6 @@ MUST HAVE
 	Skriva kommentarer på engelska
 	ha engelska namn på variabler och funktioner
 	checkbox för att välja om non-complex polygon ska vara tvingande
-	BUG: kolla att det fortfarande är en non-complex polygon när man raderat en punkt. Annars inte tillåta? eller radera båda närliggande segment?
 	Radera funktioner som inte används
 	Lägga testfunktioner separat
 	höger-klick (och vänster-klick) ska fungera i FF, Chrome och IE11
@@ -37,3 +37,4 @@ WONT DO
 	  onmousemove rita linje mellan sista segmentets.p2 och muspekaren
 	speciell plottning om man flyttar en punkt
 	  onmousemove vid flytt av linje rita segmenten som flyttas
+	 

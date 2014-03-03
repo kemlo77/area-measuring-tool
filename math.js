@@ -1,5 +1,4 @@
-
-//kollar om två linjesegment AB och CD skär varandra
+//Checking if two segments AB and CD intersect
 function calculateIntersect(segmentAB,segmentCD){
 	// inspiration på http://alienryderflex.com/intersect/
 	var punktA = segmentAB.p1.clonePoint();
@@ -9,37 +8,37 @@ function calculateIntersect(segmentAB,segmentCD){
 	
 	ax=punktA.x;
 	ay=punktA.y;
-	//utgår från att det inte finns nån intersect
+	//assuming that there is no intersection
 	var returArr = new Array();
 	returArr.push(false);
-	//Translation av punkterna så att A ligger i Origo
+	//Translation of the system so that A is in the Origin
 	punktB.transponate(-ax,-ay);
 	punktC.transponate(-ax,-ay);
 	punktD.transponate(-ax,-ay);
-	//räkna ut längden av AB
+	//calculate the length of AB
 	distAB=Math.sqrt(punktB.x*punktB.x+punktB.y*punktB.y);
-	//vinkeln mellan x-axeln och AB
+	//the angle between the x-axis and AB
 	theta1=punktB.getTheAngle();
-	//Rotera systemet så att punkt b ligger på positiva x-axeln
+	//Rotate the system so that point B is on the positive x-axis
 	punktC.rotate(theta1);
 	punktD.rotate(theta1);
-	//om CD är parallell med x-axeln
+	//The case if CD is parallell with the x-axis
 	if(punktC.y==punktD.y){
 		return returArr;
 	}
-	//om CD inte skär x-axeln (både c&d över x-axeln) eller (både c&d under x-axeln)
+	//The case if CD does not intersect the x-asis (both C&D above x-axis) or (both C&D under x-axis)
 	if((punktC.y<0&&punktD.y<0)||(punktC.y>0&&punktD.y>0)){
 		return returArr;
 	}
-	//var skär CD x-axeln
+	//calculate where CD intersects x-axis
 	ABpos=punktD.x+(punktC.x-punktD.x)*punktD.y/(punktD.y-punktC.y);
-	//skapa ny punktE där CB skär x-axeln
+	//create new point E where CD intersects x-axis
 	var punktE = new point(ABpos,0);
-	//om punkten inte ligger längs AB
+	//The case if the point E is not between A and B on the x-axis
 	if(ABpos<0||ABpos>distAB){
 		return returArr;
 	}
-	//om punkten inte ligger längs CD
+	//The case if the point E is not in segment CD
 	if(punktC.x<punktD.x){
 		if(punktE.x<punktC.x||punktE.x>punktD.x){
 			return returArr;
@@ -50,34 +49,34 @@ function calculateIntersect(segmentAB,segmentCD){
 			return returArr;
 		}
 	}
-	//omvandla punktE ursprungskoordinater (rotering + translation)
+	//Rotate and translate point E to the original coordinate system
 	punktE.rotate(-theta1);
 	punktE.transponate(ax,ay);
-	//hit kommer man om det är en intersect
+	//Arriving here if it is an intersect
 	returArr[0]=true;
-	returArr.push(punktE);//returnerar även skärningspunkten
+	returArr.push(punktE);//also returning the point of intersection E
 	return returArr;
 }
 
 
-//projicerar punkten C på linjesegment AB. Returnerar nya punkten D på linjen. och avståndet CD
+//projecting the point C onto the segment AB. Returning the new point D on the segment and the distance CD
 function project_vector(segmentAB,punktC){
 	var punktA=segmentAB.p1.clonePoint();
 	var punktB=segmentAB.p2.clonePoint();
 	var temp_v =new Array();
-	temp_v.push(-1);//normen
-	temp_v.push(0);//punkten
-	//skapa vektorer
+	temp_v.push(-1);//the norm
+	temp_v.push(0);//the point
+	//create vectors
 	vectorAB = new vector(punktA,punktB);
 	vectorAC = new vector(punktA,punktC);
-	//beräkna dot product
+	//calculate dot product
 	dotproduct_AB_AC=dotProduct(vectorAB,vectorAC);
-	//om dotproduct_AB_AC är större än noll är vinkeln spetsig då är det en intressant punkt
+	//if dotproduct_AB_AC is larger than zero the angle is acute and then C is an interesting point
 	if(dotproduct_AB_AC>=0){
-		//normen (längden av AB
+		//the norm (length of AB)
 		normAB=vectorAB.vLength();
-		//sid 136 i Anton_Rorres Elementary Linear Algebra, 7th edition
-		//projicerar AC på AB. Nya vektorn blir AD
+		//page 136 in "Elementary Linear Algebra" [Anton, Rorres], 7th edition
+		//projecting AC on AB. The new vector is AD
 		var vectorAD = new vector();
 		vectorAD.x=dotproduct_AB_AC * vectorAB.x/Math.pow(normAB,2);
 		vectorAD.y=dotproduct_AB_AC * vectorAB.y/Math.pow(normAB,2);
@@ -86,10 +85,11 @@ function project_vector(segmentAB,punktC){
 		punktD.x=punktA.x+vectorAD.x
 		punktD.y=punktA.y+vectorAD.y;
 		//kollar så inte det är längre från a->d än vad det är a->b
+		//checking so that A->D is shorter than A->B
 		if(normAD<=normAB){
 			var vectorDC= new vector(punktD,punktC);
 			normDC=vectorDC.vLength();
-			//returnerar resultatet
+			//returning result
 			temp_v[0]=normDC;
 			temp_v[1]=punktD;
 		}
@@ -98,7 +98,7 @@ function project_vector(segmentAB,punktC){
 }
 
 
-//kollar om ett värde finns inom ett givet intervall. Annars returnera värdet på närmaste begränsning
+//Check if a value is within a given interval. Otherwise return the value of the nearest limit
 function clamp(val, minval, maxval) {
 	if(val<minval) return minval;
 	if(val>maxval) return maxval;
@@ -106,13 +106,15 @@ function clamp(val, minval, maxval) {
 }
 
 
-//kollar avstånd mellan punkter
+//Check the distance between two points
 function distBetweenPoints(pointOne,pointTwo){
 	theDist=Math.sqrt(Math.pow(pointOne.x-pointTwo.x,2)+Math.pow(pointOne.y-pointTwo.y,2));
 	return theDist;
 }
 
-//funktion för att undvika negativa index i en polygon. ex om man vill använda index 0 -1 (=sista punkten)
+
+//function to translate negative indexes in a polygon.
+//(e.g. index -2 in a polygon with 6 sides is 4)
 function moduloInPolygon(indexIn,arrayLength){
 	while(indexIn<0){
 		indexIn+=arrayLength;

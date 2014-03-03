@@ -1,32 +1,32 @@
 function drawPolygon(polygonIn){
-	var moveColor="255,128,0";
-	var defaultColor="0,80,120";
+	var moveColor="255,128,0";//orange
+	var defaultColor="0,80,120";//
 	var redColor="255,0,0";
 	var greenColor="0,255,0";
 	var whiteColor="255,255,255";
-	//rensar ytan
+	//clear the canvas
 	clearTheCanvas();
-	//ritar ring rund vald punkt
+	//draw a ring around the point chosen to be moved
 	if(polygonIn.moveMode){
 		drawDot(polygonIn.segments[polygonIn.movePointIndex].p1,4,moveColor);
 	}
-	//ritar alla segment
+	//draw all segments
 	for(r=0;r<polygonIn.segments.length;r++){
 		drawOneSegment(polygonIn.segments[r],defaultColor);
 	}
-	//rita mittenpunkter, även sista (vita)
+	//draw intermediary points, also the last one (white)
 	for(z=0;z<polygonIn.segments.length;z++){
 		drawDubbelDot(polygonIn.segments[z].p2,defaultColor,whiteColor);
 	}
-	//om polygonen är stängd
+	//if the polygon is closed
 	if(polygonIn.closed){
-		//första punkten grön
+		//first point green
 		drawDubbelDot(polygonIn.segments[0].p1,defaultColor,greenColor);
-		//sista punkten röd
+		//last point red
 		drawDubbelDot(polygonIn.segments[polygonIn.segments.length-1].p1,defaultColor,redColor);
 	}
 	else{
-		//rita första punkten (grön)
+		//draw first point green
 		if(polygonIn.seed){
 			drawDubbelDot(polygonIn.seed,defaultColor,greenColor);
 		}	
@@ -34,20 +34,20 @@ function drawPolygon(polygonIn){
 }
 
 
-//tömmer canvas
+//clear the canvas
 function clearTheCanvas(){
 	ctx.clearRect(0, 0, IWIDTH, IHEIGHT);
 }
 
-//ritar ifylld punkt
+//draw a point with inner and outer color
 function drawDubbelDot(dot2paint,outerColor,innerColor){
-	//yttre prick
+	//outer color (larger)
 	drawDot(dot2paint,2,outerColor);
-	//inre prick
+	//inner color (smaler drawn on top of the other)
 	drawDot(dot2paint,1,innerColor);
 }
 
-//ritar en punkt
+//draw a point
 function drawDot(dot2paint,diam,rgbIN){
 	ctx.fillStyle = "rgba("+rgbIN+",1)";
 	ctx.beginPath();
@@ -56,7 +56,7 @@ function drawDot(dot2paint,diam,rgbIN){
 	ctx.fill();
 }
 
-//ritar ut ett segment (ritar linje mellan 2 punkter)
+//draw a segment (draws a line between two points)
 function drawOneSegment(segment2draw,lineColor){
 	ctx.strokeStyle = "rgba("+lineColor+",1)";
 	ctx.beginPath();
