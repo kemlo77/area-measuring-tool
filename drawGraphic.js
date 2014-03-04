@@ -8,7 +8,7 @@ function drawPolygon(polygonIn){
 	clearTheCanvas();
 	//draw a ring around the point chosen to be moved
 	if(polygonIn.moveMode){
-		drawDot(polygonIn.segments[polygonIn.movePointIndex].p1,4,moveColor);
+		drawDot(polygonIn.segments[polygonIn.movePointIndex].p1,6,moveColor);
 	}
 	//draw all segments
 	for(r=0;r<polygonIn.segments.length;r++){
@@ -42,9 +42,9 @@ function clearTheCanvas(){
 //draw a point with inner and outer color
 function drawDubbelDot(dot2paint,outerColor,innerColor){
 	//outer color (larger)
-	drawDot(dot2paint,2,outerColor);
+	drawDot(dot2paint,4,outerColor);
 	//inner color (smaler drawn on top of the other)
-	drawDot(dot2paint,1,innerColor);
+	drawDot(dot2paint,2,innerColor);
 }
 
 //draw a point
@@ -60,6 +60,7 @@ function drawDot(dot2paint,diam,rgbIN){
 function drawOneSegment(segment2draw,lineColor){
 	ctx.strokeStyle = "rgba("+lineColor+",1)";
 	ctx.beginPath();
+	ctx.lineWidth = 2;
 	ctx.moveTo(segment2draw.p1.x, segment2draw.p1.y);
 	ctx.lineTo(segment2draw.p2.x, segment2draw.p2.y);
 	ctx.closePath();

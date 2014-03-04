@@ -13,10 +13,11 @@
 			var ctx;
 			var IWIDTH=0;
 			var IHEIGHT=0;
-			var minDistance = 10;
+			var minDistance = 8;
+			var moveDelInsDistance=3;
 			var closePolygonMinimumDistance=5;
 			var firstPolygon= new polygon();
-			var useIntegerCoords=true;
+			var useIntegerCoords=false;
 			
 			//Left click
 			function canvasLeftClicked(event,rutans_id){
@@ -39,17 +40,19 @@
 		<canvas id="canvas" width="1000" height="400" onClick="canvasLeftClicked(event,this.id)" oncontextmenu="canvasRightClicked(event,this.id);"></canvas>
 		<BR>
 		<input type="checkbox" id="checkboxEnforceClockwise">Enforce clockwise<br>
+		<input type="checkbox" id="checkboxEnforceNonComplex" checked>Enforce non-complex polygon<br>
 				
 		<BR>
 		Praktiska<BR>
-		<button type="button" onClick="firstPolygon.reversePolygon();drawPolygon(firstPolygon)">ändra med/motsols</button>
-		<button type="button" onClick="drawPolygon(firstPolygon)">drawPolygon</button>
+		<button type="button" onClick="firstPolygon.reversePolygon();drawPolygon(firstPolygon)">ändra med/motsols</button>		
 		<button type="button" onClick="clearEntirely()">clear canvas</button>
-		<button type="button" onClick="testFunk2()"># of segments? and closed?</button>
-		<button type="button" onClick="testFunk4()">Gauss shoelace</button>
-		<button type="button" onClick="firstPolygon.revolFirstIndex(3);drawPolygon(firstPolygon)">Change starting point</button>
+		<button type="button" onClick="firstPolygon.revolFirstIndex(0);drawPolygon(firstPolygon)">Change starting point</button>
 		<BR><BR><BR>
 		Test<BR>
+		<button type="button" onClick="testFunk2()"># of segments? and closed?</button>		
+		<button type="button" onClick="drawPolygon(firstPolygon)">drawPolygon</button>
+		<button type="button" onClick="testFunk4()">Gauss shoelace</button>		
+		<BR>
 		<button type="button" onClick="testFunk()">test</button>
 		<button type="button" onClick="testFunk3()">testfunk3</button>
 		
