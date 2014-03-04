@@ -1,9 +1,8 @@
-
 function init() {
 	var canvas = document.getElementById("canvas");
 	IWIDTH=canvas.width;
 	IHEIGHT=canvas.height;
-		if (canvas.getContext) {
+	if (canvas.getContext) {
 		ctx = canvas.getContext("2d");
 	}
 }
@@ -14,8 +13,6 @@ function clearEntirely(){
 	firstPolygon.seed=false;
 	clearTheCanvas();
 }
-
-
 
 //*************************
 //** Handle clicks       **
@@ -36,7 +33,6 @@ function handleClick(isLeftClick,theClickedPoint){
 		}
 		else{rightClickOpen(handledPolygon)}//RIGHT - OPEN
 	}
-		
 	//calculate area and check if polygon is drawn clockwise or not
 	handledPolygon.gShoeLace();
 	//change to clockwise if checkbox is ticked
@@ -47,29 +43,37 @@ function handleClick(isLeftClick,theClickedPoint){
 }
 
 function leftClickClosed(hanteradPolygon,nyKlickadPunkt){
-	var nearPointIndex=checkIfCloseToPoint(hanteradPolygon.segments,nyKlickadPunkt,minDistance);
+	var nearPointIndex=checkIfCloseToPoint(hanteradPolygon.segments,nyKlickadPunkt,moveDelInsDistance);
 	if(nearPointIndex>-1){
 		hanteradPolygon.moveMode=true;
 		hanteradPolygon.movePointIndex=nearPointIndex;
 	}
 	else{
 		//if the click occured near a segment, insert a new point
-		var tempVar = checkIfCloseToLine(hanteradPolygon.segments,nyKlickadPunkt,minDistance);
+		var tempVar = checkIfCloseToLine(hanteradPolygon.segments,nyKlickadPunkt,moveDelInsDistance);
 		if(tempVar[0]){
 			//rounding coordinates to get integers
 			if(useIntegerCoords){
 				tempVar[2].x=Math.round(tempVar[2].x);
 				tempVar[2].y=Math.round(tempVar[2].y);
 			}
+			//calculating distance to both points on clicked segment
+			//so that it is not possible to insert a point too close to another
+			segmPointDist1=distBetweenPoints(hanteradPolygon.segments[tempVar[1]].p1,tempVar[2]);
+			segmPointDist2=distBetweenPoints(hanteradPolygon.segments[tempVar[1]].p2,tempVar[2]);
+			console.log(segmPointDist1+" "+(segmPointDist1>minDistance));
+			console.log(segmPointDist2+" "+(segmPointDist2>minDistance));
+			if(((segmPointDist1>minDistance)&&(segmPointDist2>minDistance))){
 			//inserting the point in the segment-array
-			hanteradPolygon.insertPoint(tempVar[2],tempVar[1]);//newPoint,index
+				hanteradPolygon.insertPoint(tempVar[2],tempVar[1]);//newPoint,index
+			}
 		}
 	}	
 }
 
 function leftClickClosedMoveMode(hanteradPolygon,nyKlickadPunkt){
-	//if the clicked point is not to close to another point
-	if(checkIfCloseToPoint(hanteradPolygon.segments,nyKlickadPunkt,minDistance)<0){
+	//if the clicked point is not to close to another point (not checking it self, there of the 4th argument in function call)
+	if(checkIfCloseToPoint(hanteradPolygon.segments,nyKlickadPunkt,minDistance,hanteradPolygon.movePointIndex)<0){
 		//if the points nearest segments do not intersect with other segments
 		if(document.getElementById("checkboxEnforceNonComplex").checked){
 			if(!checkIfMovedIntersects(hanteradPolygon.segments,nyKlickadPunkt,hanteradPolygon.movePointIndex)){
@@ -110,14 +114,16 @@ function leftClickOpen(hanteradPolygon,nyKlickadPunkt){
 		else{
 			//if the new segment does not intersect with other segments or the new point to close to other points, the add the point (+segment)
 			var nyttSegment = new segment(hanteradPolygon.segments[hanteradPolygon.segments.length-1].p2,nyKlickadPunkt);
-			if(checkIfCloseToPoint(hanteradPolygon.segments,nyKlickadPunkt,minDistance)<0){
-				if(document.getElementById("checkboxEnforceNonComplex").checked){
-					if(!checkIfIntersect(hanteradPolygon.segments,nyttSegment,false)){
-						hanteradPolygon.segments.push(nyttSegment);
+			if(checkIfCloseToPoint(hanteradPolygon.segments,nyKlickadPunkt,minDistance)<0){//checking p1 in all segments
+				if(distBetweenPoints(hanteradPolygon.segments[hanteradPolygon.segments.length-1].p2,nyKlickadPunkt)>minDistance){//checking p2 in the last segment
+					if(document.getElementById("checkboxEnforceNonComplex").checked){
+						if(!checkIfIntersect(hanteradPolygon.segments,nyttSegment,false)){
+							hanteradPolygon.segments.push(nyttSegment);
+						}
 					}
-				}
-				else{
-					hanteradPolygon.segments.push(nyttSegment);				
+					else{
+						hanteradPolygon.segments.push(nyttSegment);				
+					}
 				}
 			}
 		}
@@ -129,7 +135,7 @@ function leftClickOpen(hanteradPolygon,nyKlickadPunkt){
 		}
 		else{
 			//if it is not to close to the fist point, add the second point
-			if(checkIfCloseToPoint(hanteradPolygon.seed,nyKlickadPunkt,minDistance)<0){
+			if(distBetweenPoints(hanteradPolygon.seed,nyKlickadPunkt)>minDistance){
 				console.log("first segment");
 				var nyttSegment = new segment(hanteradPolygon.seed,nyKlickadPunkt);
 				hanteradPolygon.segments.push(nyttSegment);
@@ -150,7 +156,7 @@ function rightClickOpen(hanteradPolygon){
 
 function rightClickClosed(hanteradPolygon,nyKlickadPunkt){
 	//if the user rightclicked a point, remove it if there are more than 3 sides to the polygon
-	var nearPointIndex=checkIfCloseToPoint(hanteradPolygon.segments,nyKlickadPunkt,minDistance);
+	var nearPointIndex=checkIfCloseToPoint(hanteradPolygon.segments,nyKlickadPunkt,moveDelInsDistance);
 	if(nearPointIndex>-1){
 		//if polygon has more than 3 sides it is ok to remove point (+segment)
 		if(hanteradPolygon.segments.length>3){
@@ -169,7 +175,7 @@ function rightClickClosed(hanteradPolygon,nyKlickadPunkt){
 	//erase segment if user right clicked "on" segment
 	else{
 		//check if click was near segment
-		var tempVar = checkIfCloseToLine(hanteradPolygon.segments,nyKlickadPunkt,minDistance);
+		var tempVar = checkIfCloseToLine(hanteradPolygon.segments,nyKlickadPunkt,moveDelInsDistance);
 		if(tempVar[0]){//true if user clicked close enough to segment
 			//tempVar[1] holds what segment
 			//Changing start segment so that the one to be removed is the last one
@@ -186,9 +192,6 @@ function rightClickClosedMoveMode(hanteradPolygon){
 	hanteradPolygon.moveMode=false;
 	hanteradPolygon.movePointIndex=-1;
 }
-
-
-
 
 function checkIfRemovedPointCausesSegmentIntersect(segmentArrayIn,deleteAtIndex){
 	//needs only to be checked for polygons with 5 sides or more
@@ -208,7 +211,6 @@ function checkIfRemovedPointCausesSegmentIntersect(segmentArrayIn,deleteAtIndex)
 				console.log("if that point is removed there will be an intersect");
 				return true;
 			}
-		
 		}
 		//if coming this fara, there is no intersect found
 		return false;
@@ -217,18 +219,19 @@ function checkIfRemovedPointCausesSegmentIntersect(segmentArrayIn,deleteAtIndex)
 		//if polygon had 4 sides or less, it is automatically OK
 		return false;
 	}
-	
 }
-
-
 
 //checks if new point is too close to other points
 //returning the nearest point or -1 if all points are outside minDistanceIn
-function checkIfCloseToPoint(segmentArrayIn,nyPunkt,minDistanceIn){
+//only checks with the first point in a segment. So when the polygon is not closed, the last point is not checked.
+function checkIfCloseToPoint(segmentArrayIn,nyPunkt,minDistanceIn,skipPoint){
+	//skipPoint is an optional parameter referensing the segment containing p1 not to be checked
+	if (typeof skipPoint === 'undefined') { skipPoint = -1; }
 	var localMinDistance=minDistanceIn;
 	var isTooClose = -1;
 	var pointDistance=0;
 	for(i=0;i<segmentArrayIn.length;i++){
+		if(i==skipPoint){continue;}
 		//calculating distance between new point and all other points in polygon
 		pointDistance=distBetweenPoints(segmentArrayIn[i].p1,nyPunkt);
 		if(pointDistance<localMinDistance){
@@ -239,7 +242,6 @@ function checkIfCloseToPoint(segmentArrayIn,nyPunkt,minDistanceIn){
 	}
 	return isTooClose;
 }
-
 
 //checking if new point is near other polygon segments
 function checkIfCloseToLine(segmentArrayIn,nyPunkt,minDistanceIn){
@@ -271,8 +273,6 @@ function checkIfCloseToLine(segmentArrayIn,nyPunkt,minDistanceIn){
 	ppReturArray.push(closestPoint); //the point projected on the segment
 	return ppReturArray;
 }
-
-
 
 //checking if new segment intersects with other segment in array
 function checkIfIntersect(segmentArrayIn,nyttSegmentIn,skipFirstSegment){
@@ -327,17 +327,9 @@ function checkIfMovedIntersects(segmentArrayIn,nyPunkt,movedAtIndex){
 	}
 }
 
-
-
-
-
-
-
-
 //*************************
 //** Objects             **
 //*************************
-
 //----------------------------------------------------------------
 //---POLYGON------------------------------------------------------
 //polygon object constructor
@@ -363,7 +355,6 @@ function polygon(){
 function close(){
 	this.closed=true;
 }
-
 
 //changing direction of polygon (clockwise <-> counter clockwise)
 function reversePolygon(){
@@ -524,7 +515,6 @@ function transponate(distX,distY){
 	this.x+=distX;
 	this.y+=distY;
 }
-
 
 //return the angle between the x-axis and a vector AB (where A is in the Origin and B is the point checked)
 function getTheAngle(){

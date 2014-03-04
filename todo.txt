@@ -9,17 +9,17 @@ DONE
 	BUG: kolla att det fortfarande är en non-complex polygon när man raderat en punkt. Annars inte tillåta? eller radera båda närliggande segment?
 	checkbox för att välja om non-complex polygon ska vara tvingande
 	Skriva kommentarer på engelska
+	höger-klick (och vänster-klick) ska fungera i FF, Chrome och IE11
 
 MUST HAVE
 	granska koden
 	testa ordentligt
 	ta bort "console.log"
-
 	ha engelska namn på variabler och funktioner
 	Radera funktioner som inte används
 	Lägga testfunktioner separat
-	höger-klick (och vänster-klick) ska fungera i FF, Chrome och IE11
 	byta namn på html-filen
+	skriva ut längd/omkrets, area, om den är stängd, om den är medsols/motsolsw
 
 
 NICE TO HAVE
