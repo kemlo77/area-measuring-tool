@@ -18,39 +18,38 @@ function clearEntirely(){
 //** Handle clicks       **
 //*************************
 function handleClick(isLeftClick,theClickedPoint){
-	handledPolygon=firstPolygon;
 	if(isLeftClick){
-		if(handledPolygon.closed){
-			if(handledPolygon.moveMode){leftClickClosedMoveMode(handledPolygon,theClickedPoint)}//LEFT - CLOSED - MOVEMODE
-			else{leftClickClosed(handledPolygon,theClickedPoint)}//LEFT - CLOSED
+		if(firstPolygon.closed){
+			if(firstPolygon.moveMode){leftClickClosedMoveMode(firstPolygon,theClickedPoint)}//LEFT - CLOSED - MOVEMODE
+			else{leftClickClosed(firstPolygon,theClickedPoint)}//LEFT - CLOSED
 		}
-		else{leftClickOpen(handledPolygon,theClickedPoint)}//LEFT - OPEN
+		else{leftClickOpen(firstPolygon,theClickedPoint)}//LEFT - OPEN
 	}
 	else{
-		if(handledPolygon.closed){
-			if(handledPolygon.moveMode){rightClickClosedMoveMode(handledPolygon)}//RIGHT - CLOSED - MOVEMODE
-			else{rightClickClosed(handledPolygon,theClickedPoint)}//RIGHT - CLOSED
+		if(firstPolygon.closed){
+			if(firstPolygon.moveMode){rightClickClosedMoveMode(firstPolygon)}//RIGHT - CLOSED - MOVEMODE
+			else{rightClickClosed(firstPolygon,theClickedPoint)}//RIGHT - CLOSED
 		}
-		else{rightClickOpen(handledPolygon)}//RIGHT - OPEN
+		else{rightClickOpen(firstPolygon)}//RIGHT - OPEN
 	}
 	//calculate area and check if polygon is drawn clockwise or not
-	handledPolygon.gShoeLace();
+	firstPolygon.gShoeLace();
 	//change to clockwise if checkbox is ticked
-	if(!handledPolygon.clockWise&&document.getElementById("checkboxEnforceClockwise").checked){
-		handledPolygon.reversePolygon();
+	if(!firstPolygon.clockWise&&document.getElementById("checkboxEnforceClockwise").checked){
+		firstPolygon.reversePolygon();
 	}
-	drawPolygon(handledPolygon);
+	drawPolygon(firstPolygon);
 }
 
-function leftClickClosed(hanteradPolygon,nyKlickadPunkt){
-	var nearPointIndex=checkIfCloseToPoint(hanteradPolygon.segments,nyKlickadPunkt,moveDelInsDistance);
+function leftClickClosed(handledPolygon,newlyClickedPoint){
+	var nearPointIndex=checkIfCloseToPoint(handledPolygon.segments,newlyClickedPoint,moveDelInsDistance);
 	if(nearPointIndex>-1){
-		hanteradPolygon.moveMode=true;
-		hanteradPolygon.movePointIndex=nearPointIndex;
+		handledPolygon.moveMode=true;
+		handledPolygon.movePointIndex=nearPointIndex;
 	}
 	else{
 		//if the click occured near a segment, insert a new point
-		var tempVar = checkIfCloseToLine(hanteradPolygon.segments,nyKlickadPunkt,moveDelInsDistance);
+		var tempVar = checkIfCloseToLine(handledPolygon.segments,newlyClickedPoint,moveDelInsDistance);
 		if(tempVar[0]){
 			//rounding coordinates to get integers
 			if(useIntegerCoords){
@@ -59,138 +58,135 @@ function leftClickClosed(hanteradPolygon,nyKlickadPunkt){
 			}
 			//calculating distance to both points on clicked segment
 			//so that it is not possible to insert a point too close to another
-			segmPointDist1=distBetweenPoints(hanteradPolygon.segments[tempVar[1]].p1,tempVar[2]);
-			segmPointDist2=distBetweenPoints(hanteradPolygon.segments[tempVar[1]].p2,tempVar[2]);
-			console.log(segmPointDist1+" "+(segmPointDist1>minDistance));
-			console.log(segmPointDist2+" "+(segmPointDist2>minDistance));
+			segmPointDist1=distBetweenPoints(handledPolygon.segments[tempVar[1]].p1,tempVar[2]);
+			segmPointDist2=distBetweenPoints(handledPolygon.segments[tempVar[1]].p2,tempVar[2]);
 			if(((segmPointDist1>minDistance)&&(segmPointDist2>minDistance))){
 			//inserting the point in the segment-array
-				hanteradPolygon.insertPoint(tempVar[2],tempVar[1]);//newPoint,index
+				handledPolygon.insertPoint(tempVar[2],tempVar[1]);//newPoint,index
 			}
 		}
 	}	
 }
 
-function leftClickClosedMoveMode(hanteradPolygon,nyKlickadPunkt){
+function leftClickClosedMoveMode(handledPolygon,newlyClickedPoint){
 	//if the clicked point is not to close to another point (not checking it self, there of the 4th argument in function call)
-	if(checkIfCloseToPoint(hanteradPolygon.segments,nyKlickadPunkt,minDistance,hanteradPolygon.movePointIndex)<0){
+	if(checkIfCloseToPoint(handledPolygon.segments,newlyClickedPoint,minDistance,handledPolygon.movePointIndex)<0){
 		//if the points nearest segments do not intersect with other segments
 		if(document.getElementById("checkboxEnforceNonComplex").checked){
-			if(!checkIfMovedIntersects(hanteradPolygon.segments,nyKlickadPunkt,hanteradPolygon.movePointIndex)){
+			if(!checkIfMovedIntersects(handledPolygon.segments,newlyClickedPoint,handledPolygon.movePointIndex)){
 				//move the point at movePointIndex to the new point
-				hanteradPolygon.segments[hanteradPolygon.movePointIndex].p1.copyValues(nyKlickadPunkt); //copying values so that it is still the same object
-				hanteradPolygon.moveMode=false;
+				handledPolygon.segments[handledPolygon.movePointIndex].p1.copyValues(newlyClickedPoint); //copying values so that it is still the same object
+				handledPolygon.moveMode=false;
 			}
 		}
 		else{
 			//move the point at movePointIndex to the new point
-			hanteradPolygon.segments[hanteradPolygon.movePointIndex].p1.copyValues(nyKlickadPunkt); //copying values so that it is still the same object
-			hanteradPolygon.moveMode=false;		
+			handledPolygon.segments[handledPolygon.movePointIndex].p1.copyValues(newlyClickedPoint); //copying values so that it is still the same object
+			handledPolygon.moveMode=false;		
 		}
 	}	
 }
 
-function leftClickOpen(hanteradPolygon,nyKlickadPunkt){
+function leftClickOpen(handledPolygon,newlyClickedPoint){
 	//check if this is the first segment
-	if(hanteradPolygon.segments.length>0){
+	if(handledPolygon.segments.length>0){
 		//check if user clicks near the first point (wanting to close the polygon)
-		if(distBetweenPoints(nyKlickadPunkt,hanteradPolygon.segments[0].p1)<closePolygonMinimumDistance){
+		if(distBetweenPoints(newlyClickedPoint,handledPolygon.segments[0].p1)<closePolygonMinimumDistance){
 			//if the plygon already has at least 2 segments
-			if(hanteradPolygon.segments.length>=2){
+			if(handledPolygon.segments.length>=2){
 				//check that the segment between the last point and first point does not intersect with other segments
-				var nyttSegment = new segment(hanteradPolygon.segments[hanteradPolygon.segments.length-1].p2,hanteradPolygon.segments[0].p1);
+				var nyttSegment = new segment(handledPolygon.segments[handledPolygon.segments.length-1].p2,handledPolygon.segments[0].p1);
 				if(document.getElementById("checkboxEnforceNonComplex").checked){
-					if(!checkIfIntersect(hanteradPolygon.segments,nyttSegment,true)){
-						hanteradPolygon.segments.push(nyttSegment);
-						hanteradPolygon.close();
+					if(!checkIfIntersect(handledPolygon.segments,nyttSegment,true)){
+						handledPolygon.segments.push(nyttSegment);
+						handledPolygon.close();
 					}
 				}
 				else{
-					hanteradPolygon.segments.push(nyttSegment);
-					hanteradPolygon.close();				
+					handledPolygon.segments.push(nyttSegment);
+					handledPolygon.close();				
 				}
 			}
 		}
 		else{
 			//if the new segment does not intersect with other segments or the new point to close to other points, the add the point (+segment)
-			var nyttSegment = new segment(hanteradPolygon.segments[hanteradPolygon.segments.length-1].p2,nyKlickadPunkt);
-			if(checkIfCloseToPoint(hanteradPolygon.segments,nyKlickadPunkt,minDistance)<0){//checking p1 in all segments
-				if(distBetweenPoints(hanteradPolygon.segments[hanteradPolygon.segments.length-1].p2,nyKlickadPunkt)>minDistance){//checking p2 in the last segment
+			var nyttSegment = new segment(handledPolygon.segments[handledPolygon.segments.length-1].p2,newlyClickedPoint);
+			if(checkIfCloseToPoint(handledPolygon.segments,newlyClickedPoint,minDistance)<0){//checking p1 in all segments
+				if(distBetweenPoints(handledPolygon.segments[handledPolygon.segments.length-1].p2,newlyClickedPoint)>minDistance){//checking p2 in the last segment
 					if(document.getElementById("checkboxEnforceNonComplex").checked){
-						if(!checkIfIntersect(hanteradPolygon.segments,nyttSegment,false)){
-							hanteradPolygon.segments.push(nyttSegment);
+						if(!checkIfIntersect(handledPolygon.segments,nyttSegment,false)){
+							handledPolygon.segments.push(nyttSegment);
 						}
 					}
 					else{
-						hanteradPolygon.segments.push(nyttSegment);				
+						handledPolygon.segments.push(nyttSegment);				
 					}
 				}
 			}
 		}
 	}
 	else{//if seed does not exist (nor any other elements) Add the first point.
-		if(!hanteradPolygon.seed){
-			console.log("first point");
-			hanteradPolygon.seed=nyKlickadPunkt;
+		if(!handledPolygon.seed){
+			//console.log("first point");
+			handledPolygon.seed=newlyClickedPoint;
 		}
 		else{
 			//if it is not to close to the fist point, add the second point
-			if(distBetweenPoints(hanteradPolygon.seed,nyKlickadPunkt)>minDistance){
-				console.log("first segment");
-				var nyttSegment = new segment(hanteradPolygon.seed,nyKlickadPunkt);
-				hanteradPolygon.segments.push(nyttSegment);
+			if(distBetweenPoints(handledPolygon.seed,newlyClickedPoint)>minDistance){
+				//console.log("first segment");
+				var nyttSegment = new segment(handledPolygon.seed,newlyClickedPoint);
+				handledPolygon.segments.push(nyttSegment);
 			}
 		}
 	}	
 }
 
-function rightClickOpen(hanteradPolygon){
+function rightClickOpen(handledPolygon){
 	//removes last added point (+segment)
-	if(hanteradPolygon.segments.length==0){
-		hanteradPolygon.seed=false;
-		console.log("removed seed point");
+	if(handledPolygon.segments.length==0){
+		handledPolygon.seed=false;
+		//console.log("removed seed point");
 	}
-	hanteradPolygon.segments.pop();
-	console.log("segments left: "+hanteradPolygon.segments.length);		
+	handledPolygon.segments.pop();
 }
 
-function rightClickClosed(hanteradPolygon,nyKlickadPunkt){
+function rightClickClosed(handledPolygon,newlyClickedPoint){
 	//if the user rightclicked a point, remove it if there are more than 3 sides to the polygon
-	var nearPointIndex=checkIfCloseToPoint(hanteradPolygon.segments,nyKlickadPunkt,moveDelInsDistance);
+	var nearPointIndex=checkIfCloseToPoint(handledPolygon.segments,newlyClickedPoint,moveDelInsDistance);
 	if(nearPointIndex>-1){
 		//if polygon has more than 3 sides it is ok to remove point (+segment)
-		if(hanteradPolygon.segments.length>3){
+		if(handledPolygon.segments.length>3){
 				//check that the segment created to fill the gap does not intersect with other segments
 				if(document.getElementById("checkboxEnforceNonComplex").checked){
-					if(!checkIfRemovedPointCausesSegmentIntersect(hanteradPolygon.segments,nearPointIndex)){
+					if(!checkIfRemovedPointCausesSegmentIntersect(handledPolygon.segments,nearPointIndex)){
 						//no intersects found
-						hanteradPolygon.ejectPoint(nearPointIndex);
+						handledPolygon.ejectPoint(nearPointIndex);
 					}
 				}
 				else{
-					hanteradPolygon.ejectPoint(nearPointIndex);				
+					handledPolygon.ejectPoint(nearPointIndex);				
 				}
 		}
 	}
 	//erase segment if user right clicked "on" segment
 	else{
 		//check if click was near segment
-		var tempVar = checkIfCloseToLine(hanteradPolygon.segments,nyKlickadPunkt,moveDelInsDistance);
+		var tempVar = checkIfCloseToLine(handledPolygon.segments,newlyClickedPoint,moveDelInsDistance);
 		if(tempVar[0]){//true if user clicked close enough to segment
 			//tempVar[1] holds what segment
 			//Changing start segment so that the one to be removed is the last one
-			hanteradPolygon.revolFirstIndex(tempVar[1]);
+			handledPolygon.revolFirstIndex(tempVar[1]);
 			//opening polygon and removing last segment
-			hanteradPolygon.closed=false;
-			hanteradPolygon.segments.pop();
+			handledPolygon.closed=false;
+			handledPolygon.segments.pop();
 		}
 	}	
 }
 
-function rightClickClosedMoveMode(hanteradPolygon){
+function rightClickClosedMoveMode(handledPolygon){
 	//aborting move mode
-	hanteradPolygon.moveMode=false;
-	hanteradPolygon.movePointIndex=-1;
+	handledPolygon.moveMode=false;
+	handledPolygon.movePointIndex=-1;
 }
 
 function checkIfRemovedPointCausesSegmentIntersect(segmentArrayIn,deleteAtIndex){
@@ -388,7 +384,6 @@ function gShoeLace(){
 			theSum+=this.segments[b].p1.x*this.segments[b].p2.y-this.segments[b].p1.y*this.segments[b].p2.x;
 		}
 		this.area=theSum/2;
-		console.log("Area: "+this.area);
 		//see also http://en.wikipedia.org/wiki/Curve_orientation
 		if(this.area>0){
 			this.clockWise=true;
