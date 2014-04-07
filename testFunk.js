@@ -1,3 +1,49 @@
+function testFunk8(){
+	var testPunkt1 = new point(200,100);
+	handleClick(true,testPunkt1);
+	var testPunkt2 = new point(170,150);
+	handleClick(true,testPunkt2);
+	var testPunkt3 = new point(200,180);
+	handleClick(true,testPunkt3);
+	var testPunkt4 = new point(250,170);
+	handleClick(true,testPunkt4);
+	var testPunkt5 = new point(240,130);
+	handleClick(true,testPunkt5);
+	var testPunkt6 = new point(260,130);
+	handleClick(true,testPunkt6);
+	var testPunkt7 = new point(280,130);
+	handleClick(true,testPunkt7);
+	var testPunkt8 = new point(300,150);
+	handleClick(true,testPunkt8);
+	var testPunkt9 = new point(300,200);
+	handleClick(true,testPunkt9);
+	var testPunkt10 = new point(300,250);
+	handleClick(true,testPunkt10);
+	var testPunkt11 = new point(250,250);
+	handleClick(true,testPunkt11);
+	var testPunkt12 = new point(200,250);
+	handleClick(true,testPunkt12);
+	var testPunkt13 = new point(200,225);
+	handleClick(true,testPunkt13);
+	var testPunkt14 = new point(200,200);
+	handleClick(true,testPunkt14);
+	var testPunkt15 = new point(150,250);
+	handleClick(true,testPunkt15);
+	var testPunkt16 = new point(100,300);
+	handleClick(true,testPunkt16);
+	var testPunkt17 = new point(150,325);
+	handleClick(true,testPunkt17);
+	var testPunkt18 = new point(200,350);
+	handleClick(true,testPunkt18);
+	var testPunkt19 = new point(300,325);
+	handleClick(true,testPunkt19);
+	var testPunkt20 = new point(400,300);
+	handleClick(true,testPunkt20);
+	var testPunkt21 = new point(380,280);
+	handleClick(true,testPunkt21);
+	var testPunkt22 = new point(360,260);
+	handleClick(true,testPunkt22);
+	}
 
 function testFunk(){
 	var testPunkt1 = new point(200,100);
@@ -38,7 +84,10 @@ function testFunk(){
 }
 
 function testFunk2(){
-	alert("antalet segment i firstPolygon "+firstPolygon.segments.length+"\nclosed: "+firstPolygon.closed);
+	console.log("hejpa");
+	console.log(firstPolygon.segments.length);
+	console.log(firstPolygon.closed);
+	alert("antalet segment i firstPolygon "+firstPolygon.segments.length);
 }
 
 function testFunk4(){
@@ -98,4 +147,19 @@ function drawSegmentsInArray(segmentArrayIn,lineColor){
 		console.log("pip");
 	}
 	ctx.stroke();
+}
+
+function checkIfComplex(polygonChecked){
+	console.log("antal segment: "+polygonChecked.segments.length);
+	for(i=0;i<polygonChecked.segments.length;i++){
+		for(j=i+1;j<polygonChecked.segments.length;j++){
+			if(i==j-1){
+				console.log("***Starting****");
+				console.log(i+" "+j);
+				resultat=calculateIntersect(polygonChecked.segments[i],polygonChecked.segments[j])
+				if(resultat[0]){drawDot(resultat[1],5,"123,12,12")}
+				//console.log(resultat[0]);
+			}
+		}
+	}
 }
