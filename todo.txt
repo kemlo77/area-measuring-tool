@@ -10,16 +10,17 @@ DONE
 	checkbox för att välja om non-complex polygon ska vara tvingande
 	Skriva kommentarer på engelska
 	höger-klick (och vänster-klick) ska fungera i FF, Chrome och IE11
+	ha engelska namn på variabler och funktioner
+	ta bort "console.log"
 
 MUST HAVE
 	granska koden
 	testa ordentligt
-	ta bort "console.log"
-	ha engelska namn på variabler och funktioner
 	Radera funktioner som inte används
 	Lägga testfunktioner separat
-	byta namn på html-filen
-	skriva ut längd/omkrets, area, om den är stängd, om den är medsols/motsolsw
+	2. byta namn på html-filen
+	1. skriva ut längd/omkrets, area, om den är stängd, om den är medsols/motsolsw
+	lägga ut på jsfiddle.net eller codepen.io
 
 
 NICE TO HAVE
