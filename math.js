@@ -15,26 +15,44 @@ function calculateIntersect(segmentAB,segmentCD){
 	punktB.transponate(-ax,-ay);
 	punktC.transponate(-ax,-ay);
 	punktD.transponate(-ax,-ay);
-	console.log("B: "+ punktB.x+","+punktB.y+" C: "+ punktC.x+","+punktC.y+" D: "+ punktD.x+","+punktD.y);
 	//calculate the length of AB
 	distAB=Math.sqrt(punktB.x*punktB.x+punktB.y*punktB.y);
 	//the angle between the x-axis and AB
 	theta1=punktB.getTheAngle();
 	//Rotate the system so that point B is on the positive x-axis
+	punktB = new point(distAB,0);
 	punktC.rotate(theta1);
 	punktD.rotate(theta1);
-	console.log("C: "+ punktC.x+","+punktC.y+" D: "+ punktD.x+","+punktD.y);
 	//The case if CD is parallell with the x-axis
-	if(punktC.y==punktD.y){//AP hantera småå tal
-		console.info("retur at Alfred");
+	//if C.y is equal to D.y (or very close to it)
+	if(Math.abs(punktC.y-punktD.y)<0.000001){
+		//if C and thus also D are on the x-axis (or very close to it)
+		if((Math.abs(punktC.y)<0.000001)||(Math.abs(punktD.y)<0.000001)){
+			if((0<=punktC.x&&punktC.x<=punktB.x)){
+				//Rotate and translate point E to the original coordinate system
+				punktC.rotate(-theta1);
+				punktC.transponate(ax,ay);
+				//return true + a point of intersection
+				returArr[0]=true;
+				returArr.push(punktC);
+				return returArr;
+			}
+			if((0<=punktD.x&&punktD.x<=punktB.x)){
+				//Rotate and translate point E to the original coordinate system
+				punktD.rotate(-theta1);
+				punktD.transponate(ax,ay);
+				//return true + a point of intersection
+				returArr[0]=true;
+				returArr.push(punktD);
+				return returArr;
+			}
+		}
 		return returArr;
-		//AP: hantera om ab förlängs av cd längs x-axeln (b=c eller b=d)
 	}
 	//The case if CD does not intersect the x-asis (both C&D above x-axis) or (both C&D under x-axis)
 	//calculating with 10^-6 as zero since calculating with sin and cos can generate "close to zero" zeroes
-//	if((punktC.y<0&&punktD.y<0)||(punktC.y>0&&punktD.y>0)){
+	//if((punktC.y<0&&punktD.y<0)||(punktC.y>0&&punktD.y>0)){
 	if((punktC.y<-0.000001&&punktD.y<-0.000001)||(punktC.y>0.000001&&punktD.y>0.000001)){
-		console.info("retur at Bertil");
 		return returArr;
 	}
 	//calculate where CD intersects x-axis
@@ -43,16 +61,15 @@ function calculateIntersect(segmentAB,segmentCD){
 	var punktE = new point(ABpos,0);
 
 	//The case if the point E is not between A and B on the x-axis
-	if(ABpos<0||ABpos>distAB){ //AP hantera småå tal?
-		console.info("retur at Caesar");
+	//that is E.x less than zero or E.x larger than B.x
+	//if(punktE.x<0||punktE.x>punktB.x){
+	if(punktE.x<-0.000001||(punktE.x-punktB.x)>0.000001){
 		return returArr;
 	}
 	//The case if the point E is not in segment CD
 	if(punktC.x<punktD.x){
 		//if(punktE.x<punktC.x||punktE.x>punktD.x){
-		console.warn(punktE.x+" < "+punktC.x +" or "+ punktE.x+" > "+punktD.x);
 		if((punktE.x-punktC.x)<-0.000001||(punktE.x-punktD.x)>0.000001){
-			console.info("retur at David");		
 			return returArr;
 		}
 	}
@@ -60,7 +77,6 @@ function calculateIntersect(segmentAB,segmentCD){
 		console.warn(punktE.x+" > "+punktC.x+" or "+punktE.x+" < "+punktD.x);
 		//if(punktE.x>punktC.x||punktE.x<punktD.x){		
 		if((punktE.x-punktC.x)>0.000001||(punktE.x<punktD.x)<-0.000001){
-			console.info("retur at Erik");
 			return returArr;
 		}
 	}
@@ -70,7 +86,6 @@ function calculateIntersect(segmentAB,segmentCD){
 	//Arriving here if it is an intersect
 	returArr[0]=true;
 	returArr.push(punktE);//also returning the point of intersection E
-	console.log("*******");
 	return returArr;
 }
 
