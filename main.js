@@ -479,7 +479,7 @@ function point(x,y){
 		this.y=y;
 	}
 	this.rotate=rotate;
-	this.transponate=transponate;
+	this.translate=translate;
 	this.getTheAngle=getTheAngle;
 	this.clonePoint=clonePoint;
 	this.copyValues=copyValues;
@@ -506,7 +506,7 @@ function rotate(vinkel){
 }
 
 //move a point
-function transponate(distX,distY){
+function translate(distX,distY){
 	this.x+=distX;
 	this.y+=distY;
 }
