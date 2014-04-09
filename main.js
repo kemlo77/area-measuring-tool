@@ -1,17 +1,23 @@
 function init() {
-	var canvas = document.getElementById("canvas");
-	IWIDTH=canvas.width;
-	IHEIGHT=canvas.height;
-	if (canvas.getContext) {
+	/* var canvas = document.getElementById("canvas"); */
+
+/* 	if (canvas.getContext) {
 		ctx = canvas.getContext("2d");
-	}
+	} */
+	var canvasBackground = document.getElementById("background");
+	if (canvasBackground.getContext) {ctxBack = canvasBackground.getContext("2d");}
+	var canvasForeground = document.getElementById("foreground");
+	if (canvasForeground.getContext) {ctxFront = canvasForeground.getContext("2d");}
+	IWIDTH=canvasBackground.width;
+	IHEIGHT=canvasBackground.height;
 }
 
 function clearEntirely(){
 	firstPolygon.segments=[];
 	firstPolygon.closed=false;
 	firstPolygon.seed=false;
-	clearTheCanvas();
+	clearTheCanvas(ctxFront);
+	clearTheCanvas(ctxBack);
 }
 
 //*************************
@@ -39,6 +45,7 @@ function handleClick(isLeftClick,theClickedPoint){
 		firstPolygon.reversePolygon();
 	}
 	drawPolygon(firstPolygon);
+	clearUsedCanvas();
 }
 
 function leftClickClosed(handledPolygon,newlyClickedPoint){

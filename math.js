@@ -67,7 +67,6 @@ function calculateIntersect(segmentAB,segmentCD){
 		}
 	}
 	else{
-		console.warn(punktE.x+" > "+punktC.x+" or "+punktE.x+" < "+punktD.x);
 		//if(punktE.x>punktC.x||punktE.x<punktD.x){		
 		if((punktE.x-punktC.x)>0.000001||(punktE.x<punktD.x)<-0.000001){
 			return new Array(false);
