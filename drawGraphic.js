@@ -19,9 +19,13 @@ function drawPolygon(polygonIn){
 		}
 		//since the polygon is closed
 		//first point green
-		drawDubbelDot(polygonIn.segments[0].p1,defaultColor,greenColor);
+		if(polygonIn.movePointIndex!==0){
+			drawDubbelDot(polygonIn.segments[0].p1,defaultColor,greenColor);
+		}
 		//last point red
-		drawDubbelDot(polygonIn.segments[polygonIn.segments.length-1].p1,defaultColor,redColor);
+		if(polygonIn.movePointIndex!==(polygonIn.segments.length-1)){
+			drawDubbelDot(polygonIn.segments[polygonIn.segments.length-1].p1,defaultColor,redColor);
+		}
 	}
 	else{
 		//draw all segments
@@ -99,20 +103,15 @@ var oldXMax=1;
 var oldYMin=0;
 var oldYMax=1;
 function drawMovement(mousePosPoint,thePolygon){
-	//AP handle when polygon doesnt exist or when it only has the seed point
-	//AP clear the canvas in smart way. Only what was drawn last time
-	//   maybe with a new thicker white line?
-	//  or just with a box
+	clearUsedCanvas()
 	if(!thePolygon.closed){
 		if(thePolygon.segments.length==0){
 			if(thePolygon.seed){
-				clearUsedCanvas()
 				drawLine(thePolygon.seed,mousePosPoint,"255,128,0",ctxBack);
 				saveExtremes([thePolygon.seed,mousePosPoint]);
 			}
 		}
 		else{
-			clearUsedCanvas()
 			lastPoint = thePolygon.segments[thePolygon.segments.length-1].p2;
 			drawLine(lastPoint,mousePosPoint,"255,128,0",ctxBack);
 			saveExtremes([lastPoint,mousePosPoint]);
@@ -120,7 +119,6 @@ function drawMovement(mousePosPoint,thePolygon){
 	}
 	else{
 		if(thePolygon.moveMode){
-			clearUsedCanvas();
 			movingPointPlusOne=thePolygon.segments[thePolygon.movePointIndex].p2;
 			movingPointMinusOne=thePolygon.segments[moduloInPolygon(thePolygon.movePointIndex-1,thePolygon.segments.length)].p1;
 			drawLine(movingPointPlusOne,mousePosPoint,"255,128,0",ctxBack);

@@ -45,7 +45,8 @@ function handleClick(isLeftClick,theClickedPoint){
 		firstPolygon.reversePolygon();
 	}
 	drawPolygon(firstPolygon);
-	clearUsedCanvas();
+	//clearUsedCanvas();
+	drawMovement(theClickedPoint,firstPolygon)
 }
 
 function leftClickClosed(handledPolygon,newlyClickedPoint){
