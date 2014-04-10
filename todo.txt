@@ -12,6 +12,10 @@ DONE
 	höger-klick (och vänster-klick) ska fungera i FF, Chrome och IE11
 	ha engelska namn på variabler och funktioner
 	ta bort "console.log"
+	om polygonen är öppen ritas linje mellan sista punkten och muspekaren
+	  onmousemove rita linje mellan sista segmentets.p2 och muspekaren
+	speciell plottning om man flyttar en punkt
+	  onmousemove vid flytt av linje rita segmenten som flyttas
 
 MUST HAVE
 	granska koden
@@ -21,6 +25,11 @@ MUST HAVE
 	2. byta namn på html-filen
 	1. skriva ut längd/omkrets, area, om den är stängd, om den är medsols/motsolsw
 	lägga ut på jsfiddle.net eller codepen.io
+	testa använda mouseDown och mouseUp för flytta punkt
+	uppdatera excel
+	skapa .md fil
+	använda graphml?
+	MIT-licens
 
 
 NICE TO HAVE
@@ -33,10 +42,3 @@ NICE TO HAVE
 	beräkna omkrets på polygon
 	beräkna mass-centrum för polygonen
 	slumpa runt punkter så alla polygoner får en area som ligger närmare genomsnittet (beräkning nyArea endast för polygoner som har flyttad punkt)
-
-WONT DO
-	om polygonen är öppen ritas linje mellan sista punkten och muspekaren
-	  onmousemove rita linje mellan sista segmentets.p2 och muspekaren
-	speciell plottning om man flyttar en punkt
-	  onmousemove vid flytt av linje rita segmenten som flyttas
-	 

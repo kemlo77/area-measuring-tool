@@ -8,13 +8,10 @@ function calculateIntersect(segmentAB,segmentCD){
 	
 	ax=punktA.x;
 	ay=punktA.y;
-	//assuming that there is no intersection
-	var returArr = new Array();
-	returArr.push(false);
 	//Translation of the system so that A is in the Origin
-	punktB.transponate(-ax,-ay);
-	punktC.transponate(-ax,-ay);
-	punktD.transponate(-ax,-ay);
+	punktB.translate(-ax,-ay);
+	punktC.translate(-ax,-ay);
+	punktD.translate(-ax,-ay);
 	//calculate the length of AB
 	distAB=Math.sqrt(punktB.x*punktB.x+punktB.y*punktB.y);
 	//the angle between the x-axis and AB
@@ -31,29 +28,25 @@ function calculateIntersect(segmentAB,segmentCD){
 			if((0<=punktC.x&&punktC.x<=punktB.x)){
 				//Rotate and translate point E to the original coordinate system
 				punktC.rotate(-theta1);
-				punktC.transponate(ax,ay);
+				punktC.translate(ax,ay);
 				//return true + a point of intersection
-				returArr[0]=true;
-				returArr.push(punktC);
-				return returArr;
+				return new Array(true,punktC);
 			}
 			if((0<=punktD.x&&punktD.x<=punktB.x)){
 				//Rotate and translate point E to the original coordinate system
 				punktD.rotate(-theta1);
-				punktD.transponate(ax,ay);
+				punktD.translate(ax,ay);
 				//return true + a point of intersection
-				returArr[0]=true;
-				returArr.push(punktD);
-				return returArr;
+				return new Array(true,punktD);
 			}
 		}
-		return returArr;
+		return new Array(false);
 	}
 	//The case if CD does not intersect the x-asis (both C&D above x-axis) or (both C&D under x-axis)
 	//calculating with 10^-6 as zero since calculating with sin and cos can generate "close to zero" zeroes
 	//if((punktC.y<0&&punktD.y<0)||(punktC.y>0&&punktD.y>0)){
 	if((punktC.y<-0.000001&&punktD.y<-0.000001)||(punktC.y>0.000001&&punktD.y>0.000001)){
-		return returArr;
+		return new Array(false);
 	}
 	//calculate where CD intersects x-axis
 	ABpos=punktD.x+(punktC.x-punktD.x)*punktD.y/(punktD.y-punktC.y);
@@ -64,29 +57,26 @@ function calculateIntersect(segmentAB,segmentCD){
 	//that is E.x less than zero or E.x larger than B.x
 	//if(punktE.x<0||punktE.x>punktB.x){
 	if(punktE.x<-0.000001||(punktE.x-punktB.x)>0.000001){
-		return returArr;
+		return new Array(false);
 	}
 	//The case if the point E is not in segment CD
 	if(punktC.x<punktD.x){
 		//if(punktE.x<punktC.x||punktE.x>punktD.x){
 		if((punktE.x-punktC.x)<-0.000001||(punktE.x-punktD.x)>0.000001){
-			return returArr;
+			return new Array(false);
 		}
 	}
 	else{
-		console.warn(punktE.x+" > "+punktC.x+" or "+punktE.x+" < "+punktD.x);
 		//if(punktE.x>punktC.x||punktE.x<punktD.x){		
 		if((punktE.x-punktC.x)>0.000001||(punktE.x<punktD.x)<-0.000001){
-			return returArr;
+			return new Array(false);
 		}
 	}
 	//Rotate and translate point E to the original coordinate system
 	punktE.rotate(-theta1);
-	punktE.transponate(ax,ay);
+	punktE.translate(ax,ay);
 	//Arriving here if it is an intersect
-	returArr[0]=true;
-	returArr.push(punktE);//also returning the point of intersection E
-	return returArr;
+	return new Array(true,punktE);
 }
 
 

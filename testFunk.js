@@ -127,26 +127,26 @@ function testFunk3(){
 //-------------------------------
 //ritar linje mellan 2 punkter
 function drawLine(startP,endP,lineColor){
-	ctx.strokeStyle = "rgba("+lineColor+",1)";
-	ctx.beginPath();
-	ctx.moveTo(startP.x, startP.y);
-	ctx.lineTo(endP.x, endP.y);
-	ctx.closePath();
-	ctx.stroke();
+	ctxFront.strokeStyle = "rgba("+lineColor+",1)";
+	ctxFront.beginPath();
+	ctxFront.moveTo(startP.x, startP.y);
+	ctxFront.lineTo(endP.x, endP.y);
+	ctxFront.closePath();
+	ctxFront.stroke();
 }
 
 //ritar linje för varje segment i en segment-array
 function drawSegmentsInArray(segmentArrayIn,lineColor){
-	ctx.strokeStyle = "rgba("+lineColor+",1)";
-	ctx.beginPath();
+	ctxFront.strokeStyle = "rgba("+lineColor+",1)";
+	ctxFront.beginPath();
 	//sätter startpunkten
-	ctx.moveTo(segmentArrayIn[0].p1.x, segmentArrayIn[0].p1.y);
+	ctxFront.moveTo(segmentArrayIn[0].p1.x, segmentArrayIn[0].p1.y);
 	//ritar linje för varje segment
 	for(h=0;h<segmentArrayIn.length;h++){
-		ctx.lineTo(segmentArrayIn[h].p2.x, segmentArrayIn[h].p2.y);
+		ctxFront.lineTo(segmentArrayIn[h].p2.x, segmentArrayIn[h].p2.y);
 		console.log("pip");
 	}
-	ctx.stroke();
+	ctxFront.stroke();
 }
 
 function checkIfComplex(polygonChecked){
