@@ -3,8 +3,27 @@
 <html>
 	<head>
 		<style type="text/css">
-			  canvas { border: 1px solid black;
-						background-color: #EEE	;}
+			canvas {
+				border: 1px solid black; 
+				background-color: transparent;
+			}
+			  
+			#viewport {
+				/**
+				 * Position relative so that canvas elements
+				 * inside of it will be relative to the parent
+				 */
+				position: relative;
+			}
+			 
+			#viewport canvas {
+				/**
+				 * Position absolute provides canvases to be able
+				 * to be layered on top of each other
+				 * Be sure to remember a z-index!
+				 */
+				position: absolute;
+			}	
 		</style>
 
 		<script type="text/javascript" src="main.js"></script>
@@ -13,7 +32,8 @@
 		<script type="text/javascript" src="drawGraphic.js"></script>
 
 		<script type="application/javascript">
-			var ctx;
+			var ctxFront;
+			var ctxBack
 			var IWIDTH=0;
 			var IHEIGHT=0;
 			var minDistance = 8;
@@ -23,25 +43,39 @@
 			var useIntegerCoords=false;
 			
 			//Left click
-			function canvasLeftClicked(event,rutans_id){
-				var position_x = clamp(event.pageX-document.getElementById(rutans_id).offsetLeft,0,IWIDTH);
-				var position_y = clamp(event.pageY-document.getElementById(rutans_id).offsetTop,0,IHEIGHT);
+			function canvasLeftClicked(evt,canvas_id){
+				var rect = document.getElementById(canvas_id).getBoundingClientRect();
+				//var position_x = clamp(event.pageX-document.getElementById(rutans_id).offsetLeft,0,IWIDTH);
+				//var position_y = clamp(event.pageY-document.getElementById(rutans_id).offsetTop,0,IHEIGHT);
+				var position_x = evt.clientX - rect.left;
+				var position_y = evt.clientY - rect.top;
 				var nyVansterKlickadPunkt=new point(position_x,position_y);
 				handleClick(true,nyVansterKlickadPunkt);
 			}
 			//Right click
-			function canvasRightClicked(event,rutans_id){
-				var position_x = clamp(event.pageX-document.getElementById(rutans_id).offsetLeft,0,IWIDTH);
-				var position_y = clamp(event.pageY-document.getElementById(rutans_id).offsetTop,0,IHEIGHT);
+			function canvasRightClicked(evt,canvas_id){
+				var rect = document.getElementById(canvas_id).getBoundingClientRect();
+				//x_pos=evt.clientX - rect.left;
+				//y_pos=evt.clientY - rect.top;
+				//var position_x = clamp(event.pageX-document.getElementById(rutans_id).offsetLeft,0,IWIDTH);
+				//var position_y = clamp(event.pageY-document.getElementById(rutans_id).offsetTop,0,IHEIGHT);
+				var position_x = evt.clientX - rect.left;
+				var position_y = evt.clientY - rect.top;
+				
 				var nyHogerKlickadPunkt=new point(position_x,position_y);
 				handleClick(false,nyHogerKlickadPunkt);
 			}			
-			
+			function getMousePos(evt,canvas_id) {
+				var rect = document.getElementById(canvas_id).getBoundingClientRect();
+				x_pos=evt.clientX - rect.left;
+				y_pos=evt.clientY - rect.top;
+				//console.log(x_pos+","+y_pos);
+				var mousePosPoint = new point(x_pos,y_pos);
+				drawMovement(mousePosPoint,firstPolygon);
+			}
 		</script>
 	</head>
 	<body oncontextmenu="return false;" onload="init();">
-		<canvas id="canvas" width="1000" height="400" onClick="canvasLeftClicked(event,this.id)" oncontextmenu="canvasRightClicked(event,this.id);"></canvas>
-		<BR>
 		<input type="checkbox" id="checkboxEnforceClockwise">Enforce clockwise<br>
 		<input type="checkbox" id="checkboxEnforceNonComplex" checked>Enforce non-complex polygon<br>
 				
@@ -61,7 +95,11 @@
 		<BR>
 		<button type="button" onClick="testFunk8()">rita rad</button>
 		<button type="button" onClick="checkIfComplex(firstPolygon)">kolla intersects mellan segment</button>
-		
+		<BR>
+		<div id="viewport">
+			<canvas id="background" width="1000" height="480" style="z-index: 1;"></canvas>
+			<canvas id="foreground" width="1000" height="480" style="z-index: 2;"onMouseMove="getMousePos(event,this.id);" onClick="canvasLeftClicked(event,this.id)" oncontextmenu="canvasRightClicked(event,this.id);"></canvas>
+		</div>
 		
 	</body>
 </html>
