@@ -1,18 +1,18 @@
 DONE
-	högerklick på segment tar bort segmentet och öppnar polygonen?
-	ändra startpunkt i segmentArray 
+	hï¿½gerklick pï¿½ segment tar bort segmentet och ï¿½ppnar polygonen?
+	ï¿½ndra startpunkt i segmentArray 
 	rensa bort punktArray ur koden  
 	implementera polygon.seedPoint  
 	hantera ifall alla punkter raderas kunna "radera" seedPoint
-	efter vilka förändringar på en redigering på en stängd polygon måste man köra Gauss shoe lace formula?
-	applicera modulotänket i checkIfMovedIntersects på funktionen ejectPoint?
-	BUG: kolla att det fortfarande är en non-complex polygon när man raderat en punkt. Annars inte tillåta? eller radera båda närliggande segment?
-	checkbox för att välja om non-complex polygon ska vara tvingande
-	Skriva kommentarer på engelska
-	höger-klick (och vänster-klick) ska fungera i FF, Chrome och IE11
-	ha engelska namn på variabler och funktioner
+	efter vilka fï¿½rï¿½ndringar pï¿½ en redigering pï¿½ en stï¿½ngd polygon mï¿½ste man kï¿½ra Gauss shoe lace formula?
+	applicera modulotï¿½nket i checkIfMovedIntersects pï¿½ funktionen ejectPoint?
+	BUG: kolla att det fortfarande ï¿½r en non-complex polygon nï¿½r man raderat en punkt. Annars inte tillï¿½ta? eller radera bï¿½da nï¿½rliggande segment?
+	checkbox fï¿½r att vï¿½lja om non-complex polygon ska vara tvingande
+	Skriva kommentarer pï¿½ engelska
+	hï¿½ger-klick (och vï¿½nster-klick) ska fungera i FF, Chrome och IE11
+	ha engelska namn pï¿½ variabler och funktioner
 	ta bort "console.log"
-	om polygonen är öppen ritas linje mellan sista punkten och muspekaren
+	om polygonen ï¿½r ï¿½ppen ritas linje mellan sista punkten och muspekaren
 	  onmousemove rita linje mellan sista segmentets.p2 och muspekaren
 	speciell plottning om man flyttar en punkt
 	  onmousemove vid flytt av linje rita segmenten som flyttas
@@ -20,25 +20,24 @@ DONE
 MUST HAVE
 	granska koden
 	testa ordentligt
-	Radera funktioner som inte används
-	Lägga testfunktioner separat
-	2. byta namn på html-filen
-	1. skriva ut längd/omkrets, area, om den är stängd, om den är medsols/motsolsw
-	lägga ut på jsfiddle.net eller codepen.io
-	testa använda mouseDown och mouseUp för flytta punkt
+	Radera funktioner som inte anvï¿½nds
+	Lï¿½gga testfunktioner separat
+	1. skriva ut lï¿½ngd/omkrets, area, om den ï¿½r stï¿½ngd, om den ï¿½r medsols/motsolsw
+	lï¿½gga ut pï¿½ jsfiddle.net eller codepen.io
+	testa anvï¿½nda mouseDown och mouseUp fï¿½r flytta punkt
 	uppdatera excel
 	skapa .md fil
-	använda graphml?
+	anvï¿½nda graphml?
 	MIT-licens
 
 
 NICE TO HAVE
 	_kunna mata in flera polygoner_
-	flagga om man får rita fler än 1 polygon
-	om man har flera polygoner, använda "flagga" för att bestämma om dom får överlappa varandra.
-	polygon som inte är "aktuell" ritas utan punkterna (cirklar)
-	aktuell polygon är blå
-	funktion som delar upp segment (ex i två eller 10 delar)
-	beräkna omkrets på polygon
-	beräkna mass-centrum för polygonen
-	slumpa runt punkter så alla polygoner får en area som ligger närmare genomsnittet (beräkning nyArea endast för polygoner som har flyttad punkt)
+	flagga om man fï¿½r rita fler ï¿½n 1 polygon
+	om man har flera polygoner, anvï¿½nda "flagga" fï¿½r att bestï¿½mma om dom fï¿½r ï¿½verlappa varandra.
+	polygon som inte ï¿½r "aktuell" ritas utan punkterna (cirklar)
+	aktuell polygon ï¿½r blï¿½
+	funktion som delar upp segment (ex i tvï¿½ eller 10 delar)
+	berï¿½kna omkrets pï¿½ polygon
+	berï¿½kna mass-centrum fï¿½r polygonen
+	slumpa runt punkter sï¿½ alla polygoner fï¿½r en area som ligger nï¿½rmare genomsnittet (berï¿½kning nyArea endast fï¿½r polygoner som har flyttad punkt)
