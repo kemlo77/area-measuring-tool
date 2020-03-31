@@ -455,23 +455,4 @@ function reverseSegment(){
 	this.p2=tempReversePoint;
 }
 
-//----------------------------------------------------------------
-//---VECTOR-------------------------------------------------------
-//vector object constructor
-function vector(punkt1,punkt2){
-	if(punkt1==undefined||punkt2==undefined){this.x=0;this.y=0;}
-	else{this.x=punkt2.x-punkt1.x;this.y=punkt2.y-punkt1.y;}
-	this.vLength=vLength;
-}
-
-//calculate lenght of a vector
-function vLength(){
-	return Math.sqrt(Math.pow(this.x,2)+Math.pow(this.y,2));
-}
-
-//calculate the dot product between to vectors
-function dotProduct(vector1,vector2){
-	return (vector1.x*vector2.x+vector1.y*vector2.y);
-}
-
 

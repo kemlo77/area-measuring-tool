@@ -16,7 +16,7 @@ class Point {
     }
 
     //copying values from point so that the new point IS the same object
-    copyValues(copyFromThisPoint) {
+    copyValues(copyFromThisPoint): void {
         this.x = copyFromThisPoint.x;
         this.y = copyFromThisPoint.y;
     }
@@ -36,7 +36,7 @@ class Point {
     }
 
     //move a point
-    translate(distX, distY): void {
+    translate(distX: number, distY: number): void {
         this.x += distX;
         this.y += distY;
     }

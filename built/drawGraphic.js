@@ -143,6 +143,5 @@ function saveExtremes(arrayWithPoints){
 }
 
 function clearUsedCanvas(){
-	console.log("hejpa");
 	ctxBack.clearRect(oldXMin-2, oldYMin-2, oldXMax-oldXMin+4, oldYMax-oldYMin+4);
 }
