@@ -45,7 +45,7 @@ function drawPolygon(polygonIn){
 		}
 		else{
 			//draw first point green
-			if(polygonIn.seed){
+			if(polygonIn.seed!=null){
 				drawDubbelDot(polygonIn.seed,defaultColor,greenColor);
 			}
 			//draw last point with white dot
@@ -106,7 +106,7 @@ function drawMovement(mousePosPoint,thePolygon){
 	clearUsedCanvas()
 	if(!thePolygon.closed){
 		if(thePolygon.segments.length==0){
-			if(thePolygon.seed){
+			if(thePolygon.seed!=null){
 				drawLine(thePolygon.seed,mousePosPoint,"255,128,0",ctxBack);
 				saveExtremes([thePolygon.seed,mousePosPoint]);
 			}

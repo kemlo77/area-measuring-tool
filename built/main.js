@@ -15,7 +15,7 @@ function init() {
 function clearEntirely(){
 	firstPolygon.segments=[];
 	firstPolygon.closed=false;
-	firstPolygon.seed=false;
+	firstPolygon.seed=null;
 	clearTheCanvas(ctxFront);
 	clearTheCanvas(ctxBack);
 }
@@ -134,7 +134,7 @@ function leftClickOpen(handledPolygon,newlyClickedPoint){
 		}
 	}
 	else{//if seed does not exist (nor any other elements) Add the first point.
-		if(!handledPolygon.seed){
+		if(handledPolygon.seed==null){
 			//console.log("first point");
 			handledPolygon.seed=newlyClickedPoint;
 		}
@@ -152,7 +152,7 @@ function leftClickOpen(handledPolygon,newlyClickedPoint){
 function rightClickOpen(handledPolygon){
 	//removes last added point (+segment)
 	if(handledPolygon.segments.length==0){
-		handledPolygon.seed=false;
+		handledPolygon.seed=null;
 		//console.log("removed seed point");
 	}
 	handledPolygon.segments.pop();
@@ -330,103 +330,3 @@ function checkIfMovedIntersects(segmentArrayIn,nyPunkt,movedAtIndex){
 		return false;
 	}
 }
-
-//*************************
-//** Objects             **
-//*************************
-//----------------------------------------------------------------
-//---POLYGON------------------------------------------------------
-//polygon object constructor
-function polygon(){
-	this.segments = new Array();
-	this.closed = false;
-	this.clockWise = false;
-	this.area = 0;
-	this.seed=false;
-	this.moveMode=false;
-	this.movePointIndex=-1;
-	
-	//methods
-	this.close=close;
-	this.insertPoint=insertPoint;
-	this.ejectPoint=ejectPoint;
-	this.reversePolygon=reversePolygon;
-	this.gShoeLace=gShoeLace;
-	this.revolFirstIndex=revolFirstIndex;
-}
-
-//closing polygon
-function close(){
-	this.closed=true;
-}
-
-//changing direction of polygon (clockwise <-> counter clockwise)
-function reversePolygon(){
-	this.segments.reverse();
-	//the direction of all segments in polygon must also be reversed
-	for(u=0;u<this.segments.length;u++){
-		this.segments[u].reverseSegment();
-	}
-}
-
-//inserting a new point (+segment) in a polygon segment array, at a given index
-function insertPoint(newPointIn,insertAtThisIndex){
-//splitting a segment (A-B) that is given a new point
-//the new Segment goes from breakPoint to point B
-//the old segment is changed so that it goes from point A to the breakPoint
-	//new Segment starts at the breaking point, ends where the divided segment ended (B)
-	var tempSegmentToInsert = new Segment(newPointIn,this.segments[insertAtThisIndex].p2);
-	//add new Segment after the break
-	this.segments.splice(insertAtThisIndex+1,0,tempSegmentToInsert);
-	//chagning segment before the break so that the end point is now the breakPoint
-	this.segments[insertAtThisIndex].p2=newPointIn;
-}
-
-//calculating area and checking if polygon is drawn clockwise or not
-function gShoeLace(){
-	//using the Gauss shoelace formula
-	//http://en.wikipedia.org/wiki/Shoelace_formula
-	if(this.closed){
-		var theSum=0;
-		for(b=0;b<this.segments.length;b++){
-			theSum+=this.segments[b].p1.x*this.segments[b].p2.y-this.segments[b].p1.y*this.segments[b].p2.x;
-		}
-		this.area=theSum/2;
-		//see also http://en.wikipedia.org/wiki/Curve_orientation
-		if(this.area>0){
-			this.clockWise=true;
-		}
-		else{
-			this.clockWise=false;
-		}
-	}
-}
-
-//changing the starting point in the polygon (i.e. chaing what segment is the starting segment)
-function revolFirstIndex(newFirstIndex){
-	if(this.closed){
-		//handling if newFirstIndex is larger than the number of segments
-		newFirstIndex=moduloInPolygon(newFirstIndex,this.segments.length);
-		//removing the group of segments (up until newfirstindex)
-		var tempArray = this.segments.splice(0,newFirstIndex+1);
-		//l�gger den stumpen p� slutet
-		//adding the group of segments to the end of the other part
-		this.segments=this.segments.concat(tempArray);
-		//changing the polygon seed point to the first point
-		this.seed=this.segments[0].p1;
-	}
-}
-
-//removing a point (+segment) from a polygon segment-array, at a given index
-function ejectPoint(removeAtThisIndex){
-	//the point to be removed is the first point in the segment with index=removeAtThisIndex
-	//the index for the segment prior to the segment removed (handled if removeAtThisIndex==0)
-	indexBeforeRemoveAtThisIndex=moduloInPolygon((removeAtThisIndex-1),this.segments.length);
-	//changing the "second point in the prior segment" to the second point in the segment to be removed
-	this.segments[indexBeforeRemoveAtThisIndex].p2=this.segments[removeAtThisIndex].p2;
-	//removing the segment
-	this.segments.splice(removeAtThisIndex,1);
-}
-
-
-
