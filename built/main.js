@@ -103,7 +103,7 @@ function leftClickOpen(handledPolygon,newlyClickedPoint){
 			//if the plygon already has at least 2 segments
 			if(handledPolygon.segments.length>=2){
 				//check that the segment between the last point and first point does not intersect with other segments
-				var nyttSegment = new segment(handledPolygon.segments[handledPolygon.segments.length-1].p2,handledPolygon.segments[0].p1);
+				var nyttSegment = new Segment(handledPolygon.segments[handledPolygon.segments.length-1].p2,handledPolygon.segments[0].p1);
 				if(document.getElementById("checkboxEnforceNonComplex").checked){
 					if(!checkIfIntersect(handledPolygon.segments,nyttSegment,true)){
 						handledPolygon.segments.push(nyttSegment);
@@ -117,8 +117,8 @@ function leftClickOpen(handledPolygon,newlyClickedPoint){
 			}
 		}
 		else{
-			//if the new segment does not intersect with other segments or the new point to close to other points, the add the point (+segment)
-			var nyttSegment = new segment(handledPolygon.segments[handledPolygon.segments.length-1].p2,newlyClickedPoint);
+			//if the new Segment does not intersect with other segments or the new point to close to other points, the add the point (+segment)
+			var nyttSegment = new Segment(handledPolygon.segments[handledPolygon.segments.length-1].p2,newlyClickedPoint);
 			if(checkIfCloseToPoint(handledPolygon.segments,newlyClickedPoint,minDistance)<0){//checking p1 in all segments
 				if(distBetweenPoints(handledPolygon.segments[handledPolygon.segments.length-1].p2,newlyClickedPoint)>minDistance){//checking p2 in the last segment
 					if(document.getElementById("checkboxEnforceNonComplex").checked){
@@ -142,7 +142,7 @@ function leftClickOpen(handledPolygon,newlyClickedPoint){
 			//if it is not to close to the fist point, add the second point
 			if(distBetweenPoints(handledPolygon.seed,newlyClickedPoint)>minDistance){
 				//console.log("first segment");
-				var nyttSegment = new segment(handledPolygon.seed,newlyClickedPoint);
+				var nyttSegment = new Segment(handledPolygon.seed,newlyClickedPoint);
 				handledPolygon.segments.push(nyttSegment);
 			}
 		}
@@ -204,8 +204,8 @@ function checkIfRemovedPointCausesSegmentIntersect(segmentArrayIn,deleteAtIndex)
 		//find index for the segment one step prior
 		var indexBeforeDeleteAtIndex=moduloInPolygon(deleteAtIndex-1,segmentArrayIn.length); //DAI-1
 		//skapa ETT nya segment f�r valt index och det dessf�rrinnan
-		//create ONE new segment to replace chosen segment (at deleteAtIndex) and the segment prior
-		var thePotentialNewSegment = new segment(segmentArrayIn[indexBeforeDeleteAtIndex].p1,segmentArrayIn[deleteAtIndex].p2);
+		//create ONE new Segment to replace chosen segment (at deleteAtIndex) and the segment prior
+		var thePotentialNewSegment = new Segment(segmentArrayIn[indexBeforeDeleteAtIndex].p1,segmentArrayIn[deleteAtIndex].p2);
 		//skipping the two segments to be replaced plus their neighbouring segments
 		for(p=0;p<segmentArrayIn.length-4;p++){
 			//drawOneSegment(segmentArrayIn[moduloInPolygon((p+deleteAtIndex+2),segmentArrayIn.length)],"0,0,255");
@@ -278,7 +278,7 @@ function checkIfCloseToLine(segmentArrayIn,nyPunkt,minDistanceIn){
 	return ppReturArray;
 }
 
-//checking if new segment intersects with other segment in array
+//checking if new Segment intersects with other segment in array
 function checkIfIntersect(segmentArrayIn,nyttSegmentIn,skipFirstSegment){
 	var startSegm=0;
 	if(skipFirstSegment){startSegm=1;}//skipping first segment in case user clicks the polygons first point
@@ -303,9 +303,9 @@ function checkIfMovedIntersects(segmentArrayIn,nyPunkt,movedAtIndex){
 		var indexBeforeMovedAtIndex=moduloInPolygon(movedAtIndex-1,segmentArrayIn.length); //MAI-1
 		var indexBeforeBeforeMovedAtIndex=moduloInPolygon(indexBeforeMovedAtIndex-1,segmentArrayIn.length);//MAI-2
 		var indexAfterMovedAtIndex=moduloInPolygon(movedAtIndex+1,segmentArrayIn.length);//MAI+1
-		//creating two new segments for chosen index and the one prior
-		var firstCheckedSegment  = new segment(segmentArrayIn[indexBeforeMovedAtIndex].p1,nyPunkt);
-		var secondCheckedSegment = new segment(nyPunkt,segmentArrayIn[movedAtIndex].p2);
+		//creating two new Segments for chosen index and the one prior
+		var firstCheckedSegment  = new Segment(segmentArrayIn[indexBeforeMovedAtIndex].p1,nyPunkt);
+		var secondCheckedSegment = new Segment(nyPunkt,segmentArrayIn[movedAtIndex].p2);
 		//loop through all segments in segment array
 		//general idea: no need to check if neighbouring segments intersect with current segment (being checked)
 		for(m=0;m<segmentArrayIn.length;m++){
@@ -372,11 +372,11 @@ function reversePolygon(){
 //inserting a new point (+segment) in a polygon segment array, at a given index
 function insertPoint(newPointIn,insertAtThisIndex){
 //splitting a segment (A-B) that is given a new point
-//the new segment goes from breakPoint to point B
+//the new Segment goes from breakPoint to point B
 //the old segment is changed so that it goes from point A to the breakPoint
-	//new segment starts at the breaking point, ends where the divided segment ended (B)
-	var tempSegmentToInsert = new segment(newPointIn,this.segments[insertAtThisIndex].p2);
-	//add new segment after the break
+	//new Segment starts at the breaking point, ends where the divided segment ended (B)
+	var tempSegmentToInsert = new Segment(newPointIn,this.segments[insertAtThisIndex].p2);
+	//add new Segment after the break
 	this.segments.splice(insertAtThisIndex+1,0,tempSegmentToInsert);
 	//chagning segment before the break so that the end point is now the breakPoint
 	this.segments[insertAtThisIndex].p2=newPointIn;
@@ -428,31 +428,5 @@ function ejectPoint(removeAtThisIndex){
 	this.segments.splice(removeAtThisIndex,1);
 }
 
-//----------------------------------------------------------------
-//---SEGMENT------------------------------------------------------
-//segment object constructor
-function segment(punkt1,punkt2){
-	this.p1=punkt1;
-	this.p2=punkt2;
-	//TODO error handling if punkt1 and punkt2 are not given or not point objects
-	this.cLength=0; //calculated length
-	this.calculateLength=calculateLength;
-	this.reverseSegment=reverseSegment;
-}
-
-//the lenght of a segment
-//TODO check if it is used (could be used to calculate polygon perimeter length)
-function calculateLength(){
-	var segmentLength=Math.sqrt(Math.pow((this.p1.x-this.p2.x),2)+Math.pow((this.p1.y-this.p2.y),2));
-	this.cLength=segmentLength; //save
-	return segmentLength;
-}
-
-//chance the direction of segment
-function reverseSegment(){
-	var tempReversePoint=this.p1;
-	this.p1=this.p2;
-	this.p2=tempReversePoint;
-}
 
 

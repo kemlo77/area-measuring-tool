@@ -105,14 +105,14 @@ function testFunk3(){
 	var testpunktB = new Point(200,200);
 	var testpunktC = new Point(75,125);
 	var ritpunkt= new Point(50,50);
-	var segmentetAB = new segment(testpunktA,testpunktB);
+	var segmentetAB = new Segment(testpunktA,testpunktB);
 	
 	drawOneSegment(segmentetAB,"0,0,0");
 	drawDot(testpunktC,2,"0,0,0");
 	tempvar=(project_vector(segmentetAB,testpunktC)); // norm och punkt (-1 och 0 ifall inget)
 	if(tempvar[0]>=0){
 		drawDot(ritpunkt,3,"0,200,0");
-		var tempsegment= new segment(testpunktC,tempvar[1]);
+		var tempsegment= new Segment(testpunktC,tempvar[1]);
 		drawOneSegment(tempsegment,"255,128,0");
 	}
 	else{
