@@ -203,7 +203,7 @@ function checkIfRemovedPointCausesSegmentIntersect(segmentArrayIn,deleteAtIndex)
 	if(segmentArrayIn.length>4){
 		//find index for the segment one step prior
 		var indexBeforeDeleteAtIndex=moduloInPolygon(deleteAtIndex-1,segmentArrayIn.length); //DAI-1
-		//skapa ETT nya segment för valt index och det dessförrinnan
+		//skapa ETT nya segment fï¿½r valt index och det dessfï¿½rrinnan
 		//create ONE new segment to replace chosen segment (at deleteAtIndex) and the segment prior
 		var thePotentialNewSegment = new segment(segmentArrayIn[indexBeforeDeleteAtIndex].p1,segmentArrayIn[deleteAtIndex].p2);
 		//skipping the two segments to be replaced plus their neighbouring segments
@@ -254,7 +254,7 @@ function checkIfCloseToLine(segmentArrayIn,nyPunkt,minDistanceIn){
 	var ppReturArray = new Array();
 	var closeEnough=false;
 	var firstPointIndex = 0;
-	var closestPoint = new point();
+	var closestPoint = new Point();
 	//checking with every segment
 	for(j=0;j<segmentArrayIn.length;j++){
 		//projecting point on segment
@@ -409,7 +409,7 @@ function revolFirstIndex(newFirstIndex){
 		newFirstIndex=moduloInPolygon(newFirstIndex,this.segments.length);
 		//removing the group of segments (up until newfirstindex)
 		var tempArray = this.segments.splice(0,newFirstIndex+1);
-		//lägger den stumpen på slutet
+		//lï¿½gger den stumpen pï¿½ slutet
 		//adding the group of segments to the end of the other part
 		this.segments=this.segments.concat(tempArray);
 		//changing the polygon seed point to the first point
@@ -474,65 +474,4 @@ function dotProduct(vector1,vector2){
 	return (vector1.x*vector2.x+vector1.y*vector2.y);
 }
 
-//----------------------------------------------------------------
-//--POINT---------------------------------------------------------
-//point object constructor
-function point(x,y){
-	if(x==undefined||y==undefined){
-		x=0;
-		y=0
-	}
-	else{
-		this.x=x;
-		this.y=y;
-	}
-	this.rotate=rotate;
-	this.translate=translate;
-	this.getTheAngle=getTheAngle;
-	this.clonePoint=clonePoint;
-	this.copyValues=copyValues;
-}
-
-//copying values from point so that the new point IS the same object
-function copyValues(copyFromThisPoint){
-	this.x=copyFromThisPoint.x;
-	this.y=copyFromThisPoint.y;
-}
-
-//clone a point
-function clonePoint(){
-	var copiedPoint = new point(this.x,this.y);
-	return copiedPoint;
-}
-
-//rotate a point around the Origin
-function rotate(vinkel){
-	var tempX=this.x
-	var tempY=this.y;
-	this.x= tempX*Math.cos(vinkel)+tempY*Math.sin(vinkel);
-	this.y=-tempX*Math.sin(vinkel)+tempY*Math.cos(vinkel);
-}
-
-//move a point
-function translate(distX,distY){
-	this.x+=distX;
-	this.y+=distY;
-}
-
-//return the angle between the x-axis and a vector AB (where A is in the Origin and B is the point checked)
-function getTheAngle(){
-	arctanAngle=Math.atan(this.y/this.x);
-	if(this.y>0){
-		//if the point is in q1
-		if(this.x>=0){return arctanAngle}
-		//if the point is in q2
-		else{return (Math.PI+arctanAngle)}
-	}
-	else{
-		//if the point is in q3
-		if(this.x<0){return (Math.PI+arctanAngle)}
-		//if the point is in q4
-		else{return (2*Math.PI+arctanAngle)}
-	}
-}
 

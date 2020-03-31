@@ -26,10 +26,11 @@
 			}	
 		</style>
 
-		<script type="text/javascript" src="main.js"></script>
-		<script type="text/javascript" src="math.js"></script>
-		<script type="text/javascript" src="testFunk.js"></script>
-		<script type="text/javascript" src="drawGraphic.js"></script>
+		<script type="text/javascript" src="built/main.js"></script>
+		<script type="text/javascript" src="built/math.js"></script>
+		<script type="text/javascript" src="built/testFunk.js"></script>
+		<script type="text/javascript" src="built/drawGraphic.js"></script>
+		<script type="text/javascript" src="built/Point.js"></script>
 
 		<script type="application/javascript">
 			var ctxFront;
@@ -49,7 +50,7 @@
 				//var position_y = clamp(event.pageY-document.getElementById(rutans_id).offsetTop,0,IHEIGHT);
 				var position_x = evt.clientX - rect.left;
 				var position_y = evt.clientY - rect.top;
-				var nyVansterKlickadPunkt=new point(position_x,position_y);
+				var nyVansterKlickadPunkt=new Point(position_x,position_y);
 				handleClick(true,nyVansterKlickadPunkt);
 			}
 			//Right click
@@ -62,7 +63,7 @@
 				var position_x = evt.clientX - rect.left;
 				var position_y = evt.clientY - rect.top;
 				
-				var nyHogerKlickadPunkt=new point(position_x,position_y);
+				var nyHogerKlickadPunkt=new Point(position_x,position_y);
 				handleClick(false,nyHogerKlickadPunkt);
 			}			
 			function getMousePos(evt,canvas_id) {
@@ -70,7 +71,7 @@
 				x_pos=evt.clientX - rect.left;
 				y_pos=evt.clientY - rect.top;
 				//console.log(x_pos+","+y_pos);
-				var mousePosPoint = new point(x_pos,y_pos);
+				var mousePosPoint = new Point(x_pos,y_pos);
 				drawMovement(mousePosPoint,firstPolygon);
 			}
 		</script>

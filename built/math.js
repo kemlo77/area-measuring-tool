@@ -17,7 +17,7 @@ function calculateIntersect(segmentAB,segmentCD){
 	//the angle between the x-axis and AB
 	theta1=punktB.getTheAngle();
 	//Rotate the system so that point B is on the positive x-axis
-	punktB = new point(distAB,0);
+	punktB = new Point(distAB,0);
 	punktC.rotate(theta1);
 	punktD.rotate(theta1);
 	//The case if CD is parallell with the x-axis
@@ -51,7 +51,7 @@ function calculateIntersect(segmentAB,segmentCD){
 	//calculate where CD intersects x-axis
 	ABpos=punktD.x+(punktC.x-punktD.x)*punktD.y/(punktD.y-punktC.y);
 	//create new point E where CD intersects x-axis
-	var punktE = new point(ABpos,0);
+	var punktE = new Point(ABpos,0);
 
 	//The case if the point E is not between A and B on the x-axis
 	//that is E.x less than zero or E.x larger than B.x
@@ -102,7 +102,7 @@ function project_vector(segmentAB,punktC){
 		vectorAD.x=dotproduct_AB_AC * vectorAB.x/Math.pow(normAB,2);
 		vectorAD.y=dotproduct_AB_AC * vectorAB.y/Math.pow(normAB,2);
 		normAD=vectorAD.vLength();
-		var punktD = new point();
+		var punktD = new Point();
 		punktD.x=punktA.x+vectorAD.x
 		punktD.y=punktA.y+vectorAD.y;
 		//kollar så inte det är längre från a->d än vad det är a->b
