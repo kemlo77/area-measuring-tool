@@ -1,9 +1,4 @@
 function init() {
-	/* var canvas = document.getElementById("canvas"); */
-
-/* 	if (canvas.getContext) {
-		ctx = canvas.getContext("2d");
-	} */
 	var canvasBackground = document.getElementById("background");
 	if (canvasBackground.getContext) {ctxBack = canvasBackground.getContext("2d");}
 	var canvasForeground = document.getElementById("foreground");
@@ -25,15 +20,21 @@ function clearEntirely(){
 //*************************
 function handleClick(isLeftClick,theClickedPoint){
 	if(isLeftClick){
+		firstPolygon.handleLeftClick(theClickedPoint);
 		if(firstPolygon.closed){
-			if(firstPolygon.moveMode){leftClickClosedMoveMode(firstPolygon,theClickedPoint)}//LEFT - CLOSED - MOVEMODE
+			if(firstPolygon.moveMode){ //LEFT - CLOSED - MOVEMODE
+				leftClickClosedMoveMode(firstPolygon,theClickedPoint)
+			}
 			else{leftClickClosed(firstPolygon,theClickedPoint)}//LEFT - CLOSED
 		}
 		else{leftClickOpen(firstPolygon,theClickedPoint)}//LEFT - OPEN
 	}
 	else{
+		firstPolygon.handleRightClick(theClickedPoint);
 		if(firstPolygon.closed){
-			if(firstPolygon.moveMode){rightClickClosedMoveMode(firstPolygon)}//RIGHT - CLOSED - MOVEMODE
+			if(firstPolygon.moveMode){ //RIGHT - CLOSED - MOVEMODE
+				rightClickClosedMoveMode(firstPolygon)
+			}
 			else{rightClickClosed(firstPolygon,theClickedPoint)}//RIGHT - CLOSED
 		}
 		else{rightClickOpen(firstPolygon)}//RIGHT - OPEN

@@ -6,16 +6,29 @@ class Polygon {
     public seed: Point;
     public moveMode: boolean;
     public movePointIndex: number;
+    private currentState: PolygonState;
 
     constructor() {
         this.segments = new Array();
-        this.closed = false;
+        this.closed = false; //TODO: denna ska bort
         this.clockWise = false;
         this.area = 0;
         this.seed = null;
-        this.moveMode = false;
+        this.moveMode = false; //TODO: denna ska bort
         this.movePointIndex = -1;
+        this.currentState = OpenState.getInstance();
+    }
 
+    setCurrentState(state: PolygonState): void {
+        this.currentState = state;
+    }
+
+    handleLeftClick(point: Point): void {
+        this.currentState.handleLeftClick(this, point);
+    }
+
+    handleRightClick(point: Point): void {
+        this.currentState.handleRightClick(this, point);
     }
 
     //closing polygon

@@ -1,13 +1,23 @@
 var Polygon = /** @class */ (function () {
     function Polygon() {
         this.segments = new Array();
-        this.closed = false;
+        this.closed = false; //TODO: denna ska bort
         this.clockWise = false;
         this.area = 0;
         this.seed = null;
         this.moveMode = false;
         this.movePointIndex = -1;
+        this.currentState = OpenState.getInstance();
     }
+    Polygon.prototype.setCurrentState = function (state) {
+        this.currentState = state;
+    };
+    Polygon.prototype.handleLeftClick = function (point) {
+        this.currentState.handleLeftClick(this, point);
+    };
+    Polygon.prototype.handleRightClick = function (point) {
+        this.currentState.handleRightClick(this, point);
+    };
     //closing polygon
     Polygon.prototype.close = function () {
         this.closed = true;
