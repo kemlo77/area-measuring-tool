@@ -11,8 +11,68 @@ class OpenState implements PolygonState {
         return OpenState.instance;
     }
 
+    stateName(): string {return "OpenState"}; //TODO: ta bort senare
+
     handleLeftClick(polygon: Polygon, pointClicked: Point): void {
         console.log("OpenState - handleLeftClick");
+
+        const enforceNonComplexCheckBox: HTMLInputElement = <HTMLInputElement>document.getElementById("checkboxEnforceNonComplex");
+
+        //check if this is the first segment
+        if (polygon.segments.length > 0) {
+            //check if user clicks near the first point (wanting to close the polygon)
+            if (distBetweenPoints(pointClicked, polygon.segments[0].p1) < closePolygonMinimumDistance) {
+                //if the plygon already has at least 2 segments
+                if (polygon.segments.length >= 2) {
+                    //check that the segment between the last point and first point does not intersect with other segments
+                    var nyttSegment = new Segment(polygon.segments[polygon.segments.length - 1].p2, polygon.segments[0].p1);
+                    if (enforceNonComplexCheckBox.checked) {
+                        if (!checkIfIntersect(polygon.segments, nyttSegment, true)) {
+                            polygon.segments.push(nyttSegment); // TODO: kolla dubbel kod
+                            polygon.close(); // TODO: kolla dubbel kod
+                        }
+                    }
+                    else {
+                        polygon.segments.push(nyttSegment); // TODO: kolla dubbel kod
+                        polygon.close(); // TODO: kolla dubbel kod
+                    }
+                    polygon.setCurrentState(ClosedState.getInstance());
+                }
+            }
+            else {
+                //if the new Segment does not intersect with other segments or the new point to close to other points, the add the point (+segment)
+                var nyttSegment = new Segment(polygon.segments[polygon.segments.length - 1].p2, pointClicked);
+                if (checkIfCloseToPoint(polygon.segments, pointClicked, minDistance) < 0) {//checking p1 in all segments
+                    if (distBetweenPoints(polygon.segments[polygon.segments.length - 1].p2, pointClicked) > minDistance) {//checking p2 in the last segment
+                        if (enforceNonComplexCheckBox.checked) {
+                            if (!checkIfIntersect(polygon.segments, nyttSegment, false)) {
+                                polygon.segments.push(nyttSegment);
+                            }
+                        }
+                        else {
+                            polygon.segments.push(nyttSegment);
+                        }
+                    }
+                }
+            }
+        }
+        else {//if seed does not exist (nor any other elements) Add the first point.
+            if (polygon.seed == null) {
+                //console.log("first point");
+                polygon.seed = pointClicked;
+            }
+            else {
+                //if it is not to close to the fist point, add the second point
+                if (distBetweenPoints(polygon.seed, pointClicked) > minDistance) {
+                    //console.log("first segment");
+                    var nyttSegment = new Segment(polygon.seed, pointClicked);
+                    polygon.segments.push(nyttSegment);
+                }
+            }
+        }
+
+
+
 
         // empty space (new point)
 
@@ -20,14 +80,17 @@ class OpenState implements PolygonState {
         // on point if on other point (nothing)
 
         // on vertex (nothing)
-        polygon.setCurrentState(ClosedState.getInstance());
+        
 
     }
 
     handleRightClick(polygon: Polygon, pointClicked: Point): void {
         console.log("OpenState - handleRightClick");
-        // remove last point
-
-        polygon.setCurrentState(MoveState.getInstance());
+        //removes last added point (+segment)
+        if (polygon.segments.length == 0) {
+            polygon.seed = null;
+            //console.log("removed seed point");
+        }
+        polygon.segments.pop();
     }
 }

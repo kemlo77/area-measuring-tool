@@ -21,6 +21,7 @@ class Polygon {
 
     setCurrentState(state: PolygonState): void {
         this.currentState = state;
+        console.log("Change state to: " + state.stateName());
     }
 
     handleLeftClick(point: Point): void {

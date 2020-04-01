@@ -5,12 +5,13 @@ var Polygon = /** @class */ (function () {
         this.clockWise = false;
         this.area = 0;
         this.seed = null;
-        this.moveMode = false;
+        this.moveMode = false; //TODO: denna ska bort
         this.movePointIndex = -1;
         this.currentState = OpenState.getInstance();
     }
     Polygon.prototype.setCurrentState = function (state) {
         this.currentState = state;
+        console.log("Change state to: " + state.stateName());
     };
     Polygon.prototype.handleLeftClick = function (point) {
         this.currentState.handleLeftClick(this, point);
