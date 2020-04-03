@@ -21,7 +21,7 @@ var ClosedState = /** @class */ (function () {
         else {
             // on vertex (new point)
             //if the click occured near a segment, insert a new point
-            var tempVar = checkIfCloseToLine(polygon.segments, pointClicked, moveDelInsDistance);
+            var tempVar = this.checkIfCloseToLine(polygon.segments, pointClicked, moveDelInsDistance);
             if (tempVar[0]) {
                 //rounding coordinates to get integers
                 if (useIntegerCoords) {
@@ -50,7 +50,7 @@ var ClosedState = /** @class */ (function () {
             if (polygon.segments.length > 3) {
                 //check that the segment created to fill the gap does not intersect with other segments
                 if (enforceNonComplexCheckBox.checked) {
-                    if (!checkIfRemovedPointCausesSegmentIntersect(polygon.segments, nearPointIndex)) {
+                    if (!this.checkIfRemovedPointCausesSegmentIntersect(polygon.segments, nearPointIndex)) {
                         //no intersects found
                         polygon.ejectPoint(nearPointIndex);
                     }
@@ -63,7 +63,7 @@ var ClosedState = /** @class */ (function () {
         //erase segment if user right clicked "on" segment
         else {
             //check if click was near segment
-            var tempVar = checkIfCloseToLine(polygon.segments, pointClicked, moveDelInsDistance);
+            var tempVar = this.checkIfCloseToLine(polygon.segments, pointClicked, moveDelInsDistance);
             if (tempVar[0]) { //true if user clicked close enough to segment
                 // on vertex (removes vertex) -> OpenState
                 //tempVar[1] holds what segment
@@ -75,6 +75,61 @@ var ClosedState = /** @class */ (function () {
                 polygon.closed = false; //TODO: ta bort denna
             }
         }
+    };
+    ClosedState.prototype.checkIfRemovedPointCausesSegmentIntersect = function (segmentArrayIn, deleteAtIndex) {
+        //needs only to be checked for polygons with 5 sides or more
+        //i.e. a four sided polygon loosing a side becomes a triangle, that can have no sides intersecting.
+        if (segmentArrayIn.length > 4) {
+            //find index for the segment one step prior
+            var indexBeforeDeleteAtIndex = moduloInPolygon(deleteAtIndex - 1, segmentArrayIn.length); //DAI-1
+            //skapa ETT nya segment f�r valt index och det dessf�rrinnan
+            //create ONE new Segment to replace chosen segment (at deleteAtIndex) and the segment prior
+            var thePotentialNewSegment = new Segment(segmentArrayIn[indexBeforeDeleteAtIndex].p1, segmentArrayIn[deleteAtIndex].p2);
+            //skipping the two segments to be replaced plus their neighbouring segments
+            for (var p = 0; p < segmentArrayIn.length - 4; p++) {
+                segmentArrayIn[moduloInPolygon((p + deleteAtIndex + 2), segmentArrayIn.length)];
+                if (calculateIntersect(thePotentialNewSegment, segmentArrayIn[moduloInPolygon((p + deleteAtIndex + 2), segmentArrayIn.length)])[0]) {
+                    console.log("if that point is removed there will be an intersect");
+                    return true;
+                }
+            }
+            //if coming this far, there is no intersect found
+            return false;
+        }
+        else {
+            //if polygon had 4 sides or less, it is automatically OK
+            return false;
+        }
+    };
+    //checking if new point is near other polygon segments
+    ClosedState.prototype.checkIfCloseToLine = function (segmentArrayIn, nyPunkt, minDistanceIn) {
+        var distToLine = -1;
+        var smallestDistance = minDistanceIn;
+        var ppReturArray = new Array();
+        var closeEnough = false;
+        var firstPointIndex = 0;
+        var closestPoint = new Point();
+        //checking with every segment
+        for (var j = 0; j < segmentArrayIn.length; j++) {
+            //projecting point on segment
+            var proj_svar = project_vector(segmentArrayIn[j], nyPunkt);
+            distToLine = proj_svar[0]; //negative if it is too far away
+            var projPunkten = proj_svar[1]; //0 if it is too far away
+            //if it was between 0 and minDistanceIn
+            if (distToLine >= 0 && distToLine < minDistanceIn) {
+                if (distToLine < smallestDistance) {
+                    //if it is closer than minDistanceIn and closer than last saved, it is saved
+                    smallestDistance = distToLine;
+                    closestPoint = projPunkten;
+                    firstPointIndex = j;
+                }
+                closeEnough = true;
+            }
+        }
+        ppReturArray.push(closeEnough); //true, if there was anything close enough
+        ppReturArray.push(firstPointIndex); //index for the first point on segment clicked (index for the segment clicked?)
+        ppReturArray.push(closestPoint); //the point projected on the segment
+        return ppReturArray;
     };
     return ClosedState;
 }());

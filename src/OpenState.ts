@@ -11,7 +11,7 @@ class OpenState implements PolygonState {
         return OpenState.instance;
     }
 
-    stateName(): string {return "OpenState"}; //TODO: ta bort senare
+    stateName(): string { return "OpenState" }; //TODO: ta bort senare
 
     handleLeftClick(polygon: Polygon, pointClicked: Point): void {
         console.log("OpenState - handleLeftClick");
@@ -27,7 +27,7 @@ class OpenState implements PolygonState {
                     //check that the segment between the last point and first point does not intersect with other segments
                     var nyttSegment = new Segment(polygon.segments[polygon.segments.length - 1].p2, polygon.segments[0].p1);
                     if (enforceNonComplexCheckBox.checked) {
-                        if (!checkIfIntersect(polygon.segments, nyttSegment, true)) {
+                        if (!this.checkIfIntersect(polygon.segments, nyttSegment, true)) {
                             polygon.segments.push(nyttSegment); // TODO: kolla dubbel kod
                             polygon.close(); // TODO: kolla dubbel kod
                         }
@@ -45,7 +45,7 @@ class OpenState implements PolygonState {
                 if (checkIfCloseToPoint(polygon.segments, pointClicked, minDistance) < 0) {//checking p1 in all segments
                     if (distBetweenPoints(polygon.segments[polygon.segments.length - 1].p2, pointClicked) > minDistance) {//checking p2 in the last segment
                         if (enforceNonComplexCheckBox.checked) {
-                            if (!checkIfIntersect(polygon.segments, nyttSegment, false)) {
+                            if (!this.checkIfIntersect(polygon.segments, nyttSegment, false)) {
                                 polygon.segments.push(nyttSegment);
                             }
                         }
@@ -80,7 +80,7 @@ class OpenState implements PolygonState {
         // on point if on other point (nothing)
 
         // on vertex (nothing)
-        
+
 
     }
 
@@ -92,5 +92,22 @@ class OpenState implements PolygonState {
             //console.log("removed seed point");
         }
         polygon.segments.pop();
+    }
+
+
+    //checking if new Segment intersects with other segment in array
+    checkIfIntersect(segmentArrayIn: Segment[], nyttSegmentIn: Segment, skipFirstSegment: boolean): boolean {
+        var startSegm = 0;
+        if (skipFirstSegment) { startSegm = 1; }//skipping first segment in case user clicks the polygons first point
+        //skipping the second to last (penultimate segment)
+        for (let n = startSegm; n < segmentArrayIn.length - 1; n++) {
+            const result = calculateIntersect(segmentArrayIn[n], nyttSegmentIn);
+            if (result[0]) {
+                //returning true if there is a intersect
+                return true;
+            }
+        }
+        //arriving here, there is no intersect
+        return false;
     }
 }

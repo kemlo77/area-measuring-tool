@@ -21,7 +21,7 @@ var OpenState = /** @class */ (function () {
                     //check that the segment between the last point and first point does not intersect with other segments
                     var nyttSegment = new Segment(polygon.segments[polygon.segments.length - 1].p2, polygon.segments[0].p1);
                     if (enforceNonComplexCheckBox.checked) {
-                        if (!checkIfIntersect(polygon.segments, nyttSegment, true)) {
+                        if (!this.checkIfIntersect(polygon.segments, nyttSegment, true)) {
                             polygon.segments.push(nyttSegment); // TODO: kolla dubbel kod
                             polygon.close(); // TODO: kolla dubbel kod
                         }
@@ -39,7 +39,7 @@ var OpenState = /** @class */ (function () {
                 if (checkIfCloseToPoint(polygon.segments, pointClicked, minDistance) < 0) { //checking p1 in all segments
                     if (distBetweenPoints(polygon.segments[polygon.segments.length - 1].p2, pointClicked) > minDistance) { //checking p2 in the last segment
                         if (enforceNonComplexCheckBox.checked) {
-                            if (!checkIfIntersect(polygon.segments, nyttSegment, false)) {
+                            if (!this.checkIfIntersect(polygon.segments, nyttSegment, false)) {
                                 polygon.segments.push(nyttSegment);
                             }
                         }
@@ -77,6 +77,23 @@ var OpenState = /** @class */ (function () {
             //console.log("removed seed point");
         }
         polygon.segments.pop();
+    };
+    //checking if new Segment intersects with other segment in array
+    OpenState.prototype.checkIfIntersect = function (segmentArrayIn, nyttSegmentIn, skipFirstSegment) {
+        var startSegm = 0;
+        if (skipFirstSegment) {
+            startSegm = 1;
+        } //skipping first segment in case user clicks the polygons first point
+        //skipping the second to last (penultimate segment)
+        for (var n = startSegm; n < segmentArrayIn.length - 1; n++) {
+            var result = calculateIntersect(segmentArrayIn[n], nyttSegmentIn);
+            if (result[0]) {
+                //returning true if there is a intersect
+                return true;
+            }
+        }
+        //arriving here, there is no intersect
+        return false;
     };
     return OpenState;
 }());
