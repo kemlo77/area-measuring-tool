@@ -1,88 +1,88 @@
 //Checking if two segments AB and CD intersect
 function calculateIntersect(segmentAB: Segment, segmentCD: Segment): Point {
 	// inspiration på http://alienryderflex.com/intersect/
-	const punktA: Point = segmentAB.p1.clonePoint();
-	let punktB: Point = segmentAB.p2.clonePoint();
-	const punktC: Point = segmentCD.p1.clonePoint();
-	const punktD: Point = segmentCD.p2.clonePoint();
+	const pointA: Point = segmentAB.p1.clonePoint();
+	let pointB: Point = segmentAB.p2.clonePoint();
+	const pointC: Point = segmentCD.p1.clonePoint();
+	const pointD: Point = segmentCD.p2.clonePoint();
 
-	const ax: number = punktA.x;
-	const ay: number = punktA.y;
+	const ax: number = pointA.x;
+	const ay: number = pointA.y;
 	//Translation of the system so that A is in the Origin
-	punktB.translate(-ax, -ay);
-	punktC.translate(-ax, -ay);
-	punktD.translate(-ax, -ay);
+	pointB.translate(-ax, -ay);
+	pointC.translate(-ax, -ay);
+	pointD.translate(-ax, -ay);
 	//calculate the length of AB
-	const distAB: number = Math.sqrt(punktB.x * punktB.x + punktB.y * punktB.y);
+	const distAB: number = Math.sqrt(pointB.x * pointB.x + pointB.y * pointB.y);
 	//the angle between the x-axis and AB
-	const theta1: number = punktB.getTheAngle();
+	const theta1: number = pointB.getTheAngle();
 	//Rotate the system so that point B is on the positive x-axis
-	punktB = new Point(distAB, 0);
-	punktC.rotate(theta1);
-	punktD.rotate(theta1);
+	pointB = new Point(distAB, 0);
+	pointC.rotate(theta1);
+	pointD.rotate(theta1);
 	//The case if CD is parallell with the x-axis
 	//if C.y is equal to D.y (or very close to it)
-	if (Math.abs(punktC.y - punktD.y) < 0.000001) {
+	if (Math.abs(pointC.y - pointD.y) < 0.000001) {
 		//if C and thus also D are on the x-axis (or very close to it)
-		if ((Math.abs(punktC.y) < 0.000001) || (Math.abs(punktD.y) < 0.000001)) {
-			if ((0 <= punktC.x && punktC.x <= punktB.x)) {
+		if ((Math.abs(pointC.y) < 0.000001) || (Math.abs(pointD.y) < 0.000001)) {
+			if ((0 <= pointC.x && pointC.x <= pointB.x)) {
 				//Rotate and translate point C to the original coordinate system
-				punktC.rotate(-theta1);
-				punktC.translate(ax, ay);
+				pointC.rotate(-theta1);
+				pointC.translate(ax, ay);
 				//return point of intersection
-				return punktC;
+				return pointC;
 			}
-			if ((0 <= punktD.x && punktD.x <= punktB.x)) {
+			if ((0 <= pointD.x && pointD.x <= pointB.x)) {
 				//Rotate and translate point D to the original coordinate system
-				punktD.rotate(-theta1);
-				punktD.translate(ax, ay);
+				pointD.rotate(-theta1);
+				pointD.translate(ax, ay);
 				//return point of intersection
-				return punktD;
+				return pointD;
 			}
 		}
 		return null;
 	}
 	//The case if CD does not intersect the x-asis (both C&D above x-axis) or (both C&D under x-axis)
 	//calculating with 10^-6 as zero since calculating with sin and cos can generate "close to zero" zeroes
-	if ((punktC.y < -0.000001 && punktD.y < -0.000001) || (punktC.y > 0.000001 && punktD.y > 0.000001)) {
+	if ((pointC.y < -0.000001 && pointD.y < -0.000001) || (pointC.y > 0.000001 && pointD.y > 0.000001)) {
 		return null
 	}
 	//calculate where CD intersects x-axis
-	const ABpos: number = punktD.x + (punktC.x - punktD.x) * punktD.y / (punktD.y - punktC.y);
+	const ABpos: number = pointD.x + (pointC.x - pointD.x) * pointD.y / (pointD.y - pointC.y);
 	//create new point E where CD intersects x-axis
-	let punktE = new Point(ABpos, 0);
+	let pointE = new Point(ABpos, 0);
 
 	//The case if the point E is not between A and B on the x-axis
 	//that is E.x less than zero or E.x larger than B.x
-	if (punktE.x < -0.000001 || (punktE.x - punktB.x) > 0.000001) {
+	if (pointE.x < -0.000001 || (pointE.x - pointB.x) > 0.000001) {
 		return null;
 	}
 	//The case if the point E is not in segment CD
-	if (punktC.x < punktD.x) {
-		if ((punktE.x - punktC.x) < -0.000001 || (punktE.x - punktD.x) > 0.000001) {
+	if (pointC.x < pointD.x) {
+		if ((pointE.x - pointC.x) < -0.000001 || (pointE.x - pointD.x) > 0.000001) {
 			return null;
 		}
 	}
 	else {
-		if ((punktE.x - punktC.x) > 0.000001 || (punktE.x - punktD.x) < -0.000001) {
+		if ((pointE.x - pointC.x) > 0.000001 || (pointE.x - pointD.x) < -0.000001) {
 			return null;
 		}
 	}
 	//Rotate and translate point E to the original coordinate system
-	punktE.rotate(-theta1);
-	punktE.translate(ax, ay);
+	pointE.rotate(-theta1);
+	pointE.translate(ax, ay);
 	//Arriving here if it is an intersect
-	return punktE;
+	return pointE;
 }
 
 
 //projecting the point C onto the segment AB. Returning the new point D on the segment and the distance CD
-function projectVector(segmentAB: Segment, punktC: Point): ProjectionResult {
-	const punktA: Point = segmentAB.p1.clonePoint();
-	const punktB: Point = segmentAB.p2.clonePoint();
+function projectVector(segmentAB: Segment, pointC: Point): ProjectionResult {
+	const pointA: Point = segmentAB.p1.clonePoint();
+	const pointB: Point = segmentAB.p2.clonePoint();
 	//create vectors
-	const vectorAB: Vector = new Vector(punktA, punktB);
-	const vectorAC: Vector = new Vector(punktA, punktC);
+	const vectorAB: Vector = new Vector(pointA, pointB);
+	const vectorAC: Vector = new Vector(pointA, pointC);
 	//calculate dot product
 	const dotproduct_AB_AC: number = dotProduct(vectorAB, vectorAC);
 	//if dotproduct_AB_AC is larger than zero the angle is acute and then C is an interesting point
@@ -95,13 +95,13 @@ function projectVector(segmentAB: Segment, punktC: Point): ProjectionResult {
 		vectorAD.x = dotproduct_AB_AC * vectorAB.x / Math.pow(normAB, 2);
 		vectorAD.y = dotproduct_AB_AC * vectorAB.y / Math.pow(normAB, 2);
 		const normAD: number = vectorAD.vLength();
-		const punktD: Point = new Point(punktA.x + vectorAD.x, punktA.y + vectorAD.y);
+		const pointD: Point = new Point(pointA.x + vectorAD.x, pointA.y + vectorAD.y);
 		//kollar så inte det är längre från a->d än vad det är a->b
 		//checking so that A->D is shorter than A->B
 		if (normAD <= normAB) {
-			const vectorDC: Vector = new Vector(punktD, punktC);
+			const vectorDC: Vector = new Vector(pointD, pointC);
 			const normDC: number = vectorDC.vLength();
-			return {successful: true, norm: normDC, point: punktD };
+			return {successful: true, norm: normDC, point: pointD };
 		}
 	}
 	return { successful:false, norm: null, point: null }
