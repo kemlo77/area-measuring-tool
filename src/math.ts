@@ -26,17 +26,17 @@ function calculateIntersect(segmentAB: Segment, segmentCD: Segment): Point {
 		//if C and thus also D are on the x-axis (or very close to it)
 		if ((Math.abs(punktC.y) < 0.000001) || (Math.abs(punktD.y) < 0.000001)) {
 			if ((0 <= punktC.x && punktC.x <= punktB.x)) {
-				//Rotate and translate point E to the original coordinate system
+				//Rotate and translate point C to the original coordinate system
 				punktC.rotate(-theta1);
 				punktC.translate(ax, ay);
-				//return true + a point of intersection
+				//return point of intersection
 				return punktC;
 			}
 			if ((0 <= punktD.x && punktD.x <= punktB.x)) {
-				//Rotate and translate point E to the original coordinate system
+				//Rotate and translate point D to the original coordinate system
 				punktD.rotate(-theta1);
 				punktD.translate(ax, ay);
-				//return true + a point of intersection
+				//return point of intersection
 				return punktD;
 			}
 		}
@@ -44,30 +44,26 @@ function calculateIntersect(segmentAB: Segment, segmentCD: Segment): Point {
 	}
 	//The case if CD does not intersect the x-asis (both C&D above x-axis) or (both C&D under x-axis)
 	//calculating with 10^-6 as zero since calculating with sin and cos can generate "close to zero" zeroes
-	//if((punktC.y<0&&punktD.y<0)||(punktC.y>0&&punktD.y>0)){
 	if ((punktC.y < -0.000001 && punktD.y < -0.000001) || (punktC.y > 0.000001 && punktD.y > 0.000001)) {
 		return null
 	}
 	//calculate where CD intersects x-axis
 	const ABpos: number = punktD.x + (punktC.x - punktD.x) * punktD.y / (punktD.y - punktC.y);
 	//create new point E where CD intersects x-axis
-	var punktE = new Point(ABpos, 0);
+	let punktE = new Point(ABpos, 0);
 
 	//The case if the point E is not between A and B on the x-axis
 	//that is E.x less than zero or E.x larger than B.x
-	//if(punktE.x<0||punktE.x>punktB.x){
 	if (punktE.x < -0.000001 || (punktE.x - punktB.x) > 0.000001) {
 		return null;
 	}
 	//The case if the point E is not in segment CD
 	if (punktC.x < punktD.x) {
-		//if(punktE.x<punktC.x||punktE.x>punktD.x){
 		if ((punktE.x - punktC.x) < -0.000001 || (punktE.x - punktD.x) > 0.000001) {
 			return null;
 		}
 	}
 	else {
-		//if(punktE.x>punktC.x||punktE.x<punktD.x){		
 		if ((punktE.x - punktC.x) > 0.000001 || (punktE.x - punktD.x) < -0.000001) {
 			return null;
 		}
@@ -81,12 +77,9 @@ function calculateIntersect(segmentAB: Segment, segmentCD: Segment): Point {
 
 
 //projecting the point C onto the segment AB. Returning the new point D on the segment and the distance CD
-function project_vector(segmentAB: Segment, punktC: Point) {
-	const punktA = segmentAB.p1.clonePoint();
-	const punktB = segmentAB.p2.clonePoint();
-	const temp_v = new Array();
-	temp_v.push(-1);//the norm
-	temp_v.push(0);//the point
+function projectVector(segmentAB: Segment, punktC: Point): ProjectionResult {
+	const punktA: Point = segmentAB.p1.clonePoint();
+	const punktB: Point = segmentAB.p2.clonePoint();
 	//create vectors
 	const vectorAB: Vector = new Vector(punktA, punktB);
 	const vectorAC: Vector = new Vector(punktA, punktC);
@@ -98,46 +91,32 @@ function project_vector(segmentAB: Segment, punktC: Point) {
 		const normAB: number = vectorAB.vLength();
 		//page 136 in "Elementary Linear Algebra" [Anton, Rorres], 7th edition
 		//projecting AC on AB. The new vector is AD
-		const vectorAD = new Vector(null, null);
-		//TODO: skapa ytterligare konstruktor hos Vector där man anger x och y-komponent
+		const vectorAD: Vector = new Vector(null, null); //TODO: skapa ytterligare konstruktor hos Vector där man anger x och y-komponent
 		vectorAD.x = dotproduct_AB_AC * vectorAB.x / Math.pow(normAB, 2);
 		vectorAD.y = dotproduct_AB_AC * vectorAB.y / Math.pow(normAB, 2);
 		const normAD: number = vectorAD.vLength();
-		const punktD = new Point();
-		punktD.x = punktA.x + vectorAD.x
-		punktD.y = punktA.y + vectorAD.y;
+		const punktD: Point = new Point(punktA.x + vectorAD.x, punktA.y + vectorAD.y);
 		//kollar så inte det är längre från a->d än vad det är a->b
 		//checking so that A->D is shorter than A->B
 		if (normAD <= normAB) {
 			const vectorDC: Vector = new Vector(punktD, punktC);
-			const normDC:number = vectorDC.vLength();
-			//returning result
-			temp_v[0] = normDC;
-			temp_v[1] = punktD;
+			const normDC: number = vectorDC.vLength();
+			return {successful: true, norm: normDC, point: punktD };
 		}
 	}
-	return temp_v;
-}
-
-
-//Check if a value is within a given interval. Otherwise return the value of the nearest limit
-function clamp(val, minval, maxval) {
-	if (val < minval) return minval;
-	if (val > maxval) return maxval;
-	return val;
+	return { successful:false, norm: null, point: null }
 }
 
 
 //Check the distance between two points
-function distBetweenPoints(pointOne, pointTwo) {
-	const theDist: number = Math.sqrt(Math.pow(pointOne.x - pointTwo.x, 2) + Math.pow(pointOne.y - pointTwo.y, 2));
-	return theDist;
+function distBetweenPoints(pointOne: Point, pointTwo: Point): number {
+	return Math.sqrt(Math.pow(pointOne.x - pointTwo.x, 2) + Math.pow(pointOne.y - pointTwo.y, 2));
 }
 
 
 //function to translate negative indexes in a polygon.
 //(e.g. index -2 in a polygon with 6 sides is 4)
-function moduloInPolygon(indexIn, arrayLength) {
+function moduloInPolygon(indexIn: number, arrayLength: number): number {
 	while (indexIn < 0) {
 		indexIn += arrayLength;
 	}
@@ -145,6 +124,6 @@ function moduloInPolygon(indexIn, arrayLength) {
 }
 
 //calculate the dot product between to vectors
-function dotProduct(vector1, vector2) {
+function dotProduct(vector1: Vector, vector2: Vector): number {
 	return (vector1.x * vector2.x + vector1.y * vector2.y);
 }

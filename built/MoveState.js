@@ -1,17 +1,16 @@
-var MoveState = /** @class */ (function () {
-    function MoveState() {
-    }
-    MoveState.getInstance = function () {
+class MoveState {
+    constructor() { }
+    static getInstance() {
         if (!MoveState.instance) {
             MoveState.instance = new MoveState();
         }
         return MoveState.instance;
-    };
-    MoveState.prototype.stateName = function () { return "MoveState"; };
+    }
+    stateName() { return "MoveState"; }
     ; //TODO: ta bort senare
-    MoveState.prototype.handleLeftClick = function (polygon, pointClicked) {
+    handleLeftClick(polygon, pointClicked) {
         console.log("MoveState - handleLeftClick");
-        var enforceNonComplexCheckBox = document.getElementById("checkboxEnforceNonComplex");
+        const enforceNonComplexCheckBox = document.getElementById("checkboxEnforceNonComplex");
         // empty space (moves to new point) -> ClosedState
         //if the clicked point is not to close to another point (not checking it self, there of the 4th argument in function call)
         if (checkIfCloseToPoint(polygon.segments, pointClicked, minDistance, polygon.movePointIndex) < 0) {
@@ -31,17 +30,17 @@ var MoveState = /** @class */ (function () {
                 polygon.setCurrentState(ClosedState.getInstance());
             }
         }
-    };
-    MoveState.prototype.handleRightClick = function (polygon, pointClicked) {
+    }
+    handleRightClick(polygon, pointClicked) {
         console.log("MoveState - handleRightClick");
         // (aborts move) -> ClosedState
         //aborting move mode
         polygon.moveMode = false;
         polygon.movePointIndex = -1;
         polygon.setCurrentState(ClosedState.getInstance());
-    };
+    }
     //checking if the two segments containing a point (being moved) intersects with the other segments in a polygon (at move)
-    MoveState.prototype.checkIfMovedIntersects = function (segmentArrayIn, nyPunkt, movedAtIndex) {
+    checkIfMovedIntersects(segmentArrayIn, nyPunkt, movedAtIndex) {
         // if polygon has more than 3 segments, otherwise return false
         if (segmentArrayIn.length > 3) {
             //find index for segments two steps before, one step before and one step after chosen index
@@ -54,7 +53,7 @@ var MoveState = /** @class */ (function () {
             var secondCheckedSegment = new Segment(nyPunkt, segmentArrayIn[movedAtIndex].p2);
             //loop through all segments in segment array
             //general idea: no need to check if neighbouring segments intersect with current segment (being checked)
-            for (var m = 0; m < segmentArrayIn.length; m++) {
+            for (let m = 0; m < segmentArrayIn.length; m++) {
                 //skip the two unnecessary segments for both comparisons (lying next to both segments)
                 if (m == movedAtIndex || m == indexBeforeMovedAtIndex) {
                     continue;
@@ -81,6 +80,5 @@ var MoveState = /** @class */ (function () {
             //if the polygon had only 3 sides, it is automatically ok
             return false;
         }
-    };
-    return MoveState;
-}());
+    }
+}

@@ -1,7 +1,8 @@
-var moveDelInsDistance = 3; //TODO: Döp om denna
-var minDistance = 8;
-var useIntegerCoords = false;
-var closePolygonMinimumDistance = 5;
+let moveDelInsDistance: number = 3; //TODO: Döp om denna
+let minDistance:number = 8;
+let closePolygonMinimumDistance:number = 5;
+let useIntegerCoords:boolean = false;
+
 let firstPolygon: Polygon;
 
 
@@ -14,7 +15,7 @@ function clearEntirely(): void {
 	CanvasPainter.getInstance().clearBothCanvas();
 }
 
-function handleClick(isLeftClick, theClickedPoint): void {
+function handleClick(isLeftClick: boolean, theClickedPoint: Point): void {
 	if (isLeftClick) {
 		firstPolygon.handleLeftClick(theClickedPoint);
 	}
@@ -66,11 +67,11 @@ function canvasRightClicked(event: MouseEvent, canvasId: string): void {
 	const rightClickedPoint: Point = new Point(clickedPositionX, clickedPositionY);
 	handleClick(false, rightClickedPoint);
 }
-function getMousePos(event: MouseEvent, canvadId: string): void {
-	var rect: ClientRect = document.getElementById(canvadId).getBoundingClientRect();
+function getMousePos(event: MouseEvent, canvasId: string): void {
+	const rect: ClientRect = document.getElementById(canvasId).getBoundingClientRect();
 	const mousePositionX: number = event.clientX - rect.left;
 	const mousePositionY: number = event.clientY - rect.top;
-	var mousePosition = new Point(mousePositionX, mousePositionY);
+	const mousePosition = new Point(mousePositionX, mousePositionY);
 	//TODO: borde nog inte specifikt ange vilken polygon här, kanske hämta aktuell?
 	CanvasPainter.getInstance().drawMovement(mousePosition, firstPolygon);
 }

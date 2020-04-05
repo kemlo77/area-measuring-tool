@@ -133,15 +133,13 @@ class ClosedState implements PolygonState {
         //checking with every segment
         for (let j = 0; j < segmentArrayIn.length; j++) {
             //projecting point on segment
-            var proj_svar = project_vector(segmentArrayIn[j], nyPunkt);
-            distToLine = proj_svar[0]; //negative if it is too far away
-            var projPunkten = proj_svar[1];   //0 if it is too far away
+            const projectionResult: ProjectionResult = projectVector(segmentArrayIn[j], nyPunkt);
             //if it was between 0 and minDistanceIn
-            if (distToLine >= 0 && distToLine < minDistanceIn) {
-                if (distToLine < smallestDistance) {
+            if (projectionResult.successful && projectionResult.norm < minDistanceIn) {
+                if (projectionResult.norm < smallestDistance) {
                     //if it is closer than minDistanceIn and closer than last saved, it is saved
-                    smallestDistance = distToLine;
-                    closestPoint = projPunkten;
+                    smallestDistance = projectionResult.norm;
+                    closestPoint = projectionResult.point;
                     firstPointIndex = j;
                 }
                 closeEnough = true;

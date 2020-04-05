@@ -1,15 +1,14 @@
-var ClosedState = /** @class */ (function () {
-    function ClosedState() {
-    }
-    ClosedState.getInstance = function () {
+class ClosedState {
+    constructor() { }
+    static getInstance() {
         if (!ClosedState.instance) {
             ClosedState.instance = new ClosedState();
         }
         return ClosedState.instance;
-    };
-    ClosedState.prototype.stateName = function () { return "ClosedState"; };
+    }
+    stateName() { return "ClosedState"; }
     ; //TODO: ta bort senare
-    ClosedState.prototype.handleLeftClick = function (polygon, pointClicked) {
+    handleLeftClick(polygon, pointClicked) {
         console.log("ClosedState - handleLeftClick");
         var nearPointIndex = checkIfCloseToPoint(polygon.segments, pointClicked, moveDelInsDistance);
         if (nearPointIndex > -1) {
@@ -30,18 +29,18 @@ var ClosedState = /** @class */ (function () {
                 }
                 //calculating distance to both points on clicked segment
                 //so that it is not possible to insert a point too close to another
-                var segmPointDist1 = distBetweenPoints(polygon.segments[tempVar[1]].p1, tempVar[2]);
-                var segmPointDist2 = distBetweenPoints(polygon.segments[tempVar[1]].p2, tempVar[2]);
+                const segmPointDist1 = distBetweenPoints(polygon.segments[tempVar[1]].p1, tempVar[2]);
+                const segmPointDist2 = distBetweenPoints(polygon.segments[tempVar[1]].p2, tempVar[2]);
                 if (((segmPointDist1 > minDistance) && (segmPointDist2 > minDistance))) {
                     //inserting the point in the segment-array
                     polygon.insertPoint(tempVar[2], tempVar[1]); //newPoint,index
                 }
             }
         }
-    };
-    ClosedState.prototype.handleRightClick = function (polygon, pointClicked) {
+    }
+    handleRightClick(polygon, pointClicked) {
         console.log("ClosedState - handleRightClick");
-        var enforceNonComplexCheckBox = document.getElementById("checkboxEnforceNonComplex");
+        const enforceNonComplexCheckBox = document.getElementById("checkboxEnforceNonComplex");
         // on point (removes point)
         //if the user rightclicked a point, remove it if there are more than 3 sides to the polygon
         var nearPointIndex = checkIfCloseToPoint(polygon.segments, pointClicked, moveDelInsDistance);
@@ -75,8 +74,8 @@ var ClosedState = /** @class */ (function () {
                 polygon.closed = false; //TODO: ta bort denna
             }
         }
-    };
-    ClosedState.prototype.checkIfRemovedPointCausesSegmentIntersect = function (segmentArrayIn, deleteAtIndex) {
+    }
+    checkIfRemovedPointCausesSegmentIntersect(segmentArrayIn, deleteAtIndex) {
         //needs only to be checked for polygons with 5 sides or more
         //i.e. a four sided polygon loosing a side becomes a triangle, that can have no sides intersecting.
         if (segmentArrayIn.length > 4) {
@@ -86,7 +85,7 @@ var ClosedState = /** @class */ (function () {
             //create ONE new Segment to replace chosen segment (at deleteAtIndex) and the segment prior
             var thePotentialNewSegment = new Segment(segmentArrayIn[indexBeforeDeleteAtIndex].p1, segmentArrayIn[deleteAtIndex].p2);
             //skipping the two segments to be replaced plus their neighbouring segments
-            for (var p = 0; p < segmentArrayIn.length - 4; p++) {
+            for (let p = 0; p < segmentArrayIn.length - 4; p++) {
                 segmentArrayIn[moduloInPolygon((p + deleteAtIndex + 2), segmentArrayIn.length)];
                 if (calculateIntersect(thePotentialNewSegment, segmentArrayIn[moduloInPolygon((p + deleteAtIndex + 2), segmentArrayIn.length)])) {
                     console.log("if that point is removed there will be an intersect");
@@ -100,9 +99,9 @@ var ClosedState = /** @class */ (function () {
             //if polygon had 4 sides or less, it is automatically OK
             return false;
         }
-    };
+    }
     //checking if new point is near other polygon segments
-    ClosedState.prototype.checkIfCloseToLine = function (segmentArrayIn, nyPunkt, minDistanceIn) {
+    checkIfCloseToLine(segmentArrayIn, nyPunkt, minDistanceIn) {
         var distToLine = -1;
         var smallestDistance = minDistanceIn;
         var ppReturArray = new Array();
@@ -110,17 +109,15 @@ var ClosedState = /** @class */ (function () {
         var firstPointIndex = 0;
         var closestPoint = new Point();
         //checking with every segment
-        for (var j = 0; j < segmentArrayIn.length; j++) {
+        for (let j = 0; j < segmentArrayIn.length; j++) {
             //projecting point on segment
-            var proj_svar = project_vector(segmentArrayIn[j], nyPunkt);
-            distToLine = proj_svar[0]; //negative if it is too far away
-            var projPunkten = proj_svar[1]; //0 if it is too far away
+            const projectionResult = projectVector(segmentArrayIn[j], nyPunkt);
             //if it was between 0 and minDistanceIn
-            if (distToLine >= 0 && distToLine < minDistanceIn) {
-                if (distToLine < smallestDistance) {
+            if (projectionResult.successful && projectionResult.norm < minDistanceIn) {
+                if (projectionResult.norm < smallestDistance) {
                     //if it is closer than minDistanceIn and closer than last saved, it is saved
-                    smallestDistance = distToLine;
-                    closestPoint = projPunkten;
+                    smallestDistance = projectionResult.norm;
+                    closestPoint = projectionResult.point;
                     firstPointIndex = j;
                 }
                 closeEnough = true;
@@ -130,6 +127,5 @@ var ClosedState = /** @class */ (function () {
         ppReturArray.push(firstPointIndex); //index for the first point on segment clicked (index for the segment clicked?)
         ppReturArray.push(closestPoint); //the point projected on the segment
         return ppReturArray;
-    };
-    return ClosedState;
-}());
+    }
+}

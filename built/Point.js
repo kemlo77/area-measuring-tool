@@ -1,5 +1,5 @@
-var Point = /** @class */ (function () {
-    function Point(x, y) {
+class Point {
+    constructor(x, y) {
         if (x === null || y === null) {
             x = 0;
             y = 0;
@@ -10,30 +10,30 @@ var Point = /** @class */ (function () {
         }
     }
     //copying values from point so that the new point IS the same object
-    Point.prototype.copyValues = function (copyFromThisPoint) {
+    copyValues(copyFromThisPoint) {
         this.x = copyFromThisPoint.x;
         this.y = copyFromThisPoint.y;
-    };
+    }
     //clone a point
-    Point.prototype.clonePoint = function () {
+    clonePoint() {
         var copiedPoint = new Point(this.x, this.y);
         return copiedPoint;
-    };
+    }
     //rotate a point around the Origin
-    Point.prototype.rotate = function (angle) {
+    rotate(angle) {
         var tempX = this.x;
         var tempY = this.y;
         this.x = tempX * Math.cos(angle) + tempY * Math.sin(angle);
         this.y = -tempX * Math.sin(angle) + tempY * Math.cos(angle);
-    };
+    }
     //move a point
-    Point.prototype.translate = function (distX, distY) {
+    translate(distX, distY) {
         this.x += distX;
         this.y += distY;
-    };
+    }
     //return the angle between the x-axis and a vector AB (where A is in the Origin and B is the point checked)
-    Point.prototype.getTheAngle = function () {
-        var arctanAngle = Math.atan(this.y / this.x);
+    getTheAngle() {
+        const arctanAngle = Math.atan(this.y / this.x);
         if (this.y > 0) {
             //if the point is in q1
             if (this.x >= 0) {
@@ -54,6 +54,5 @@ var Point = /** @class */ (function () {
                 return (2 * Math.PI + arctanAngle);
             }
         }
-    };
-    return Point;
-}());
+    }
+}

@@ -1,17 +1,16 @@
-var OpenState = /** @class */ (function () {
-    function OpenState() {
-    }
-    OpenState.getInstance = function () {
+class OpenState {
+    constructor() { }
+    static getInstance() {
         if (!OpenState.instance) {
             OpenState.instance = new OpenState();
         }
         return OpenState.instance;
-    };
-    OpenState.prototype.stateName = function () { return "OpenState"; };
+    }
+    stateName() { return "OpenState"; }
     ; //TODO: ta bort senare
-    OpenState.prototype.handleLeftClick = function (polygon, pointClicked) {
+    handleLeftClick(polygon, pointClicked) {
         console.log("OpenState - handleLeftClick");
-        var enforceNonComplexCheckBox = document.getElementById("checkboxEnforceNonComplex");
+        const enforceNonComplexCheckBox = document.getElementById("checkboxEnforceNonComplex");
         //check if this is the first segment
         if (polygon.segments.length > 0) {
             //check if user clicks near the first point (wanting to close the polygon)
@@ -68,8 +67,8 @@ var OpenState = /** @class */ (function () {
         // on point if on endpoint (closes)-> ClosedState
         // on point if on other point (nothing)
         // on vertex (nothing)
-    };
-    OpenState.prototype.handleRightClick = function (polygon, pointClicked) {
+    }
+    handleRightClick(polygon, pointClicked) {
         console.log("OpenState - handleRightClick");
         //removes last added point (+segment)
         if (polygon.segments.length == 0) {
@@ -77,15 +76,15 @@ var OpenState = /** @class */ (function () {
             //console.log("removed seed point");
         }
         polygon.segments.pop();
-    };
+    }
     //checking if new Segment intersects with other segment in array
-    OpenState.prototype.checkIfIntersect = function (segmentArrayIn, nyttSegmentIn, skipFirstSegment) {
+    checkIfIntersect(segmentArrayIn, nyttSegmentIn, skipFirstSegment) {
         var startSegm = 0;
         if (skipFirstSegment) {
             startSegm = 1;
         } //skipping first segment in case user clicks the polygons first point
         //skipping the second to last (penultimate segment)
-        for (var n = startSegm; n < segmentArrayIn.length - 1; n++) {
+        for (let n = startSegm; n < segmentArrayIn.length - 1; n++) {
             if (calculateIntersect(segmentArrayIn[n], nyttSegmentIn)) {
                 //returning true if there is a intersect
                 return true;
@@ -93,6 +92,5 @@ var OpenState = /** @class */ (function () {
         }
         //arriving here, there is no intersect
         return false;
-    };
-    return OpenState;
-}());
+    }
+}

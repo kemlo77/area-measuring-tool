@@ -1,6 +1,6 @@
-var Vector = /** @class */ (function () {
+class Vector {
     //TODO: ytterligare konstruktor där man anger x och y-komponent
-    function Vector(punkt1, punkt2) {
+    constructor(punkt1, punkt2) {
         if (punkt1 === null || punkt2 === null) {
             this.x = 0;
             this.y = 0;
@@ -11,8 +11,7 @@ var Vector = /** @class */ (function () {
         }
     }
     //calculate lenght of a vector
-    Vector.prototype.vLength = function () {
+    vLength() {
         return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
-    };
-    return Vector;
-}());
+    }
+}

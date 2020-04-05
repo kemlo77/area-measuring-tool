@@ -1,8 +1,8 @@
-var moveDelInsDistance = 3; //TODO: Döp om denna
-var minDistance = 8;
-var useIntegerCoords = false;
-var closePolygonMinimumDistance = 5;
-var firstPolygon;
+let moveDelInsDistance = 3; //TODO: Döp om denna
+let minDistance = 8;
+let closePolygonMinimumDistance = 5;
+let useIntegerCoords = false;
+let firstPolygon;
 function init() {
     firstPolygon = new Polygon();
 }
@@ -29,10 +29,10 @@ function checkIfCloseToPoint(segmentArrayIn, nyPunkt, minDistanceIn, skipPoint) 
     if (typeof skipPoint === 'undefined') {
         skipPoint = -1;
     }
-    var localMinDistance = minDistanceIn;
-    var closestPointWithinMinDistance = -1;
-    var pointDistance = 0;
-    for (var i = 0; i < segmentArrayIn.length; i++) {
+    let localMinDistance = minDistanceIn;
+    let closestPointWithinMinDistance = -1;
+    let pointDistance = 0;
+    for (let i = 0; i < segmentArrayIn.length; i++) {
         if (i == skipPoint) {
             continue;
         }
@@ -47,24 +47,24 @@ function checkIfCloseToPoint(segmentArrayIn, nyPunkt, minDistanceIn, skipPoint) 
     return closestPointWithinMinDistance;
 }
 function canvasLeftClicked(event, canvasId) {
-    var rect = document.getElementById(canvasId).getBoundingClientRect();
-    var clickedPositionX = event.clientX - rect.left;
-    var clickedPositionY = event.clientY - rect.top;
-    var leftClickedPoint = new Point(clickedPositionX, clickedPositionY);
+    const rect = document.getElementById(canvasId).getBoundingClientRect();
+    const clickedPositionX = event.clientX - rect.left;
+    const clickedPositionY = event.clientY - rect.top;
+    const leftClickedPoint = new Point(clickedPositionX, clickedPositionY);
     handleClick(true, leftClickedPoint);
 }
 function canvasRightClicked(event, canvasId) {
-    var rect = document.getElementById(canvasId).getBoundingClientRect();
-    var clickedPositionX = event.clientX - rect.left;
-    var clickedPositionY = event.clientY - rect.top;
-    var rightClickedPoint = new Point(clickedPositionX, clickedPositionY);
+    const rect = document.getElementById(canvasId).getBoundingClientRect();
+    const clickedPositionX = event.clientX - rect.left;
+    const clickedPositionY = event.clientY - rect.top;
+    const rightClickedPoint = new Point(clickedPositionX, clickedPositionY);
     handleClick(false, rightClickedPoint);
 }
-function getMousePos(event, canvadId) {
-    var rect = document.getElementById(canvadId).getBoundingClientRect();
-    var mousePositionX = event.clientX - rect.left;
-    var mousePositionY = event.clientY - rect.top;
-    var mousePosition = new Point(mousePositionX, mousePositionY);
+function getMousePos(event, canvasId) {
+    const rect = document.getElementById(canvasId).getBoundingClientRect();
+    const mousePositionX = event.clientX - rect.left;
+    const mousePositionY = event.clientY - rect.top;
+    const mousePosition = new Point(mousePositionX, mousePositionY);
     //TODO: borde nog inte specifikt ange vilken polygon här, kanske hämta aktuell?
     CanvasPainter.getInstance().drawMovement(mousePosition, firstPolygon);
 }

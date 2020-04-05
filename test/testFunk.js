@@ -99,7 +99,7 @@ function testFunk4(){
 }
 
 
-//testk�r project_vector
+//testk�r projectVector
 function testFunk3(){
 	var testpunktA = new Point(100,100);
 	var testpunktB = new Point(200,200);
@@ -109,7 +109,7 @@ function testFunk3(){
 	
 	drawOneSegment(segmentetAB,"0,0,0");
 	drawDot(testpunktC,2,"0,0,0");
-	tempvar=(project_vector(segmentetAB,testpunktC)); // norm och punkt (-1 och 0 ifall inget)
+	tempvar=(projectVector(segmentetAB,testpunktC)); // norm och punkt (-1 och 0 ifall inget)
 	if(tempvar[0]>=0){
 		drawDot(ritpunkt,3,"0,200,0");
 		var tempsegment= new Segment(testpunktC,tempvar[1]);
