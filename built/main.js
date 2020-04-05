@@ -3,27 +3,11 @@ var minDistance = 8;
 var useIntegerCoords = false;
 var closePolygonMinimumDistance = 5;
 function init() {
-    var canvasBackground = document.getElementById("background");
-    if (canvasBackground.getContext) {
-        ctxBack = canvasBackground.getContext("2d");
-    }
-    var canvasForeground = document.getElementById("foreground");
-    if (canvasForeground.getContext) {
-        ctxFront = canvasForeground.getContext("2d");
-    }
-    IWIDTH = canvasBackground.width;
-    IHEIGHT = canvasBackground.height;
 }
 function clearEntirely() {
-    firstPolygon.segments = [];
-    firstPolygon.closed = false;
-    firstPolygon.seed = null;
-    clearTheCanvas(ctxFront);
-    clearTheCanvas(ctxBack);
+    firstPolygon = new Polygon();
+    CanvasPainter.getInstance().clearBothCanvas();
 }
-//*************************
-//** Handle clicks       **
-//*************************
 function handleClick(isLeftClick, theClickedPoint) {
     if (isLeftClick) {
         firstPolygon.handleLeftClick(theClickedPoint);
@@ -31,9 +15,8 @@ function handleClick(isLeftClick, theClickedPoint) {
     else {
         firstPolygon.handleRightClick(theClickedPoint);
     }
-    drawPolygon(firstPolygon);
-    //clearUsedCanvas();
-    drawMovement(theClickedPoint, firstPolygon);
+    CanvasPainter.getInstance().drawPolygon(firstPolygon);
+    CanvasPainter.getInstance().drawMovement(theClickedPoint, firstPolygon);
 }
 //checks if new point is too close to other points
 //returning the nearest point or -1 if all points are outside minDistanceIn
@@ -81,5 +64,5 @@ function getMousePos(evt, canvas_id) {
     x_pos = evt.clientX - rect.left;
     y_pos = evt.clientY - rect.top;
     var mousePosPoint = new Point(x_pos, y_pos);
-    drawMovement(mousePosPoint, firstPolygon);
+    CanvasPainter.getInstance().drawMovement(mousePosPoint, firstPolygon);
 }
