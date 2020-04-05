@@ -86,8 +86,7 @@ var OpenState = /** @class */ (function () {
         } //skipping first segment in case user clicks the polygons first point
         //skipping the second to last (penultimate segment)
         for (var n = startSegm; n < segmentArrayIn.length - 1; n++) {
-            var result = calculateIntersect(segmentArrayIn[n], nyttSegmentIn);
-            if (result[0]) {
+            if (calculateIntersect(segmentArrayIn[n], nyttSegmentIn)) {
                 //returning true if there is a intersect
                 return true;
             }

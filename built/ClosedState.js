@@ -88,7 +88,7 @@ var ClosedState = /** @class */ (function () {
             //skipping the two segments to be replaced plus their neighbouring segments
             for (var p = 0; p < segmentArrayIn.length - 4; p++) {
                 segmentArrayIn[moduloInPolygon((p + deleteAtIndex + 2), segmentArrayIn.length)];
-                if (calculateIntersect(thePotentialNewSegment, segmentArrayIn[moduloInPolygon((p + deleteAtIndex + 2), segmentArrayIn.length)])[0]) {
+                if (calculateIntersect(thePotentialNewSegment, segmentArrayIn[moduloInPolygon((p + deleteAtIndex + 2), segmentArrayIn.length)])) {
                     console.log("if that point is removed there will be an intersect");
                     return true;
                 }

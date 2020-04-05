@@ -62,14 +62,14 @@ var MoveState = /** @class */ (function () {
                 //skip the segment before firstCheckedSegment
                 if (m !== indexBeforeBeforeMovedAtIndex) { //MAI-2
                     //checking if firstCheckedSegment intersects with any of the other interesting segments
-                    if (calculateIntersect(firstCheckedSegment, segmentArrayIn[m])[0]) {
+                    if (calculateIntersect(firstCheckedSegment, segmentArrayIn[m])) {
                         return true;
                     }
                 }
                 //skip the segment after secondCheckedSegment
                 if (m !== indexAfterMovedAtIndex) { //MAI+1
                     //checking if secondCheckedSegment intersects with any of the other interesting segments
-                    if (calculateIntersect(secondCheckedSegment, segmentArrayIn[m])[0]) {
+                    if (calculateIntersect(secondCheckedSegment, segmentArrayIn[m])) {
                         return true;
                     }
                 }
