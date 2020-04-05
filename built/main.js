@@ -60,3 +60,26 @@ function checkIfCloseToPoint(segmentArrayIn, nyPunkt, minDistanceIn, skipPoint) 
     }
     return isTooClose;
 }
+//Left click
+function canvasLeftClicked(evt, canvas_id) {
+    var rect = document.getElementById(canvas_id).getBoundingClientRect();
+    var position_x = evt.clientX - rect.left;
+    var position_y = evt.clientY - rect.top;
+    var nyVansterKlickadPunkt = new Point(position_x, position_y);
+    handleClick(true, nyVansterKlickadPunkt);
+}
+//Right click
+function canvasRightClicked(evt, canvas_id) {
+    var rect = document.getElementById(canvas_id).getBoundingClientRect();
+    var position_x = evt.clientX - rect.left;
+    var position_y = evt.clientY - rect.top;
+    var nyHogerKlickadPunkt = new Point(position_x, position_y);
+    handleClick(false, nyHogerKlickadPunkt);
+}
+function getMousePos(evt, canvas_id) {
+    var rect = document.getElementById(canvas_id).getBoundingClientRect();
+    x_pos = evt.clientX - rect.left;
+    y_pos = evt.clientY - rect.top;
+    var mousePosPoint = new Point(x_pos, y_pos);
+    drawMovement(mousePosPoint, firstPolygon);
+}
