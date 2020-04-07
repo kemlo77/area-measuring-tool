@@ -22,7 +22,8 @@ function handleClick(isLeftClick: boolean, theClickedPoint: Point): void {
 	else {
 		firstPolygon.handleRightClick(theClickedPoint);
 	}
-	CanvasPainter.getInstance().drawPolygon(firstPolygon);
+	//CanvasPainter.getInstance().drawPolygon(firstPolygon);
+	firstPolygon.drawSegments();
 	CanvasPainter.getInstance().drawMovement(theClickedPoint, firstPolygon)
 }
 

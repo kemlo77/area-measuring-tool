@@ -28,6 +28,10 @@ class Polygon {
         this.currentState.handleRightClick(this, point);
     }
 
+    drawSegments(): void {
+        this.currentState.drawSegments(this);
+    }
+
     //closing polygon
     //TODO: denna ska bort
     close(): void {

@@ -1,14 +1,20 @@
 class CanvasPainter {
-    canvasBackground: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("background");
-    ctxBack2: CanvasRenderingContext2D = this.canvasBackground.getContext("2d");
-    canvasForeground: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("foreground");
-    ctxFront2: CanvasRenderingContext2D = this.canvasForeground.getContext("2d");
-    canvasWidth: number = this.canvasBackground.width;
-    canvasHeight: number = this.canvasBackground.height;
-    oldXMin: number = 0;
-    oldXMax: number = 1;
-    oldYMin: number = 0;
-    oldYMax: number = 1;
+    private canvasBackground: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("background");
+    private ctxBack2: CanvasRenderingContext2D = this.canvasBackground.getContext("2d");
+    private canvasForeground: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("foreground");
+    private ctxFront2: CanvasRenderingContext2D = this.canvasForeground.getContext("2d");
+    private canvasWidth: number = this.canvasBackground.width;
+    private canvasHeight: number = this.canvasBackground.height;
+    private oldXMin: number = 0;
+    private oldXMax: number = 1;
+    private oldYMin: number = 0;
+    private oldYMax: number = 1;
+
+    private moveColor: string = "255,128,0";//orange
+    private defaultColor: string = "0,80,120";//
+    private redColor: string = "255,0,0";
+    private greenColor: string = "0,255,0";
+    private whiteColor: string = "255,255,255";
 
     private static instance: CanvasPainter;
 
@@ -21,110 +27,63 @@ class CanvasPainter {
         return CanvasPainter.instance;
     }
 
-    drawPolygon(polygonIn: Polygon): void {
-        let moveColor: string = "255,128,0";//orange
-        let defaultColor: string = "0,80,120";//
-        let redColor: string = "255,0,0";
-        let greenColor: string = "0,255,0";
-        let whiteColor: string = "255,255,255";
-        //clear the canvas
+    drawClosedPolygon(polygon: Polygon): void {
         this.clearTheFrontCanvas();
-        //draw a ring around the point chosen to be moved
-        if (polygonIn.moveMode) {
-            //draw all segments except the ones next to the dot being moved
-            for (let r = 0; r < polygonIn.segments.length - 2; r++) {
-                this.drawOneSegment(polygonIn.segments[moduloInPolygon(r + polygonIn.movePointIndex + 1, polygonIn.segments.length)], defaultColor);
-            }
-            //draw intermediary points, skip the one being moved
-            for (let z = 1; z < polygonIn.segments.length; z++) {
-                if (z == polygonIn.movePointIndex) { continue; }
-                this.drawDoubleDot(polygonIn.segments[z].p1, defaultColor, whiteColor);
-            }
-            //since the polygon is closed
-            //first point green
-            if (polygonIn.movePointIndex !== 0) {
-                this.drawDoubleDot(polygonIn.segments[0].p1, defaultColor, greenColor);
-            }
-            //last point red
-            if (polygonIn.movePointIndex !== (polygonIn.segments.length - 1)) {
-                this.drawDoubleDot(polygonIn.segments[polygonIn.segments.length - 1].p1, defaultColor, redColor);
-            }
+        //draw all segments
+        for (let r = 0; r < polygon.segments.length; r++) {
+            this.drawOneSegment(polygon.segments[r], this.defaultColor);
         }
-        else {
-            //draw all segments
-            for (let r = 0; r < polygonIn.segments.length; r++) {
-                this.drawOneSegment(polygonIn.segments[r], defaultColor);
-            }
-            //draw intermediary points, also the last one (white)
-            for (let z = 1; z < polygonIn.segments.length; z++) {
-                this.drawDoubleDot(polygonIn.segments[z].p1, defaultColor, whiteColor);
-            }
-            //if the polygon is closed
-            if (polygonIn.closed) {
-                //first point green
-                this.drawDoubleDot(polygonIn.segments[0].p1, defaultColor, greenColor);
-                //last point red
-                this.drawDoubleDot(polygonIn.segments[polygonIn.segments.length - 1].p1, defaultColor, redColor);
-            }
-            else {
-                //draw first point green
-                if (polygonIn.seed != null) {
-                    this.drawDoubleDot(polygonIn.seed, defaultColor, greenColor);
-                }
-                //draw last point with white dot
-                if (polygonIn.segments.length > 0) {
-                    this.drawDoubleDot(polygonIn.segments[polygonIn.segments.length - 1].p2, defaultColor, whiteColor);
-                }
-            }
+        //draw intermediary points, also the last one (white)
+        for (let z = 1; z < polygon.segments.length; z++) {
+            this.drawDoubleDot(polygon.segments[z].p1, this.defaultColor, this.whiteColor);
         }
-
-
+        //first point green
+        this.drawDoubleDot(polygon.segments[0].p1, this.defaultColor, this.greenColor);
+        //last point red
+        this.drawDoubleDot(polygon.segments[polygon.segments.length - 1].p1, this.defaultColor, this.redColor);
     }
 
-
-    //clear the canvas
-    clearBothCanvas(): void {
-        this.ctxFront2.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-        this.ctxBack2.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+    drawOpenPolygon(polygon: Polygon): void {
+        this.clearTheFrontCanvas();
+        //draw all segments
+        for (let r = 0; r < polygon.segments.length; r++) {
+            this.drawOneSegment(polygon.segments[r], this.defaultColor);
+        }
+        //draw intermediary points, also the last one (white)
+        for (let z = 1; z < polygon.segments.length; z++) {
+            this.drawDoubleDot(polygon.segments[z].p1, this.defaultColor, this.whiteColor);
+        }
+        //draw first point green
+        if (polygon.seed != null) {
+            this.drawDoubleDot(polygon.seed, this.defaultColor, this.greenColor);
+        }
+        //draw last point with white dot
+        if (polygon.segments.length > 0) {
+            this.drawDoubleDot(polygon.segments[polygon.segments.length - 1].p2, this.defaultColor, this.whiteColor);
+        }
     }
 
-    clearTheFrontCanvas(): void {
-        this.ctxFront2.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+    drawMovePolygon(polygonIn: Polygon): void {
+        this.clearTheFrontCanvas();
+        //draw all segments except the ones next to the dot being moved
+        for (let r = 0; r < polygonIn.segments.length - 2; r++) {
+            this.drawOneSegment(polygonIn.segments[moduloInPolygon(r + polygonIn.movePointIndex + 1, polygonIn.segments.length)], this.defaultColor);
+        }
+        //draw intermediary points, skip the one being moved
+        for (let z = 1; z < polygonIn.segments.length; z++) {
+            if (z == polygonIn.movePointIndex) { continue; }
+            this.drawDoubleDot(polygonIn.segments[z].p1, this.defaultColor, this.whiteColor);
+        }
+        //since the polygon is closed
+        //first point green
+        if (polygonIn.movePointIndex !== 0) {
+            this.drawDoubleDot(polygonIn.segments[0].p1, this.defaultColor, this.greenColor);
+        }
+        //last point red
+        if (polygonIn.movePointIndex !== (polygonIn.segments.length - 1)) {
+            this.drawDoubleDot(polygonIn.segments[polygonIn.segments.length - 1].p1, this.defaultColor, this.redColor);
+        }
     }
-
-    //draw a point with inner and outer color
-    drawDoubleDot(dot2paint: Point, outerColor: string, innerColor: string): void {
-        //outer color (larger)
-        this.drawDot(dot2paint, 4, outerColor);
-        //inner color (smaler drawn on top of the other)
-        this.drawDot(dot2paint, 2, innerColor);
-    }
-
-    //draw a point
-    drawDot(dot2paint: Point, diam: number, rgbIn: string): void {
-        this.ctxFront2.fillStyle = "rgba(" + rgbIn + ",1)";
-        this.ctxFront2.beginPath();
-        this.ctxFront2.arc(dot2paint.x, dot2paint.y, diam, 0, Math.PI * 2, true);
-        this.ctxFront2.closePath();
-        this.ctxFront2.fill();
-    }
-
-    //draw a segment (draws a line between two points)
-    drawOneSegment(segment2draw: Segment, lineColor: string): void {
-        this.drawLine(segment2draw.p1, segment2draw.p2, lineColor, this.ctxFront2);
-    }
-
-    //draws line between 2 points
-    drawLine(startP: Point, endP: Point, lineColor: string, ctx: CanvasRenderingContext2D): void {
-        ctx.strokeStyle = "rgba(" + lineColor + ",1)";
-        ctx.beginPath();
-        ctx.lineWidth = 2;
-        ctx.moveTo(startP.x, startP.y);
-        ctx.lineTo(endP.x, endP.y);
-        ctx.closePath();
-        ctx.stroke();
-    }
-
 
     drawMovement(mousePosPoint: Point, thePolygon: Polygon): void {
         this.clearUsedCanvas()
@@ -148,10 +107,53 @@ class CanvasPainter {
                 this.drawLine(movingPointPlusOne, mousePosPoint, "255,128,0", this.ctxBack2);
                 this.drawLine(movingPointMinusOne, mousePosPoint, "255,128,0", this.ctxBack2);
                 this.saveExtremes([movingPointPlusOne, movingPointMinusOne, mousePosPoint]);
-
             }
         }
     }
+
+
+    //clear the canvas
+    clearBothCanvas(): void {
+        this.ctxFront2.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+        this.ctxBack2.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+    }
+
+    clearTheFrontCanvas(): void {
+        this.ctxFront2.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+    }
+
+    //draw a point with inner and outer color
+    drawDoubleDot(dot2paint: Point, outerColor: string, innerColor: string): void {
+        //outer color (larger)
+        this.drawDot(dot2paint, 4, outerColor);
+        //inner color (smaler drawn on top of the other)
+        this.drawDot(dot2paint, 2, innerColor);
+    }
+
+    drawDot(dot2paint: Point, diam: number, rgbIn: string): void {
+        this.ctxFront2.fillStyle = "rgba(" + rgbIn + ",1)";
+        this.ctxFront2.beginPath();
+        this.ctxFront2.arc(dot2paint.x, dot2paint.y, diam, 0, Math.PI * 2, true);
+        this.ctxFront2.closePath();
+        this.ctxFront2.fill();
+    }
+
+    drawOneSegment(segment2draw: Segment, lineColor: string): void {
+        this.drawLine(segment2draw.p1, segment2draw.p2, lineColor, this.ctxFront2);
+    }
+
+    drawLine(startP: Point, endP: Point, lineColor: string, ctx: CanvasRenderingContext2D): void {
+        ctx.strokeStyle = "rgba(" + lineColor + ",1)";
+        ctx.beginPath();
+        ctx.lineWidth = 2;
+        ctx.moveTo(startP.x, startP.y);
+        ctx.lineTo(endP.x, endP.y);
+        ctx.closePath();
+        ctx.stroke();
+    }
+
+
+
 
     saveExtremes(arrayWithPoints: Point[]): void {
         this.oldXMin = arrayWithPoints[0].x;

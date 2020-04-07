@@ -142,6 +142,10 @@ class ClosedState implements PolygonState {
         }
     }
 
+    drawSegments(polygon: Polygon){
+        CanvasPainter.getInstance().drawClosedPolygon(polygon);
+    }
+
 }
 
 interface PointToSegmentProjection {

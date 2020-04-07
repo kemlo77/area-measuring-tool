@@ -98,4 +98,8 @@ class OpenState implements PolygonState {
         //arriving here, there is no intersect
         return false;
     }
+
+    drawSegments(polygon: Polygon){
+        CanvasPainter.getInstance().drawOpenPolygon(polygon);
+    }
 }

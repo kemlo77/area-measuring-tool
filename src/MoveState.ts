@@ -88,4 +88,8 @@ class MoveState implements PolygonState {
             return false;
         }
     }
+
+    drawSegments(polygon: Polygon){
+        CanvasPainter.getInstance().drawMovePolygon(polygon);       
+    }
 }

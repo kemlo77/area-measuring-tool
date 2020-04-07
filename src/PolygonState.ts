@@ -6,4 +6,6 @@ interface PolygonState {
 
     handleRightClick(polygon: Polygon, pointClicked: Point): void;
 
+    drawSegments(polygon: Polygon): void;
+
 }
