@@ -1,13 +1,11 @@
 class Polygon {
     public segments: Segment[];
-    public closed: boolean;
     public seed: Point;
     public movePointIndex: number;
     private currentState: PolygonState;
 
     constructor() {
         this.segments = new Array();
-        this.closed = false; //TODO: denna ska bort
         this.seed = null;
         this.movePointIndex = -1; //TODO: går det skriva om koden så att MoveState får den här punkten från ClosedState?
         this.currentState = OpenState.getInstance();
@@ -32,12 +30,6 @@ class Polygon {
 
     drawMovement(mousePosition: Point): void {
         this.currentState.drawMovement(this, mousePosition);
-    }
-
-    //closing polygon
-    //TODO: denna ska bort
-    close(): void {
-        this.closed = true;
     }
 
     //changing direction of polygon (clockwise <-> counter clockwise)
@@ -102,7 +94,7 @@ class Polygon {
 
     //changing the starting point in the polygon (i.e. chaing what segment is the starting segment)
     revolFirstIndex(newFirstIndex): void {
-        if (this.closed) {
+        if (this.currentState instanceof  ClosedState) {
             //handling if newFirstIndex is larger than the number of segments
             let newFirstIndexHandled: number = moduloInPolygon(newFirstIndex, this.segments.length);
             //removing the group of segments (up until newfirstindex)

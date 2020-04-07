@@ -29,15 +29,17 @@ class OpenState implements PolygonState {
                     if (enforceNonComplexCheckBox.checked) {
                         if (!this.checkIfIntersect(polygon.segments, nyttSegment, true)) {
                             polygon.segments.push(nyttSegment);
-                            polygon.close();
+                            //polygon.close();
+                            CanvasPainter.getInstance().clearTheBackCanvas();
+                            polygon.setCurrentState(ClosedState.getInstance());
                         }
                     }
                     else {
                         polygon.segments.push(nyttSegment);
-                        polygon.close();
+                        //polygon.close();
+                        CanvasPainter.getInstance().clearTheBackCanvas();
+                        polygon.setCurrentState(ClosedState.getInstance());
                     }
-                    CanvasPainter.getInstance().clearTheBackCanvas();
-                    polygon.setCurrentState(ClosedState.getInstance());
                 }
             }
             else {

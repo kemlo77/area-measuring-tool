@@ -77,8 +77,6 @@ class ClosedState implements PolygonState {
                 //opening polygon and removing last segment
                 polygon.segments.pop();
                 polygon.setCurrentState(OpenState.getInstance());
-                polygon.closed = false; //TODO: ta bort denna
-
             }
         }
     }
