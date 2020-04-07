@@ -112,34 +112,6 @@ class CanvasPainter {
 
     }
 
-
-    drawMovement(mousePosPoint: Point, thePolygon: Polygon): void {
-        this.clearUsedCanvas()
-        if (!thePolygon.closed) {
-            if (thePolygon.segments.length == 0) {
-                if (thePolygon.seed != null) {
-                    this.drawLine(thePolygon.seed, mousePosPoint, "255,128,0", this.ctxBack2);
-                    this.saveExtremes([thePolygon.seed, mousePosPoint]);
-                }
-            }
-            else {
-                const lastPoint: Point = thePolygon.segments[thePolygon.segments.length - 1].p2;
-                this.drawLine(lastPoint, mousePosPoint, "255,128,0", this.ctxBack2);
-                this.saveExtremes([lastPoint, mousePosPoint]);
-            }
-        }
-        else {
-            if (thePolygon.moveMode) {
-                const movingPointPlusOne: Point = thePolygon.segments[thePolygon.movePointIndex].p2;
-                const movingPointMinusOne: Point = thePolygon.segments[moduloInPolygon(thePolygon.movePointIndex - 1, thePolygon.segments.length)].p1;
-                this.drawLine(movingPointPlusOne, mousePosPoint, "255,128,0", this.ctxBack2);
-                this.drawLine(movingPointMinusOne, mousePosPoint, "255,128,0", this.ctxBack2);
-                this.saveExtremes([movingPointPlusOne, movingPointMinusOne, mousePosPoint]);
-            }
-        }
-    }
-
-
     //clear the canvas
     clearBothCanvas(): void {
         this.ctxFront2.clearRect(0, 0, this.canvasWidth, this.canvasHeight);

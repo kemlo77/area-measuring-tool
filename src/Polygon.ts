@@ -2,7 +2,6 @@ class Polygon {
     public segments: Segment[];
     public closed: boolean;
     public seed: Point;
-    public moveMode: boolean;
     public movePointIndex: number;
     private currentState: PolygonState;
 
@@ -10,7 +9,6 @@ class Polygon {
         this.segments = new Array();
         this.closed = false; //TODO: denna ska bort
         this.seed = null;
-        this.moveMode = false; //TODO: denna ska bort
         this.movePointIndex = -1; //TODO: går det skriva om koden så att MoveState får den här punkten från ClosedState?
         this.currentState = OpenState.getInstance();
     }

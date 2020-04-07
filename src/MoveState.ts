@@ -26,14 +26,12 @@ class MoveState implements PolygonState {
                 if (!this.checkIfMovedIntersects(polygon.segments, pointClicked, polygon.movePointIndex)) {
                     //move the point at movePointIndex to the new point
                     polygon.segments[polygon.movePointIndex].p1.copyValues(pointClicked); //copying values so that it is still the same object
-                    polygon.moveMode = false;
                     polygon.setCurrentState(ClosedState.getInstance());
                 }
             }
             else {
                 //move the point at movePointIndex to the new point
                 polygon.segments[polygon.movePointIndex].p1.copyValues(pointClicked); //copying values so that it is still the same object
-                polygon.moveMode = false;
                 polygon.setCurrentState(ClosedState.getInstance());
             }
         }
@@ -45,7 +43,6 @@ class MoveState implements PolygonState {
         // (aborts move) -> ClosedState
 
         //aborting move mode
-        polygon.moveMode = false;
         polygon.movePointIndex = -1;
 
         polygon.setCurrentState(ClosedState.getInstance());

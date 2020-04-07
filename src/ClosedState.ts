@@ -19,7 +19,6 @@ class ClosedState implements PolygonState {
         if (nearPointIndex > -1) {
             // on point (mark for move) -> MoveState
             polygon.movePointIndex = nearPointIndex;
-            polygon.moveMode = true; //TODO: denna ska bort
             polygon.setCurrentState(MoveState.getInstance());
 
         }
