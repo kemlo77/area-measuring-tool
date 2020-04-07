@@ -15,7 +15,7 @@ class ClosedState implements PolygonState {
 
     handleLeftClick(polygon: Polygon, pointClicked: Point): void {
         console.log("ClosedState - handleLeftClick");
-        var nearPointIndex = checkIfCloseToPoint(polygon.segments, pointClicked, moveDelInsDistance);
+        let nearPointIndex: number = checkIfCloseToPoint(polygon.segments, pointClicked, moveDelInsDistance);
         if (nearPointIndex > -1) {
             // on point (mark for move) -> MoveState
             polygon.movePointIndex = nearPointIndex;
@@ -26,20 +26,20 @@ class ClosedState implements PolygonState {
         else {
             // on vertex (new point)
             //if the click occured near a segment, insert a new point
-            var tempVar = this.checkIfCloseToLine(polygon.segments, pointClicked, moveDelInsDistance);
-            if (tempVar[0]) {
+            let projection: PointToSegmentProjection = this.checkIfCloseToLine(polygon.segments, pointClicked, moveDelInsDistance);
+            if (projection.withinMinimumDistance) {
                 //rounding coordinates to get integers
                 if (useIntegerCoords) {
-                    tempVar[2].x = Math.round(tempVar[2].x);
-                    tempVar[2].y = Math.round(tempVar[2].y);
+                    projection.projectionPointOnSegment.x = Math.round(projection.projectionPointOnSegment.x);
+                    projection.projectionPointOnSegment.y = Math.round(projection.projectionPointOnSegment.y);
                 }
                 //calculating distance to both points on clicked segment
                 //so that it is not possible to insert a point too close to another
-                const segmPointDist1: number = distBetweenPoints(polygon.segments[tempVar[1]].p1, tempVar[2]);
-                const segmPointDist2: number = distBetweenPoints(polygon.segments[tempVar[1]].p2, tempVar[2]);
+                const segmPointDist1: number = distBetweenPoints(polygon.segments[projection.segmentIndex].p1, projection.projectionPointOnSegment);
+                const segmPointDist2: number = distBetweenPoints(polygon.segments[projection.segmentIndex].p2, projection.projectionPointOnSegment);
                 if (((segmPointDist1 > minDistance) && (segmPointDist2 > minDistance))) {
                     //inserting the point in the segment-array
-                    polygon.insertPoint(tempVar[2], tempVar[1]);//newPoint,index
+                    polygon.insertPoint(projection.projectionPointOnSegment, projection.segmentIndex);//newPoint,index
                 }
             }
         }
@@ -51,7 +51,7 @@ class ClosedState implements PolygonState {
 
         // on point (removes point)
         //if the user rightclicked a point, remove it if there are more than 3 sides to the polygon
-        var nearPointIndex = checkIfCloseToPoint(polygon.segments, pointClicked, moveDelInsDistance);
+        let nearPointIndex: number = checkIfCloseToPoint(polygon.segments, pointClicked, moveDelInsDistance);
         if (nearPointIndex > -1) {
             //if polygon has more than 3 sides it is ok to remove point (+segment)
             if (polygon.segments.length > 3) {
@@ -70,12 +70,11 @@ class ClosedState implements PolygonState {
         //erase segment if user right clicked "on" segment
         else {
             //check if click was near segment
-            var tempVar = this.checkIfCloseToLine(polygon.segments, pointClicked, moveDelInsDistance);
-            if (tempVar[0]) {//true if user clicked close enough to segment
-                // on vertex (removes vertex) -> OpenState
-                //tempVar[1] holds what segment
+            let projection: PointToSegmentProjection = this.checkIfCloseToLine(polygon.segments, pointClicked, moveDelInsDistance);
+            if (projection.withinMinimumDistance) {//true if user clicked close enough to segment
                 //Changing start segment so that the one to be removed is the last one
-                polygon.revolFirstIndex(tempVar[1]);
+                //TODO: När Polygon består av en trave punkter istället för segment. Så kanske man kan lyfta ut en punkt ur array:en utan att rotera en massa.
+                polygon.revolFirstIndex(projection.segmentIndex);
                 //opening polygon and removing last segment
                 polygon.segments.pop();
                 polygon.setCurrentState(OpenState.getInstance());
@@ -83,14 +82,6 @@ class ClosedState implements PolygonState {
 
             }
         }
-
-
-
-
-
-
-
-
     }
 
 
@@ -100,10 +91,10 @@ class ClosedState implements PolygonState {
         //i.e. a four sided polygon loosing a side becomes a triangle, that can have no sides intersecting.
         if (segmentArrayIn.length > 4) {
             //find index for the segment one step prior
-            var indexBeforeDeleteAtIndex = moduloInPolygon(deleteAtIndex - 1, segmentArrayIn.length); //DAI-1
+            let indexBeforeDeleteAtIndex: number = moduloInPolygon(deleteAtIndex - 1, segmentArrayIn.length); //DAI-1
             //skapa ETT nya segment f�r valt index och det dessf�rrinnan
             //create ONE new Segment to replace chosen segment (at deleteAtIndex) and the segment prior
-            var thePotentialNewSegment = new Segment(segmentArrayIn[indexBeforeDeleteAtIndex].p1, segmentArrayIn[deleteAtIndex].p2);
+            let thePotentialNewSegment: Segment = new Segment(segmentArrayIn[indexBeforeDeleteAtIndex].p1, segmentArrayIn[deleteAtIndex].p2);
             //skipping the two segments to be replaced plus their neighbouring segments
             for (let p = 0; p < segmentArrayIn.length - 4; p++) {
                 segmentArrayIn[moduloInPolygon((p + deleteAtIndex + 2), segmentArrayIn.length)]
@@ -123,32 +114,40 @@ class ClosedState implements PolygonState {
 
 
     //checking if new point is near other polygon segments
-    checkIfCloseToLine(segmentArrayIn: Segment[], nyPunkt: Point, minDistanceIn: number) {
-        var distToLine = -1;
-        var smallestDistance = minDistanceIn;
-        var ppReturArray = new Array();
-        var closeEnough = false;
-        var firstPointIndex = 0;
-        var closestPoint = new Point();
+    checkIfCloseToLine(segmentArrayIn: Segment[], nyPunkt: Point, minDistanceIn: number): PointToSegmentProjection {
+        let smallestDistance: number = minDistanceIn;
+        let withinMinimumDistance: boolean = false;
+        let segmentIndex: number = 0;
+        let closestPoint: Point = new Point();
         //checking with every segment
         for (let j = 0; j < segmentArrayIn.length; j++) {
             //projecting point on segment
             const projectionResult: ProjectionResult = projectVector(segmentArrayIn[j], nyPunkt);
             //if it was between 0 and minDistanceIn
             if (projectionResult.successful && projectionResult.norm < minDistanceIn) {
+                withinMinimumDistance = true;
                 if (projectionResult.norm < smallestDistance) {
                     //if it is closer than minDistanceIn and closer than last saved, it is saved
                     smallestDistance = projectionResult.norm;
                     closestPoint = projectionResult.point;
-                    firstPointIndex = j;
+                    segmentIndex = j;
                 }
-                closeEnough = true;
             }
         }
-        ppReturArray.push(closeEnough); //true, if there was anything close enough
-        ppReturArray.push(firstPointIndex); //index for the first point on segment clicked (index for the segment clicked?)
-        ppReturArray.push(closestPoint); //the point projected on the segment
-        return ppReturArray;
+        let projectionPointOnSegment: Point = closestPoint;
+        return {
+            withinMinimumDistance,
+            segmentIndex,
+            projectionPointOnSegment
+        }
     }
 
+}
+
+interface PointToSegmentProjection {
+    withinMinimumDistance: boolean;
+    //TODO: Jag kanske skulle kunna returnera det aktuella segmentet istället?
+    //Beror lite på när jag tänker gå över till att Polygon bygger på Point istället för Segment.
+    segmentIndex: number;
+    projectionPointOnSegment: Point;
 }

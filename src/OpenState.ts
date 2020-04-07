@@ -25,23 +25,23 @@ class OpenState implements PolygonState {
                 //if the plygon already has at least 2 segments
                 if (polygon.segments.length >= 2) {
                     //check that the segment between the last point and first point does not intersect with other segments
-                    var nyttSegment = new Segment(polygon.segments[polygon.segments.length - 1].p2, polygon.segments[0].p1);
+                    const nyttSegment: Segment = new Segment(polygon.segments[polygon.segments.length - 1].p2, polygon.segments[0].p1);
                     if (enforceNonComplexCheckBox.checked) {
                         if (!this.checkIfIntersect(polygon.segments, nyttSegment, true)) {
-                            polygon.segments.push(nyttSegment); // TODO: kolla dubbel kod
-                            polygon.close(); // TODO: kolla dubbel kod
+                            polygon.segments.push(nyttSegment);
+                            polygon.close();
                         }
                     }
                     else {
-                        polygon.segments.push(nyttSegment); // TODO: kolla dubbel kod
-                        polygon.close(); // TODO: kolla dubbel kod
+                        polygon.segments.push(nyttSegment);
+                        polygon.close();
                     }
                     polygon.setCurrentState(ClosedState.getInstance());
                 }
             }
             else {
                 //if the new Segment does not intersect with other segments or the new point to close to other points, the add the point (+segment)
-                var nyttSegment = new Segment(polygon.segments[polygon.segments.length - 1].p2, pointClicked);
+                const nyttSegment: Segment = new Segment(polygon.segments[polygon.segments.length - 1].p2, pointClicked);
                 if (checkIfCloseToPoint(polygon.segments, pointClicked, minDistance) < 0) {//checking p1 in all segments
                     if (distBetweenPoints(polygon.segments[polygon.segments.length - 1].p2, pointClicked) > minDistance) {//checking p2 in the last segment
                         if (enforceNonComplexCheckBox.checked) {
@@ -65,23 +65,11 @@ class OpenState implements PolygonState {
                 //if it is not to close to the fist point, add the second point
                 if (distBetweenPoints(polygon.seed, pointClicked) > minDistance) {
                     //console.log("first segment");
-                    var nyttSegment = new Segment(polygon.seed, pointClicked);
+                    let nyttSegment: Segment = new Segment(polygon.seed, pointClicked);
                     polygon.segments.push(nyttSegment);
                 }
             }
         }
-
-
-
-
-        // empty space (new point)
-
-        // on point if on endpoint (closes)-> ClosedState
-        // on point if on other point (nothing)
-
-        // on vertex (nothing)
-
-
     }
 
     handleRightClick(polygon: Polygon, pointClicked: Point): void {
@@ -97,7 +85,7 @@ class OpenState implements PolygonState {
 
     //checking if new Segment intersects with other segment in array
     checkIfIntersect(segmentArrayIn: Segment[], nyttSegmentIn: Segment, skipFirstSegment: boolean): boolean {
-        var startSegm = 0;
+        let startSegm = 0;
         if (skipFirstSegment) { startSegm = 1; }//skipping first segment in case user clicks the polygons first point
         //skipping the second to last (penultimate segment)
         for (let n = startSegm; n < segmentArrayIn.length - 1; n++) {

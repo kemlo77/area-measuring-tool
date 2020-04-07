@@ -53,17 +53,17 @@ class MoveState implements PolygonState {
     }
 
     //checking if the two segments containing a point (being moved) intersects with the other segments in a polygon (at move)
-    checkIfMovedIntersects(segmentArrayIn: Segment[], nyPunkt: Point, movedAtIndex: number) {
+    checkIfMovedIntersects(segmentArrayIn: Segment[], nyPunkt: Point, movedAtIndex: number): boolean {
         // if polygon has more than 3 segments, otherwise return false
         if (segmentArrayIn.length > 3) {
             //find index for segments two steps before, one step before and one step after chosen index
             //MAI ~ Move At Index
-            var indexBeforeMovedAtIndex = moduloInPolygon(movedAtIndex - 1, segmentArrayIn.length); //MAI-1
-            var indexBeforeBeforeMovedAtIndex = moduloInPolygon(indexBeforeMovedAtIndex - 1, segmentArrayIn.length);//MAI-2
-            var indexAfterMovedAtIndex = moduloInPolygon(movedAtIndex + 1, segmentArrayIn.length);//MAI+1
+            let indexBeforeMovedAtIndex: number = moduloInPolygon(movedAtIndex - 1, segmentArrayIn.length); //MAI-1
+            let indexBeforeBeforeMovedAtIndex: number = moduloInPolygon(indexBeforeMovedAtIndex - 1, segmentArrayIn.length);//MAI-2
+            let indexAfterMovedAtIndex: number = moduloInPolygon(movedAtIndex + 1, segmentArrayIn.length);//MAI+1
             //creating two new Segments for chosen index and the one prior
-            var firstCheckedSegment = new Segment(segmentArrayIn[indexBeforeMovedAtIndex].p1, nyPunkt);
-            var secondCheckedSegment = new Segment(nyPunkt, segmentArrayIn[movedAtIndex].p2);
+            let firstCheckedSegment: Segment = new Segment(segmentArrayIn[indexBeforeMovedAtIndex].p1, nyPunkt);
+            let secondCheckedSegment: Segment = new Segment(nyPunkt, segmentArrayIn[movedAtIndex].p2);
             //loop through all segments in segment array
             //general idea: no need to check if neighbouring segments intersect with current segment (being checked)
             for (let m = 0; m < segmentArrayIn.length; m++) {

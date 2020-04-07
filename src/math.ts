@@ -88,19 +88,19 @@ function projectVector(segmentAB: Segment, pointC: Point): ProjectionResult {
 	//if dotproduct_AB_AC is larger than zero the angle is acute and then C is an interesting point
 	if (dotproduct_AB_AC >= 0) {
 		//the norm (length of AB)
-		const normAB: number = vectorAB.vLength();
+		const normAB: number = vectorAB.length;
 		//page 136 in "Elementary Linear Algebra" [Anton, Rorres], 7th edition
 		//projecting AC on AB. The new vector is AD
 		const vectorAD: Vector = new Vector(null, null); //TODO: skapa ytterligare konstruktor hos Vector där man anger x och y-komponent
 		vectorAD.x = dotproduct_AB_AC * vectorAB.x / Math.pow(normAB, 2);
 		vectorAD.y = dotproduct_AB_AC * vectorAB.y / Math.pow(normAB, 2);
-		const normAD: number = vectorAD.vLength();
+		const normAD: number = vectorAD.length;
 		const pointD: Point = new Point(pointA.x + vectorAD.x, pointA.y + vectorAD.y);
 		//kollar så inte det är längre från a->d än vad det är a->b
 		//checking so that A->D is shorter than A->B
 		if (normAD <= normAB) {
 			const vectorDC: Vector = new Vector(pointD, pointC);
-			const normDC: number = vectorDC.vLength();
+			const normDC: number = vectorDC.length;
 			return {successful: true, norm: normDC, point: pointD };
 		}
 	}

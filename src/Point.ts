@@ -15,22 +15,22 @@ class Point {
 
     }
 
-    //copying values from point so that the new point IS the same object
-    copyValues(copyFromThisPoint): void {
+    //copying values from point to the current Point-object
+    copyValues(copyFromThisPoint: Point): void {
         this.x = copyFromThisPoint.x;
         this.y = copyFromThisPoint.y;
     }
 
     //clone a point
     clonePoint(): Point {
-        var copiedPoint = new Point(this.x, this.y);
+        let copiedPoint: Point = new Point(this.x, this.y);
         return copiedPoint;
     }
 
     //rotate a point around the Origin
     rotate(angle: number): void {
-        var tempX = this.x
-        var tempY = this.y;
+        let tempX: number = this.x
+        let tempY: number = this.y;
         this.x = tempX * Math.cos(angle) + tempY * Math.sin(angle);
         this.y = -tempX * Math.sin(angle) + tempY * Math.cos(angle);
     }

@@ -22,11 +22,11 @@ class CanvasPainter {
     }
 
     drawPolygon(polygonIn: Polygon): void {
-        var moveColor = "255,128,0";//orange
-        var defaultColor = "0,80,120";//
-        var redColor = "255,0,0";
-        var greenColor = "0,255,0";
-        var whiteColor = "255,255,255";
+        let moveColor: string = "255,128,0";//orange
+        let defaultColor: string = "0,80,120";//
+        let redColor: string = "255,0,0";
+        let greenColor: string = "0,255,0";
+        let whiteColor: string = "255,255,255";
         //clear the canvas
         this.clearTheFrontCanvas();
         //draw a ring around the point chosen to be moved
