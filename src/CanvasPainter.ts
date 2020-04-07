@@ -63,27 +63,55 @@ class CanvasPainter {
         }
     }
 
-    drawMovePolygon(polygonIn: Polygon): void {
+    drawMovePolygon(polygon: Polygon): void {
         this.clearTheFrontCanvas();
         //draw all segments except the ones next to the dot being moved
-        for (let r = 0; r < polygonIn.segments.length - 2; r++) {
-            this.drawOneSegment(polygonIn.segments[moduloInPolygon(r + polygonIn.movePointIndex + 1, polygonIn.segments.length)], this.defaultColor);
+        for (let r = 0; r < polygon.segments.length - 2; r++) {
+            this.drawOneSegment(polygon.segments[moduloInPolygon(r + polygon.movePointIndex + 1, polygon.segments.length)], this.defaultColor);
         }
         //draw intermediary points, skip the one being moved
-        for (let z = 1; z < polygonIn.segments.length; z++) {
-            if (z == polygonIn.movePointIndex) { continue; }
-            this.drawDoubleDot(polygonIn.segments[z].p1, this.defaultColor, this.whiteColor);
+        for (let z = 1; z < polygon.segments.length; z++) {
+            if (z == polygon.movePointIndex) { continue; }
+            this.drawDoubleDot(polygon.segments[z].p1, this.defaultColor, this.whiteColor);
         }
         //since the polygon is closed
         //first point green
-        if (polygonIn.movePointIndex !== 0) {
-            this.drawDoubleDot(polygonIn.segments[0].p1, this.defaultColor, this.greenColor);
+        if (polygon.movePointIndex !== 0) {
+            this.drawDoubleDot(polygon.segments[0].p1, this.defaultColor, this.greenColor);
         }
         //last point red
-        if (polygonIn.movePointIndex !== (polygonIn.segments.length - 1)) {
-            this.drawDoubleDot(polygonIn.segments[polygonIn.segments.length - 1].p1, this.defaultColor, this.redColor);
+        if (polygon.movePointIndex !== (polygon.segments.length - 1)) {
+            this.drawDoubleDot(polygon.segments[polygon.segments.length - 1].p1, this.defaultColor, this.redColor);
         }
     }
+
+    drawMovementPolygonInOpenState(polygon: Polygon, mousePosition: Point): void {
+        this.clearUsedCanvas()
+
+        if (polygon.segments.length == 0) {
+            if (polygon.seed != null) {
+                this.drawLine(polygon.seed, mousePosition, "255,128,0", this.ctxBack2);
+                this.saveExtremes([polygon.seed, mousePosition]);
+            }
+        }
+        else {
+            const lastPoint: Point = polygon.segments[polygon.segments.length - 1].p2;
+            this.drawLine(lastPoint, mousePosition, "255,128,0", this.ctxBack2);
+            this.saveExtremes([lastPoint, mousePosition]);
+        }
+    }
+
+    drawMovementPolygonInMoveState(polygon: Polygon, mousePosition: Point): void {
+        this.clearUsedCanvas()
+
+        const movingPointPlusOne: Point = polygon.segments[polygon.movePointIndex].p2;
+        const movingPointMinusOne: Point = polygon.segments[moduloInPolygon(polygon.movePointIndex - 1, polygon.segments.length)].p1;
+        this.drawLine(movingPointPlusOne, mousePosition, "255,128,0", this.ctxBack2);
+        this.drawLine(movingPointMinusOne, mousePosition, "255,128,0", this.ctxBack2);
+        this.saveExtremes([movingPointPlusOne, movingPointMinusOne, mousePosition]);
+
+    }
+
 
     drawMovement(mousePosPoint: Point, thePolygon: Polygon): void {
         this.clearUsedCanvas()
@@ -120,6 +148,10 @@ class CanvasPainter {
 
     clearTheFrontCanvas(): void {
         this.ctxFront2.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+    }
+
+    clearTheBackCanvas(): void {
+        this.ctxBack2.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
     }
 
     //draw a point with inner and outer color

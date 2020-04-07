@@ -8,4 +8,6 @@ interface PolygonState {
 
     drawSegments(polygon: Polygon): void;
 
+    drawMovement(polygon: Polygon, mousePosition: Point): void;
+
 }

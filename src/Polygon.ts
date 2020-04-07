@@ -32,6 +32,10 @@ class Polygon {
         this.currentState.drawSegments(this);
     }
 
+    drawMovement(mousePosition: Point): void {
+        this.currentState.drawMovement(this, mousePosition);
+    }
+
     //closing polygon
     //TODO: denna ska bort
     close(): void {

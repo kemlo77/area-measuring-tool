@@ -36,6 +36,7 @@ class OpenState implements PolygonState {
                         polygon.segments.push(nyttSegment);
                         polygon.close();
                     }
+                    CanvasPainter.getInstance().clearTheBackCanvas();
                     polygon.setCurrentState(ClosedState.getInstance());
                 }
             }
@@ -101,5 +102,10 @@ class OpenState implements PolygonState {
 
     drawSegments(polygon: Polygon){
         CanvasPainter.getInstance().drawOpenPolygon(polygon);
+    }
+
+    drawMovement(polygon: Polygon, mousePosition: Point): void {
+        CanvasPainter.getInstance().drawMovementPolygonInOpenState(polygon,mousePosition);
+
     }
 }

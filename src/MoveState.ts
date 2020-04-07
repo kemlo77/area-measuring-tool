@@ -92,4 +92,8 @@ class MoveState implements PolygonState {
     drawSegments(polygon: Polygon){
         CanvasPainter.getInstance().drawMovePolygon(polygon);       
     }
+
+    drawMovement(polygon: Polygon, mousePosition: Point): void {
+        CanvasPainter.getInstance().drawMovementPolygonInMoveState(polygon,mousePosition);
+    }
 }

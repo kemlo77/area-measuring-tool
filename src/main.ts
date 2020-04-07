@@ -15,16 +15,17 @@ function clearEntirely(): void {
 	CanvasPainter.getInstance().clearBothCanvas();
 }
 
-function handleClick(isLeftClick: boolean, theClickedPoint: Point): void {
+function handleClick(isLeftClick: boolean, mousePosition: Point): void {
 	if (isLeftClick) {
-		firstPolygon.handleLeftClick(theClickedPoint);
+		firstPolygon.handleLeftClick(mousePosition);
 	}
 	else {
-		firstPolygon.handleRightClick(theClickedPoint);
+		firstPolygon.handleRightClick(mousePosition);
 	}
 	//CanvasPainter.getInstance().drawPolygon(firstPolygon);
 	firstPolygon.drawSegments();
-	CanvasPainter.getInstance().drawMovement(theClickedPoint, firstPolygon)
+	//CanvasPainter.getInstance().drawMovement(theClickedPoint, firstPolygon)
+	firstPolygon.drawMovement(mousePosition);
 }
 
 
@@ -74,5 +75,6 @@ function getMousePos(event: MouseEvent, canvasId: string): void {
 	const mousePositionY: number = event.clientY - rect.top;
 	const mousePosition = new Point(mousePositionX, mousePositionY);
 	//TODO: borde nog inte specifikt ange vilken polygon här, kanske hämta aktuell?
-	CanvasPainter.getInstance().drawMovement(mousePosition, firstPolygon);
+	//CanvasPainter.getInstance().drawMovement(mousePosition, firstPolygon);
+	firstPolygon.drawMovement(mousePosition);
 }
