@@ -22,9 +22,7 @@ function handleClick(isLeftClick: boolean, mousePosition: Point): void {
 	else {
 		firstPolygon.handleRightClick(mousePosition);
 	}
-	//CanvasPainter.getInstance().drawPolygon(firstPolygon);
 	firstPolygon.drawSegments();
-	//CanvasPainter.getInstance().drawMovement(theClickedPoint, firstPolygon)
 	firstPolygon.drawMovement(mousePosition);
 }
 

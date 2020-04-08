@@ -3,12 +3,24 @@ class Polygon {
     public seed: Point;
     public movePointIndex: number;
     private currentState: PolygonState;
+    private enforceNonComplex: boolean;
+    private enforceClockWise: boolean;
 
     constructor() {
         this.segments = new Array();
         this.seed = null;
         this.movePointIndex = -1; //TODO: går det skriva om koden så att MoveState får den här punkten från ClosedState?
         this.currentState = OpenState.getInstance();
+        this.enforceNonComplex = true;
+        this.enforceClockWise = true;
+    }
+
+    get enforceNonComplexPolygon() {
+        return this.enforceNonComplex;
+    }
+
+    get enforceClockWisePolygon() {
+        return this.enforceClockWise;
     }
 
     setCurrentState(state: PolygonState): void {
@@ -94,7 +106,7 @@ class Polygon {
 
     //changing the starting point in the polygon (i.e. chaing what segment is the starting segment)
     revolFirstIndex(newFirstIndex): void {
-        if (this.currentState instanceof  ClosedState) {
+        if (this.currentState instanceof ClosedState) {
             //handling if newFirstIndex is larger than the number of segments
             let newFirstIndexHandled: number = moduloInPolygon(newFirstIndex, this.segments.length);
             //removing the group of segments (up until newfirstindex)

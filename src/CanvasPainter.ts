@@ -90,13 +90,13 @@ class CanvasPainter {
 
         if (polygon.segments.length == 0) {
             if (polygon.seed != null) {
-                this.drawLine(polygon.seed, mousePosition, "255,128,0", this.ctxBack2);
+                this.drawLine(polygon.seed, mousePosition, this.moveColor, this.ctxBack2);
                 this.saveExtremes([polygon.seed, mousePosition]);
             }
         }
         else {
             const lastPoint: Point = polygon.segments[polygon.segments.length - 1].p2;
-            this.drawLine(lastPoint, mousePosition, "255,128,0", this.ctxBack2);
+            this.drawLine(lastPoint, mousePosition, this.moveColor, this.ctxBack2);
             this.saveExtremes([lastPoint, mousePosition]);
         }
     }
@@ -106,8 +106,8 @@ class CanvasPainter {
 
         const movingPointPlusOne: Point = polygon.segments[polygon.movePointIndex].p2;
         const movingPointMinusOne: Point = polygon.segments[moduloInPolygon(polygon.movePointIndex - 1, polygon.segments.length)].p1;
-        this.drawLine(movingPointPlusOne, mousePosition, "255,128,0", this.ctxBack2);
-        this.drawLine(movingPointMinusOne, mousePosition, "255,128,0", this.ctxBack2);
+        this.drawLine(movingPointPlusOne, mousePosition, this.moveColor, this.ctxBack2);
+        this.drawLine(movingPointMinusOne, mousePosition, this.moveColor, this.ctxBack2);
         this.saveExtremes([movingPointPlusOne, movingPointMinusOne, mousePosition]);
 
     }

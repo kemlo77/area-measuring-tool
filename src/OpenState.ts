@@ -16,8 +16,6 @@ class OpenState implements PolygonState {
     handleLeftClick(polygon: Polygon, pointClicked: Point): void {
         console.log("OpenState - handleLeftClick");
 
-        const enforceNonComplexCheckBox: HTMLInputElement = <HTMLInputElement>document.getElementById("checkboxEnforceNonComplex");
-
         //check if this is the first segment
         if (polygon.segments.length > 0) {
             //check if user clicks near the first point (wanting to close the polygon)
@@ -26,7 +24,7 @@ class OpenState implements PolygonState {
                 if (polygon.segments.length >= 2) {
                     //check that the segment between the last point and first point does not intersect with other segments
                     const nyttSegment: Segment = new Segment(polygon.segments[polygon.segments.length - 1].p2, polygon.segments[0].p1);
-                    if (enforceNonComplexCheckBox.checked) {
+                    if (polygon.enforceNonComplexPolygon) {
                         if (!this.checkIfIntersect(polygon.segments, nyttSegment, true)) {
                             polygon.segments.push(nyttSegment);
                             //polygon.close();
@@ -47,7 +45,7 @@ class OpenState implements PolygonState {
                 const nyttSegment: Segment = new Segment(polygon.segments[polygon.segments.length - 1].p2, pointClicked);
                 if (checkIfCloseToPoint(polygon.segments, pointClicked, minDistance) < 0) {//checking p1 in all segments
                     if (distBetweenPoints(polygon.segments[polygon.segments.length - 1].p2, pointClicked) > minDistance) {//checking p2 in the last segment
-                        if (enforceNonComplexCheckBox.checked) {
+                        if (polygon.enforceNonComplexPolygon) {
                             if (!this.checkIfIntersect(polygon.segments, nyttSegment, false)) {
                                 polygon.segments.push(nyttSegment);
                             }

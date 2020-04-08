@@ -46,8 +46,6 @@ class ClosedState implements PolygonState {
 
     handleRightClick(polygon: Polygon, pointClicked: Point): void {
         console.log("ClosedState - handleRightClick");
-        const enforceNonComplexCheckBox: HTMLInputElement = <HTMLInputElement>document.getElementById("checkboxEnforceNonComplex");
-
         // on point (removes point)
         //if the user rightclicked a point, remove it if there are more than 3 sides to the polygon
         let nearPointIndex: number = checkIfCloseToPoint(polygon.segments, pointClicked, moveDelInsDistance);
@@ -55,7 +53,7 @@ class ClosedState implements PolygonState {
             //if polygon has more than 3 sides it is ok to remove point (+segment)
             if (polygon.segments.length > 3) {
                 //check that the segment created to fill the gap does not intersect with other segments
-                if (enforceNonComplexCheckBox.checked) {
+                if (polygon.enforceNonComplexPolygon) {
                     if (!this.checkIfRemovedPointCausesSegmentIntersect(polygon.segments, nearPointIndex)) {
                         //no intersects found
                         polygon.ejectPoint(nearPointIndex);
