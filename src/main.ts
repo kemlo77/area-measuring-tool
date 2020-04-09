@@ -1,7 +1,7 @@
 let moveDelInsDistance: number = 3; //TODO: Döp om denna
-let minDistance:number = 8;
-let closePolygonMinimumDistance:number = 5;
-let useIntegerCoords:boolean = false;
+let minDistance: number = 8;
+let closePolygonMinimumDistance: number = 5;
+let useIntegerCoords: boolean = false;
 
 let firstPolygon: Polygon;
 
@@ -24,6 +24,8 @@ function handleClick(isLeftClick: boolean, mousePosition: Point): void {
 	}
 	firstPolygon.drawSegments();
 	firstPolygon.drawMovement(mousePosition);
+	console.log('number of vertices: ' + firstPolygon.vertices.length);
+	firstPolygon.vertices.forEach((punkt) => console.log(punkt.x + ',' + punkt.y + ' '));
 }
 
 
@@ -73,6 +75,5 @@ function getMousePos(event: MouseEvent, canvasId: string): void {
 	const mousePositionY: number = event.clientY - rect.top;
 	const mousePosition = new Point(mousePositionX, mousePositionY);
 	//TODO: borde nog inte specifikt ange vilken polygon här, kanske hämta aktuell?
-	//CanvasPainter.getInstance().drawMovement(mousePosition, firstPolygon);
 	firstPolygon.drawMovement(mousePosition);
 }

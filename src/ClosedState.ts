@@ -39,6 +39,9 @@ class ClosedState implements PolygonState {
                 if (((segmPointDist1 > minDistance) && (segmPointDist2 > minDistance))) {
                     //inserting the point in the segment-array
                     polygon.insertPoint(projection.projectionPointOnSegment, projection.segmentIndex);//newPoint,index
+                    polygon.insertVertex(projection.projectionPointOnSegment, projection.segmentIndex);
+                } else {
+                    console.warn('New vertex too close to other vertex.')
                 }
             }
         }
@@ -57,11 +60,15 @@ class ClosedState implements PolygonState {
                     if (!this.checkIfRemovedPointCausesSegmentIntersect(polygon.segments, nearPointIndex)) {
                         //no intersects found
                         polygon.ejectPoint(nearPointIndex);
+                        polygon.ejectVertex(nearPointIndex);
                     }
                 }
                 else {
                     polygon.ejectPoint(nearPointIndex);
+                    polygon.ejectVertex(nearPointIndex);
                 }
+            } else{
+                console.warn("Cannot remove vertex when polygon is a triangle.")
             }
         }
         //erase segment if user right clicked "on" segment
@@ -70,7 +77,7 @@ class ClosedState implements PolygonState {
             let projection: PointToSegmentProjection = this.checkIfCloseToLine(polygon.segments, pointClicked, moveDelInsDistance);
             if (projection.withinMinimumDistance) {//true if user clicked close enough to segment
                 //Changing start segment so that the one to be removed is the last one
-                //TODO: När Polygon består av en trave punkter istället för segment. Så kanske man kan lyfta ut en punkt ur array:en utan att rotera en massa.
+                //TODO: När Polygon består av en trave punkter istället för segment. Så kanske det räcker med att "rotera" arrayen och ändra status till öppen
                 polygon.revolFirstIndex(projection.segmentIndex);
                 //opening polygon and removing last segment
                 polygon.segments.pop();

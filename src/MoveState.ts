@@ -17,19 +17,22 @@ class MoveState implements PolygonState {
         console.log("MoveState - handleLeftClick");
 
         // empty space (moves to new point) -> ClosedState
-        //if the clicked point is not to close to another point (not checking it self, there of the 4th argument in function call)
+        //if the clicked point is not too close to another point (not checking it self, there of the 4th argument in function call)
         if (checkIfCloseToPoint(polygon.segments, pointClicked, minDistance, polygon.movePointIndex) < 0) {
             //if the points nearest segments do not intersect with other segments
             if (polygon.enforceNonComplexPolygon) {
                 if (!this.checkIfMovedIntersects(polygon.segments, pointClicked, polygon.movePointIndex)) {
                     //move the point at movePointIndex to the new point
                     polygon.segments[polygon.movePointIndex].p1.copyValues(pointClicked); //copying values so that it is still the same object
+                    polygon.vertices[polygon.movePointIndex] = pointClicked;
+                    this.clearTheBackCanvas();
                     polygon.setCurrentState(ClosedState.getInstance());
                 }
             }
             else {
                 //move the point at movePointIndex to the new point
                 polygon.segments[polygon.movePointIndex].p1.copyValues(pointClicked); //copying values so that it is still the same object
+                this.clearTheBackCanvas();
                 polygon.setCurrentState(ClosedState.getInstance());
             }
         }
@@ -90,5 +93,9 @@ class MoveState implements PolygonState {
 
     drawMovement(polygon: Polygon, mousePosition: Point): void {
         CanvasPainter.getInstance().drawMovementPolygonInMoveState(polygon,mousePosition);
+    }
+
+    clearTheBackCanvas(): void{
+        CanvasPainter.getInstance().clearTheBackCanvas();
     }
 }

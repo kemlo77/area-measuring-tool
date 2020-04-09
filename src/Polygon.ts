@@ -1,6 +1,7 @@
 class Polygon {
     public segments: Segment[];
     public seed: Point;
+    public vertices: Point[];
     public movePointIndex: number;
     private currentState: PolygonState;
     private enforceNonComplex: boolean;
@@ -8,6 +9,7 @@ class Polygon {
 
     constructor() {
         this.segments = new Array();
+        this.vertices = new Array();
         this.seed = null;
         this.movePointIndex = -1; //TODO: går det skriva om koden så att MoveState får den här punkten från ClosedState?
         this.currentState = OpenState.getInstance();
@@ -46,11 +48,7 @@ class Polygon {
 
     //changing direction of polygon (clockwise <-> counter clockwise)
     reversePolygon(): void {
-        this.segments.reverse();
-        //the direction of all segments in polygon must also be reversed
-        for (let u = 0; u < this.segments.length; u++) {
-            this.segments[u].reverseSegment();
-        }
+        this.vertices.reverse();
     }
 
     //inserting a new point (+segment) in a polygon segment array, at a given index
@@ -64,6 +62,10 @@ class Polygon {
         this.segments.splice(insertAtThisIndex + 1, 0, tempSegmentToInsert);
         //chagning segment before the break so that the end point is now the breakPoint
         this.segments[insertAtThisIndex].p2 = newPointIn;
+    }
+
+    insertVertex(newPoint: Point, insertAtThisIndex: number): void {
+        this.vertices.splice(insertAtThisIndex+1,0, newPoint);
     }
 
     get clockWise(): boolean {
@@ -105,7 +107,7 @@ class Polygon {
     }
 
     //changing the starting point in the polygon (i.e. chaing what segment is the starting segment)
-    revolFirstIndex(newFirstIndex): void {
+    revolFirstIndex(newFirstIndex: number): void {
         if (this.currentState instanceof ClosedState) {
             //handling if newFirstIndex is larger than the number of segments
             let newFirstIndexHandled: number = moduloInPolygon(newFirstIndex, this.segments.length);
@@ -120,7 +122,7 @@ class Polygon {
     }
 
     //removing a point (+segment) from a polygon segment-array, at a given index
-    ejectPoint(removeAtThisIndex): void {
+    ejectPoint(removeAtThisIndex: number): void {
         //the point to be removed is the first point in the segment with index=removeAtThisIndex
         //the index for the segment prior to the segment removed (handled if removeAtThisIndex==0)
         let indexBeforeRemoveAtThisIndex: number = moduloInPolygon((removeAtThisIndex - 1), this.segments.length);
@@ -128,6 +130,10 @@ class Polygon {
         this.segments[indexBeforeRemoveAtThisIndex].p2 = this.segments[removeAtThisIndex].p2;
         //removing the segment
         this.segments.splice(removeAtThisIndex, 1);
+    }
+
+    ejectVertex(removeAtThisIndex: number): void {
+        this.vertices.splice(removeAtThisIndex, 1);
     }
 
 

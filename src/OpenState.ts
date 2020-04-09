@@ -27,15 +27,13 @@ class OpenState implements PolygonState {
                     if (polygon.enforceNonComplexPolygon) {
                         if (!this.checkIfIntersect(polygon.segments, nyttSegment, true)) {
                             polygon.segments.push(nyttSegment);
-                            //polygon.close();
-                            CanvasPainter.getInstance().clearTheBackCanvas();
+                            this.clearTheBackCanvas();
                             polygon.setCurrentState(ClosedState.getInstance());
                         }
                     }
                     else {
                         polygon.segments.push(nyttSegment);
-                        //polygon.close();
-                        CanvasPainter.getInstance().clearTheBackCanvas();
+                        this.clearTheBackCanvas();
                         polygon.setCurrentState(ClosedState.getInstance());
                     }
                 }
@@ -48,10 +46,12 @@ class OpenState implements PolygonState {
                         if (polygon.enforceNonComplexPolygon) {
                             if (!this.checkIfIntersect(polygon.segments, nyttSegment, false)) {
                                 polygon.segments.push(nyttSegment);
+                                polygon.vertices.push(pointClicked);
                             }
                         }
                         else {
                             polygon.segments.push(nyttSegment);
+                            polygon.vertices.push(pointClicked);
                         }
                     }
                 }
@@ -61,6 +61,7 @@ class OpenState implements PolygonState {
             if (polygon.seed == null) {
                 //console.log("first point");
                 polygon.seed = pointClicked;
+                polygon.vertices.push(pointClicked);
             }
             else {
                 //if it is not to close to the fist point, add the second point
@@ -68,6 +69,7 @@ class OpenState implements PolygonState {
                     //console.log("first segment");
                     let nyttSegment: Segment = new Segment(polygon.seed, pointClicked);
                     polygon.segments.push(nyttSegment);
+                    polygon.vertices.push(pointClicked);
                 }
             }
         }
@@ -81,6 +83,7 @@ class OpenState implements PolygonState {
             //console.log("removed seed point");
         }
         polygon.segments.pop();
+        polygon.vertices.pop();
     }
 
 
@@ -108,4 +111,9 @@ class OpenState implements PolygonState {
         CanvasPainter.getInstance().drawMovementPolygonInOpenState(polygon,mousePosition);
 
     }
+
+    clearTheBackCanvas(): void{
+        CanvasPainter.getInstance().clearTheBackCanvas();
+    }
+
 }
