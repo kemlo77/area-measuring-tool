@@ -17,22 +17,22 @@ class OpenState implements PolygonState {
         console.log("OpenState - handleLeftClick");
 
         //check if this is the first segment
-        if (polygon.segments.length > 0) {
+        if (polygon.oldSegments.length > 0) {
             //check if user clicks near the first point (wanting to close the polygon)
-            if (distBetweenPoints(pointClicked, polygon.segments[0].p1) < closePolygonMinimumDistance) {
+            if (distBetweenPoints(pointClicked, polygon.oldSegments[0].p1) < closePolygonMinimumDistance) {
                 //if the plygon already has at least 2 segments
-                if (polygon.segments.length >= 2) {
+                if (polygon.oldSegments.length >= 2) {
                     //check that the segment between the last point and first point does not intersect with other segments
-                    const nyttSegment: Segment = new Segment(polygon.segments[polygon.segments.length - 1].p2, polygon.segments[0].p1);
+                    const nyttSegment: Segment = new Segment(polygon.oldSegments[polygon.oldSegments.length - 1].p2, polygon.oldSegments[0].p1);
                     if (polygon.enforceNonComplexPolygon) {
-                        if (!this.checkIfIntersect(polygon.segments, nyttSegment, true)) {
-                            polygon.segments.push(nyttSegment);
+                        if (!this.checkIfIntersect(polygon.oldSegments, nyttSegment, true)) {
+                            polygon.oldSegments.push(nyttSegment);
                             this.clearTheBackCanvas();
                             polygon.setCurrentState(ClosedState.getInstance());
                         }
                     }
                     else {
-                        polygon.segments.push(nyttSegment);
+                        polygon.oldSegments.push(nyttSegment);
                         this.clearTheBackCanvas();
                         polygon.setCurrentState(ClosedState.getInstance());
                     }
@@ -40,17 +40,17 @@ class OpenState implements PolygonState {
             }
             else {
                 //if the new Segment does not intersect with other segments or the new point to close to other points, the add the point (+segment)
-                const nyttSegment: Segment = new Segment(polygon.segments[polygon.segments.length - 1].p2, pointClicked);
-                if (checkIfCloseToPoint(polygon.segments, pointClicked, minDistance) < 0) {//checking p1 in all segments
-                    if (distBetweenPoints(polygon.segments[polygon.segments.length - 1].p2, pointClicked) > minDistance) {//checking p2 in the last segment
+                const nyttSegment: Segment = new Segment(polygon.oldSegments[polygon.oldSegments.length - 1].p2, pointClicked);
+                if (checkIfCloseToPoint(polygon.oldSegments, pointClicked, minDistance) < 0) {//checking p1 in all segments
+                    if (distBetweenPoints(polygon.oldSegments[polygon.oldSegments.length - 1].p2, pointClicked) > minDistance) {//checking p2 in the last segment
                         if (polygon.enforceNonComplexPolygon) {
-                            if (!this.checkIfIntersect(polygon.segments, nyttSegment, false)) {
-                                polygon.segments.push(nyttSegment);
+                            if (!this.checkIfIntersect(polygon.oldSegments, nyttSegment, false)) {
+                                polygon.oldSegments.push(nyttSegment);
                                 polygon.vertices.push(pointClicked);
                             }
                         }
                         else {
-                            polygon.segments.push(nyttSegment);
+                            polygon.oldSegments.push(nyttSegment);
                             polygon.vertices.push(pointClicked);
                         }
                     }
@@ -68,7 +68,7 @@ class OpenState implements PolygonState {
                 if (distBetweenPoints(polygon.seed, pointClicked) > minDistance) {
                     //console.log("first segment");
                     let nyttSegment: Segment = new Segment(polygon.seed, pointClicked);
-                    polygon.segments.push(nyttSegment);
+                    polygon.oldSegments.push(nyttSegment);
                     polygon.vertices.push(pointClicked);
                 }
             }
@@ -78,11 +78,11 @@ class OpenState implements PolygonState {
     handleRightClick(polygon: Polygon, pointClicked: Point): void {
         console.log("OpenState - handleRightClick");
         //removes last added point (+segment)
-        if (polygon.segments.length == 0) {
+        if (polygon.oldSegments.length == 0) {
             polygon.seed = null;
             //console.log("removed seed point");
         }
-        polygon.segments.pop();
+        polygon.oldSegments.pop();
         polygon.vertices.pop();
     }
 
@@ -104,7 +104,7 @@ class OpenState implements PolygonState {
     }
 
     drawSegments(polygon: Polygon){
-        CanvasPainter.getInstance().drawOpenPolygon(polygon);
+        CanvasPainter.getInstance().drawOpenStatePolygon(polygon);
     }
 
     drawMovement(polygon: Polygon, mousePosition: Point): void {
@@ -114,6 +114,17 @@ class OpenState implements PolygonState {
 
     clearTheBackCanvas(): void{
         CanvasPainter.getInstance().clearTheBackCanvas();
+    }
+
+    calculateSegments(polygon: Polygon): Segment[] {
+        const calculatedSegments: Segment[] = new Array();
+        for (let index = 1; index <polygon.vertices.length; index++) {
+            const firstPoint: Point =polygon.vertices[index-1];
+            const secondPoint: Point =polygon.vertices[index];
+            const currentSegment: Segment = new Segment(firstPoint, secondPoint);
+            calculatedSegments.push(currentSegment);
+        }
+        return calculatedSegments;
     }
 
 }

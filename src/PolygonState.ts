@@ -10,4 +10,6 @@ interface PolygonState {
 
     drawMovement(polygon: Polygon, mousePosition: Point): void;
 
+    calculateSegments(polygon: Polygon): Segment[];
+
 }

@@ -15,11 +15,11 @@ function calculateIntersect(segmentAB: Segment, segmentCD: Segment): Point {
 	//calculate the length of AB
 	const distAB: number = Math.sqrt(pointB.x * pointB.x + pointB.y * pointB.y);
 	//the angle between the x-axis and AB
-	const theta1: number = pointB.getTheAngle();
+	const theta: number = pointB.getTheAngle();
 	//Rotate the system so that point B is on the positive x-axis
 	pointB = new Point(distAB, 0);
-	pointC.rotate(theta1);
-	pointD.rotate(theta1);
+	pointC.rotate(theta);
+	pointD.rotate(theta);
 	//The case if CD is parallell with the x-axis
 	//if C.y is equal to D.y (or very close to it)
 	if (Math.abs(pointC.y - pointD.y) < 0.000001) {
@@ -27,15 +27,15 @@ function calculateIntersect(segmentAB: Segment, segmentCD: Segment): Point {
 		if ((Math.abs(pointC.y) < 0.000001) || (Math.abs(pointD.y) < 0.000001)) {
 			if ((0 <= pointC.x && pointC.x <= pointB.x)) {
 				//Rotate and translate point C to the original coordinate system
-				pointC.rotate(-theta1);
-				pointC.translate(ax, ay);
+				pointC.rotate(-theta)
+					.translate(ax, ay);
 				//return point of intersection
 				return pointC;
 			}
 			if ((0 <= pointD.x && pointD.x <= pointB.x)) {
 				//Rotate and translate point D to the original coordinate system
-				pointD.rotate(-theta1);
-				pointD.translate(ax, ay);
+				pointD.rotate(-theta)
+					.translate(ax, ay);
 				//return point of intersection
 				return pointD;
 			}
@@ -69,8 +69,8 @@ function calculateIntersect(segmentAB: Segment, segmentCD: Segment): Point {
 		}
 	}
 	//Rotate and translate point E to the original coordinate system
-	pointE.rotate(-theta1);
-	pointE.translate(ax, ay);
+	pointE.rotate(-theta)
+		.translate(ax, ay);
 	//Arriving here if it is an intersect
 	return pointE;
 }
@@ -101,10 +101,10 @@ function projectVector(segmentAB: Segment, pointC: Point): ProjectionResult {
 		if (normAD <= normAB) {
 			const vectorDC: Vector = new Vector(pointD, pointC);
 			const normDC: number = vectorDC.length;
-			return {successful: true, norm: normDC, point: pointD };
+			return { successful: true, norm: normDC, point: pointD };
 		}
 	}
-	return { successful:false, norm: null, point: null }
+	return { successful: false, norm: null, point: null }
 }
 
 

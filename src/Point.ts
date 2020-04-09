@@ -28,17 +28,19 @@ class Point {
     }
 
     //rotate a point around the Origin
-    rotate(angle: number): void {
+    rotate(angle: number): Point {
         let tempX: number = this.x
         let tempY: number = this.y;
         this.x = tempX * Math.cos(angle) + tempY * Math.sin(angle);
         this.y = -tempX * Math.sin(angle) + tempY * Math.cos(angle);
+        return this;
     }
 
     //move a point
-    translate(distX: number, distY: number): void {
+    translate(distX: number, distY: number): Point {
         this.x += distX;
         this.y += distY;
+        return this;
     }
 
     //return the angle between the x-axis and a vector AB (where A is in the Origin and B is the point checked)

@@ -15,7 +15,7 @@ class ClosedState implements PolygonState {
 
     handleLeftClick(polygon: Polygon, pointClicked: Point): void {
         console.log("ClosedState - handleLeftClick");
-        let nearPointIndex: number = checkIfCloseToPoint(polygon.segments, pointClicked, moveDelInsDistance);
+        let nearPointIndex: number = checkIfCloseToPoint(polygon.oldSegments, pointClicked, moveDelInsDistance);
         if (nearPointIndex > -1) {
             // on point (mark for move) -> MoveState
             polygon.movePointIndex = nearPointIndex;
@@ -25,7 +25,7 @@ class ClosedState implements PolygonState {
         else {
             // on vertex (new point)
             //if the click occured near a segment, insert a new point
-            let projection: PointToSegmentProjection = this.checkIfCloseToLine(polygon.segments, pointClicked, moveDelInsDistance);
+            let projection: PointToSegmentProjection = this.checkIfCloseToLine(polygon.oldSegments, pointClicked, moveDelInsDistance);
             if (projection.withinMinimumDistance) {
                 //rounding coordinates to get integers
                 if (useIntegerCoords) {
@@ -34,8 +34,8 @@ class ClosedState implements PolygonState {
                 }
                 //calculating distance to both points on clicked segment
                 //so that it is not possible to insert a point too close to another
-                const segmPointDist1: number = distBetweenPoints(polygon.segments[projection.segmentIndex].p1, projection.projectionPointOnSegment);
-                const segmPointDist2: number = distBetweenPoints(polygon.segments[projection.segmentIndex].p2, projection.projectionPointOnSegment);
+                const segmPointDist1: number = distBetweenPoints(polygon.oldSegments[projection.segmentIndex].p1, projection.projectionPointOnSegment);
+                const segmPointDist2: number = distBetweenPoints(polygon.oldSegments[projection.segmentIndex].p2, projection.projectionPointOnSegment);
                 if (((segmPointDist1 > minDistance) && (segmPointDist2 > minDistance))) {
                     //inserting the point in the segment-array
                     polygon.insertPoint(projection.projectionPointOnSegment, projection.segmentIndex);//newPoint,index
@@ -51,13 +51,13 @@ class ClosedState implements PolygonState {
         console.log("ClosedState - handleRightClick");
         // on point (removes point)
         //if the user rightclicked a point, remove it if there are more than 3 sides to the polygon
-        let nearPointIndex: number = checkIfCloseToPoint(polygon.segments, pointClicked, moveDelInsDistance);
+        let nearPointIndex: number = checkIfCloseToPoint(polygon.oldSegments, pointClicked, moveDelInsDistance);
         if (nearPointIndex > -1) {
             //if polygon has more than 3 sides it is ok to remove point (+segment)
-            if (polygon.segments.length > 3) {
+            if (polygon.oldSegments.length > 3) {
                 //check that the segment created to fill the gap does not intersect with other segments
                 if (polygon.enforceNonComplexPolygon) {
-                    if (!this.checkIfRemovedPointCausesSegmentIntersect(polygon.segments, nearPointIndex)) {
+                    if (!this.checkIfRemovedPointCausesSegmentIntersect(polygon.oldSegments, nearPointIndex)) {
                         //no intersects found
                         polygon.ejectPoint(nearPointIndex);
                         polygon.ejectVertex(nearPointIndex);
@@ -74,13 +74,13 @@ class ClosedState implements PolygonState {
         //erase segment if user right clicked "on" segment
         else {
             //check if click was near segment
-            let projection: PointToSegmentProjection = this.checkIfCloseToLine(polygon.segments, pointClicked, moveDelInsDistance);
+            let projection: PointToSegmentProjection = this.checkIfCloseToLine(polygon.oldSegments, pointClicked, moveDelInsDistance);
             if (projection.withinMinimumDistance) {//true if user clicked close enough to segment
                 //Changing start segment so that the one to be removed is the last one
-                //TODO: När Polygon består av en trave punkter istället för segment. Så kanske det räcker med att "rotera" arrayen och ändra status till öppen
                 polygon.revolFirstIndex(projection.segmentIndex);
+                polygon.rotateVertices(projection.segmentIndex+1);
                 //opening polygon and removing last segment
-                polygon.segments.pop();
+                polygon.oldSegments.pop();
                 polygon.setCurrentState(OpenState.getInstance());
             }
         }
@@ -145,10 +145,26 @@ class ClosedState implements PolygonState {
     }
 
     drawSegments(polygon: Polygon){
-        CanvasPainter.getInstance().drawClosedPolygon(polygon);
+        CanvasPainter.getInstance().drawClosedStatePolygon(polygon);
     }
 
     drawMovement(polygon: Polygon, mousePosition: Point): void {}
+
+
+    calculateSegments(polygon: Polygon): Segment[] {
+        const calculatedSegments: Segment[] = new Array();
+        for (let index = 1; index <polygon.vertices.length; index++) {
+            const pointA: Point =polygon.vertices[index-1];
+            const pointB: Point =polygon.vertices[index];
+            const currentSegment: Segment = new Segment(pointA, pointB);
+            calculatedSegments.push(currentSegment);
+        }
+        const lastPoint: Point = polygon.vertices[polygon.vertices.length-1];
+        const firstPoint: Point = polygon.vertices[0];
+        const lastSegment: Segment = new Segment(lastPoint,firstPoint);
+        calculatedSegments.push(lastSegment);
+        return calculatedSegments;
+    }
 
 }
 
