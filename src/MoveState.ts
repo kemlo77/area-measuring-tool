@@ -18,21 +18,25 @@ class MoveState implements PolygonState {
 
         // empty space (moves to new point) -> ClosedState
         //if the clicked point is not too close to another point (not checking it self, there of the 4th argument in function call)
-        if (checkIfCloseToPointOld(polygon.oldSegments, pointClicked, minDistance, polygon.movePointIndex) < 0) {
+        if (checkIfCloseToPoint(polygon.vertices, pointClicked, minDistance, polygon.movePointIndex) < 0) {
             //if the points nearest segments do not intersect with other segments
             if (polygon.enforceNonComplexPolygon) {
-                if (!this.checkIfMovedIntersects(polygon.oldSegments, pointClicked, polygon.movePointIndex)) {
+                if (!this.checkIfMovedIntersects(polygon.segments, pointClicked, polygon.movePointIndex)) {
                     //move the point at movePointIndex to the new point
-                    polygon.oldSegments[polygon.movePointIndex].p1.copyValues(pointClicked); //copying values so that it is still the same object
+                    polygon.segments[polygon.movePointIndex].p1.copyValues(pointClicked); //copying values so that it is still the same object
                     polygon.vertices[polygon.movePointIndex] = pointClicked;
                     polygon.setCurrentState(ClosedState.getInstance());
+                } else {
+                    console.warn('Moving vertex there will cause segments to intersect.');
                 }
             }
             else {
                 //move the point at movePointIndex to the new point
-                polygon.oldSegments[polygon.movePointIndex].p1.copyValues(pointClicked); //copying values so that it is still the same object
+                polygon.segments[polygon.movePointIndex].p1.copyValues(pointClicked); //copying values so that it is still the same object
                 polygon.setCurrentState(ClosedState.getInstance());
             }
+        } else {
+            console.warn('Moved vertex is too close to other vertex.');
         }
 
     }
@@ -85,26 +89,26 @@ class MoveState implements PolygonState {
         }
     }
 
-    drawSegments(polygon: Polygon){
-        CanvasPainter.getInstance().drawMoveStatePolygon(polygon);       
+    drawSegments(polygon: Polygon) {
+        CanvasPainter.getInstance().drawMoveStatePolygon(polygon);
     }
 
     drawMovement(polygon: Polygon, mousePosition: Point): void {
-        CanvasPainter.getInstance().drawMovementPolygonInMoveState(polygon,mousePosition);
+        CanvasPainter.getInstance().drawMovementPolygonInMoveState(polygon, mousePosition);
     }
 
 
     calculateSegments(polygon: Polygon): Segment[] {
         const calculatedSegments: Segment[] = new Array();
-        for (let index = 1; index <polygon.vertices.length; index++) {
-            const pointA: Point =polygon.vertices[index-1];
-            const pointB: Point =polygon.vertices[index];
+        for (let index = 1; index < polygon.vertices.length; index++) {
+            const pointA: Point = polygon.vertices[index - 1];
+            const pointB: Point = polygon.vertices[index];
             const currentSegment: Segment = new Segment(pointA, pointB);
             calculatedSegments.push(currentSegment);
         }
-        const lastPoint: Point = polygon.vertices[polygon.vertices.length-1];
+        const lastPoint: Point = polygon.vertices[polygon.vertices.length - 1];
         const firstPoint: Point = polygon.vertices[0];
-        const lastSegment: Segment = new Segment(lastPoint,firstPoint);
+        const lastSegment: Segment = new Segment(lastPoint, firstPoint);
         calculatedSegments.push(lastSegment);
         return calculatedSegments;
     }

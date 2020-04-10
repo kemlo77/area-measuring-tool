@@ -32,24 +32,6 @@ function handleClick(isLeftClick: boolean, mousePosition: Point): void {
 }
 
 
-
-//TODO: remove this
-function checkIfCloseToPointOld(segmentArrayIn: Segment[], nyPunkt: Point, minDistanceIn: number, skipPoint?: number): number {
-	if (typeof skipPoint === 'undefined') { skipPoint = -1; }
-	let localMinDistance: number = minDistanceIn;
-	let closestPointWithinMinDistance: number = -1;
-	let pointDistance: number = 0;
-	for (let i = 0; i < segmentArrayIn.length; i++) {
-		if (i == skipPoint) { continue; }
-		pointDistance = distBetweenPoints(segmentArrayIn[i].p1, nyPunkt);
-		if (pointDistance < localMinDistance) {
-			closestPointWithinMinDistance = i;
-			localMinDistance = pointDistance;
-		}
-	}
-	return closestPointWithinMinDistance;
-}
-
 //checks if new point is too close to other points
 //returning the nearest point or -1 if all points are outside minDistanceIn
 //only checks with the first point in a segment. So when the polygon is not closed, the last point is not checked.
