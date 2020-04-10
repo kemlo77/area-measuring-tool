@@ -127,3 +127,10 @@ function moduloInPolygon(indexIn: number, arrayLength: number): number {
 function dotProduct(vector1: Vector, vector2: Vector): number {
 	return (vector1.x * vector2.x + vector1.y * vector2.y);
 }
+
+function arrayRotate(arr: any[], steps: number): any[] {
+	for (let step = 0; step < steps; step++) {
+		arr.push(arr.shift());
+	}
+	return arr;
+}

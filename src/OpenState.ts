@@ -27,13 +27,11 @@ class OpenState implements PolygonState {
                     if (polygon.enforceNonComplexPolygon) {
                         if (!this.checkIfIntersect(polygon.oldSegments, nyttSegment, true)) {
                             polygon.oldSegments.push(nyttSegment);
-                            this.clearTheBackCanvas();
                             polygon.setCurrentState(ClosedState.getInstance());
                         }
                     }
                     else {
                         polygon.oldSegments.push(nyttSegment);
-                        this.clearTheBackCanvas();
                         polygon.setCurrentState(ClosedState.getInstance());
                     }
                 }
@@ -110,10 +108,6 @@ class OpenState implements PolygonState {
     drawMovement(polygon: Polygon, mousePosition: Point): void {
         CanvasPainter.getInstance().drawMovementPolygonInOpenState(polygon,mousePosition);
 
-    }
-
-    clearTheBackCanvas(): void{
-        CanvasPainter.getInstance().clearTheBackCanvas();
     }
 
     calculateSegments(polygon: Polygon): Segment[] {

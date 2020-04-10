@@ -31,6 +31,7 @@ class Polygon {
 
     setCurrentState(state: PolygonState): void {
         this.currentState = state;
+        CanvasPainter.getInstance().clearTheBackCanvas();
         console.log("Change state to: " + state.stateName());
     }
 
@@ -126,15 +127,10 @@ class Polygon {
     }
 
     rotateVertices(steps: number): void {
-        for (let step = 0; step < steps; step++) {
-            this.vertices = this.arrayRotate(this.vertices);
-        }
+            this.vertices = arrayRotate(this.vertices, steps);
     }
 
-    arrayRotate(arr: any[]): any[] {
-        arr.push(arr.shift());
-        return arr;
-    }
+
 
     //removing a point (+segment) from a polygon segment-array, at a given index
     ejectPoint(removeAtThisIndex: number): void {

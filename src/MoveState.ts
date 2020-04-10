@@ -25,14 +25,12 @@ class MoveState implements PolygonState {
                     //move the point at movePointIndex to the new point
                     polygon.oldSegments[polygon.movePointIndex].p1.copyValues(pointClicked); //copying values so that it is still the same object
                     polygon.vertices[polygon.movePointIndex] = pointClicked;
-                    this.clearTheBackCanvas();
                     polygon.setCurrentState(ClosedState.getInstance());
                 }
             }
             else {
                 //move the point at movePointIndex to the new point
                 polygon.oldSegments[polygon.movePointIndex].p1.copyValues(pointClicked); //copying values so that it is still the same object
-                this.clearTheBackCanvas();
                 polygon.setCurrentState(ClosedState.getInstance());
             }
         }
@@ -95,9 +93,6 @@ class MoveState implements PolygonState {
         CanvasPainter.getInstance().drawMovementPolygonInMoveState(polygon,mousePosition);
     }
 
-    clearTheBackCanvas(): void{
-        CanvasPainter.getInstance().clearTheBackCanvas();
-    }
 
     calculateSegments(polygon: Polygon): Segment[] {
         const calculatedSegments: Segment[] = new Array();
