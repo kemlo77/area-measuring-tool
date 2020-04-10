@@ -26,28 +26,45 @@ function handleClick(isLeftClick: boolean, mousePosition: Point): void {
 	firstPolygon.drawMovement(mousePosition);
 	console.log('number of vertices: ' + firstPolygon.vertices.length);
 	//firstPolygon.vertices.forEach((punkt) => console.log(punkt.x + ',' + punkt.y + ' '));
-	console.log(firstPolygon.vertices.reduce((sum, it) => sum + '   ' + it.x + ',' + it.y, ''));
+	//console.log(firstPolygon.vertices.reduce((sum, it) => sum + '   ' + it.x + ',' + it.y, ''));
 	console.log('number of segments: ' + firstPolygon.segments.length);
-	console.log(firstPolygon.segments.reduce((sum, it) => sum + ' ' + it.p1.x + ',' + it.p1.y + '--' + it.p2.x + ',' + it.p2.y, ''));
+	//console.log(firstPolygon.segments.reduce((sum, it) => sum + ' ' + it.p1.x + ',' + it.p1.y + '--' + it.p2.x + ',' + it.p2.y, ''));
 	CanvasPainter.getInstance().drawTempPolygonDouble(firstPolygon); //TODO: remove drawTheseDots from CanvasPainter
 }
 
 
 
-//checks if new point is too close to other points
-//returning the nearest point or -1 if all points are outside minDistanceIn
-//only checks with the first point in a segment. So when the polygon is not closed, the last point is not checked.
-function checkIfCloseToPoint(segmentArrayIn: Segment[], nyPunkt: Point, minDistanceIn: number, skipPoint?: number): number {
-	//TODO: skriv om denna så att den får in punkterna i Polygonen
-	//skipPoint is an optional parameter referensing the segment containing p1 not to be checked
+//TODO: remove this
+function checkIfCloseToPointOld(segmentArrayIn: Segment[], nyPunkt: Point, minDistanceIn: number, skipPoint?: number): number {
 	if (typeof skipPoint === 'undefined') { skipPoint = -1; }
 	let localMinDistance: number = minDistanceIn;
 	let closestPointWithinMinDistance: number = -1;
 	let pointDistance: number = 0;
 	for (let i = 0; i < segmentArrayIn.length; i++) {
 		if (i == skipPoint) { continue; }
-		//calculating distance between new point and all other points in polygon
 		pointDistance = distBetweenPoints(segmentArrayIn[i].p1, nyPunkt);
+		if (pointDistance < localMinDistance) {
+			closestPointWithinMinDistance = i;
+			localMinDistance = pointDistance;
+		}
+	}
+	return closestPointWithinMinDistance;
+}
+
+//checks if new point is too close to other points
+//returning the nearest point or -1 if all points are outside minDistanceIn
+//only checks with the first point in a segment. So when the polygon is not closed, the last point is not checked.
+//TODO: Denna borde kunna returnera en Point istälelt för ett index?? Undersök
+function checkIfCloseToPoint(points: Point[], candidatePoint: Point, minDistanceIn: number, skipPoint?: number): number {
+	//skipPoint is an optional parameter referensing the segment containing p1 not to be checked
+	if (typeof skipPoint === 'undefined') { skipPoint = -1; }
+	let localMinDistance: number = minDistanceIn;
+	let closestPointWithinMinDistance: number = -1;
+	let pointDistance: number = 0;
+	for (let i = 0; i < points.length; i++) {
+		if (i == skipPoint) { continue; }
+		//calculating distance between new point and all other points in polygon
+		pointDistance = distBetweenPoints(points[i], candidatePoint);
 		if (pointDistance < localMinDistance) {
 			//if it is closer than minDistanceIn, or nearer than any other previously saved, it is saved
 			closestPointWithinMinDistance = i;

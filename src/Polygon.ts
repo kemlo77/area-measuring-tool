@@ -29,6 +29,14 @@ class Polygon {
         return this.currentState.calculateSegments(this);
     }
 
+    get lastVertex(): Point {
+        return this.vertices[this.vertices.length - 1];
+    }
+
+    get firstVertex(): Point {
+        return this.vertices[0];
+    }
+
     setCurrentState(state: PolygonState): void {
         this.currentState = state;
         CanvasPainter.getInstance().clearTheBackCanvas();
@@ -112,6 +120,7 @@ class Polygon {
     }
 
     //changing the starting point in the polygon (i.e. changing what segment is the starting segment)
+    //TODO: ta bort denna
     revolFirstIndex(newFirstIndex: number): void {
         if (this.currentState instanceof ClosedState) {
             //handling if newFirstIndex is larger than the number of segments

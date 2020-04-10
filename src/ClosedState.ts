@@ -15,7 +15,7 @@ class ClosedState implements PolygonState {
 
     handleLeftClick(polygon: Polygon, pointClicked: Point): void {
         console.log("ClosedState - handleLeftClick");
-        let nearPointIndex: number = checkIfCloseToPoint(polygon.oldSegments, pointClicked, moveDelInsDistance);
+        let nearPointIndex: number = checkIfCloseToPointOld(polygon.oldSegments, pointClicked, moveDelInsDistance);
         if (nearPointIndex > -1) {
             // on point (mark for move) -> MoveState
             polygon.movePointIndex = nearPointIndex;
@@ -51,7 +51,7 @@ class ClosedState implements PolygonState {
         console.log("ClosedState - handleRightClick");
         // on point (removes point)
         //if the user rightclicked a point, remove it if there are more than 3 sides to the polygon
-        let nearPointIndex: number = checkIfCloseToPoint(polygon.oldSegments, pointClicked, moveDelInsDistance);
+        let nearPointIndex: number = checkIfCloseToPointOld(polygon.oldSegments, pointClicked, moveDelInsDistance);
         if (nearPointIndex > -1) {
             //if polygon has more than 3 sides it is ok to remove point (+segment)
             if (polygon.oldSegments.length > 3) {
@@ -101,7 +101,7 @@ class ClosedState implements PolygonState {
             for (let p = 0; p < segmentArrayIn.length - 4; p++) {
                 segmentArrayIn[moduloInPolygon((p + deleteAtIndex + 2), segmentArrayIn.length)]
                 if (calculateIntersect(thePotentialNewSegment, segmentArrayIn[moduloInPolygon((p + deleteAtIndex + 2), segmentArrayIn.length)])) {
-                    console.log("if that point is removed there will be an intersect");
+                    console.warn("if that point is removed there will be an intersect");
                     return true;
                 }
             }
