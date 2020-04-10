@@ -29,7 +29,6 @@ function handleClick(isLeftClick: boolean, mousePosition: Point): void {
 	//console.log(firstPolygon.vertices.reduce((sum, it) => sum + '   ' + it.x + ',' + it.y, ''));
 	console.log('number of segments: ' + firstPolygon.segments.length);
 	//console.log(firstPolygon.segments.reduce((sum, it) => sum + ' ' + it.p1.x + ',' + it.p1.y + '--' + it.p2.x + ',' + it.p2.y, ''));
-	CanvasPainter.getInstance().drawTempPolygonDouble(firstPolygon); //TODO: remove drawTheseDots from CanvasPainter
 }
 
 

@@ -93,16 +93,6 @@ class CanvasPainter {
 
     }
 
-    drawTempPolygonDouble(polygon: Polygon): void {
-        polygon.segments.forEach((it) => {
-            let p1: Point = it.p1.clonePoint().translate(10, 10);
-            let p2: Point = it.p2.clonePoint().translate(10, 10);
-            let s1: Segment = new Segment(p1, p2);
-            this.drawOneSegment(s1, "255,0,0")
-        });
-        polygon.vertices.forEach((it) => this.drawDot(it.clonePoint().translate(10, 10), 3, "255,0,0"))
-    }
-
     //clear the canvas
     clearBothCanvas(): void {
         this.ctxFront2.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
