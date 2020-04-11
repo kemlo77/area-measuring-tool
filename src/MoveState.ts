@@ -18,7 +18,7 @@ class MoveState implements PolygonState {
 
         // empty space (moves to new point) -> ClosedState
         //if the clicked point is not too close to another point (not checking it self, there of the 4th argument in function call)
-        if (checkIfCloseToPoint(polygon.vertices, pointClicked, minDistance, polygon.movePointIndex) < 0) {
+        if (pointClicked.isCloseToPoints(polygon.vertices, minDistance, polygon.movePointIndex) < 0) {
             //if the points nearest segments do not intersect with other segments
             if (polygon.enforceNonComplexPolygon) {
                 if (!this.checkIfMovedIntersects(polygon.segments, pointClicked, polygon.movePointIndex)) {

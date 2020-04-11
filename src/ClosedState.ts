@@ -15,7 +15,7 @@ class ClosedState implements PolygonState {
 
     handleLeftClick(polygon: Polygon, pointClicked: Point): void {
         console.log("ClosedState - handleLeftClick");
-        let nearPointIndex: number = checkIfCloseToPoint(polygon.vertices, pointClicked, moveDelInsDistance);
+        let nearPointIndex: number = pointClicked.isCloseToPoints(polygon.vertices, moveDelInsDistance);
         if (nearPointIndex > -1) {
             // on point (mark for move) -> MoveState
             polygon.movePointIndex = nearPointIndex;
@@ -53,7 +53,7 @@ class ClosedState implements PolygonState {
         console.log("ClosedState - handleRightClick");
         // on point (removes point)
         //if the user rightclicked a point, remove it if there are more than 3 sides to the polygon
-        let nearPointIndex: number = checkIfCloseToPoint(polygon.vertices, pointClicked, moveDelInsDistance);
+        let nearPointIndex: number = pointClicked.isCloseToPoints(polygon.vertices, moveDelInsDistance);
         if (nearPointIndex > -1) {
             //if polygon has more than 3 sides it is ok to remove point (+segment)
             if (polygon.vertices.length > 3) {
