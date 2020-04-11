@@ -7,7 +7,8 @@
     "rules": {
         "no-console": [true, "log"],
         "quotemark": [true, "single"],
-        "semicolon": [true, "always"]
+        "semicolon": [true, "always"],
+        "typedef": [true, "parameter", "call-signature", "member-variable-declaration"]
     },
     "rulesDirectory": []
 }

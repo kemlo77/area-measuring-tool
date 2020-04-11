@@ -13,11 +13,11 @@ class Polygon {
         this.enforceClockWise = true;
     }
 
-    get enforceNonComplexPolygon() {
+    get enforceNonComplexPolygon(): boolean {
         return this.enforceNonComplex;
     }
 
-    get enforceClockWisePolygon() {
+    get enforceClockWisePolygon(): boolean {
         return this.enforceClockWise;
     }
 
@@ -36,7 +36,6 @@ class Polygon {
     setCurrentState(state: PolygonState): void {
         this.currentState = state;
         CanvasPainter.getInstance().clearTheBackCanvas();
-        console.log('Change state to: ' + state.stateName());
     }
 
     handleLeftClick(point: Point): void {

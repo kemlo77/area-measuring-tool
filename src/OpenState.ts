@@ -14,8 +14,6 @@ class OpenState implements PolygonState {
     stateName(): string { return 'OpenState'; } // TODO: ta bort senare
 
     handleLeftClick(polygon: Polygon, pointClicked: Point): void {
-        console.log('OpenState - handleLeftClick');
-
         // check if this is the first segment
         if (polygon.vertices.length > 1) {
             // check if user clicks near the first point (wanting to close the polygon)
@@ -60,7 +58,6 @@ class OpenState implements PolygonState {
         else {
             if (polygon.vertices.length === 0) {
                 polygon.vertices.push(pointClicked);
-                console.log('Adding first vertex.');
             }
             else {
                 // if it is not to close to the fist point, add the second point
@@ -75,7 +72,6 @@ class OpenState implements PolygonState {
     }
 
     handleRightClick(polygon: Polygon, pointClicked: Point): void {
-        console.log('OpenState - handleRightClick');
         polygon.vertices.pop();
     }
 
@@ -97,7 +93,7 @@ class OpenState implements PolygonState {
         return false;
     }
 
-    drawSegments(polygon: Polygon) {
+    drawSegments(polygon: Polygon): void {
         CanvasPainter.getInstance().drawOpenStatePolygon(polygon);
     }
 

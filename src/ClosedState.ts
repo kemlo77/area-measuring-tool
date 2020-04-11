@@ -14,7 +14,6 @@ class ClosedState implements PolygonState {
     stateName(): string { return 'ClosedState'; } // TODO: ta bort senare
 
     handleLeftClick(polygon: Polygon, pointClicked: Point): void {
-        console.log('ClosedState - handleLeftClick');
         const nearPointIndex: number = pointClicked.isCloseToPoints(polygon.vertices, moveDelInsDistance);
         if (nearPointIndex > -1) {
             // on point (mark for move) -> MoveState
@@ -50,8 +49,6 @@ class ClosedState implements PolygonState {
     }
 
     handleRightClick(polygon: Polygon, pointClicked: Point): void {
-        console.log('ClosedState - handleRightClick');
-        // on point (removes point)
         // if the user rightclicked a point, remove it if there are more than 3 sides to the polygon
         const nearPointIndex: number = pointClicked.isCloseToPoints(polygon.vertices, moveDelInsDistance);
         if (nearPointIndex > -1) {
@@ -143,7 +140,7 @@ class ClosedState implements PolygonState {
         };
     }
 
-    drawSegments(polygon: Polygon) {
+    drawSegments(polygon: Polygon): void {
         CanvasPainter.getInstance().drawClosedStatePolygon(polygon);
     }
 

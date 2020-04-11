@@ -14,8 +14,6 @@ class MoveState implements PolygonState {
     stateName(): string { return 'MoveState'; } // TODO: ta bort senare
 
     handleLeftClick(polygon: Polygon, pointClicked: Point): void {
-        console.log('MoveState - handleLeftClick');
-
         // empty space (moves to new point) -> ClosedState
         // if the clicked point is not too close to another point (not checking it self, there of the 4th argument in function call)
         if (pointClicked.isCloseToPoints(polygon.vertices, minDistance, polygon.movePointIndex) < 0) {
@@ -38,16 +36,11 @@ class MoveState implements PolygonState {
         } else {
             console.warn('Moved vertex is too close to other vertex.');
         }
-
     }
 
     handleRightClick(polygon: Polygon, pointClicked: Point): void {
-        console.log('MoveState - handleRightClick');
-        // (aborts move) -> ClosedState
-
         // aborting move mode
         polygon.movePointIndex = -1;
-
         polygon.setCurrentState(ClosedState.getInstance());
 
     }
@@ -89,7 +82,7 @@ class MoveState implements PolygonState {
         }
     }
 
-    drawSegments(polygon: Polygon) {
+    drawSegments(polygon: Polygon): void {
         CanvasPainter.getInstance().drawMoveStatePolygon(polygon);
     }
 
