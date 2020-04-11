@@ -1,4 +1,4 @@
-let moveDelInsDistance: number = 3; //TODO: Döp om denna
+let moveDelInsDistance: number = 3; // TODO: Döp om denna
 let minDistance: number = 8;
 let closePolygonMinimumDistance: number = 5;
 let useIntegerCoords: boolean = false;
@@ -48,6 +48,6 @@ function getMousePos(event: MouseEvent, canvasId: string): void {
 	const mousePositionX: number = event.clientX - rect.left;
 	const mousePositionY: number = event.clientY - rect.top;
 	const mousePosition = new Point(mousePositionX, mousePositionY);
-	//TODO: borde nog inte specifikt ange vilken polygon här, kanske hämta aktuell?
+	// TODO: borde nog inte specifikt ange vilken polygon här, kanske hämta aktuell?
 	firstPolygon.drawMovement(mousePosition);
 }

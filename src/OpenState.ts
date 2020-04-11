@@ -11,18 +11,18 @@ class OpenState implements PolygonState {
         return OpenState.instance;
     }
 
-    stateName(): string { return "OpenState" }; //TODO: ta bort senare
+    stateName(): string { return 'OpenState'; } // TODO: ta bort senare
 
     handleLeftClick(polygon: Polygon, pointClicked: Point): void {
-        console.log("OpenState - handleLeftClick");
+        console.log('OpenState - handleLeftClick');
 
-        //check if this is the first segment
+        // check if this is the first segment
         if (polygon.vertices.length > 1) {
-            //check if user clicks near the first point (wanting to close the polygon)
+            // check if user clicks near the first point (wanting to close the polygon)
             if (distBetweenPoints(pointClicked, polygon.firstVertex) < closePolygonMinimumDistance) {
-                //if the plygon already has at least 2 segments
+                // if the plygon already has at least 2 segments
                 if (polygon.vertices.length >= 3) {
-                    //check that the segment between the last point and first point does not intersect with other segments
+                    // check that the segment between the last point and first point does not intersect with other segments
                     const nyttSegment: Segment = new Segment(polygon.lastVertex, polygon.firstVertex);
                     if (polygon.enforceNonComplexPolygon) {
                         if (this.checkIfIntersect(polygon.segments, nyttSegment, true)) {
@@ -39,7 +39,7 @@ class OpenState implements PolygonState {
                 }
             }
             else {
-                //if the new Segment does not intersect with other segments or the new point to close to other points, the add the point (+segment)
+                // if the new Segment does not intersect with other segments or the new point to close to other points, the add the point (+segment)
                 const candidateSegment: Segment = new Segment(polygon.lastVertex, pointClicked);
                 if (pointClicked.isCloseToPoints(polygon.vertices, minDistance) < 0) {
                     if (polygon.enforceNonComplexPolygon) {
@@ -58,14 +58,13 @@ class OpenState implements PolygonState {
             }
         }
         else {
-            if (polygon.vertices.length == 0) {
+            if (polygon.vertices.length === 0) {
                 polygon.vertices.push(pointClicked);
                 console.log('Adding first vertex.');
             }
             else {
-                //if it is not to close to the fist point, add the second point
+                // if it is not to close to the fist point, add the second point
                 if (distBetweenPoints(polygon.vertices[0], pointClicked) > minDistance) {
-                    let nyttSegment: Segment = new Segment(polygon.vertices[0], pointClicked);
                     polygon.vertices.push(pointClicked);
                 } else {
                     console.warn('Too close to first point');
@@ -76,25 +75,25 @@ class OpenState implements PolygonState {
     }
 
     handleRightClick(polygon: Polygon, pointClicked: Point): void {
-        console.log("OpenState - handleRightClick");
+        console.log('OpenState - handleRightClick');
         polygon.vertices.pop();
     }
 
 
-    //checking if new Segment intersects with other segment in array
-    //TODO: det är borde vara en instansmetod i Segment. Kanske döp om så att currentSegment.checkIfIntersectsWith(polygon.segments, skipFirstSegment)
+    // checking if new Segment intersects with other segment in array
+    // TODO: det är borde vara en instansmetod i Segment. Kanske döp om så att currentSegment.checkIfIntersectsWith(polygon.segments, skipFirstSegment)
     checkIfIntersect(segmentArrayIn: Segment[], nyttSegmentIn: Segment, skipFirstSegment: boolean): boolean {
         let startSegm = 0;
-        if (skipFirstSegment) { startSegm = 1; }//skipping first segment in case user clicks the polygons first point
-        //skipping the second to last (penultimate segment)
+        if (skipFirstSegment) { startSegm = 1; }// skipping first segment in case user clicks the polygons first point
+        // skipping the second to last (penultimate segment)
         for (let n = startSegm; n < segmentArrayIn.length - 1; n++) {
 
             if (calculateIntersect(segmentArrayIn[n], nyttSegmentIn)) {
-                //returning true if there is a intersect
+                // returning true if there is a intersect
                 return true;
             }
         }
-        //arriving here, there is no intersect
+        // arriving here, there is no intersect
         return false;
     }
 

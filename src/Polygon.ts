@@ -7,7 +7,7 @@ class Polygon {
 
     constructor() {
         this.vertices = new Array();
-        this.movePointIndex = -1; //TODO: går det skriva om koden så att MoveState får den här punkten från ClosedState?
+        this.movePointIndex = -1; // TODO: går det skriva om koden så att MoveState får den här punkten från ClosedState?
         this.currentState = OpenState.getInstance();
         this.enforceNonComplex = true;
         this.enforceClockWise = true;
@@ -36,7 +36,7 @@ class Polygon {
     setCurrentState(state: PolygonState): void {
         this.currentState = state;
         CanvasPainter.getInstance().clearTheBackCanvas();
-        console.log("Change state to: " + state.stateName());
+        console.log('Change state to: ' + state.stateName());
     }
 
     handleLeftClick(point: Point): void {
@@ -55,7 +55,7 @@ class Polygon {
         this.currentState.drawMovement(this, mousePosition);
     }
 
-    //changing direction of polygon (clockwise <-> counter clockwise)
+    // changing direction of polygon (clockwise <-> counter clockwise)
     reversePolygon(): void {
         this.vertices.reverse();
     }
@@ -66,13 +66,7 @@ class Polygon {
 
     get clockWise(): boolean {
         if (this.currentState instanceof ClosedState) {
-            let theSum: number = 0;
-            for (let b = 0; b < this.segments.length; b++) {
-                theSum += this.segments[b].p1.x * this.segments[b].p2.y - this.segments[b].p1.y * this.segments[b].p2.x;
-            }
-            let area: number = theSum / 2;
-            //see also http://en.wikipedia.org/wiki/Curve_orientation
-            if (area > 0) {
+            if (this.gaussShoelace() > 0) {
                 return true;
             }
             else {
@@ -84,22 +78,24 @@ class Polygon {
     }
 
     get area(): number {
-        //TODO: lägga detta i closed state istället
         if (this.currentState instanceof ClosedState) {
-            //using the Gauss shoelace formula
-            //http://en.wikipedia.org/wiki/Shoelace_formula
-            let theSum: number = 0;
-            for (let b = 0; b < this.segments.length; b++) {
-                theSum += this.segments[b].p1.x * this.segments[b].p2.y - this.segments[b].p1.y * this.segments[b].p2.x;
-            }
-            return theSum / 2;
+            return Math.abs(this.gaussShoelace());
         } else {
             return 0;
         }
     }
 
+    gaussShoelace(): number {
+        let theSum: number = 0;
+        for (const segment of this.segments) {
+            theSum += segment.p1.x * segment.p2.y - segment.p1.y * segment.p2.x;
+        }
+        const area: number = theSum / 2;
+        return area;
+    }
+
     get perimeterLength(): number {
-        return this.segments.reduce((sum, it) => sum + it.length, 0)
+        return this.segments.reduce((sum, it) => sum + it.length, 0);
     }
 
 

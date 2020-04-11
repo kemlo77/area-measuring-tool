@@ -8,13 +8,13 @@ class Segment {
     }
 
     get length(): number {
-        let segmentLength: number = Math.sqrt(Math.pow((this.p1.x - this.p2.x), 2) + Math.pow((this.p1.y - this.p2.y), 2));
+        const segmentLength: number = Math.sqrt(Math.pow((this.p1.x - this.p2.x), 2) + Math.pow((this.p1.y - this.p2.y), 2));
         return segmentLength;
     }
 
-    //TODO: Denna blir förmodligen/förhoppningsvis förlegad/onödig
+    // TODO: Denna blir förmodligen/förhoppningsvis förlegad/onödig
     reverseSegment(): void {
-        let tempReversePoint: Point = this.p1;
+        const tempReversePoint: Point = this.p1;
         this.p1 = this.p2;
         this.p2 = tempReversePoint;
     }
