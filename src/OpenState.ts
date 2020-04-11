@@ -28,12 +28,10 @@ class OpenState implements PolygonState {
                         if (this.checkIfIntersect(polygon.segments, nyttSegment, true)) {
                             console.warn('Cannot close because new segment intersects old segment.');
                         } else {
-                            polygon.oldSegments.push(nyttSegment);
                             polygon.setCurrentState(ClosedState.getInstance());
                         }
                     }
                     else {
-                        polygon.oldSegments.push(nyttSegment);
                         polygon.setCurrentState(ClosedState.getInstance());
                     }
                 } else {
@@ -46,14 +44,12 @@ class OpenState implements PolygonState {
                 if (checkIfCloseToPoint(polygon.vertices, pointClicked, minDistance) < 0) {
                     if (polygon.enforceNonComplexPolygon) {
                         if (!this.checkIfIntersect(polygon.segments, candidateSegment, false)) {
-                            polygon.oldSegments.push(candidateSegment);
                             polygon.vertices.push(pointClicked);
                         } else {
                             console.warn('New segment intersects with existing segment.');
                         }
                     }
                     else {
-                        polygon.oldSegments.push(candidateSegment);
                         polygon.vertices.push(pointClicked);
                     }
                 } else {
@@ -61,19 +57,15 @@ class OpenState implements PolygonState {
                 }
             }
         }
-        else {//if seed does not exist (nor any other elements) Add the first point.
+        else {
             if (polygon.vertices.length == 0) {
-                //console.log("first point");
-                polygon.seed = pointClicked;
                 polygon.vertices.push(pointClicked);
                 console.log('Adding first vertex.');
             }
             else {
                 //if it is not to close to the fist point, add the second point
                 if (distBetweenPoints(polygon.vertices[0], pointClicked) > minDistance) {
-                    //console.log("first segment");
                     let nyttSegment: Segment = new Segment(polygon.vertices[0], pointClicked);
-                    polygon.oldSegments.push(nyttSegment);
                     polygon.vertices.push(pointClicked);
                 } else {
                     console.warn('Too close to first point');
@@ -85,12 +77,6 @@ class OpenState implements PolygonState {
 
     handleRightClick(polygon: Polygon, pointClicked: Point): void {
         console.log("OpenState - handleRightClick");
-        //removes last added point (+segment)
-        if (polygon.vertices.length == 1) {
-            polygon.seed = null;
-            //console.log("removed seed point");
-        }
-        polygon.oldSegments.pop();
         polygon.vertices.pop();
     }
 

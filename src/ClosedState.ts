@@ -41,7 +41,6 @@ class ClosedState implements PolygonState {
                 const segmPointDist2: number = distBetweenPoints(polygon.segments[projection.segmentIndex].p2, projection.projectionPointOnSegment);
                 if (((segmPointDist1 > minDistance) && (segmPointDist2 > minDistance))) {
                     //inserting the point in the segment-array
-                    polygon.insertPoint(projection.projectionPointOnSegment, projection.segmentIndex);//newPoint,index
                     polygon.insertVertex(projection.projectionPointOnSegment, projection.segmentIndex);
                 } else {
                     console.warn('New vertex too close to other vertex.')
@@ -62,7 +61,6 @@ class ClosedState implements PolygonState {
                 if (polygon.enforceNonComplexPolygon) {
                     if (!this.checkIfRemovedPointCausesSegmentIntersect(polygon.segments, nearPointIndex)) {
                         //no intersects found
-                        polygon.ejectPoint(nearPointIndex);
                         polygon.ejectVertex(nearPointIndex);
                     }
                     else {
@@ -70,7 +68,6 @@ class ClosedState implements PolygonState {
                     }
                 }
                 else {
-                    polygon.ejectPoint(nearPointIndex);
                     polygon.ejectVertex(nearPointIndex);
                 }
             } else {
@@ -83,10 +80,8 @@ class ClosedState implements PolygonState {
             let projection: PointToSegmentProjection = this.checkIfCloseToLine(polygon.segments, pointClicked, moveDelInsDistance);
             if (projection.withinMinimumDistance) {//true if user clicked close enough to segment
                 //Changing start segment so that the one to be removed is the last one
-                polygon.revolFirstIndex(projection.segmentIndex);
                 polygon.rotateVertices(projection.segmentIndex + 1);
                 //opening polygon and removing last segment
-                polygon.oldSegments.pop();
                 polygon.setCurrentState(OpenState.getInstance());
             }
         }
