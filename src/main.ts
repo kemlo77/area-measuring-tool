@@ -1,11 +1,15 @@
+import { Polygon } from './Polygon.js';
+import { Point } from './Point.js'; // TODO: Kanske skriva om denna så att handleClick tar ett json-obj istället typ {x: nnn, y: nnn}
+import { CanvasPainter } from './CanvasPainter.js';
+
 let firstPolygon: Polygon;
 
 
-function init(): void {
+export function init(): void {
 	firstPolygon = new Polygon();
 }
 
-function clearEntirely(): void {
+export function clearEntirely(): void {
 	firstPolygon = new Polygon();
 	CanvasPainter.getInstance().clearBothCanvas();
 }
@@ -23,7 +27,7 @@ function handleClick(isLeftClick: boolean, mousePosition: Point): void {
 
 
 
-function canvasLeftClicked(event: MouseEvent, canvasId: string): void {
+export function canvasLeftClicked(event: MouseEvent, canvasId: string): void {
 	const rect: ClientRect = document.getElementById(canvasId).getBoundingClientRect();
 	const clickedPositionX: number = event.clientX - rect.left;
 	const clickedPositionY: number = event.clientY - rect.top;
@@ -31,14 +35,14 @@ function canvasLeftClicked(event: MouseEvent, canvasId: string): void {
 	handleClick(true, leftClickedPoint);
 }
 
-function canvasRightClicked(event: MouseEvent, canvasId: string): void {
+export function canvasRightClicked(event: MouseEvent, canvasId: string): void {
 	const rect: ClientRect = document.getElementById(canvasId).getBoundingClientRect();
 	const clickedPositionX: number = event.clientX - rect.left;
 	const clickedPositionY: number = event.clientY - rect.top;
 	const rightClickedPoint: Point = new Point(clickedPositionX, clickedPositionY);
 	handleClick(false, rightClickedPoint);
 }
-function getMousePos(event: MouseEvent, canvasId: string): void {
+export function getMousePos(event: MouseEvent, canvasId: string): void {
 	const rect: ClientRect = document.getElementById(canvasId).getBoundingClientRect();
 	const mousePositionX: number = event.clientX - rect.left;
 	const mousePositionY: number = event.clientY - rect.top;

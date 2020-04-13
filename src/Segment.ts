@@ -1,4 +1,6 @@
-class Segment {
+import { Point } from './Point.js';
+
+export class Segment {
     public p1: Point;
     public p2: Point;
 

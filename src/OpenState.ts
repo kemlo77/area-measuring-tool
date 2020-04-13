@@ -1,4 +1,12 @@
-class OpenState implements PolygonState {
+import { Polygon } from './Polygon.js';
+import { Segment } from './Segment.js';
+import { PolygonState } from './PolygonState.js';
+import { Point } from './Point.js';
+import { ClosedState } from './ClosedState.js';
+import { calculateIntersect } from './math.js';
+import { CanvasPainter } from './CanvasPainter.js';
+
+export class OpenState implements PolygonState {
 
     private static instance: OpenState;
 

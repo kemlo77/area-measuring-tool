@@ -1,4 +1,4 @@
-class Point {
+export class Point {
     public x: number;
     public y: number;
 
@@ -60,31 +60,31 @@ class Point {
         }
     }
 
-// returning the nearest point or -1 if all points are outside minDistanceIn
-// only checks with the first point in a segment. So when the polygon is not closed, the last point is not checked.
-// TODO: Denna borde kunna returnera en Point istälelt för ett index?? Undersök
-isCloseToPoints(points: Point[], minDistanceIn: number, skipPoint?: number): number {
-	// skipPoint is an optional parameter referensing the segment containing p1 not to be checked
-	if (typeof skipPoint === 'undefined') { skipPoint = -1; }
-	let localMinDistance: number = minDistanceIn;
-	let closestPointWithinMinDistance: number = -1;
-	let pointDistance: number = 0;
-	for (let i = 0; i < points.length; i++) {
-		if (i === skipPoint) { continue; }
-		// calculating distance between new point and all other points in polygon
-		pointDistance = this.distanceToOtherPoint(points[i]);
-		if (pointDistance < localMinDistance) {
-			// if it is closer than minDistanceIn, or nearer than any other previously saved, it is saved
-			closestPointWithinMinDistance = i;
-			localMinDistance = pointDistance;
-		}
-	}
-	return closestPointWithinMinDistance;
-}
+    // returning the nearest point or -1 if all points are outside minDistanceIn
+    // only checks with the first point in a segment. So when the polygon is not closed, the last point is not checked.
+    // TODO: Denna borde kunna returnera en Point istälelt för ett index?? Undersök
+    isCloseToPoints(points: Point[], minDistanceIn: number, skipPoint?: number): number {
+        // skipPoint is an optional parameter referensing the segment containing p1 not to be checked
+        if (typeof skipPoint === 'undefined') { skipPoint = -1; }
+        let localMinDistance: number = minDistanceIn;
+        let closestPointWithinMinDistance: number = -1;
+        let pointDistance: number = 0;
+        for (let i = 0; i < points.length; i++) {
+            if (i === skipPoint) { continue; }
+            // calculating distance between new point and all other points in polygon
+            pointDistance = this.distanceToOtherPoint(points[i]);
+            if (pointDistance < localMinDistance) {
+                // if it is closer than minDistanceIn, or nearer than any other previously saved, it is saved
+                closestPointWithinMinDistance = i;
+                localMinDistance = pointDistance;
+            }
+        }
+        return closestPointWithinMinDistance;
+    }
 
-// Check the distance between two points
-distanceToOtherPoint(otherPoint: Point): number {
-	return Math.sqrt(Math.pow(this.x - otherPoint.x, 2) + Math.pow(this.y - otherPoint.y, 2));
-}
+    // Check the distance between two points
+    distanceToOtherPoint(otherPoint: Point): number {
+        return Math.sqrt(Math.pow(this.x - otherPoint.x, 2) + Math.pow(this.y - otherPoint.y, 2));
+    }
 
 }

@@ -1,4 +1,8 @@
-interface PolygonState {
+import { Polygon } from './Polygon.js';
+import { Point } from './Point.js';
+import { Segment } from './Segment.js';
+
+export interface PolygonState {
 
     stateName(): string;
 

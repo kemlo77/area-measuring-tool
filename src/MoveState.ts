@@ -1,4 +1,12 @@
-class MoveState implements PolygonState {
+import { Polygon } from './Polygon.js';
+import { PolygonState } from './PolygonState.js';
+import { Point } from './Point.js';
+import { ClosedState } from './ClosedState.js';
+import { Segment } from './Segment.js';
+import { moduloInPolygon, calculateIntersect } from './math.js';
+import { CanvasPainter } from './CanvasPainter.js';
+
+export class MoveState implements PolygonState {
 
     private static instance: MoveState;
 

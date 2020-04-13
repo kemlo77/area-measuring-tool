@@ -1,4 +1,9 @@
-class CanvasPainter {
+import { Polygon } from './Polygon.js';
+import { Segment } from './Segment.js';
+import { Point } from './Point.js';
+import { moduloInPolygon, arrayRotate } from './math.js';
+
+export class CanvasPainter {
     private canvasBackground: HTMLCanvasElement = document.getElementById('background') as HTMLCanvasElement;
     private ctxBack2: CanvasRenderingContext2D = this.canvasBackground.getContext('2d');
     private canvasForeground: HTMLCanvasElement = document.getElementById('foreground') as HTMLCanvasElement;

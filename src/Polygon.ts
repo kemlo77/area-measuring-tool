@@ -1,4 +1,12 @@
-class Polygon {
+import { OpenState } from './OpenState.js';
+import { Point } from './Point.js';
+import { PolygonState } from './PolygonState.js';
+import { Segment } from './Segment.js';
+import { ClosedState } from './ClosedState.js';
+import { CanvasPainter } from './CanvasPainter.js';
+import { arrayRotate } from './math.js';
+
+export class Polygon {
     public vertices: Point[];
     public movePointIndex: number;
     private currentState: PolygonState;
@@ -37,7 +45,7 @@ class Polygon {
         return this.vertices[0];
     }
 
-    get minimumCloseDistance (): number {
+    get minimumCloseDistance(): number {
         return this.closePolygonMinimumDistance;
     }
 
@@ -134,11 +142,4 @@ class Polygon {
     ejectVertex(removeAtThisIndex: number): void {
         this.vertices.splice(removeAtThisIndex, 1);
     }
-
-
-
-
-
-
-
 }

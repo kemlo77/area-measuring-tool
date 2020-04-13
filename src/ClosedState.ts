@@ -1,4 +1,14 @@
-class ClosedState implements PolygonState {
+import { Polygon } from './Polygon.js';
+import { MoveState } from './MoveState.js';
+import { PolygonState } from './PolygonState.js';
+import { Point } from './Point.js';
+import { OpenState } from './OpenState.js';
+import { Segment } from './Segment.js';
+import { moduloInPolygon, calculateIntersect, projectVector } from './math.js';
+import { ProjectionResult } from './ProjectionResult.js';
+import { CanvasPainter } from './CanvasPainter.js';
+
+export class ClosedState implements PolygonState {
 
     private static instance: ClosedState;
 
@@ -144,7 +154,7 @@ class ClosedState implements PolygonState {
         CanvasPainter.getInstance().drawClosedStatePolygon(polygon);
     }
 
-    drawMovement(polygon: Polygon, mousePosition: Point): void {/**/}
+    drawMovement(polygon: Polygon, mousePosition: Point): void {/**/ }
 
 
     calculateSegments(polygon: Polygon): Segment[] {

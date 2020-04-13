@@ -1,4 +1,6 @@
-class Vector {
+import { Point } from './Point.js';
+
+export class Vector {
     public x: number;
     public y: number;
 

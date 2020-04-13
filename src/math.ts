@@ -1,5 +1,10 @@
+import { Point } from './Point.js';
+import { Segment } from './Segment.js';
+import { Vector } from './Vector.js';
+import { ProjectionResult } from './ProjectionResult.js';
+
 // Checking if two segments AB and CD intersect
-function calculateIntersect(segmentAB: Segment, segmentCD: Segment): Point {
+export function calculateIntersect(segmentAB: Segment, segmentCD: Segment): Point {
 	// inspiration på http://alienryderflex.com/intersect/
 	const pointA: Point = segmentAB.p1.clonePoint();
 	let pointB: Point = segmentAB.p2.clonePoint();
@@ -76,7 +81,7 @@ function calculateIntersect(segmentAB: Segment, segmentCD: Segment): Point {
 
 
 // projecting the point C onto the segment AB. Returning the new point D on the segment and the distance CD
-function projectVector(segmentAB: Segment, pointC: Point): ProjectionResult {
+export function projectVector(segmentAB: Segment, pointC: Point): ProjectionResult {
 	const pointA: Point = segmentAB.p1.clonePoint();
 	const pointB: Point = segmentAB.p2.clonePoint();
 	// create vectors
@@ -103,12 +108,12 @@ function projectVector(segmentAB: Segment, pointC: Point): ProjectionResult {
 			return { successful: true, norm: normDC, point: pointD };
 		}
 	}
-	return {successful: false, norm: null, point: null};
+	return { successful: false, norm: null, point: null };
 }
 
 // function to translate negative indexes in a polygon.
 // (e.g. index -2 in a polygon with 6 sides is 4)
-function moduloInPolygon(indexIn: number, arrayLength: number): number {
+export function moduloInPolygon(indexIn: number, arrayLength: number): number {
 	while (indexIn < 0) {
 		indexIn += arrayLength;
 	}
@@ -120,7 +125,7 @@ function dotProduct(vector1: Vector, vector2: Vector): number {
 	return (vector1.x * vector2.x + vector1.y * vector2.y);
 }
 
-function arrayRotate(arr: any[], steps: number): any[] {
+export function arrayRotate(arr: any[], steps: number): any[] {
 	for (let step = 0; step < steps; step++) {
 		arr.push(arr.shift());
 	}
