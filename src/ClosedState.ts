@@ -36,8 +36,8 @@ class ClosedState implements PolygonState {
                 }
                 // calculating distance to both points on clicked segment
                 // so that it is not possible to insert a point too close to another
-                const segmPointDist1: number = distBetweenPoints(polygon.segments[projection.segmentIndex].p1, projection.projectionPointOnSegment);
-                const segmPointDist2: number = distBetweenPoints(polygon.segments[projection.segmentIndex].p2, projection.projectionPointOnSegment);
+                const segmPointDist1: number = projection.projectionPointOnSegment.distanceToOtherPoint(polygon.segments[projection.segmentIndex].p1);
+                const segmPointDist2: number = projection.projectionPointOnSegment.distanceToOtherPoint(polygon.segments[projection.segmentIndex].p2);
                 if (((segmPointDist1 > minDistance) && (segmPointDist2 > minDistance))) {
                     // inserting the point in the segment-array
                     polygon.insertVertex(projection.projectionPointOnSegment, projection.segmentIndex);

@@ -106,13 +106,6 @@ function projectVector(segmentAB: Segment, pointC: Point): ProjectionResult {
 	return {successful: false, norm: null, point: null};
 }
 
-
-// Check the distance between two points
-function distBetweenPoints(pointOne: Point, pointTwo: Point): number {
-	return Math.sqrt(Math.pow(pointOne.x - pointTwo.x, 2) + Math.pow(pointOne.y - pointTwo.y, 2));
-}
-
-
 // function to translate negative indexes in a polygon.
 // (e.g. index -2 in a polygon with 6 sides is 4)
 function moduloInPolygon(indexIn: number, arrayLength: number): number {

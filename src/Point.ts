@@ -72,7 +72,7 @@ isCloseToPoints(points: Point[], minDistanceIn: number, skipPoint?: number): num
 	for (let i = 0; i < points.length; i++) {
 		if (i === skipPoint) { continue; }
 		// calculating distance between new point and all other points in polygon
-		pointDistance = distBetweenPoints(points[i], this);
+		pointDistance = this.distanceToOtherPoint(points[i]);
 		if (pointDistance < localMinDistance) {
 			// if it is closer than minDistanceIn, or nearer than any other previously saved, it is saved
 			closestPointWithinMinDistance = i;
@@ -80,6 +80,11 @@ isCloseToPoints(points: Point[], minDistanceIn: number, skipPoint?: number): num
 		}
 	}
 	return closestPointWithinMinDistance;
+}
+
+// Check the distance between two points
+distanceToOtherPoint(otherPoint: Point): number {
+	return Math.sqrt(Math.pow(this.x - otherPoint.x, 2) + Math.pow(this.y - otherPoint.y, 2));
 }
 
 }
