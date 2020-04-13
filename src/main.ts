@@ -1,8 +1,3 @@
-let moveDelInsDistance: number = 3; // TODO: Döp om denna
-let minDistance: number = 8;
-let closePolygonMinimumDistance: number = 5;
-let useIntegerCoords: boolean = false;
-
 let firstPolygon: Polygon;
 
 

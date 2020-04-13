@@ -4,10 +4,14 @@ class Polygon {
     private currentState: PolygonState;
     private enforceNonComplex: boolean;
     private enforceClockWise: boolean;
+    private closePolygonMinimumDistance: number = 5;
+    private minDistBetweenPoints: number = 8;
+    private moveDelInsDistance: number = 3; // Minimum distance when selecting for moving, deleting, or inserting
+    private useIntegerCoords: boolean = false;
 
     constructor() {
         this.vertices = new Array();
-        this.movePointIndex = -1; // TODO: går det skriva om koden så att MoveState får den här punkten från ClosedState?
+        this.movePointIndex = -1; // TODO: går det skriva om det här så att det är en Point iställlet?
         this.currentState = OpenState.getInstance();
         this.enforceNonComplex = true;
         this.enforceClockWise = true;
@@ -31,6 +35,30 @@ class Polygon {
 
     get firstVertex(): Point {
         return this.vertices[0];
+    }
+
+    get minimumCloseDistance (): number {
+        return this.closePolygonMinimumDistance;
+    }
+
+    get minimumDistanceBetweenPoints(): number {
+        return this.minDistBetweenPoints;
+    }
+
+    get markForMoveDistance(): number {
+        return this.moveDelInsDistance;
+    }
+
+    get insertNewPointDistance(): number {
+        return this.moveDelInsDistance;
+    }
+
+    get deleteDistance(): number {
+        return this.moveDelInsDistance;
+    }
+
+    get useIntegerCoordinates(): boolean {
+        return this.useIntegerCoords;
     }
 
     setCurrentState(state: PolygonState): void {

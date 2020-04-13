@@ -17,7 +17,7 @@ class OpenState implements PolygonState {
         // check if this is the first segment
         if (polygon.vertices.length > 1) {
             // check if user clicks near the first point (wanting to close the polygon)
-            if (pointClicked.distanceToOtherPoint(polygon.firstVertex) < closePolygonMinimumDistance) {
+            if (pointClicked.distanceToOtherPoint(polygon.firstVertex) < polygon.minimumCloseDistance) {
                 // if the plygon already has at least 2 segments
                 if (polygon.vertices.length >= 3) {
                     // check that the segment between the last point and first point does not intersect with other segments
@@ -39,7 +39,7 @@ class OpenState implements PolygonState {
             else {
                 // if the new Segment does not intersect with other segments or the new point to close to other points, the add the point (+segment)
                 const candidateSegment: Segment = new Segment(polygon.lastVertex, pointClicked);
-                if (pointClicked.isCloseToPoints(polygon.vertices, minDistance) < 0) {
+                if (pointClicked.isCloseToPoints(polygon.vertices, polygon.minimumDistanceBetweenPoints) < 0) {
                     if (polygon.enforceNonComplexPolygon) {
                         if (!this.checkIfIntersect(polygon.segments, candidateSegment, false)) {
                             polygon.vertices.push(pointClicked);
@@ -61,7 +61,7 @@ class OpenState implements PolygonState {
             }
             else {
                 // if it is not to close to the fist point, add the second point
-                if (pointClicked.distanceToOtherPoint(polygon.vertices[0]) > minDistance) {
+                if (pointClicked.distanceToOtherPoint(polygon.vertices[0]) > polygon.minimumDistanceBetweenPoints) {
                     polygon.vertices.push(pointClicked);
                 } else {
                     console.warn('Too close to first point');
