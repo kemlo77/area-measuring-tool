@@ -6,7 +6,9 @@ import { OpenState } from './OpenState.js';
 import { Segment } from './Segment.js';
 import { moduloInPolygon, calculateIntersect, projectVector } from './math.js';
 import { ProjectionResult } from './ProjectionResult.js';
-import { CanvasPainter } from './CanvasPainter.js';
+import { CanvasPainterOld } from './CanvasPainterOld.js';
+import { Coordinate } from './Coordinate.js';
+import { PaintableSegment } from './PaintableSegment.js';
 
 export class ClosedState implements PolygonState {
 
@@ -151,7 +153,7 @@ export class ClosedState implements PolygonState {
     }
 
     drawSegments(polygon: Polygon): void {
-        CanvasPainter.getInstance().drawClosedStatePolygon(polygon);
+        CanvasPainterOld.getInstance().drawClosedStatePolygon(polygon);
     }
 
     drawMovement(polygon: Polygon, mousePosition: Point): void {/**/ }
@@ -170,6 +172,18 @@ export class ClosedState implements PolygonState {
         const lastSegment: Segment = new Segment(lastPoint, firstPoint);
         calculatedSegments.push(lastSegment);
         return calculatedSegments;
+    }
+
+    calculatePaintableStillSegments(polygon: Polygon): PaintableSegment[] {
+        const paintableSegment: PaintableSegment[] = new Array();
+        for (const segment of this.calculateSegments(polygon)) {
+            paintableSegment.push({ p1: segment.p1, p2: segment.p2});
+        }
+        return paintableSegment;
+    }
+
+    calculatePaintableMovingSegments(polygon: Polygon, mousePosition: Coordinate): PaintableSegment[] {
+        return new Array();
     }
 
 }

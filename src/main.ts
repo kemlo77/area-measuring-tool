@@ -1,6 +1,7 @@
 import { Polygon } from './Polygon.js';
-import { CanvasPainter } from './CanvasPainter.js';
+import { CanvasPainterOld } from './CanvasPainterOld.js';
 import { Coordinate } from './Coordinate.js';
+import { CanvasStudio } from './painter/CanvasStudio.js';
 
 let firstPolygon: Polygon;
 
@@ -11,7 +12,7 @@ export function init(): void {
 
 export function clearEntirely(): void {
 	firstPolygon = new Polygon();
-	CanvasPainter.getInstance().clearBothCanvas();
+	CanvasPainterOld.getInstance().clearBothCanvas();
 }
 
 function handleClick(isLeftClick: boolean, mousePosition: Coordinate): void {
@@ -23,6 +24,8 @@ function handleClick(isLeftClick: boolean, mousePosition: Coordinate): void {
 	}
 	firstPolygon.drawSegments();
 	firstPolygon.drawMovement(mousePosition);
+	CanvasStudio.getInstance().paintStill(firstPolygon);
+	CanvasStudio.getInstance().paintMovement(firstPolygon, mousePosition);
 }
 
 

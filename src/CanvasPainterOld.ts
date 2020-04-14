@@ -3,7 +3,7 @@ import { Segment } from './Segment.js';
 import { Point } from './Point.js';
 import { moduloInPolygon, arrayRotate } from './math.js';
 
-export class CanvasPainter {
+export class CanvasPainterOld {
     private canvasBackground: HTMLCanvasElement = document.getElementById('background') as HTMLCanvasElement;
     private ctxBack2: CanvasRenderingContext2D = this.canvasBackground.getContext('2d');
     private canvasForeground: HTMLCanvasElement = document.getElementById('foreground') as HTMLCanvasElement;
@@ -21,15 +21,15 @@ export class CanvasPainter {
     private greenColor: string = '0,255,0';
     private whiteColor: string = '255,255,255';
 
-    private static instance: CanvasPainter;
+    private static instance: CanvasPainterOld;
 
     private constructor() { }
 
-    public static getInstance(): CanvasPainter {
-        if (!CanvasPainter.instance) {
-            CanvasPainter.instance = new CanvasPainter();
+    public static getInstance(): CanvasPainterOld {
+        if (!CanvasPainterOld.instance) {
+            CanvasPainterOld.instance = new CanvasPainterOld();
         }
-        return CanvasPainter.instance;
+        return CanvasPainterOld.instance;
     }
 
     drawClosedStatePolygon(polygon: Polygon): void {

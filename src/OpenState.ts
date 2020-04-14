@@ -4,7 +4,9 @@ import { PolygonState } from './PolygonState.js';
 import { Point } from './Point.js';
 import { ClosedState } from './ClosedState.js';
 import { calculateIntersect } from './math.js';
-import { CanvasPainter } from './CanvasPainter.js';
+import { CanvasPainterOld } from './CanvasPainterOld.js';
+import { Coordinate } from './Coordinate.js';
+import { PaintableSegment } from './PaintableSegment.js';
 
 export class OpenState implements PolygonState {
 
@@ -102,11 +104,11 @@ export class OpenState implements PolygonState {
     }
 
     drawSegments(polygon: Polygon): void {
-        CanvasPainter.getInstance().drawOpenStatePolygon(polygon);
+        CanvasPainterOld.getInstance().drawOpenStatePolygon(polygon);
     }
 
     drawMovement(polygon: Polygon, mousePosition: Point): void {
-        CanvasPainter.getInstance().drawMovementPolygonInOpenState(polygon, mousePosition);
+        CanvasPainterOld.getInstance().drawMovementPolygonInOpenState(polygon, mousePosition);
 
     }
 
@@ -119,6 +121,21 @@ export class OpenState implements PolygonState {
             calculatedSegments.push(currentSegment);
         }
         return calculatedSegments;
+    }
+
+    calculatePaintableStillSegments(polygon: Polygon): PaintableSegment[] {
+        const paintableSegment: PaintableSegment[] = new Array();
+        const calculatedSegments: Segment[] = this.calculateSegments(polygon);
+        for (const segment of calculatedSegments) {
+            paintableSegment.push({ p1: segment.p1, p2: segment.p2 });
+        }
+        return paintableSegment;
+    }
+
+    calculatePaintableMovingSegments(polygon: Polygon, mousePosition: Coordinate): PaintableSegment[] {
+        const paintableSegment: PaintableSegment[] = new Array();
+        paintableSegment.push({ p1: polygon.lastVertex, p2: mousePosition });
+        return paintableSegment;
     }
 
 }

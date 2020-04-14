@@ -3,9 +3,10 @@ import { Point } from './Point.js';
 import { PolygonState } from './PolygonState.js';
 import { Segment } from './Segment.js';
 import { ClosedState } from './ClosedState.js';
-import { CanvasPainter } from './CanvasPainter.js';
+import { CanvasPainterOld } from './CanvasPainterOld.js';
 import { arrayRotate } from './math.js';
 import { Coordinate } from './Coordinate.js';
+import { PaintableSegment } from './PaintableSegment.js';
 
 export class Polygon {
     public vertices: Point[];
@@ -70,9 +71,21 @@ export class Polygon {
         return this.useIntegerCoords;
     }
 
+    private get isClosed(): boolean {
+        return this.currentState instanceof ClosedState;
+    }
+
+    getPaintableStillSegments(): PaintableSegment[] {
+        return this.currentState.calculatePaintableStillSegments(this);
+    }
+
+    getPaintableMovingSegments(mousePosition: Coordinate): PaintableSegment[] {
+        return this.currentState.calculatePaintableMovingSegments(this, mousePosition);
+    }
+
     setCurrentState(state: PolygonState): void {
         this.currentState = state;
-        CanvasPainter.getInstance().clearTheBackCanvas();
+        CanvasPainterOld.getInstance().clearTheBackCanvas();
     }
 
     handleLeftClick(position: Coordinate): void {
@@ -104,7 +117,7 @@ export class Polygon {
     }
 
     get clockWise(): boolean {
-        if (this.currentState instanceof ClosedState) {
+        if (this.isClosed) {
             if (this.gaussShoelace() > 0) {
                 return true;
             }
@@ -117,7 +130,7 @@ export class Polygon {
     }
 
     get area(): number {
-        if (this.currentState instanceof ClosedState) {
+        if (this.isClosed) {
             return Math.abs(this.gaussShoelace());
         } else {
             return 0;

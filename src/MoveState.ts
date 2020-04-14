@@ -3,8 +3,10 @@ import { PolygonState } from './PolygonState.js';
 import { Point } from './Point.js';
 import { ClosedState } from './ClosedState.js';
 import { Segment } from './Segment.js';
-import { moduloInPolygon, calculateIntersect } from './math.js';
-import { CanvasPainter } from './CanvasPainter.js';
+import { moduloInPolygon, calculateIntersect, arrayRotate } from './math.js';
+import { CanvasPainterOld } from './CanvasPainterOld.js';
+import { Coordinate } from './Coordinate.js';
+import { PaintableSegment } from './PaintableSegment.js';
 
 export class MoveState implements PolygonState {
 
@@ -91,14 +93,17 @@ export class MoveState implements PolygonState {
     }
 
     drawSegments(polygon: Polygon): void {
-        CanvasPainter.getInstance().drawMoveStatePolygon(polygon);
+        CanvasPainterOld.getInstance().drawMoveStatePolygon(polygon);
     }
 
     drawMovement(polygon: Polygon, mousePosition: Point): void {
-        CanvasPainter.getInstance().drawMovementPolygonInMoveState(polygon, mousePosition);
+        CanvasPainterOld.getInstance().drawMovementPolygonInMoveState(polygon, mousePosition);
     }
 
 
+    // TODO: här borde jag kanske inte returnera alla segment utan skippa dom två som är närmast flyttpunkten
+    // Se metoden calculatePaintableSegments()
+    // Då måste jag nog uppdatera checkIfMovedIntersects()
     calculateSegments(polygon: Polygon): Segment[] {
         const calculatedSegments: Segment[] = new Array();
         for (let index = 1; index < polygon.vertices.length; index++) {
@@ -112,5 +117,30 @@ export class MoveState implements PolygonState {
         const lastSegment: Segment = new Segment(lastPoint, firstPoint);
         calculatedSegments.push(lastSegment);
         return calculatedSegments;
+    }
+
+    calculatePaintableStillSegments(polygon: Polygon): PaintableSegment[] {
+        const paintableSegment: PaintableSegment[] = new Array();
+
+        const calculatedSegments: Segment[] = arrayRotate(this.calculateSegments(polygon), polygon.movePointIndex + 1);
+        calculatedSegments.pop();
+        calculatedSegments.pop();
+        for (const segment of calculatedSegments) {
+            paintableSegment.push({ p1: segment.p1, p2: segment.p2});
+        }
+        return paintableSegment;
+    }
+
+
+    calculatePaintableMovingSegments(polygon: Polygon, mousePosition: Coordinate): PaintableSegment[] {
+        const paintableSegment: PaintableSegment[] = new Array();
+
+        const pointBeforeIndex: number = moduloInPolygon(polygon.movePointIndex-1,polygon.vertices.length);
+        const pointBefore: Point = polygon.vertices[pointBeforeIndex];
+        const pointAfterIndex: number = moduloInPolygon(polygon.movePointIndex+1,polygon.vertices.length);
+        const pointAfter: Point = polygon.vertices[pointAfterIndex];
+        paintableSegment.push({ p1: pointBefore, p2: mousePosition});
+        paintableSegment.push({ p1: pointAfter, p2: mousePosition});
+        return paintableSegment;
     }
 }
