@@ -5,6 +5,7 @@ import { Segment } from './Segment.js';
 import { ClosedState } from './ClosedState.js';
 import { CanvasPainter } from './CanvasPainter.js';
 import { arrayRotate } from './math.js';
+import { Coordinate } from './Coordinate.js';
 
 export class Polygon {
     public vertices: Point[];
@@ -74,20 +75,23 @@ export class Polygon {
         CanvasPainter.getInstance().clearTheBackCanvas();
     }
 
-    handleLeftClick(point: Point): void {
-        this.currentState.handleLeftClick(this, point);
+    handleLeftClick(position: Coordinate): void {
+        const leftClickedPoint: Point = new Point(position.x, position.y);
+        this.currentState.handleLeftClick(this, leftClickedPoint);
     }
 
-    handleRightClick(point: Point): void {
-        this.currentState.handleRightClick(this, point);
+    handleRightClick(position: Coordinate): void {
+        const rightClickedPoint: Point = new Point(position.x,position.y);
+        this.currentState.handleRightClick(this, rightClickedPoint);
+    }
+
+    drawMovement(mousePosition: Coordinate): void {
+        const mousePositionPoint: Point = new Point(mousePosition.x,mousePosition.y);
+        this.currentState.drawMovement(this, mousePositionPoint);
     }
 
     drawSegments(): void {
         this.currentState.drawSegments(this);
-    }
-
-    drawMovement(mousePosition: Point): void {
-        this.currentState.drawMovement(this, mousePosition);
     }
 
     // changing direction of polygon (clockwise <-> counter clockwise)

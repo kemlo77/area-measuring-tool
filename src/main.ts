@@ -1,6 +1,6 @@
 import { Polygon } from './Polygon.js';
-import { Point } from './Point.js'; // TODO: Kanske skriva om denna så att handleClick tar ett json-obj istället typ {x: nnn, y: nnn}
 import { CanvasPainter } from './CanvasPainter.js';
+import { Coordinate } from './Coordinate.js';
 
 let firstPolygon: Polygon;
 
@@ -14,7 +14,7 @@ export function clearEntirely(): void {
 	CanvasPainter.getInstance().clearBothCanvas();
 }
 
-function handleClick(isLeftClick: boolean, mousePosition: Point): void {
+function handleClick(isLeftClick: boolean, mousePosition: Coordinate): void {
 	if (isLeftClick) {
 		firstPolygon.handleLeftClick(mousePosition);
 	}
@@ -29,24 +29,21 @@ function handleClick(isLeftClick: boolean, mousePosition: Point): void {
 
 export function canvasLeftClicked(event: MouseEvent, canvasId: string): void {
 	const rect: ClientRect = document.getElementById(canvasId).getBoundingClientRect();
-	const clickedPositionX: number = event.clientX - rect.left;
-	const clickedPositionY: number = event.clientY - rect.top;
-	const leftClickedPoint: Point = new Point(clickedPositionX, clickedPositionY);
-	handleClick(true, leftClickedPoint);
+	const x: number = event.clientX - rect.left;
+	const y: number = event.clientY - rect.top;
+	handleClick(true, { x, y });
 }
 
 export function canvasRightClicked(event: MouseEvent, canvasId: string): void {
 	const rect: ClientRect = document.getElementById(canvasId).getBoundingClientRect();
-	const clickedPositionX: number = event.clientX - rect.left;
-	const clickedPositionY: number = event.clientY - rect.top;
-	const rightClickedPoint: Point = new Point(clickedPositionX, clickedPositionY);
-	handleClick(false, rightClickedPoint);
+	const x: number = event.clientX - rect.left;
+	const y: number = event.clientY - rect.top;
+	handleClick(false, { x, y });
 }
 export function getMousePos(event: MouseEvent, canvasId: string): void {
 	const rect: ClientRect = document.getElementById(canvasId).getBoundingClientRect();
-	const mousePositionX: number = event.clientX - rect.left;
-	const mousePositionY: number = event.clientY - rect.top;
-	const mousePosition = new Point(mousePositionX, mousePositionY);
+	const x: number = event.clientX - rect.left;
+	const y: number = event.clientY - rect.top;
 	// TODO: borde nog inte specifikt ange vilken polygon här, kanske hämta aktuell?
-	firstPolygon.drawMovement(mousePosition);
+	firstPolygon.drawMovement({ x, y });
 }
