@@ -3,7 +3,6 @@ import { Point } from './Point.js';
 import { PolygonState } from './PolygonState.js';
 import { Segment } from './Segment.js';
 import { ClosedState } from './ClosedState.js';
-import { CanvasPainterOld } from './CanvasPainterOld.js';
 import { arrayRotate } from './math.js';
 import { Coordinate } from './Coordinate.js';
 import { PaintableSegment } from './PaintableSegment.js';
@@ -11,6 +10,7 @@ import { PaintableSegment } from './PaintableSegment.js';
 export class Polygon {
     public vertices: Point[];
     public movePointIndex: number;
+    public movePoint: Point;
     private currentState: PolygonState;
     private enforceNonComplex: boolean;
     private enforceClockWise: boolean;
@@ -22,6 +22,7 @@ export class Polygon {
     constructor() {
         this.vertices = new Array();
         this.movePointIndex = -1; // TODO: går det skriva om det här så att det är en Point iställlet?
+        this.movePoint = null;
         this.currentState = OpenState.getInstance();
         this.enforceNonComplex = true;
         this.enforceClockWise = true;
@@ -71,7 +72,7 @@ export class Polygon {
         return this.useIntegerCoords;
     }
 
-    private get isClosed(): boolean {
+    get isClosed(): boolean {
         return this.currentState instanceof ClosedState;
     }
 
@@ -85,7 +86,7 @@ export class Polygon {
 
     setCurrentState(state: PolygonState): void {
         this.currentState = state;
-        CanvasPainterOld.getInstance().clearTheBackCanvas();
+        // TODO: clear the back canvas??
     }
 
     handleLeftClick(position: Coordinate): void {
@@ -96,15 +97,6 @@ export class Polygon {
     handleRightClick(position: Coordinate): void {
         const rightClickedPoint: Point = new Point(position.x,position.y);
         this.currentState.handleRightClick(this, rightClickedPoint);
-    }
-
-    drawMovement(mousePosition: Coordinate): void {
-        const mousePositionPoint: Point = new Point(mousePosition.x,mousePosition.y);
-        this.currentState.drawMovement(this, mousePositionPoint);
-    }
-
-    drawSegments(): void {
-        this.currentState.drawSegments(this);
     }
 
     // changing direction of polygon (clockwise <-> counter clockwise)

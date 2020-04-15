@@ -1,5 +1,4 @@
 import { Polygon } from './Polygon.js';
-import { CanvasPainterOld } from './CanvasPainterOld.js';
 import { Coordinate } from './Coordinate.js';
 import { CanvasStudio } from './painter/CanvasStudio.js';
 
@@ -12,7 +11,7 @@ export function init(): void {
 
 export function clearEntirely(): void {
 	firstPolygon = new Polygon();
-	CanvasPainterOld.getInstance().clearBothCanvas();
+	CanvasStudio.getInstance().paintStill(firstPolygon);
 }
 
 function handleClick(isLeftClick: boolean, mousePosition: Coordinate): void {
@@ -22,8 +21,6 @@ function handleClick(isLeftClick: boolean, mousePosition: Coordinate): void {
 	else {
 		firstPolygon.handleRightClick(mousePosition);
 	}
-	firstPolygon.drawSegments();
-	firstPolygon.drawMovement(mousePosition);
 	CanvasStudio.getInstance().paintStill(firstPolygon);
 	CanvasStudio.getInstance().paintMovement(firstPolygon, mousePosition);
 }
@@ -48,5 +45,5 @@ export function getMousePos(event: MouseEvent, canvasId: string): void {
 	const x: number = event.clientX - rect.left;
 	const y: number = event.clientY - rect.top;
 	// TODO: borde nog inte specifikt ange vilken polygon här, kanske hämta aktuell?
-	firstPolygon.drawMovement({ x, y });
+	CanvasStudio.getInstance().paintMovement(firstPolygon, { x, y });
 }

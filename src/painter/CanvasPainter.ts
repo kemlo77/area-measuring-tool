@@ -11,13 +11,13 @@ export abstract class CanvasPainter implements PaintingStrategy {
 
     moveColor: string = '255,128,0';
     defaultColor: string = '0,80,120';
-    private redColor: string = '255,0,0';
-    private greenColor: string = '0,255,0';
-    private whiteColor: string = '255,255,255';
+    redColor: string = '255,0,0';
+    greenColor: string = '0,255,0';
+    whiteColor: string = '255,255,255';
 
 
     abstract drawStill(motif: any): void;
-    abstract drawMovement(modif: any,mousePosition: Coordinate): void;
+    abstract drawMovement(modif: any, mousePosition: Coordinate): void;
 
     // clear the canvas
     clearBothCanvas(): void {

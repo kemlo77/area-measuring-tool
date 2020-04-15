@@ -5,6 +5,12 @@ import { Polygon } from '../Polygon.js';
 
 export class CanvasPolygonPainter extends CanvasPainter {
 
+    private oldXMin: number = 0;
+    private oldXMax: number = 1;
+    private oldYMin: number = 0;
+    private oldYMax: number = 1;
+
+
     private static instance: CanvasPolygonPainter;
 
     private constructor() {
@@ -25,16 +31,37 @@ export class CanvasPolygonPainter extends CanvasPainter {
         // draw 'segments' not marked as moving
         // draw dots
         const polygon: Polygon = motif as Polygon;
-        polygon.getPaintableStillSegments().forEach((it) => { this.drawOneSegment(it, this.defaultColor); });
-        console.log('CanvasPolygonPainter drawing still Polygon parts');
+        polygon.getPaintableStillSegments().forEach((it) => { this.drawOneStillSegment(it, this.defaultColor); });
+        for (const vertex of polygon.vertices) {
+            if(vertex === polygon.movePoint) {
+                continue;
+            }
+            this.drawDoubleDot(vertex, this.defaultColor, this.whiteColor);
+        }
+
+        // if(polygon.vertices.length>0) {
+        //     this.drawDoubleDot(polygon.firstVertex, this.defaultColor, this.greenColor);
+        // }
+
+        // if(polygon.isClosed) {
+        //     this.drawDoubleDot(polygon.lastVertex, this.defaultColor, this.redColor);
+        // }
+
     }
+
     drawMovement(motif: any, mousePosition: Coordinate): void {
         this.clearUsedCanvas();
         // draw 'segments' marked as moving
         const polygon: Polygon = motif as Polygon;
-        polygon.getPaintableMovingSegments(mousePosition).forEach((it) => { this.drawOneSegment(it, this.defaultColor); });
-        console.log('CanvasPolygonPainter drawing moving Polygon parts');
-        this.saveExtremes([{ x: 1, y: 2 }, { x: 1, y: 2 }]);
+
+        const segments: PaintableSegment[] = polygon.getPaintableMovingSegments(mousePosition);
+        if (segments.length > 0) {
+            for (const segment of segments) {
+                this.drawOneMovingSegment(segment, this.moveColor);
+            }
+            this.saveExtremes(segments);
+        }
+
     }
 
 
@@ -55,8 +82,12 @@ export class CanvasPolygonPainter extends CanvasPainter {
         this.stillCanvasCtx.fill();
     }
 
-    drawOneSegment(segment2draw: PaintableSegment, lineColor: string): void {
+    drawOneStillSegment(segment2draw: PaintableSegment, lineColor: string): void {
         this.drawLine(segment2draw.p1, segment2draw.p2, lineColor, this.stillCanvasCtx);
+    }
+
+    drawOneMovingSegment(segment2draw: PaintableSegment, lineColor: string): void {
+        this.drawLine(segment2draw.p1, segment2draw.p2, lineColor, this.movementCanvasCtx);
     }
 
     drawLine(startP: Coordinate, endP: Coordinate, lineColor: string, ctx: CanvasRenderingContext2D): void {
@@ -71,26 +102,33 @@ export class CanvasPolygonPainter extends CanvasPainter {
 
 
 
-    private oldXMin: number = 0;
-    private oldXMax: number = 1;
-    private oldYMin: number = 0;
-    private oldYMax: number = 1;
 
-    saveExtremes(arrayWithPoints: Coordinate[]): void {
-        this.oldXMin = arrayWithPoints[0].x;
-        this.oldXMax = arrayWithPoints[0].x;
-        this.oldYMin = arrayWithPoints[0].y;
-        this.oldYMax = arrayWithPoints[0].y;
-        for (let p = 1; p < arrayWithPoints.length; p++) {
-            if (this.oldXMin > arrayWithPoints[p].x) { this.oldXMin = arrayWithPoints[p].x; }
-            if (this.oldXMax < arrayWithPoints[p].x) { this.oldXMax = arrayWithPoints[p].x; }
-            if (this.oldYMin > arrayWithPoints[p].y) { this.oldYMin = arrayWithPoints[p].y; }
-            if (this.oldYMax < arrayWithPoints[p].y) { this.oldYMax = arrayWithPoints[p].y; }
+
+    saveExtremes(arrayWithSegments: PaintableSegment[]): void {
+        this.oldXMin = arrayWithSegments[0].p1.x;
+        this.oldXMax = arrayWithSegments[0].p1.x;
+        this.oldYMin = arrayWithSegments[0].p1.y;
+        this.oldYMax = arrayWithSegments[0].p1.y;
+        for (const segment of arrayWithSegments) {
+            if (this.oldXMin > segment.p1.x) { this.oldXMin = segment.p1.x; }
+            if (this.oldXMax < segment.p1.x) { this.oldXMax = segment.p1.x; }
+            if (this.oldYMin > segment.p1.y) { this.oldYMin = segment.p1.y; }
+            if (this.oldYMax < segment.p1.y) { this.oldYMax = segment.p1.y; }
+
+            if (this.oldXMin > segment.p2.x) { this.oldXMin = segment.p2.x; }
+            if (this.oldXMax < segment.p2.x) { this.oldXMax = segment.p2.x; }
+            if (this.oldYMin > segment.p2.y) { this.oldYMin = segment.p2.y; }
+            if (this.oldYMax < segment.p2.y) { this.oldYMax = segment.p2.y; }
         }
     }
 
     clearUsedCanvas(): void {
         this.movementCanvasCtx.clearRect(this.oldXMin - 2, this.oldYMin - 2, this.oldXMax - this.oldXMin + 4, this.oldYMax - this.oldYMin + 4);
+
+        this.oldXMin = 0;
+        this.oldXMax = 1;
+        this.oldYMin = 0;
+        this.oldYMax = 1;
     }
 
 }

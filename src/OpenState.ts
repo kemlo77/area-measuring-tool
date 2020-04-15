@@ -4,7 +4,6 @@ import { PolygonState } from './PolygonState.js';
 import { Point } from './Point.js';
 import { ClosedState } from './ClosedState.js';
 import { calculateIntersect } from './math.js';
-import { CanvasPainterOld } from './CanvasPainterOld.js';
 import { Coordinate } from './Coordinate.js';
 import { PaintableSegment } from './PaintableSegment.js';
 
@@ -103,15 +102,6 @@ export class OpenState implements PolygonState {
         return false;
     }
 
-    drawSegments(polygon: Polygon): void {
-        CanvasPainterOld.getInstance().drawOpenStatePolygon(polygon);
-    }
-
-    drawMovement(polygon: Polygon, mousePosition: Point): void {
-        CanvasPainterOld.getInstance().drawMovementPolygonInOpenState(polygon, mousePosition);
-
-    }
-
     calculateSegments(polygon: Polygon): Segment[] {
         const calculatedSegments: Segment[] = new Array();
         for (let index = 1; index < polygon.vertices.length; index++) {
@@ -134,7 +124,9 @@ export class OpenState implements PolygonState {
 
     calculatePaintableMovingSegments(polygon: Polygon, mousePosition: Coordinate): PaintableSegment[] {
         const paintableSegment: PaintableSegment[] = new Array();
-        paintableSegment.push({ p1: polygon.lastVertex, p2: mousePosition });
+        if(polygon.vertices.length>0){
+            paintableSegment.push({ p1: polygon.lastVertex, p2: mousePosition });
+        }
         return paintableSegment;
     }
 

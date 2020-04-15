@@ -4,7 +4,6 @@ import { Point } from './Point.js';
 import { ClosedState } from './ClosedState.js';
 import { Segment } from './Segment.js';
 import { moduloInPolygon, calculateIntersect, arrayRotate } from './math.js';
-import { CanvasPainterOld } from './CanvasPainterOld.js';
 import { Coordinate } from './Coordinate.js';
 import { PaintableSegment } from './PaintableSegment.js';
 
@@ -31,7 +30,8 @@ export class MoveState implements PolygonState {
             if (polygon.enforceNonComplexPolygon) {
                 if (!this.checkIfMovedIntersects(polygon.segments, pointClicked, polygon.movePointIndex)) {
                     // move the point at movePointIndex to the new point
-                    polygon.segments[polygon.movePointIndex].p1.copyValues(pointClicked); // copying values so that it is still the same object
+                    // polygon.segments[polygon.movePointIndex].p1.copyValues(pointClicked); // copying values so that it is still the same object
+                    polygon.movePoint.copyValues(pointClicked); // copying values so that it is still the same object
                     polygon.vertices[polygon.movePointIndex] = pointClicked;
                     polygon.setCurrentState(ClosedState.getInstance());
                 } else {
@@ -40,7 +40,8 @@ export class MoveState implements PolygonState {
             }
             else {
                 // move the point at movePointIndex to the new point
-                polygon.segments[polygon.movePointIndex].p1.copyValues(pointClicked); // copying values so that it is still the same object
+                // polygon.segments[polygon.movePointIndex].p1.copyValues(pointClicked); // copying values so that it is still the same object
+                polygon.movePoint.copyValues(pointClicked); // copying values so that it is still the same object
                 polygon.setCurrentState(ClosedState.getInstance());
             }
         } else {
@@ -51,6 +52,7 @@ export class MoveState implements PolygonState {
     handleRightClick(polygon: Polygon, pointClicked: Point): void {
         // aborting move mode
         polygon.movePointIndex = -1;
+        polygon.movePoint = null;
         polygon.setCurrentState(ClosedState.getInstance());
 
     }
@@ -92,15 +94,7 @@ export class MoveState implements PolygonState {
         }
     }
 
-    drawSegments(polygon: Polygon): void {
-        CanvasPainterOld.getInstance().drawMoveStatePolygon(polygon);
-    }
-
-    drawMovement(polygon: Polygon, mousePosition: Point): void {
-        CanvasPainterOld.getInstance().drawMovementPolygonInMoveState(polygon, mousePosition);
-    }
-
-
+ 
     // TODO: här borde jag kanske inte returnera alla segment utan skippa dom två som är närmast flyttpunkten
     // Se metoden calculatePaintableSegments()
     // Då måste jag nog uppdatera checkIfMovedIntersects()

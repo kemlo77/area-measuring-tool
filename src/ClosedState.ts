@@ -6,7 +6,6 @@ import { OpenState } from './OpenState.js';
 import { Segment } from './Segment.js';
 import { moduloInPolygon, calculateIntersect, projectVector } from './math.js';
 import { ProjectionResult } from './ProjectionResult.js';
-import { CanvasPainterOld } from './CanvasPainterOld.js';
 import { Coordinate } from './Coordinate.js';
 import { PaintableSegment } from './PaintableSegment.js';
 
@@ -30,6 +29,7 @@ export class ClosedState implements PolygonState {
         if (nearPointIndex > -1) {
             // on point (mark for move) -> MoveState
             polygon.movePointIndex = nearPointIndex;
+            polygon.movePoint = polygon.vertices[nearPointIndex];
             polygon.setCurrentState(MoveState.getInstance());
 
         }
@@ -151,12 +151,6 @@ export class ClosedState implements PolygonState {
             projectionPointOnSegment
         };
     }
-
-    drawSegments(polygon: Polygon): void {
-        CanvasPainterOld.getInstance().drawClosedStatePolygon(polygon);
-    }
-
-    drawMovement(polygon: Polygon, mousePosition: Point): void {/**/ }
 
 
     calculateSegments(polygon: Polygon): Segment[] {
