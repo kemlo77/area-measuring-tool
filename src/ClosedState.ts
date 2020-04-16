@@ -27,11 +27,10 @@ export class ClosedState implements PolygonState {
     stateName(): string { return 'ClosedState'; } // TODO: ta bort senare
 
     handleLeftClick(polygon: Polygon, pointClicked: Point): void {
-        const nearPointIndex: number = pointClicked.isCloseToPoints(polygon.vertices, polygon.markForMoveDistance);
-        if (nearPointIndex > -1) {
+        const nearestPoint: Point = pointClicked.isCloseToPoints(polygon.vertices, polygon.markForMoveDistance);
+        if (nearestPoint !== null) {
             // on point (mark for move) -> MoveState
-            polygon.movePointIndex = nearPointIndex;
-            polygon.movePoint = polygon.vertices[nearPointIndex];
+            polygon.movePoint = nearestPoint;
             polygon.setCurrentState(MoveState.getInstance());
 
         }
@@ -67,17 +66,15 @@ export class ClosedState implements PolygonState {
 
     handleRightClick(polygon: Polygon, pointClicked: Point): void {
         // if the user rightclicked a point, remove it if there are more than 3 sides to the polygon
-        const nearPointIndex: number = pointClicked.isCloseToPoints(polygon.vertices, polygon.deleteDistance);
+        const nearestPoint: Point = pointClicked.isCloseToPoints(polygon.vertices, polygon.deleteDistance);
 
-        if (nearPointIndex > -1) {
-            const nearestPoint: Point = polygon.vertices[nearPointIndex];
+        if (nearestPoint !== null) {
             // if polygon has more than 3 sides it is ok to remove point (+segment)
             if (polygon.vertices.length > 3) {
                 // check that the segment created to fill the gap does not intersect with other segments
                 if (polygon.enforceNonComplexPolygon) {
                     if (!this.checkIfRemovedPointCausesSegmentIntersect(polygon, nearestPoint)) {
                         // no intersects found
-                        console.log('***** no intersects found******');
                         polygon.ejectVertex(nearestPoint);
                     }
                     else {

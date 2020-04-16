@@ -48,7 +48,7 @@ export class OpenState implements PolygonState {
             else {
                 // if the new Segment does not intersect with other segments or the new point to close to other points, the add the point (+segment)
                 const candidateSegment: Segment = new Segment(polygon.lastVertex, pointClicked);
-                if (pointClicked.isCloseToPoints(polygon.vertices, polygon.minimumDistanceBetweenPoints) < 0) {
+                if (pointClicked.isCloseToPoints(polygon.vertices, polygon.minimumDistanceBetweenPoints) == null) {
                     if (polygon.enforceNonComplexPolygon) {
                         if (!this.checkIfIntersect(polygon.segments, candidateSegment, false)) {
                             polygon.vertices.push(pointClicked);

@@ -10,7 +10,6 @@ import { UnselectedState } from './UnselectedState.js';
 
 export class Polygon {
     public vertices: Point[];
-    public movePointIndex: number;
     public movePoint: Point;
     private currentState: PolygonState;
     private enforceNonComplex: boolean;
@@ -22,7 +21,6 @@ export class Polygon {
 
     constructor() {
         this.vertices = new Array();
-        this.movePointIndex = -1; // TODO: går det skriva om det här så att det är en Point iställlet?
         this.movePoint = null;
         this.currentState = OpenState.getInstance();
         this.enforceNonComplex = true;

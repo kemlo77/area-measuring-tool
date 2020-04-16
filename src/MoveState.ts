@@ -25,22 +25,17 @@ export class MoveState implements PolygonState {
     handleLeftClick(polygon: Polygon, pointClicked: Point): void {
         // empty space (moves to new point) -> ClosedState
         // if the clicked point is not too close to another point (not checking it self, there of the 4th argument in function call)
-        if (pointClicked.isCloseToPoints(polygon.vertices, polygon.minimumDistanceBetweenPoints, polygon.movePointIndex) < 0) {
+        if (pointClicked.isCloseToPoints(polygon.vertices, polygon.minimumDistanceBetweenPoints, polygon.movePoint) == null) {
             // if the points nearest segments do not intersect with other segments
             if (polygon.enforceNonComplexPolygon) {
                 if (!this.checkIfMovedIntersects(polygon, pointClicked, polygon.movePoint)) {
-                    // move the point at movePointIndex to the new point
-                    // polygon.segments[polygon.movePointIndex].p1.copyValues(pointClicked); // copying values so that it is still the same object
                     polygon.movePoint.copyValues(pointClicked); // copying values so that it is still the same object
-                    polygon.vertices[polygon.movePointIndex] = pointClicked;
                     polygon.setCurrentState(ClosedState.getInstance());
                 } else {
                     console.warn('Moving vertex there will cause segments to intersect.');
                 }
             }
             else {
-                // move the point at movePointIndex to the new point
-                // polygon.segments[polygon.movePointIndex].p1.copyValues(pointClicked); // copying values so that it is still the same object
                 polygon.movePoint.copyValues(pointClicked); // copying values so that it is still the same object
                 polygon.setCurrentState(ClosedState.getInstance());
             }
@@ -51,7 +46,6 @@ export class MoveState implements PolygonState {
 
     handleRightClick(polygon: Polygon, pointClicked: Point): void {
         // aborting move mode
-        polygon.movePointIndex = -1;
         polygon.movePoint = null;
         polygon.setCurrentState(ClosedState.getInstance());
 
@@ -104,8 +98,9 @@ export class MoveState implements PolygonState {
 
     calculatePaintableStillSegments(polygon: Polygon): PaintableSegment[] {
         const paintableSegment: PaintableSegment[] = new Array();
-
-        const calculatedSegments: Segment[] = arrayRotate(this.calculateSegments(polygon), polygon.movePointIndex + 2);
+        // TODO: skriv om raderna nedan
+        const movingPointIndex: number = polygon.vertices.indexOf(polygon.movePoint);
+        const calculatedSegments: Segment[] = arrayRotate(this.calculateSegments(polygon), movingPointIndex + 2);
         calculatedSegments.pop();
         calculatedSegments.pop();
         for (const segment of calculatedSegments) {
@@ -118,10 +113,8 @@ export class MoveState implements PolygonState {
     calculatePaintableMovingSegments(polygon: Polygon, mousePosition: Coordinate): PaintableSegment[] {
         const paintableSegment: PaintableSegment[] = new Array();
 
-        const pointBeforeIndex: number = moduloInPolygon(polygon.movePointIndex - 1, polygon.vertices.length);
-        const pointBefore: Point = polygon.vertices[pointBeforeIndex];
-        const pointAfterIndex: number = moduloInPolygon(polygon.movePointIndex + 1, polygon.vertices.length);
-        const pointAfter: Point = polygon.vertices[pointAfterIndex];
+        const pointBefore: Point = polygon.getPrecedingVertex(polygon.movePoint);
+        const pointAfter: Point = polygon.getFollowingVertex(polygon.movePoint);
         paintableSegment.push({ p1: pointBefore, p2: mousePosition });
         paintableSegment.push({ p1: pointAfter, p2: mousePosition });
         return paintableSegment;
