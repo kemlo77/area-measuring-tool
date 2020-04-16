@@ -166,7 +166,13 @@ export class Polygon {
 
     getPrecedingVertex(vertex: Point): Point {
         const index: number = this.vertices.indexOf(vertex);
-        const indexOfPrevious: number = moduloInPolygon(index-1, this.vertices.length);
-        return this.vertices[indexOfPrevious];
+        const indexOfPreceding: number = moduloInPolygon(index-1, this.vertices.length);
+        return this.vertices[indexOfPreceding];
+    }
+
+    getFollowingVertex(vertex: Point): Point {
+        const index: number = this.vertices.indexOf(vertex);
+        const indexOfFollowing: number = moduloInPolygon(index+1, this.vertices.length);
+        return this.vertices[indexOfFollowing];
     }
 }

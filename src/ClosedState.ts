@@ -160,7 +160,7 @@ export class ClosedState implements PolygonState {
 
     calculateSegments(polygon: Polygon): Segment[] {
         const calculatedSegments: Segment[] = new Array();
-        for(const vertex of polygon.vertices){
+        for (const vertex of polygon.vertices) {
             const precedingVertex: Point = polygon.getPrecedingVertex(vertex);
             const currentSegment: Segment = new Segment(precedingVertex, vertex);
             calculatedSegments.push(currentSegment);

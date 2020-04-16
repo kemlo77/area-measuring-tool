@@ -39,12 +39,12 @@ export class CanvasPolygonPainter extends CanvasPainter {
                 }
                 this.drawDoubleDot(vertex, this.defaultColor, this.whiteColor);
             }
-            // if(polygon.vertices.length>0) {
-            //     this.drawDoubleDot(polygon.firstVertex, this.defaultColor, this.greenColor);
-            // }
-            // if(polygon.isClosed) {
-            //     this.drawDoubleDot(polygon.lastVertex, this.defaultColor, this.redColor);
-            // }
+            if(polygon.vertices.length>0) {
+                this.drawDoubleDot(polygon.firstVertex, this.defaultColor, this.greenColor);
+            }
+            if(polygon.isClosed) {
+                this.drawDoubleDot(polygon.lastVertex, this.defaultColor, this.redColor);
+            }
         }
 
     }

@@ -21,4 +21,8 @@ export class Segment {
         this.p2 = tempReversePoint;
     }
 
+    containsThisVertex(vertex: Point): boolean {
+        return (this.p1 === vertex || this.p2 === vertex);
+    }
+
 }

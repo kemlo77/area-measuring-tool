@@ -28,7 +28,7 @@ export class MoveState implements PolygonState {
         if (pointClicked.isCloseToPoints(polygon.vertices, polygon.minimumDistanceBetweenPoints, polygon.movePointIndex) < 0) {
             // if the points nearest segments do not intersect with other segments
             if (polygon.enforceNonComplexPolygon) {
-                if (!this.checkIfMovedIntersects(polygon.segments, pointClicked, polygon.movePointIndex)) {
+                if (!this.checkIfMovedIntersects(polygon, pointClicked, polygon.movePoint)) {
                     // move the point at movePointIndex to the new point
                     // polygon.segments[polygon.movePointIndex].p1.copyValues(pointClicked); // copying values so that it is still the same object
                     polygon.movePoint.copyValues(pointClicked); // copying values so that it is still the same object
@@ -57,32 +57,30 @@ export class MoveState implements PolygonState {
 
     }
 
-    // checking if the two segments containing a point (being moved) intersects with the other segments in a polygon (at move)
-    checkIfMovedIntersects(segmentArrayIn: Segment[], nyPunkt: Point, movedAtIndex: number): boolean {
+    // checking if the two segments containing a point (being moved) intersects with the other segments in a polygon (after move)
+    checkIfMovedIntersects(polygon: Polygon, moveToCandidateLocation: Point, movingVertex: Point): boolean {
+        const segments: Segment[] = this.calculateSegments(polygon);
         // if polygon has more than 3 segments, otherwise return false
-        if (segmentArrayIn.length > 3) {
-            // find index for segments two steps before, one step before and one step after chosen index
-            // MAI ~ Move At Index
-            const indexBeforeMovedAtIndex: number = moduloInPolygon(movedAtIndex - 1, segmentArrayIn.length); // MAI-1
-            const indexBeforeBeforeMovedAtIndex: number = moduloInPolygon(indexBeforeMovedAtIndex - 1, segmentArrayIn.length);// MAI-2
-            const indexAfterMovedAtIndex: number = moduloInPolygon(movedAtIndex + 1, segmentArrayIn.length);// MAI+1
-            // creating two new Segments for chosen index and the one prior
-            const firstCheckedSegment: Segment = new Segment(segmentArrayIn[indexBeforeMovedAtIndex].p1, nyPunkt);
-            const secondCheckedSegment: Segment = new Segment(nyPunkt, segmentArrayIn[movedAtIndex].p2);
-            // loop through all segments in segment array
+        if (segments.length > 3) {
+
+            const precedingVertex: Point = polygon.getPrecedingVertex(movingVertex);
+            const followingVertex: Point = polygon.getFollowingVertex(movingVertex);
+
+            // creating two candidate segments containing the moveToCandidateLocation
+            const firstCheckedSegment: Segment = new Segment(precedingVertex, moveToCandidateLocation);
+            const secondCheckedSegment: Segment = new Segment(moveToCandidateLocation, followingVertex);
+
             // general idea: no need to check if neighbouring segments intersect with current segment (being checked)
-            for (let m = 0; m < segmentArrayIn.length; m++) {
-                // skip the two unnecessary segments for both comparisons (lying next to both segments)
-                if (m === movedAtIndex || m === indexBeforeMovedAtIndex) { continue; } // MAI & MAI-1
-                // skip the segment before firstCheckedSegment
-                if (m !== indexBeforeBeforeMovedAtIndex) { // MAI-2
-                    // checking if firstCheckedSegment intersects with any of the other interesting segments
-                    if (calculateIntersect(firstCheckedSegment, segmentArrayIn[m])) { return true; }
+            for (const segment of segments) {
+
+                if (segment.containsThisVertex(movingVertex)) { continue; }
+
+                if (!segment.containsThisVertex(precedingVertex)) {
+                    if (calculateIntersect(firstCheckedSegment, segment)) { return true; }
                 }
-                // skip the segment after secondCheckedSegment
-                if (m !== indexAfterMovedAtIndex) { // MAI+1
-                    // checking if secondCheckedSegment intersects with any of the other interesting segments
-                    if (calculateIntersect(secondCheckedSegment, segmentArrayIn[m])) { return true; }
+
+                if (!segment.containsThisVertex(followingVertex)) {
+                    if (calculateIntersect(secondCheckedSegment, segment)) { return true; }
                 }
             }
             // if arriving here, there are no intersects
@@ -94,33 +92,24 @@ export class MoveState implements PolygonState {
         }
     }
 
-
-    // TODO: här borde jag kanske inte returnera alla segment utan skippa dom två som är närmast flyttpunkten
-    // Se metoden calculatePaintableSegments()
-    // Då måste jag nog uppdatera checkIfMovedIntersects()
     calculateSegments(polygon: Polygon): Segment[] {
         const calculatedSegments: Segment[] = new Array();
-        for (let index = 1; index < polygon.vertices.length; index++) {
-            const pointA: Point = polygon.vertices[index - 1];
-            const pointB: Point = polygon.vertices[index];
-            const currentSegment: Segment = new Segment(pointA, pointB);
+        for (const vertex of polygon.vertices) {
+            const precedingVertex: Point = polygon.getPrecedingVertex(vertex);
+            const currentSegment: Segment = new Segment(precedingVertex, vertex);
             calculatedSegments.push(currentSegment);
         }
-        const lastPoint: Point = polygon.vertices[polygon.vertices.length - 1];
-        const firstPoint: Point = polygon.vertices[0];
-        const lastSegment: Segment = new Segment(lastPoint, firstPoint);
-        calculatedSegments.push(lastSegment);
         return calculatedSegments;
     }
 
     calculatePaintableStillSegments(polygon: Polygon): PaintableSegment[] {
         const paintableSegment: PaintableSegment[] = new Array();
 
-        const calculatedSegments: Segment[] = arrayRotate(this.calculateSegments(polygon), polygon.movePointIndex + 1);
+        const calculatedSegments: Segment[] = arrayRotate(this.calculateSegments(polygon), polygon.movePointIndex + 2);
         calculatedSegments.pop();
         calculatedSegments.pop();
         for (const segment of calculatedSegments) {
-            paintableSegment.push({ p1: segment.p1, p2: segment.p2});
+            paintableSegment.push({ p1: segment.p1, p2: segment.p2 });
         }
         return paintableSegment;
     }
@@ -129,12 +118,12 @@ export class MoveState implements PolygonState {
     calculatePaintableMovingSegments(polygon: Polygon, mousePosition: Coordinate): PaintableSegment[] {
         const paintableSegment: PaintableSegment[] = new Array();
 
-        const pointBeforeIndex: number = moduloInPolygon(polygon.movePointIndex-1,polygon.vertices.length);
+        const pointBeforeIndex: number = moduloInPolygon(polygon.movePointIndex - 1, polygon.vertices.length);
         const pointBefore: Point = polygon.vertices[pointBeforeIndex];
-        const pointAfterIndex: number = moduloInPolygon(polygon.movePointIndex+1,polygon.vertices.length);
+        const pointAfterIndex: number = moduloInPolygon(polygon.movePointIndex + 1, polygon.vertices.length);
         const pointAfter: Point = polygon.vertices[pointAfterIndex];
-        paintableSegment.push({ p1: pointBefore, p2: mousePosition});
-        paintableSegment.push({ p1: pointAfter, p2: mousePosition});
+        paintableSegment.push({ p1: pointBefore, p2: mousePosition });
+        paintableSegment.push({ p1: pointAfter, p2: mousePosition });
         return paintableSegment;
     }
 }
