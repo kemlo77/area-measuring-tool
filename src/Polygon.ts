@@ -109,8 +109,13 @@ export class Polygon {
         this.vertices.reverse();
     }
 
-    insertVertex(newPoint: Point, insertAtThisIndex: number): void {
+    insertVertexOld(newPoint: Point, insertAtThisIndex: number): void {
         this.vertices.splice(insertAtThisIndex + 1, 0, newPoint);
+    }
+
+    insertVertex(newPoint: Point, beforePoint: Point): void {
+        const oldPointIndex = this.vertices.indexOf(beforePoint);
+        this.vertices.splice(oldPointIndex + 1, 0, newPoint);
     }
 
     get clockWise(): boolean {
@@ -150,6 +155,12 @@ export class Polygon {
 
     rotateVertices(steps: number): void {
         this.vertices = arrayRotate(this.vertices, steps);
+    }
+
+    makeThisVertexFirst(vertex: Point): void {
+        while(vertex !== this.vertices[0]) {
+            this.rotateVertices(1);
+        }
     }
 
 

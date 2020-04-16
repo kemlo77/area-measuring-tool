@@ -40,6 +40,7 @@ export class ClosedState implements PolygonState {
             // if the click occured near a segment, insert a new point
             const projection: PointToSegmentProjection = this.checkIfCloseToLine(polygon.segments, pointClicked, polygon.insertNewPointDistance);
             if (projection.withinMinimumDistance) {
+                // TODO: flytta den här avrundningen till 'checkIfCloseToLine'. Och/eller till en egen metod?
                 // rounding coordinates to get integers
                 if (polygon.useIntegerCoordinates) {
                     projection.projectionPointOnSegment.x = Math.round(projection.projectionPointOnSegment.x);
@@ -50,11 +51,11 @@ export class ClosedState implements PolygonState {
                 }
                 // calculating distance to both points on clicked segment
                 // so that it is not possible to insert a point too close to another
-                const segmPointDist1: number = projection.projectionPointOnSegment.distanceToOtherPoint(polygon.segments[projection.segmentIndex].p1);
-                const segmPointDist2: number = projection.projectionPointOnSegment.distanceToOtherPoint(polygon.segments[projection.segmentIndex].p2);
+                const segmPointDist1: number = projection.projectionPointOnSegment.distanceToOtherPoint(projection.segmentProjectedOn.p1);
+                const segmPointDist2: number = projection.projectionPointOnSegment.distanceToOtherPoint(projection.segmentProjectedOn.p2);
                 if (((segmPointDist1 > polygon.minimumDistanceBetweenPoints) && (segmPointDist2 > polygon.minimumDistanceBetweenPoints))) {
                     // inserting the point in the segment-array
-                    polygon.insertVertex(projection.projectionPointOnSegment, projection.segmentIndex);
+                    polygon.insertVertex(projection.projectionPointOnSegment, projection.segmentProjectedOn.p1);
                 } else {
                     console.warn('New vertex too close to other vertex.');
                 }
@@ -91,10 +92,10 @@ export class ClosedState implements PolygonState {
         else {
             // check if click was near segment
             const projection: PointToSegmentProjection = this.checkIfCloseToLine(polygon.segments, pointClicked, polygon.deleteDistance);
-            if (projection.withinMinimumDistance) {// true if user clicked close enough to segment
+            if (projection.withinMinimumDistance) {
                 // Changing start segment so that the one to be removed is the last one
-                polygon.rotateVertices(projection.segmentIndex + 1);
-                // opening polygon and removing last segment
+                polygon.makeThisVertexFirst(projection.segmentProjectedOn.p2);
+                // opening polygon
                 polygon.setCurrentState(OpenState.getInstance());
             }
         }
@@ -131,12 +132,13 @@ export class ClosedState implements PolygonState {
     checkIfCloseToLine(segmentArrayIn: Segment[], nyPunkt: Point, minDistanceIn: number): PointToSegmentProjection {
         let smallestDistance: number = minDistanceIn;
         let withinMinimumDistance: boolean = false;
-        let segmentIndex: number = 0;
+        let segmentProjectedOn: Segment = null;
         let closestPoint: Point = new Point();
         // checking with every segment
-        for (let j = 0; j < segmentArrayIn.length; j++) {
+        // for (let j = 0; j < segmentArrayIn.length; j++) {
+        for (const segment of segmentArrayIn) {
             // projecting point on segment
-            const projectionResult: ProjectionResult = projectVector(segmentArrayIn[j], nyPunkt);
+            const projectionResult: ProjectionResult = projectVector(segment, nyPunkt);
             // if it was between 0 and minDistanceIn
             if (projectionResult.successful && projectionResult.norm < minDistanceIn) {
                 withinMinimumDistance = true;
@@ -144,14 +146,14 @@ export class ClosedState implements PolygonState {
                     // if it is closer than minDistanceIn and closer than last saved, it is saved
                     smallestDistance = projectionResult.norm;
                     closestPoint = projectionResult.point;
-                    segmentIndex = j;
+                    segmentProjectedOn = segment;
                 }
             }
         }
         const projectionPointOnSegment: Point = closestPoint;
         return {
             withinMinimumDistance,
-            segmentIndex,
+            segmentProjectedOn,
             projectionPointOnSegment
         };
     }
@@ -175,7 +177,7 @@ export class ClosedState implements PolygonState {
     calculatePaintableStillSegments(polygon: Polygon): PaintableSegment[] {
         const paintableSegment: PaintableSegment[] = new Array();
         for (const segment of this.calculateSegments(polygon)) {
-            paintableSegment.push({ p1: segment.p1, p2: segment.p2});
+            paintableSegment.push({ p1: segment.p1, p2: segment.p2 });
         }
         return paintableSegment;
     }
