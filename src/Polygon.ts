@@ -3,7 +3,7 @@ import { Point } from './Point.js';
 import { PolygonState } from './PolygonState.js';
 import { Segment } from './Segment.js';
 import { ClosedState } from './ClosedState.js';
-import { arrayRotate } from './math.js';
+import { arrayRotate, moduloInPolygon } from './math.js';
 import { Coordinate } from './Coordinate.js';
 import { PaintableSegment } from './PaintableSegment.js';
 import { UnselectedState } from './UnselectedState.js';
@@ -109,10 +109,6 @@ export class Polygon {
         this.vertices.reverse();
     }
 
-    insertVertexOld(newPoint: Point, insertAtThisIndex: number): void {
-        this.vertices.splice(insertAtThisIndex + 1, 0, newPoint);
-    }
-
     insertVertex(newPoint: Point, beforePoint: Point): void {
         const oldPointIndex = this.vertices.indexOf(beforePoint);
         this.vertices.splice(oldPointIndex + 1, 0, newPoint);
@@ -166,5 +162,11 @@ export class Polygon {
 
     ejectVertex(removeAtThisIndex: number): void {
         this.vertices.splice(removeAtThisIndex, 1);
+    }
+
+    getPrecedingVertex(vertex: Point): Point {
+        const index: number = this.vertices.indexOf(vertex);
+        const indexOfPrevious: number = moduloInPolygon(index-1, this.vertices.length);
+        return this.vertices[indexOfPrevious];
     }
 }

@@ -135,7 +135,6 @@ export class ClosedState implements PolygonState {
         let segmentProjectedOn: Segment = null;
         let closestPoint: Point = new Point();
         // checking with every segment
-        // for (let j = 0; j < segmentArrayIn.length; j++) {
         for (const segment of segmentArrayIn) {
             // projecting point on segment
             const projectionResult: ProjectionResult = projectVector(segment, nyPunkt);
@@ -161,16 +160,11 @@ export class ClosedState implements PolygonState {
 
     calculateSegments(polygon: Polygon): Segment[] {
         const calculatedSegments: Segment[] = new Array();
-        for (let index = 1; index < polygon.vertices.length; index++) {
-            const pointA: Point = polygon.vertices[index - 1];
-            const pointB: Point = polygon.vertices[index];
-            const currentSegment: Segment = new Segment(pointA, pointB);
+        for(const vertex of polygon.vertices){
+            const precedingVertex: Point = polygon.getPrecedingVertex(vertex);
+            const currentSegment: Segment = new Segment(precedingVertex, vertex);
             calculatedSegments.push(currentSegment);
         }
-        const lastPoint: Point = polygon.vertices[polygon.vertices.length - 1];
-        const firstPoint: Point = polygon.vertices[0];
-        const lastSegment: Segment = new Segment(lastPoint, firstPoint);
-        calculatedSegments.push(lastSegment);
         return calculatedSegments;
     }
 
