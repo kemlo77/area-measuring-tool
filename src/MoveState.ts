@@ -94,7 +94,7 @@ export class MoveState implements PolygonState {
         }
     }
 
- 
+
     // TODO: här borde jag kanske inte returnera alla segment utan skippa dom två som är närmast flyttpunkten
     // Se metoden calculatePaintableSegments()
     // Då måste jag nog uppdatera checkIfMovedIntersects()

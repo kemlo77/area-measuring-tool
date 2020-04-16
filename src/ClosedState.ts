@@ -8,6 +8,8 @@ import { moduloInPolygon, calculateIntersect, projectVector } from './math.js';
 import { ProjectionResult } from './ProjectionResult.js';
 import { Coordinate } from './Coordinate.js';
 import { PaintableSegment } from './PaintableSegment.js';
+import { PointToSegmentProjection } from './PointToSegmentProjection.js';
+import { UnselectedState } from './UnselectedState.js';
 
 export class ClosedState implements PolygonState {
 
@@ -56,6 +58,8 @@ export class ClosedState implements PolygonState {
                 } else {
                     console.warn('New vertex too close to other vertex.');
                 }
+            } else {
+                polygon.setCurrentState(UnselectedState.getInstance());
             }
         }
     }
@@ -180,12 +184,4 @@ export class ClosedState implements PolygonState {
         return new Array();
     }
 
-}
-
-interface PointToSegmentProjection {
-    withinMinimumDistance: boolean;
-    // TODO: Jag kanske skulle kunna returnera det aktuella segmentet istället?
-    // Beror lite på när jag tänker gå över till att Polygon bygger på Point istället för Segment.
-    segmentIndex: number;
-    projectionPointOnSegment: Point;
 }

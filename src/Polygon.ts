@@ -6,6 +6,7 @@ import { ClosedState } from './ClosedState.js';
 import { arrayRotate } from './math.js';
 import { Coordinate } from './Coordinate.js';
 import { PaintableSegment } from './PaintableSegment.js';
+import { UnselectedState } from './UnselectedState.js';
 
 export class Polygon {
     public vertices: Point[];
@@ -74,6 +75,10 @@ export class Polygon {
 
     get isClosed(): boolean {
         return this.currentState instanceof ClosedState;
+    }
+
+    get isSelected(): boolean {
+        return !(this.currentState instanceof UnselectedState);
     }
 
     getPaintableStillSegments(): PaintableSegment[] {
