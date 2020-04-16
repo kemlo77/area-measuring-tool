@@ -68,21 +68,24 @@ export class ClosedState implements PolygonState {
     handleRightClick(polygon: Polygon, pointClicked: Point): void {
         // if the user rightclicked a point, remove it if there are more than 3 sides to the polygon
         const nearPointIndex: number = pointClicked.isCloseToPoints(polygon.vertices, polygon.deleteDistance);
+
         if (nearPointIndex > -1) {
+            const nearestPoint: Point = polygon.vertices[nearPointIndex];
             // if polygon has more than 3 sides it is ok to remove point (+segment)
             if (polygon.vertices.length > 3) {
                 // check that the segment created to fill the gap does not intersect with other segments
                 if (polygon.enforceNonComplexPolygon) {
-                    if (!this.checkIfRemovedPointCausesSegmentIntersect(polygon.segments, nearPointIndex)) {
+                    if (!this.checkIfRemovedPointCausesSegmentIntersect(polygon, nearestPoint)) {
                         // no intersects found
-                        polygon.ejectVertex(nearPointIndex);
+                        console.log('***** no intersects found******');
+                        polygon.ejectVertex(nearestPoint);
                     }
                     else {
                         console.warn('Removing that point will cause remaining segments to intersect.');
                     }
                 }
                 else {
-                    polygon.ejectVertex(nearPointIndex);
+                    polygon.ejectVertex(nearestPoint);
                 }
             } else {
                 console.warn('Cannot remove vertex when polygon is a triangle.');
@@ -101,30 +104,23 @@ export class ClosedState implements PolygonState {
         }
     }
 
-
-    // TODO: Refactor and test this one thoroughly
-    private checkIfRemovedPointCausesSegmentIntersect(segmentArrayIn: Segment[], deleteAtIndex: number): boolean {
-        // needs only to be checked for polygons with 5 sides or more
-        // i.e. a four sided polygon loosing a side becomes a triangle, that can have no sides intersecting.
+    private checkIfRemovedPointCausesSegmentIntersect(polygon: Polygon, deleteCandidateVertex: Point): boolean {
+        const segmentArrayIn: Segment[] = polygon.segments;
+        // A four sided polygon loosing a side becomes a triangle, that can have no sides intersecting.
         if (segmentArrayIn.length > 4) {
-            // find index for the segment one step prior
-            const indexBeforeDeleteAtIndex: number = moduloInPolygon(deleteAtIndex - 1, segmentArrayIn.length); // DAI-1
-            // skapa ETT nya segment f�r valt index och det dessf�rrinnan
-            // create ONE new Segment to replace chosen segment (at deleteAtIndex) and the segment prior
-            const thePotentialNewSegment: Segment = new Segment(segmentArrayIn[indexBeforeDeleteAtIndex].p1, segmentArrayIn[deleteAtIndex].p2);
-            // skipping the two segments to be replaced plus their neighbouring segments
-            for (let p = 0; p < segmentArrayIn.length - 4; p++) {
-                if (calculateIntersect(thePotentialNewSegment, segmentArrayIn[moduloInPolygon((p + deleteAtIndex + 2), segmentArrayIn.length)])) {
+            const precedingVertex: Point = polygon.getPrecedingVertex(deleteCandidateVertex);
+            const followingVertex: Point = polygon.getFollowingVertex(deleteCandidateVertex);
+            const thePotentialNewSegment: Segment = new Segment(precedingVertex, followingVertex);
+            for (const segment of polygon.segments) {
+                if (segment.containsThisVertex(precedingVertex) || segment.containsThisVertex(followingVertex)) {
+                    continue;
+                }
+                if (calculateIntersect(thePotentialNewSegment, segment) !== null) {
                     return true;
                 }
             }
-            // if coming this far, there is no intersect found
-            return false;
         }
-        else {
-            // if polygon had 4 sides or less, it is automatically OK
-            return false;
-        }
+        return false;
     }
 
 

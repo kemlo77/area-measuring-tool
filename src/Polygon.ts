@@ -160,8 +160,9 @@ export class Polygon {
     }
 
 
-    ejectVertex(removeAtThisIndex: number): void {
-        this.vertices.splice(removeAtThisIndex, 1);
+    ejectVertex(vertexToRemove: Point): void {
+        const index: number = this.vertices.indexOf(vertexToRemove);
+        this.vertices.splice(index, 1);
     }
 
     getPrecedingVertex(vertex: Point): Point {
