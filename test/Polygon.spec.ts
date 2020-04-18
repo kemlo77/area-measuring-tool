@@ -71,7 +71,7 @@ describe('Polygon', () => {
         }
 
         for (let step = 0; step < 4; step++) {
-            const square: Polygon = returnSquare();
+            const square: Polygon = getSquare();
             it('Trying to remove point but not within minimum distance ' + step, () => {
                 square.rotateVertices(step);
                 square.handleRightClick({ x: 100 - square.deleteDistance, y: 100 });
@@ -81,7 +81,7 @@ describe('Polygon', () => {
         }
 
         for (let step = 0; step < 4; step++) {
-            const square: Polygon = returnSquare();
+            const square: Polygon = getSquare();
             it('All points are possible to remove normally ' + step, () => {
                 square.rotateVertices(step);
                 square.handleRightClick({ x: 100, y: 100 });
@@ -91,7 +91,7 @@ describe('Polygon', () => {
         }
 
         for (let step = 0; step < 4; step++) {
-            const square: Polygon = returnSquare();
+            const square: Polygon = getSquare();
             it('Erasing segment and thus opening the polygon ' + step, () => {
                 square.rotateVertices(step);
                 square.handleRightClick({ x: 150, y: 100 });
@@ -101,7 +101,7 @@ describe('Polygon', () => {
         }
 
         for (let step = 0; step < 4; step++) {
-            const square: Polygon = returnSquare();
+            const square: Polygon = getSquare();
             it('trying to erase segment but not within minimum segment distance ' + step, () => {
                 square.rotateVertices(step);
                 square.handleRightClick({ x: 150, y: 100 + square.deleteDistance + 1 });
@@ -115,9 +115,110 @@ describe('Polygon', () => {
 
     });
 
+    describe('Moving', () => {
+
+        for (let step = 0; step < 4; step++) {
+            const square: Polygon = getSquare();
+            it('All vertices are normally possible to move ' + step, () => {
+                square.rotateVertices(-step);
+                square.handleLeftClick({ x: 100, y: 100 });
+                square.handleLeftClick({ x: 50, y: 50 });
+                expect(square.vertices[step].x).to.equal(50);
+                expect(square.vertices[step].y).to.equal(50);
+                expect(square.isClosed).to.equal(true, 'Polygon not closed.');
+            });
+        }
+
+        for (let step = 0; step < 4; step++) {
+            const square: Polygon = getSquare();
+            it('Not possible to move vertex too close to existing vertex' + step, () => {
+                square.rotateVertices(-step);
+                square.handleLeftClick({ x: 100, y: 100 });
+                square.handleLeftClick({ x: 200 - square.minDistBetweenPoints + 1, y: 199 }); // clicking near another vertex
+                square.handleRightClick({ x: 10, y: 10 });  // right  clicking in the void to abort move
+                expect(square.vertices[step].x).to.equal(100);
+                expect(square.vertices[step].y).to.equal(100);
+                expect(square.isClosed).to.equal(true, 'Polygon not closed.');
+            });
+        }
+
+        for (let step = 0; step < 4; step++) {
+            const square: Polygon = getSquare();
+            it('Possible to move vertex when NOT too close to other vertex ' + step, () => {
+                square.rotateVertices(-step);
+                square.handleLeftClick({ x: 100, y: 100 });
+                square.handleLeftClick({ x: 200 - square.minDistBetweenPoints, y: 199 }); // clicking near another vertex
+                square.handleRightClick({ x: 10, y: 10 });  // right  clicking in the void to abort move
+                expect(square.vertices[step].x).not.to.equal(100);
+                expect(square.vertices[step].y).not.to.equal(100);
+                expect(square.isClosed).to.equal(true, 'Polygon not closed.');
+            });
+        }
+
+        it('Aborting a move', () => {
+            const square: Polygon = getSquare();
+            square.handleLeftClick({ x: 100, y: 100 });
+            expect(square.isClosed).is.equal(false);
+            square.handleRightClick({ x: 10, y: 10 }); // aborting
+            expect(square.isClosed).is.equal(true);
+        });
+
+
+    });
+
+    describe('Closing', () => {
+        it('Closing by clicking on first point', () => {
+            const square: Polygon = new Polygon();
+            square.handleLeftClick({ x: 100, y: 100 });
+            square.handleLeftClick({ x: 200, y: 100 });
+            square.handleLeftClick({ x: 200, y: 200 });
+            square.handleLeftClick({ x: 100, y: 200 });
+            expect(square.isClosed).is.equal(false, 'wrongly closed');
+            square.handleLeftClick({ x: 100, y: 100 });
+            expect(square.isClosed).is.equal(true, 'not closed?');
+        });
+
+        it('Not being able to close by clickint at wrong point', () => {
+            const square: Polygon = new Polygon();
+            square.handleLeftClick({ x: 100, y: 100 });
+            square.handleLeftClick({ x: 200, y: 100 });
+            square.handleLeftClick({ x: 200, y: 200 });
+            square.handleLeftClick({ x: 100, y: 200 });
+            expect(square.isClosed).is.equal(false, 'wrongly closed');
+            square.handleLeftClick({ x: 200, y: 100 });
+            expect(square.isClosed).is.equal(false, 'wrongly closed');
+        });
+
+        it('Cannot close because intersecting an old segment (second segment', () => {
+            const square: Polygon = new Polygon();
+            square.handleLeftClick({ x: 150, y: 50 });
+            square.handleLeftClick({ x: 100, y: 100 });
+            square.handleLeftClick({ x: 200, y: 100 });
+            square.handleLeftClick({ x: 200, y: 200 });
+            square.handleLeftClick({ x: 100, y: 200 });
+            expect(square.isClosed).is.equal(false, 'wrongly closed');
+            square.handleLeftClick({ x: 150, y: 50 });
+            expect(square.isClosed).is.equal(false, 'wrongly closed');
+        });
+
+        it('Cannot close because intersecting an old segment (second to last segment', () => {
+            const square: Polygon = new Polygon();
+            square.handleLeftClick({ x: 250, y: 150 });
+            square.handleLeftClick({ x: 200, y: 50 });
+            square.handleLeftClick({ x: 100, y: 100 });
+            square.handleLeftClick({ x: 200, y: 100 });
+            square.handleLeftClick({ x: 200, y: 200 });
+            square.handleLeftClick({ x: 100, y: 200 });
+            expect(square.isClosed).is.equal(false, 'wrongly closed');
+            square.handleLeftClick({ x: 250, y: 150 });
+            expect(square.isClosed).is.equal(false, 'wrongly closed');
+        });
+
+    });
+
 });
 
-function returnSquare(): Polygon {
+function getSquare(): Polygon {
     const square: Polygon = new Polygon();
     square.handleLeftClick({ x: 100, y: 100 });
     square.handleLeftClick({ x: 200, y: 100 });
@@ -134,6 +235,7 @@ function returnSquare(): Polygon {
 // Arean
 // Clockwise
 // Closed returnerar true om den är closed
+// clockwise enforced
 
 // Regretting
 // 'regretting' a vertex (by right clicking)
@@ -144,15 +246,13 @@ function returnSquare(): Polygon {
 // adding segment not possible when intersecting other line
 // adding segment not possible when too close to other vertex
 
-// Closing
-// closing a polygon by clicking on first point
-// not possible to close polygon if intersecting a segment
+
 
 // Erasing
+// TODO: kolla om det finns nåt kvar av erase att testa (se ClosedState)
 
 
 // Moving
-// normally all vertexes are possible to move
 // not possible to move a vertex if it means that the new polygon has segments that intersect
-// not possible to move a vertex if it means that the new position is to close to an existing segment
+// not possible to move a vertex if it means that the new position is to close to an existing vertex
 // vertices next to new vertex are possible to move

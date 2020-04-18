@@ -128,8 +128,14 @@ function dotProduct(vector1: Vector, vector2: Vector): number {
 }
 
 export function arrayRotate(arr: any[], steps: number): any[] {
-	for (let step = 0; step < steps; step++) {
-		arr.push(arr.shift());
-	}
+    if(steps>0) {
+        for (let step = 0; step < steps; step++) {
+            arr.push(arr.shift());
+        }
+    }else {
+        for (let step = 0; step < Math.abs(steps); step++) {
+            arr.unshift(arr.pop());
+        }
+    }
 	return arr;
 }

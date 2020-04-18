@@ -23,8 +23,7 @@ export class OpenState implements PolygonState {
     stateName(): string { return 'OpenState'; } // TODO: ta bort senare
 
     handleLeftClick(polygon: Polygon, pointClicked: Point): void {
-        // check if this is the first segment
-        if (polygon.vertices.length > 1) {
+        if (polygon.vertices.length >= 2) {
             // check if user clicks near the first point (wanting to close the polygon)
             if (pointClicked.distanceToOtherPoint(polygon.firstVertex) < polygon.minimumCloseDistance) {
                 // if the plygon already has at least 2 segments
@@ -70,7 +69,7 @@ export class OpenState implements PolygonState {
             }
             else {
                 // if it is not to close to the fist point, add the second point
-                if (pointClicked.distanceToOtherPoint(polygon.vertices[0]) > polygon.minimumDistanceBetweenPoints) {
+                if (pointClicked.distanceToOtherPoint(polygon.firstVertex) > polygon.minimumDistanceBetweenPoints) {
                     polygon.vertices.push(pointClicked);
                 } else {
                     console.warn('Too close to first point');
@@ -124,7 +123,7 @@ export class OpenState implements PolygonState {
 
     calculatePaintableMovingSegments(polygon: Polygon, mousePosition: Coordinate): PaintableSegment[] {
         const paintableSegment: PaintableSegment[] = new Array();
-        if(polygon.vertices.length>0){
+        if (polygon.vertices.length > 0) {
             paintableSegment.push({ p1: polygon.lastVertex, p2: mousePosition });
         }
         return paintableSegment;
