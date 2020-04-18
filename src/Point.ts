@@ -61,7 +61,7 @@ export class Point {
     }
 
     // returning the nearest point or null if all points are outside minDistanceIn
-    isCloseToPoints(points: Point[], minDistanceIn: number, skipPoint?: Point): Point {
+    nearestPointWithinDistance(points: Point[], minDistanceIn: number, skipPoint?: Point): Point {
         if (typeof skipPoint === 'undefined') { skipPoint = null; }
         let localMinDistance: number = minDistanceIn;
         let closestPointWithinMinDistance: Point = null;

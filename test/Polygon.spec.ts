@@ -74,7 +74,7 @@ describe('Polygon', () => {
             const square: Polygon = getSquare();
             it('Trying to remove point but not within minimum distance ' + step, () => {
                 square.rotateVertices(step);
-                square.handleRightClick({ x: 100 - square.deleteDistance, y: 100 });
+                square.handleRightClick({ x: 100 - Polygon.interactDistance, y: 100 });
                 expect(square.vertices.length).to.equal(4);
                 expect(square.isClosed).to.equal(true, 'Polygon not closed');
             });
@@ -104,7 +104,7 @@ describe('Polygon', () => {
             const square: Polygon = getSquare();
             it('trying to erase segment but not within minimum segment distance ' + step, () => {
                 square.rotateVertices(step);
-                square.handleRightClick({ x: 150, y: 100 + square.deleteDistance + 1 });
+                square.handleRightClick({ x: 150, y: 100 + Polygon.interactDistance + 1 });
                 expect(square.vertices.length).to.equal(4);
                 expect(square.isClosed).to.equal(true, 'Polygon not closed.');
             });
@@ -134,7 +134,7 @@ describe('Polygon', () => {
             it('Not possible to move vertex too close to existing vertex' + step, () => {
                 square.rotateVertices(-step);
                 square.handleLeftClick({ x: 100, y: 100 });
-                square.handleLeftClick({ x: 200 - square.minDistBetweenPoints + 1, y: 199 }); // clicking near another vertex
+                square.handleLeftClick({ x: 200 - Polygon.minimumDistanceBetweenPoints + 1, y: 199 }); // clicking near another vertex
                 square.handleRightClick({ x: 10, y: 10 });  // right  clicking in the void to abort move
                 expect(square.vertices[step].x).to.equal(100);
                 expect(square.vertices[step].y).to.equal(100);
@@ -147,7 +147,7 @@ describe('Polygon', () => {
             it('Possible to move vertex when NOT too close to other vertex ' + step, () => {
                 square.rotateVertices(-step);
                 square.handleLeftClick({ x: 100, y: 100 });
-                square.handleLeftClick({ x: 200 - square.minDistBetweenPoints, y: 199 }); // clicking near another vertex
+                square.handleLeftClick({ x: 200 - Polygon.minimumDistanceBetweenPoints, y: 199 }); // clicking near another vertex
                 square.handleRightClick({ x: 10, y: 10 });  // right  clicking in the void to abort move
                 expect(square.vertices[step].x).not.to.equal(100);
                 expect(square.vertices[step].y).not.to.equal(100);

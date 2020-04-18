@@ -25,7 +25,7 @@ export class OpenState implements PolygonState {
     handleLeftClick(polygon: Polygon, pointClicked: Point): void {
         if (polygon.vertices.length >= 2) {
             // check if user clicks near the first point (wanting to close the polygon)
-            if (pointClicked.distanceToOtherPoint(polygon.firstVertex) < polygon.minimumCloseDistance) {
+            if (pointClicked.distanceToOtherPoint(polygon.firstVertex) < Polygon.interactDistance) {
                 // if the plygon already has at least 2 segments
                 if (polygon.vertices.length >= 3) {
                     // check that the segment between the last point and first point does not intersect with other segments
@@ -47,7 +47,7 @@ export class OpenState implements PolygonState {
             else {
                 // if the new Segment does not intersect with other segments or the new point to close to other points, the add the point (+segment)
                 const candidateSegment: Segment = new Segment(polygon.lastVertex, pointClicked);
-                if (pointClicked.isCloseToPoints(polygon.vertices, polygon.minimumDistanceBetweenPoints) == null) {
+                if (pointClicked.nearestPointWithinDistance(polygon.vertices, Polygon.minimumDistanceBetweenPoints) == null) {
                     if (polygon.enforceNonComplexPolygon) {
                         if (!this.checkIfIntersect(polygon.segments, candidateSegment, false)) {
                             polygon.vertices.push(pointClicked);
@@ -69,7 +69,7 @@ export class OpenState implements PolygonState {
             }
             else {
                 // if it is not to close to the fist point, add the second point
-                if (pointClicked.distanceToOtherPoint(polygon.firstVertex) > polygon.minimumDistanceBetweenPoints) {
+                if (pointClicked.distanceToOtherPoint(polygon.firstVertex) > Polygon.minimumDistanceBetweenPoints) {
                     polygon.vertices.push(pointClicked);
                 } else {
                     console.warn('Too close to first point');

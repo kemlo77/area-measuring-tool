@@ -25,18 +25,20 @@ export class MoveState implements PolygonState {
     handleLeftClick(polygon: Polygon, pointClicked: Point): void {
         // empty space (moves to new point) -> ClosedState
         // if the clicked point is not too close to another point (not checking it self, there of the 4th argument in function call)
-        if (pointClicked.isCloseToPoints(polygon.vertices, polygon.minimumDistanceBetweenPoints, polygon.movePoint) == null) {
+        if (pointClicked.nearestPointWithinDistance(polygon.vertices, Polygon.minimumDistanceBetweenPoints, polygon.movePoint) == null) {
             // if the points nearest segments do not intersect with other segments
             if (polygon.enforceNonComplexPolygon) {
                 if (!this.checkIfMovedIntersects(polygon, pointClicked, polygon.movePoint)) {
-                    polygon.movePoint.copyValues(pointClicked); // copying values so that it is still the same object
+                    polygon.movePoint.copyValues(pointClicked); // copying values to point referenced by movePoint
+                    polygon.movePoint = null;
                     polygon.setCurrentState(ClosedState.getInstance());
                 } else {
                     console.warn('Moving vertex there will cause segments to intersect.');
                 }
             }
             else {
-                polygon.movePoint.copyValues(pointClicked); // copying values so that it is still the same object
+                polygon.movePoint.copyValues(pointClicked); // copying values to point referenced by movePoint
+                polygon.movePoint = null;
                 polygon.setCurrentState(ClosedState.getInstance());
             }
         } else {

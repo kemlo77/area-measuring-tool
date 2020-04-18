@@ -13,26 +13,21 @@ export class Polygon {
     public movePoint: Point;
     private currentState: PolygonState;
     private enforceNonComplex: boolean;
-    private enforceClockWise: boolean;
-    private closePolygonMinimumDistance: number = 5;
-    private minDistBetweenPoints: number = 8;
-    private moveDelInsDistance: number = 3; // Minimum distance when selecting for moving, deleting, or inserting
-    private useIntegerCoords: boolean = false;
+    private readonly enforceClockwise: boolean;
+    public static readonly minimumDistanceBetweenPoints: number = 8;
+    public static readonly interactDistance: number = 5;
+    public static readonly useIntegerCoords: boolean = false;
 
     constructor() {
         this.vertices = new Array();
         this.movePoint = null;
         this.currentState = OpenState.getInstance();
         this.enforceNonComplex = true;
-        this.enforceClockWise = true;
+        this.enforceClockwise = false;
     }
 
     get enforceNonComplexPolygon(): boolean {
         return this.enforceNonComplex;
-    }
-
-    get enforceClockWisePolygon(): boolean {
-        return this.enforceClockWise;
     }
 
     get segments(): Segment[] {
@@ -45,30 +40,6 @@ export class Polygon {
 
     get firstVertex(): Point {
         return this.vertices[0];
-    }
-
-    get minimumCloseDistance(): number {
-        return this.closePolygonMinimumDistance;
-    }
-
-    get minimumDistanceBetweenPoints(): number {
-        return this.minDistBetweenPoints;
-    }
-
-    get markForMoveDistance(): number {
-        return this.moveDelInsDistance;
-    }
-
-    get insertNewPointDistance(): number {
-        return this.moveDelInsDistance;
-    }
-
-    get deleteDistance(): number {
-        return this.moveDelInsDistance;
-    }
-
-    get useIntegerCoordinates(): boolean {
-        return this.useIntegerCoords;
     }
 
     get isClosed(): boolean {
@@ -89,7 +60,9 @@ export class Polygon {
 
     setCurrentState(state: PolygonState): void {
         this.currentState = state;
-        // TODO: clear the back canvas??
+        if (this.enforceClockwise) {
+            this.makeDirectionClockWise();
+        }
     }
 
     handleLeftClick(position: Coordinate): void {
@@ -98,27 +71,38 @@ export class Polygon {
     }
 
     handleRightClick(position: Coordinate): void {
-        const rightClickedPoint: Point = new Point(position.x,position.y);
+        const rightClickedPoint: Point = new Point(position.x, position.y);
         this.currentState.handleRightClick(this, rightClickedPoint);
     }
 
-    // changing direction of polygon (clockwise <-> counter clockwise)
-    reversePolygon(): void {
+    reversePolygonDirection(): void {
         this.vertices.reverse();
     }
 
-    insertVertex(newPoint: Point, beforePoint: Point): void {
-        const oldPointIndex = this.vertices.indexOf(beforePoint);
-        this.vertices.splice(oldPointIndex + 1, 0, newPoint);
+    makeDirectionClockWise(): void {
+        if (this.isClosed && this.isCounterclockwise) {
+            this.reversePolygonDirection();
+        }
     }
 
-    get clockWise(): boolean {
+    makeDirectionCounterclockWise(): void {
+        if (this.isClosed && !this.isCounterclockwise) {
+            this.reversePolygonDirection();
+        }
+    }
+
+    insertVertex(newVertex: Point, insertAfterThisVertex: Point): void {
+        const oldPointIndex = this.vertices.indexOf(insertAfterThisVertex);
+        this.vertices.splice(oldPointIndex + 1, 0, newVertex);
+    }
+
+    get isCounterclockwise(): boolean {
         if (this.isClosed) {
             if (this.gaussShoelace() > 0) {
-                return true;
+                return false;
             }
             else {
-                return false;
+                return true;
             }
         } else {
             return null;
@@ -152,7 +136,7 @@ export class Polygon {
     }
 
     makeThisVertexFirst(vertex: Point): void {
-        while(vertex !== this.vertices[0]) {
+        while (vertex !== this.vertices[0]) {
             this.rotateVertices(1);
         }
     }
@@ -165,13 +149,13 @@ export class Polygon {
 
     getPrecedingVertex(vertex: Point): Point {
         const index: number = this.vertices.indexOf(vertex);
-        const indexOfPreceding: number = MathUtil.moduloInPolygon(index-1, this.vertices.length);
+        const indexOfPreceding: number = MathUtil.moduloInPolygon(index - 1, this.vertices.length);
         return this.vertices[indexOfPreceding];
     }
 
     getFollowingVertex(vertex: Point): Point {
         const index: number = this.vertices.indexOf(vertex);
-        const indexOfFollowing: number = MathUtil.moduloInPolygon(index+1, this.vertices.length);
+        const indexOfFollowing: number = MathUtil.moduloInPolygon(index + 1, this.vertices.length);
         return this.vertices[indexOfFollowing];
     }
 }

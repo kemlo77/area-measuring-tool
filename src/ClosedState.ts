@@ -27,7 +27,7 @@ export class ClosedState implements PolygonState {
     stateName(): string { return 'ClosedState'; } // TODO: ta bort senare
 
     handleLeftClick(polygon: Polygon, pointClicked: Point): void {
-        const nearestPoint: Point = pointClicked.isCloseToPoints(polygon.vertices, polygon.markForMoveDistance);
+        const nearestPoint: Point = pointClicked.nearestPointWithinDistance(polygon.vertices, Polygon.interactDistance);
         if (nearestPoint !== null) {
             // on point (mark for move) -> MoveState
             polygon.movePoint = nearestPoint;
@@ -37,22 +37,13 @@ export class ClosedState implements PolygonState {
         else {
             // on vertex (new point)
             // if the click occured near a segment, insert a new point
-            const projection: PointToSegmentProjection = this.checkIfCloseToLine(polygon.segments, pointClicked, polygon.insertNewPointDistance);
+            const projection: PointToSegmentProjection = this.checkIfCloseToSegment(polygon.segments, pointClicked, Polygon.interactDistance);
             if (projection.withinMinimumDistance) {
-                // TODO: flytta den här avrundningen till 'checkIfCloseToLine'. Och/eller till en egen metod?
-                // rounding coordinates to get integers
-                if (polygon.useIntegerCoordinates) {
-                    projection.projectionPointOnSegment.x = Math.round(projection.projectionPointOnSegment.x);
-                    projection.projectionPointOnSegment.y = Math.round(projection.projectionPointOnSegment.y);
-                } else {
-                    projection.projectionPointOnSegment.x = Math.round(projection.projectionPointOnSegment.x * 100) / 100;
-                    projection.projectionPointOnSegment.y = Math.round(projection.projectionPointOnSegment.y * 100) / 100;
-                }
                 // calculating distance to both points on clicked segment
                 // so that it is not possible to insert a point too close to another
                 const segmPointDist1: number = projection.projectionPointOnSegment.distanceToOtherPoint(projection.segmentProjectedOn.p1);
                 const segmPointDist2: number = projection.projectionPointOnSegment.distanceToOtherPoint(projection.segmentProjectedOn.p2);
-                if (((segmPointDist1 > polygon.minimumDistanceBetweenPoints) && (segmPointDist2 > polygon.minimumDistanceBetweenPoints))) {
+                if (((segmPointDist1 > Polygon.minimumDistanceBetweenPoints) && (segmPointDist2 > Polygon.minimumDistanceBetweenPoints))) {
                     // inserting the point in the segment-array
                     polygon.insertVertex(projection.projectionPointOnSegment, projection.segmentProjectedOn.p1);
                 } else {
@@ -66,7 +57,7 @@ export class ClosedState implements PolygonState {
 
     handleRightClick(polygon: Polygon, pointClicked: Point): void {
         // if the user rightclicked a point, remove it if there are more than 3 sides to the polygon
-        const nearestPoint: Point = pointClicked.isCloseToPoints(polygon.vertices, polygon.deleteDistance);
+        const nearestPoint: Point = pointClicked.nearestPointWithinDistance(polygon.vertices, Polygon.interactDistance);
 
         if (nearestPoint !== null) {
             // if polygon has more than 3 sides it is ok to remove point (+segment)
@@ -91,7 +82,7 @@ export class ClosedState implements PolygonState {
         // erase segment if user right clicked "on" segment
         else {
             // check if click was near segment
-            const projection: PointToSegmentProjection = this.checkIfCloseToLine(polygon.segments, pointClicked, polygon.deleteDistance);
+            const projection: PointToSegmentProjection = this.checkIfCloseToSegment(polygon.segments, pointClicked, Polygon.interactDistance);
             if (projection.withinMinimumDistance) {
                 // Changing start segment so that the one to be removed is the last one
                 polygon.makeThisVertexFirst(projection.segmentProjectedOn.p2);
@@ -121,13 +112,12 @@ export class ClosedState implements PolygonState {
     }
 
 
-    // checking if new point is near other polygon segments
-    checkIfCloseToLine(segmentArrayIn: Segment[], nyPunkt: Point, minDistanceIn: number): PointToSegmentProjection {
+    checkIfCloseToSegment(segmentArrayIn: Segment[], nyPunkt: Point, minDistanceIn: number): PointToSegmentProjection {
         let smallestDistance: number = minDistanceIn;
         let withinMinimumDistance: boolean = false;
         let segmentProjectedOn: Segment = null;
         let closestPoint: Point = new Point();
-        // checking with every segment
+
         for (const segment of segmentArrayIn) {
             // projecting point on segment
             const projectionResult: ProjectionResult = MathUtil.projectVector(segment, nyPunkt);
@@ -143,6 +133,16 @@ export class ClosedState implements PolygonState {
             }
         }
         const projectionPointOnSegment: Point = closestPoint;
+
+
+        if (Polygon.useIntegerCoords) {
+            projectionPointOnSegment.x = Math.round(projectionPointOnSegment.x);
+            projectionPointOnSegment.y = Math.round(projectionPointOnSegment.y);
+        } else {
+            projectionPointOnSegment.x = Math.round(projectionPointOnSegment.x * 100) / 100;
+            projectionPointOnSegment.y = Math.round(projectionPointOnSegment.y * 100) / 100;
+        }
+
         return {
             withinMinimumDistance,
             segmentProjectedOn,

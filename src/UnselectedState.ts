@@ -23,7 +23,7 @@ export class UnselectedState implements PolygonState {
     stateName(): string { return 'UnselectedState'; } // TODO: ta bort senare
 
     handleLeftClick(polygon: Polygon, pointClicked: Point): void {
-        const projection: PointToSegmentProjection = ClosedState.getInstance().checkIfCloseToLine(polygon.segments, pointClicked, polygon.insertNewPointDistance);
+        const projection: PointToSegmentProjection = ClosedState.getInstance().checkIfCloseToSegment(polygon.segments, pointClicked, Polygon.interactDistance);
         if(projection.withinMinimumDistance) {
             polygon.setCurrentState(ClosedState.getInstance());
         }
