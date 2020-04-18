@@ -3,7 +3,7 @@ import { PolygonState } from './PolygonState.js';
 import { Point } from './Point.js';
 import { ClosedState } from './ClosedState.js';
 import { Segment } from './Segment.js';
-import { moduloInPolygon, calculateIntersect, arrayRotate } from './math.js';
+import { MathUtil } from './MathUtil.js';
 import { Coordinate } from './Coordinate.js';
 import { PaintableSegment } from './PaintableSegment.js';
 
@@ -70,11 +70,11 @@ export class MoveState implements PolygonState {
                 if (segment.containsThisVertex(movingVertex)) { continue; }
 
                 if (!segment.containsThisVertex(precedingVertex)) {
-                    if (calculateIntersect(firstCheckedSegment, segment)) { return true; }
+                    if (MathUtil.calculateIntersect(firstCheckedSegment, segment)) { return true; }
                 }
 
                 if (!segment.containsThisVertex(followingVertex)) {
-                    if (calculateIntersect(secondCheckedSegment, segment)) { return true; }
+                    if (MathUtil.calculateIntersect(secondCheckedSegment, segment)) { return true; }
                 }
             }
             // if arriving here, there are no intersects
@@ -100,7 +100,7 @@ export class MoveState implements PolygonState {
         const paintableSegment: PaintableSegment[] = new Array();
         // TODO: skriv om raderna nedan
         const movingPointIndex: number = polygon.vertices.indexOf(polygon.movePoint);
-        const calculatedSegments: Segment[] = arrayRotate(this.calculateSegments(polygon), movingPointIndex + 2);
+        const calculatedSegments: Segment[] = MathUtil.arrayRotate(this.calculateSegments(polygon), movingPointIndex + 2);
         calculatedSegments.pop();
         calculatedSegments.pop();
         for (const segment of calculatedSegments) {

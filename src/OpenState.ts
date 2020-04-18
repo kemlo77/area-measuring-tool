@@ -3,7 +3,7 @@ import { Segment } from './Segment.js';
 import { PolygonState } from './PolygonState.js';
 import { Point } from './Point.js';
 import { ClosedState } from './ClosedState.js';
-import { calculateIntersect } from './math.js';
+import { MathUtil } from './MathUtil.js';
 import { Coordinate } from './Coordinate.js';
 import { PaintableSegment } from './PaintableSegment.js';
 
@@ -92,7 +92,7 @@ export class OpenState implements PolygonState {
         // skipping the second to last (penultimate segment)
         for (let n = startSegm; n < segmentArrayIn.length - 1; n++) {
 
-            if (calculateIntersect(segmentArrayIn[n], nyttSegmentIn)) {
+            if (MathUtil.calculateIntersect(segmentArrayIn[n], nyttSegmentIn)) {
                 // returning true if there is a intersect
                 return true;
             }

@@ -1,6 +1,5 @@
 import { expect } from 'chai';
-import 'mocha';
-import { Point } from '../src/Point';
+import { Point } from '../built/Point.js';
 
 
 describe('Point', () => {

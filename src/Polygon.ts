@@ -3,7 +3,7 @@ import { Point } from './Point.js';
 import { PolygonState } from './PolygonState.js';
 import { Segment } from './Segment.js';
 import { ClosedState } from './ClosedState.js';
-import { arrayRotate, moduloInPolygon } from './math.js';
+import { MathUtil } from './MathUtil.js';
 import { Coordinate } from './Coordinate.js';
 import { PaintableSegment } from './PaintableSegment.js';
 import { UnselectedState } from './UnselectedState.js';
@@ -148,7 +148,7 @@ export class Polygon {
 
 
     rotateVertices(steps: number): void {
-        this.vertices = arrayRotate(this.vertices, steps);
+        this.vertices = MathUtil.arrayRotate(this.vertices, steps);
     }
 
     makeThisVertexFirst(vertex: Point): void {
@@ -165,13 +165,13 @@ export class Polygon {
 
     getPrecedingVertex(vertex: Point): Point {
         const index: number = this.vertices.indexOf(vertex);
-        const indexOfPreceding: number = moduloInPolygon(index-1, this.vertices.length);
+        const indexOfPreceding: number = MathUtil.moduloInPolygon(index-1, this.vertices.length);
         return this.vertices[indexOfPreceding];
     }
 
     getFollowingVertex(vertex: Point): Point {
         const index: number = this.vertices.indexOf(vertex);
-        const indexOfFollowing: number = moduloInPolygon(index+1, this.vertices.length);
+        const indexOfFollowing: number = MathUtil.moduloInPolygon(index+1, this.vertices.length);
         return this.vertices[indexOfFollowing];
     }
 }

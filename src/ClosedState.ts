@@ -4,7 +4,7 @@ import { PolygonState } from './PolygonState.js';
 import { Point } from './Point.js';
 import { OpenState } from './OpenState.js';
 import { Segment } from './Segment.js';
-import { moduloInPolygon, calculateIntersect, projectVector } from './math.js';
+import { MathUtil } from './MathUtil.js';
 import { ProjectionResult } from './ProjectionResult.js';
 import { Coordinate } from './Coordinate.js';
 import { PaintableSegment } from './PaintableSegment.js';
@@ -112,7 +112,7 @@ export class ClosedState implements PolygonState {
                 if (segment.containsThisVertex(precedingVertex) || segment.containsThisVertex(followingVertex)) {
                     continue;
                 }
-                if (calculateIntersect(thePotentialNewSegment, segment) !== null) {
+                if (MathUtil.calculateIntersect(thePotentialNewSegment, segment) !== null) {
                     return true;
                 }
             }
@@ -130,7 +130,7 @@ export class ClosedState implements PolygonState {
         // checking with every segment
         for (const segment of segmentArrayIn) {
             // projecting point on segment
-            const projectionResult: ProjectionResult = projectVector(segment, nyPunkt);
+            const projectionResult: ProjectionResult = MathUtil.projectVector(segment, nyPunkt);
             // if it was between 0 and minDistanceIn
             if (projectionResult.successful && projectionResult.norm < minDistanceIn) {
                 withinMinimumDistance = true;
