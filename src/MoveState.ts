@@ -20,26 +20,12 @@ export class MoveState implements PolygonState {
         return MoveState.instance;
     }
 
-    stateName(): string { return 'MoveState'; } // TODO: ta bort senare
-
     handleLeftClick(polygon: Polygon, pointClicked: Point): void {
-        // empty space (moves to new point) -> ClosedState
-        // if the clicked point is not too close to another point (not checking it self, there of the 4th argument in function call)
-        if (pointClicked.nearestPointWithinDistance(polygon.vertices, Polygon.minimumDistanceBetweenPoints, polygon.movePoint) == null) {
-            // if the points nearest segments do not intersect with other segments
-            if (polygon.enforceNonComplexPolygon) {
-                if (!this.checkIfMovedIntersects(polygon, pointClicked, polygon.movePoint)) {
-                    polygon.movePoint.copyValues(pointClicked); // copying values to point referenced by movePoint
-                    polygon.movePoint = null;
-                    polygon.setCurrentState(ClosedState.getInstance());
-                } else {
-                    console.warn('Moving vertex there will cause segments to intersect.');
-                }
-            }
-            else {
-                polygon.movePoint.copyValues(pointClicked); // copying values to point referenced by movePoint
-                polygon.movePoint = null;
-                polygon.setCurrentState(ClosedState.getInstance());
+        if (pointClicked.noneOfThesePointsTooClose(polygon.verticesExceptMovePoint, Polygon.minimumDistanceBetweenPoints)) {
+            if(this.noIntersectingSegmentsWhenMoving(polygon, pointClicked)) {
+                this.moveSelectedVertexTo(polygon, pointClicked);
+            } else {
+                console.warn('Moving vertex there will cause segments to intersect.');
             }
         } else {
             console.warn('Moved vertex is too close to other vertex.');
@@ -50,8 +36,28 @@ export class MoveState implements PolygonState {
         // aborting move mode
         polygon.movePoint = null;
         polygon.setCurrentState(ClosedState.getInstance());
-
     }
+
+    noIntersectingSegmentsWhenMoving(polygon: Polygon, movePointCandidate: Point): boolean {
+        if (polygon.enforceNonComplexPolygon) {
+            if (!this.checkIfMovedIntersects(polygon, movePointCandidate, polygon.movePoint)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        else {
+            return true;
+        }
+    }
+
+    moveSelectedVertexTo(polygon: Polygon, toPoint: Point): void {
+        polygon.movePoint.copyValues(toPoint); // copying values to point referenced by movePoint
+        polygon.movePoint = null; // removing the reference
+        polygon.setCurrentState(ClosedState.getInstance());
+    }
+
+
 
     // checking if the two segments containing a point (being moved) intersects with the other segments in a polygon (after move)
     checkIfMovedIntersects(polygon: Polygon, moveToCandidateLocation: Point, movingVertex: Point): boolean {

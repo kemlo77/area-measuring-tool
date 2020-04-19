@@ -24,8 +24,6 @@ export class ClosedState implements PolygonState {
         return ClosedState.instance;
     }
 
-    stateName(): string { return 'ClosedState'; } // TODO: ta bort senare
-
     handleLeftClick(polygon: Polygon, pointClicked: Point): void {
         const nearestPoint: Point = pointClicked.nearestPointWithinDistance(polygon.vertices, Polygon.interactDistance);
         if (nearestPoint !== null) {
@@ -61,7 +59,7 @@ export class ClosedState implements PolygonState {
 
         if (nearestPoint !== null) {
             // if polygon has more than 3 sides it is ok to remove point (+segment)
-            if (polygon.vertices.length > 3) {
+            if (polygon.numberOfSegments > 3) {
                 // check that the segment created to fill the gap does not intersect with other segments
                 if (polygon.enforceNonComplexPolygon) {
                     if (!this.checkIfRemovedPointCausesSegmentIntersect(polygon, nearestPoint)) {

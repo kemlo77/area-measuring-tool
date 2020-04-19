@@ -36,6 +36,38 @@ describe('Polygon', () => {
         expect(rectangle.perimeterLength).to.equal(400);
     });
 
+    it('numberOfSegments - closed', () => {
+        const square: Polygon = getSquare();
+        expect(square.numberOfSegments).to.equal(4);
+    });
+
+    it('numberOfSegments - just the first vertex', () => {
+        const square: Polygon = new Polygon();
+        square.handleLeftClick({ x: 150, y: 100 });
+        expect(square.numberOfSegments).to.equal(0);
+    });
+
+    it('numberOfSegments - two vertices', () => {
+        const square: Polygon = new Polygon();
+        square.handleLeftClick({ x: 150, y: 100 });
+        square.handleLeftClick({ x: 150, y: 200 });
+        expect(square.numberOfSegments).to.equal(1);
+    });
+
+    it('verticesExceptMovePoint - no movePoint selected', () => {
+        const square: Polygon = getSquare();
+        expect(square.verticesExceptMovePoint.length).to.equal(4);
+    });
+
+    it('verticesExceptMovePoint - with a movePoint selected', () => {
+        const square: Polygon = getSquare();
+        square.handleLeftClick({ x: 100, y: 100 });
+        expect(square.verticesExceptMovePoint.length).to.equal(3);
+    });
+
+
+
+
     describe('Delete', () => {
 
         for (let step = 0; step < 6; step++) {

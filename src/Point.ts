@@ -82,4 +82,21 @@ export class Point {
         return Math.sqrt(Math.pow(this.x - otherPoint.x, 2) + Math.pow(this.y - otherPoint.y, 2));
     }
 
+    noneOfThesePointsTooClose(otherPoints: Point[], closenessLimit: number): boolean {
+        for (const point of otherPoints) {
+            if (this.distanceToOtherPoint(point) < closenessLimit) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    closeEnoughToPoint(otherPoint: Point, distanceLimit: number): boolean {
+        return this.distanceToOtherPoint(otherPoint) < distanceLimit;
+    }
+
+    notTooCloseToPoint(otherPoint: Point, distanceLimit: number): boolean {
+        return this.distanceToOtherPoint(otherPoint) > distanceLimit;
+    }
+
 }

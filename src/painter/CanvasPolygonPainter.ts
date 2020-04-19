@@ -32,17 +32,17 @@ export class CanvasPolygonPainter extends CanvasPainter {
         // draw dots
         const polygon: Polygon = motif as Polygon;
         polygon.getPaintableStillSegments().forEach((it) => { this.drawOneStillSegment(it, this.defaultColor); });
-        if(polygon.isSelected) {
+        if (polygon.isSelected) {
             for (const vertex of polygon.vertices) {
-                if(vertex === polygon.movePoint) {
+                if (vertex === polygon.movePoint) {
                     continue;
                 }
                 this.drawDoubleDot(vertex, this.defaultColor, this.whiteColor);
             }
-            if(polygon.vertices.length>0) {
+            if (polygon.numberOfVertices > 0) {
                 this.drawDoubleDot(polygon.firstVertex, this.defaultColor, this.greenColor);
             }
-            if(polygon.isClosed) {
+            if (polygon.isClosed) {
                 this.drawDoubleDot(polygon.lastVertex, this.defaultColor, this.redColor);
             }
         }

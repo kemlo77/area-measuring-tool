@@ -34,12 +34,42 @@ export class Polygon {
         return this.currentState.calculateSegments(this);
     }
 
+    get numberOfVertices(): number {
+        return this.vertices.length;
+    }
+
+    get numberOfSegments(): number {
+        if (this.numberOfVertices >= 1) {
+            if (this.isClosed) {
+                return this.numberOfVertices;
+            } else {
+                return this.numberOfVertices - 1;
+            }
+        } else {
+            return 0;
+        }
+    }
+
     get lastVertex(): Point {
         return this.vertices[this.vertices.length - 1];
     }
 
     get firstVertex(): Point {
         return this.vertices[0];
+    }
+
+    get verticesExceptMovePoint(): Point[] {
+        if (this.movePoint === null) {
+            return this.vertices;
+        } else {
+            const verticesWithoutMovePoint: Point[] = new Array();
+            for ( const vertex of this.vertices) {
+                if ( vertex !== this.movePoint) {
+                    verticesWithoutMovePoint.push(vertex);
+                }
+            }
+            return verticesWithoutMovePoint;
+        }
     }
 
     get isClosed(): boolean {
@@ -141,7 +171,6 @@ export class Polygon {
         }
     }
 
-
     ejectVertex(vertexToRemove: Point): void {
         const index: number = this.vertices.indexOf(vertexToRemove);
         this.vertices.splice(index, 1);
@@ -158,4 +187,6 @@ export class Polygon {
         const indexOfFollowing: number = MathUtil.moduloInPolygon(index + 1, this.vertices.length);
         return this.vertices[indexOfFollowing];
     }
+
+
 }

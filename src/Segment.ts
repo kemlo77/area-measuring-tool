@@ -1,4 +1,5 @@
 import { Point } from './Point.js';
+import { MathUtil } from './MathUtil.js';
 
 export class Segment {
     public p1: Point;
@@ -14,15 +15,16 @@ export class Segment {
         return segmentLength;
     }
 
-    // TODO: Denna blir förmodligen/förhoppningsvis förlegad/onödig
-    reverseSegment(): void {
-        const tempReversePoint: Point = this.p1;
-        this.p1 = this.p2;
-        this.p2 = tempReversePoint;
-    }
-
     containsThisVertex(vertex: Point): boolean {
         return (this.p1 === vertex || this.p2 === vertex);
     }
 
+    doesNotIntersectAnyOfTheseSegments(segmentArrayIn: Segment[]): boolean {
+        for (const segment of segmentArrayIn) {
+            if (MathUtil.calculateIntersect(segment, this)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
