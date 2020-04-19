@@ -9,16 +9,13 @@ import { PaintableSegment } from './PaintableSegment.js';
 
 export class MoveState implements PolygonState {
 
-    private static instance: MoveState;
+    private polygon: Polygon;
 
-    private constructor() { }
-
-    public static getInstance(): MoveState {
-        if (!MoveState.instance) {
-            MoveState.instance = new MoveState();
-        }
-        return MoveState.instance;
+    constructor(polygon: Polygon) {
+        this.polygon=polygon;
     }
+
+
 
     handleLeftClick(polygon: Polygon, pointClicked: Point): void {
         if (pointClicked.noneOfThesePointsTooClose(polygon.verticesExceptMovePoint, Polygon.minimumDistanceBetweenPoints)) {
@@ -35,7 +32,7 @@ export class MoveState implements PolygonState {
     handleRightClick(polygon: Polygon, pointClicked: Point): void {
         // aborting move mode
         polygon.movePoint = null;
-        polygon.setCurrentState(ClosedState.getInstance());
+        polygon.setCurrentState(new ClosedState(polygon));
     }
 
     noIntersectingSegmentsWhenMoving(polygon: Polygon, movePointCandidate: Point): boolean {
@@ -54,7 +51,7 @@ export class MoveState implements PolygonState {
     moveSelectedVertexTo(polygon: Polygon, toPoint: Point): void {
         polygon.movePoint.copyValues(toPoint); // copying values to point referenced by movePoint
         polygon.movePoint = null; // removing the reference
-        polygon.setCurrentState(ClosedState.getInstance());
+        polygon.setCurrentState(new ClosedState(polygon));
     }
 
 

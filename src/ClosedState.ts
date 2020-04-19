@@ -13,23 +13,19 @@ import { UnselectedState } from './UnselectedState.js';
 
 export class ClosedState implements PolygonState {
 
-    private static instance: ClosedState;
+    private polygon: Polygon;
 
-    private constructor() { }
-
-    public static getInstance(): ClosedState {
-        if (!ClosedState.instance) {
-            ClosedState.instance = new ClosedState();
-        }
-        return ClosedState.instance;
+    constructor(polygon: Polygon) {
+        this.polygon = polygon;
     }
+
 
     handleLeftClick(polygon: Polygon, pointClicked: Point): void {
         const nearestPoint: Point = pointClicked.nearestPointWithinDistance(polygon.vertices, Polygon.interactDistance);
         if (nearestPoint !== null) {
             // on point (mark for move) -> MoveState
             polygon.movePoint = nearestPoint;
-            polygon.setCurrentState(MoveState.getInstance());
+            polygon.setCurrentState(new MoveState(polygon));
 
         }
         else {
@@ -48,7 +44,7 @@ export class ClosedState implements PolygonState {
                     console.warn('New vertex too close to other vertex.');
                 }
             } else {
-                polygon.setCurrentState(UnselectedState.getInstance());
+                polygon.setCurrentState(new UnselectedState(polygon, this));
             }
         }
     }
@@ -85,7 +81,7 @@ export class ClosedState implements PolygonState {
                 // Changing start segment so that the one to be removed is the last one
                 polygon.makeThisVertexFirst(projection.segmentProjectedOn.p2);
                 // opening polygon
-                polygon.setCurrentState(OpenState.getInstance());
+                polygon.setCurrentState(new OpenState(polygon));
             }
         }
     }

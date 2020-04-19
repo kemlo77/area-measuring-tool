@@ -9,16 +9,13 @@ import { PaintableSegment } from './PaintableSegment.js';
 
 export class OpenState implements PolygonState {
 
-    private static instance: OpenState;
+    private polygon: Polygon;
 
-    private constructor() { }
-
-    public static getInstance(): OpenState {
-        if (!OpenState.instance) {
-            OpenState.instance = new OpenState();
-        }
-        return OpenState.instance;
+    constructor(polygon: Polygon) {
+        this.polygon = polygon;
     }
+
+
 
     handleLeftClick(polygon: Polygon, pointClicked: Point): void {
         if (polygon.numberOfVertices >= 2) {
@@ -96,7 +93,7 @@ export class OpenState implements PolygonState {
 
 
     closePolygon(polygon: Polygon): void {
-        polygon.setCurrentState(ClosedState.getInstance());
+        polygon.setCurrentState(new ClosedState(polygon));
     }
 
     calculateSegments(polygon: Polygon): Segment[] {

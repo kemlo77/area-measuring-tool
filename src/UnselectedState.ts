@@ -9,21 +9,19 @@ import { PointToSegmentProjection } from './PointToSegmentProjection.js';
 
 export class UnselectedState implements PolygonState {
 
-    private static instance: UnselectedState;
+    private polygon: Polygon;
+    private closedState: ClosedState;
 
-    private constructor() { }
-
-    public static getInstance(): UnselectedState {
-        if (!UnselectedState.instance) {
-            UnselectedState.instance = new UnselectedState();
-        }
-        return UnselectedState.instance;
+    constructor(polygon: Polygon, closedState: ClosedState) {
+        this.polygon = polygon;
+        this.closedState =closedState;
     }
 
+
     handleLeftClick(polygon: Polygon, pointClicked: Point): void {
-        const projection: PointToSegmentProjection = ClosedState.getInstance().checkIfCloseToSegment(polygon.segments, pointClicked, Polygon.interactDistance);
-        if(projection.withinMinimumDistance) {
-            polygon.setCurrentState(ClosedState.getInstance());
+        const projection: PointToSegmentProjection = this.closedState.checkIfCloseToSegment(polygon.segments, pointClicked, Polygon.interactDistance);
+        if (projection.withinMinimumDistance) {
+            polygon.setCurrentState(this.closedState);
         }
     }
 
@@ -32,11 +30,11 @@ export class UnselectedState implements PolygonState {
     }
 
     calculateSegments(polygon: Polygon): Segment[] {
-        return ClosedState.getInstance().calculateSegments(polygon);
+        return this.closedState.calculateSegments(polygon);
     }
 
     calculatePaintableStillSegments(polygon: Polygon): PaintableSegment[] {
-        return ClosedState.getInstance().calculatePaintableStillSegments(polygon);
+        return this.closedState.calculatePaintableStillSegments(polygon);
     }
 
     calculatePaintableMovingSegments(polygon: Polygon, mousePosition: Coordinate): PaintableSegment[] {

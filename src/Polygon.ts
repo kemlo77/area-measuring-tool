@@ -21,7 +21,7 @@ export class Polygon {
     constructor() {
         this.vertices = new Array();
         this.movePoint = null;
-        this.currentState = OpenState.getInstance();
+        this.currentState = new OpenState(this);
         this.enforceNonComplex = true;
         this.enforceClockwise = false;
     }
