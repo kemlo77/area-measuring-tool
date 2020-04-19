@@ -21,11 +21,9 @@ export class ClosedState implements PolygonState {
 
 
     handleLeftClick(pointClicked: Point): void {
-        const nearestPoint: Point = pointClicked.nearestPointWithinDistance(this.polygon.vertices, Polygon.interactDistance);
-        if (nearestPoint !== null) {
-            // on point (mark for move) -> MoveState
-            this.polygon.movePoint = nearestPoint;
-            this.polygon.setCurrentState(new MoveState(this.polygon));
+        const vertexSelectedForMove: Point = pointClicked.nearestPointWithinDistance(this.polygon.vertices, Polygon.interactDistance);
+        if (vertexSelectedForMove !== null) {
+            this.beginMovingThisVertex(vertexSelectedForMove);
 
         }
         else {
@@ -49,51 +47,60 @@ export class ClosedState implements PolygonState {
         }
     }
 
-    handleRightClick(pointClicked: Point): void {
-        // if the user rightclicked a point, remove it if there are more than 3 sides to the polygon
-        const nearestPoint: Point = pointClicked.nearestPointWithinDistance(this.polygon.vertices, Polygon.interactDistance);
+    beginMovingThisVertex(vertex: Point): void {
+        this.polygon.movePoint = vertex;
+        this.polygon.setCurrentState(new MoveState(this.polygon));
+    }
 
-        if (nearestPoint !== null) {
-            // if polygon has more than 3 sides it is ok to remove point (+segment)
+    handleRightClick(pointClicked: Point): void {
+        const removeCandidateVertex: Point = pointClicked.nearestPointWithinDistance(this.polygon.vertices, Polygon.interactDistance);
+
+        if (removeCandidateVertex !== null) {
             if (this.polygon.numberOfSegments > 3) {
-                // check that the segment created to fill the gap does not intersect with other segments
-                if (this.polygon.enforceNonComplexPolygon) {
-                    if (!this.checkIfRemovedPointCausesSegmentIntersect(this.polygon, nearestPoint)) {
-                        // no intersects found
-                        this.polygon.ejectVertex(nearestPoint);
-                    }
-                    else {
-                        console.warn('Removing that point will cause remaining segments to intersect.');
-                    }
-                }
-                else {
-                    this.polygon.ejectVertex(nearestPoint);
+                if (this.noIntersectingSegmentsWhenRemovingVertex(removeCandidateVertex)) {
+                    this.removeSelectedVertex(removeCandidateVertex);
+                } else {
+                    console.warn('Removing that point will cause remaining segments to intersect.');
                 }
             } else {
                 console.warn('Cannot remove vertex when polygon is a triangle.');
             }
         }
-        // erase segment if user right clicked "on" segment
         else {
-            // check if click was near segment
+            // TODO: skriv om denna raden
             const projection: PointToSegmentProjection = this.checkIfCloseToSegment(this.polygon.segments, pointClicked, Polygon.interactDistance);
             if (projection.withinMinimumDistance) {
-                // Changing start segment so that the one to be removed is the last one
-                this.polygon.makeThisVertexFirst(projection.segmentProjectedOn.p2);
-                // opening polygon
-                this.polygon.setCurrentState(new OpenState(this.polygon));
+                this.removeSelectedSegment(projection.segmentProjectedOn);
             }
         }
     }
 
-    private checkIfRemovedPointCausesSegmentIntersect(polygon: Polygon, deleteCandidateVertex: Point): boolean {
-        const segmentArrayIn: Segment[] = polygon.segments;
+    removeSelectedSegment(segment: Segment): void {
+        this.polygon.makeThisVertexFirst(segment.p2);
+        this.polygon.setCurrentState(new OpenState(this.polygon));
+    }
+
+    removeSelectedVertex(vertex: Point): void {
+        this.polygon.ejectVertex(vertex);
+    }
+
+    noIntersectingSegmentsWhenRemovingVertex(removeCandidateVertex: Point): boolean {
+        if (this.polygon.enforceNonComplexPolygon) {
+            return !this.checkIfRemovedPointCausesSegmentIntersect(removeCandidateVertex);
+        }
+        else {
+            return true;
+        }
+    }
+
+    private checkIfRemovedPointCausesSegmentIntersect(deleteCandidateVertex: Point): boolean {
+        const segmentArrayIn: Segment[] = this.polygon.segments;
         // A four sided polygon loosing a side becomes a triangle, that can have no sides intersecting.
         if (segmentArrayIn.length > 4) {
-            const precedingVertex: Point = polygon.getPrecedingVertex(deleteCandidateVertex);
-            const followingVertex: Point = polygon.getFollowingVertex(deleteCandidateVertex);
+            const precedingVertex: Point = this.polygon.getPrecedingVertex(deleteCandidateVertex);
+            const followingVertex: Point = this.polygon.getFollowingVertex(deleteCandidateVertex);
             const thePotentialNewSegment: Segment = new Segment(precedingVertex, followingVertex);
-            for (const segment of polygon.segments) {
+            for (const segment of this.polygon.segments) {
                 if (segment.containsThisVertex(precedingVertex) || segment.containsThisVertex(followingVertex)) {
                     continue;
                 }

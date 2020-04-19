@@ -19,6 +19,10 @@ export class Segment {
         return (this.p1 === vertex || this.p2 === vertex);
     }
 
+    doesNotContainThisVertex(vertex: Point): boolean {
+        return !this.containsThisVertex(vertex);
+    }
+
     doesNotIntersectAnyOfTheseSegments(segmentArrayIn: Segment[]): boolean {
         for (const segment of segmentArrayIn) {
             if (MathUtil.calculateIntersect(segment, this)) {
@@ -26,5 +30,12 @@ export class Segment {
             }
         }
         return true;
+    }
+
+    intersectsThisSegment(segment: Segment): boolean {
+        if (MathUtil.calculateIntersect(this, segment)) {
+            return true;
+        }
+        return false;
     }
 }
