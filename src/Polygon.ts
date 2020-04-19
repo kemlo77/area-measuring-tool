@@ -31,7 +31,7 @@ export class Polygon {
     }
 
     get segments(): Segment[] {
-        return this.currentState.calculateSegments(this);
+        return this.currentState.calculateSegments();
     }
 
     get numberOfVertices(): number {
@@ -63,8 +63,8 @@ export class Polygon {
             return this.vertices;
         } else {
             const verticesWithoutMovePoint: Point[] = new Array();
-            for ( const vertex of this.vertices) {
-                if ( vertex !== this.movePoint) {
+            for (const vertex of this.vertices) {
+                if (vertex !== this.movePoint) {
                     verticesWithoutMovePoint.push(vertex);
                 }
             }
@@ -81,11 +81,11 @@ export class Polygon {
     }
 
     getPaintableStillSegments(): PaintableSegment[] {
-        return this.currentState.calculatePaintableStillSegments(this);
+        return this.currentState.calculatePaintableStillSegments();
     }
 
     getPaintableMovingSegments(mousePosition: Coordinate): PaintableSegment[] {
-        return this.currentState.calculatePaintableMovingSegments(this, mousePosition);
+        return this.currentState.calculatePaintableMovingSegments(mousePosition);
     }
 
     setCurrentState(state: PolygonState): void {
@@ -97,12 +97,12 @@ export class Polygon {
 
     handleLeftClick(position: Coordinate): void {
         const leftClickedPoint: Point = new Point(position.x, position.y);
-        this.currentState.handleLeftClick(this, leftClickedPoint);
+        this.currentState.handleLeftClick(leftClickedPoint);
     }
 
     handleRightClick(position: Coordinate): void {
         const rightClickedPoint: Point = new Point(position.x, position.y);
-        this.currentState.handleRightClick(this, rightClickedPoint);
+        this.currentState.handleRightClick(rightClickedPoint);
     }
 
     reversePolygonDirection(): void {

@@ -14,30 +14,30 @@ export class UnselectedState implements PolygonState {
 
     constructor(polygon: Polygon, closedState: ClosedState) {
         this.polygon = polygon;
-        this.closedState =closedState;
+        this.closedState = closedState;
     }
 
 
-    handleLeftClick(polygon: Polygon, pointClicked: Point): void {
-        const projection: PointToSegmentProjection = this.closedState.checkIfCloseToSegment(polygon.segments, pointClicked, Polygon.interactDistance);
+    handleLeftClick(pointClicked: Point): void {
+        const projection: PointToSegmentProjection = this.closedState.checkIfCloseToSegment(this.polygon.segments, pointClicked, Polygon.interactDistance);
         if (projection.withinMinimumDistance) {
-            polygon.setCurrentState(this.closedState);
+            this.polygon.setCurrentState(this.closedState);
         }
     }
 
-    handleRightClick(polygon: Polygon, pointClicked: Point): void {
+    handleRightClick(pointClicked: Point): void {
         //
     }
 
-    calculateSegments(polygon: Polygon): Segment[] {
-        return this.closedState.calculateSegments(polygon);
+    calculateSegments(): Segment[] {
+        return this.closedState.calculateSegments();
     }
 
-    calculatePaintableStillSegments(polygon: Polygon): PaintableSegment[] {
-        return this.closedState.calculatePaintableStillSegments(polygon);
+    calculatePaintableStillSegments(): PaintableSegment[] {
+        return this.closedState.calculatePaintableStillSegments();
     }
 
-    calculatePaintableMovingSegments(polygon: Polygon, mousePosition: Coordinate): PaintableSegment[] {
+    calculatePaintableMovingSegments(mousePosition: Coordinate): PaintableSegment[] {
         return new Array<PaintableSegment>();
     }
 

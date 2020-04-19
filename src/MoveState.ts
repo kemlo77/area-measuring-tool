@@ -12,15 +12,15 @@ export class MoveState implements PolygonState {
     private polygon: Polygon;
 
     constructor(polygon: Polygon) {
-        this.polygon=polygon;
+        this.polygon = polygon;
     }
 
 
 
-    handleLeftClick(polygon: Polygon, pointClicked: Point): void {
-        if (pointClicked.noneOfThesePointsTooClose(polygon.verticesExceptMovePoint, Polygon.minimumDistanceBetweenPoints)) {
-            if(this.noIntersectingSegmentsWhenMoving(polygon, pointClicked)) {
-                this.moveSelectedVertexTo(polygon, pointClicked);
+    handleLeftClick(pointClicked: Point): void {
+        if (pointClicked.noneOfThesePointsTooClose(this.polygon.verticesExceptMovePoint, Polygon.minimumDistanceBetweenPoints)) {
+            if (this.noIntersectingSegmentsWhenMoving(pointClicked)) {
+                this.moveSelectedVertexTo(pointClicked);
             } else {
                 console.warn('Moving vertex there will cause segments to intersect.');
             }
@@ -29,15 +29,15 @@ export class MoveState implements PolygonState {
         }
     }
 
-    handleRightClick(polygon: Polygon, pointClicked: Point): void {
+    handleRightClick(pointClicked: Point): void {
         // aborting move mode
-        polygon.movePoint = null;
-        polygon.setCurrentState(new ClosedState(polygon));
+        this.polygon.movePoint = null;
+        this.polygon.setCurrentState(new ClosedState(this.polygon));
     }
 
-    noIntersectingSegmentsWhenMoving(polygon: Polygon, movePointCandidate: Point): boolean {
-        if (polygon.enforceNonComplexPolygon) {
-            if (!this.checkIfMovedIntersects(polygon, movePointCandidate, polygon.movePoint)) {
+    noIntersectingSegmentsWhenMoving(movePointCandidate: Point): boolean {
+        if (this.polygon.enforceNonComplexPolygon) {
+            if (!this.checkIfMovedIntersects(movePointCandidate, this.polygon.movePoint)) {
                 return true;
             } else {
                 return false;
@@ -48,22 +48,22 @@ export class MoveState implements PolygonState {
         }
     }
 
-    moveSelectedVertexTo(polygon: Polygon, toPoint: Point): void {
-        polygon.movePoint.copyValues(toPoint); // copying values to point referenced by movePoint
-        polygon.movePoint = null; // removing the reference
-        polygon.setCurrentState(new ClosedState(polygon));
+    moveSelectedVertexTo(toPoint: Point): void {
+        this.polygon.movePoint.copyValues(toPoint); // copying values to point referenced by movePoint
+        this.polygon.movePoint = null; // removing the reference
+        this.polygon.setCurrentState(new ClosedState(this.polygon));
     }
 
 
 
     // checking if the two segments containing a point (being moved) intersects with the other segments in a polygon (after move)
-    checkIfMovedIntersects(polygon: Polygon, moveToCandidateLocation: Point, movingVertex: Point): boolean {
-        const segments: Segment[] = this.calculateSegments(polygon);
+    checkIfMovedIntersects(moveToCandidateLocation: Point, movingVertex: Point): boolean {
+        const segments: Segment[] = this.calculateSegments();
         // if polygon has more than 3 segments, otherwise return false
         if (segments.length > 3) {
 
-            const precedingVertex: Point = polygon.getPrecedingVertex(movingVertex);
-            const followingVertex: Point = polygon.getFollowingVertex(movingVertex);
+            const precedingVertex: Point = this.polygon.getPrecedingVertex(movingVertex);
+            const followingVertex: Point = this.polygon.getFollowingVertex(movingVertex);
 
             // creating two candidate segments containing the moveToCandidateLocation
             const firstCheckedSegment: Segment = new Segment(precedingVertex, moveToCandidateLocation);
@@ -91,21 +91,21 @@ export class MoveState implements PolygonState {
         }
     }
 
-    calculateSegments(polygon: Polygon): Segment[] {
+    calculateSegments(): Segment[] {
         const calculatedSegments: Segment[] = new Array();
-        for (const vertex of polygon.vertices) {
-            const precedingVertex: Point = polygon.getPrecedingVertex(vertex);
+        for (const vertex of this.polygon.vertices) {
+            const precedingVertex: Point = this.polygon.getPrecedingVertex(vertex);
             const currentSegment: Segment = new Segment(precedingVertex, vertex);
             calculatedSegments.push(currentSegment);
         }
         return calculatedSegments;
     }
 
-    calculatePaintableStillSegments(polygon: Polygon): PaintableSegment[] {
+    calculatePaintableStillSegments(): PaintableSegment[] {
         const paintableSegment: PaintableSegment[] = new Array();
         // TODO: skriv om raderna nedan
-        const movingPointIndex: number = polygon.vertices.indexOf(polygon.movePoint);
-        const calculatedSegments: Segment[] = MathUtil.arrayRotate(this.calculateSegments(polygon), movingPointIndex + 2);
+        const movingPointIndex: number = this.polygon.vertices.indexOf(this.polygon.movePoint);
+        const calculatedSegments: Segment[] = MathUtil.arrayRotate(this.calculateSegments(), movingPointIndex + 2);
         calculatedSegments.pop();
         calculatedSegments.pop();
         for (const segment of calculatedSegments) {
@@ -115,11 +115,11 @@ export class MoveState implements PolygonState {
     }
 
 
-    calculatePaintableMovingSegments(polygon: Polygon, mousePosition: Coordinate): PaintableSegment[] {
+    calculatePaintableMovingSegments(mousePosition: Coordinate): PaintableSegment[] {
         const paintableSegment: PaintableSegment[] = new Array();
 
-        const pointBefore: Point = polygon.getPrecedingVertex(polygon.movePoint);
-        const pointAfter: Point = polygon.getFollowingVertex(polygon.movePoint);
+        const pointBefore: Point = this.polygon.getPrecedingVertex(this.polygon.movePoint);
+        const pointAfter: Point = this.polygon.getFollowingVertex(this.polygon.movePoint);
         paintableSegment.push({ p1: pointBefore, p2: mousePosition });
         paintableSegment.push({ p1: pointAfter, p2: mousePosition });
         return paintableSegment;

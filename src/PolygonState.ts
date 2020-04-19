@@ -6,14 +6,14 @@ import { Coordinate } from './Coordinate.js';
 
 export interface PolygonState {
 
-    handleLeftClick(polygon: Polygon, pointClicked: Point): void;
+    handleLeftClick(pointClicked: Point): void;
 
-    handleRightClick(polygon: Polygon, pointClicked: Point): void;
+    handleRightClick(pointClicked: Point): void;
 
-    calculateSegments(polygon: Polygon): Segment[];
+    calculateSegments(): Segment[];
 
-    calculatePaintableStillSegments(polygon:Polygon): PaintableSegment[];
+    calculatePaintableStillSegments(): PaintableSegment[];
 
-    calculatePaintableMovingSegments(polygon:Polygon, mousePosition: Coordinate): PaintableSegment[];
+    calculatePaintableMovingSegments(mousePosition: Coordinate): PaintableSegment[];
 
 }
