@@ -19,7 +19,7 @@ export class UnselectedState implements PolygonState {
 
 
     handleLeftClick(pointClicked: Point): void {
-        const projection: PointToSegmentProjection = this.closedState.checkIfCloseToSegment(this.polygon.segments, pointClicked, Polygon.interactDistance);
+        const projection: PointToSegmentProjection = this.closedState.checkIfCloseToSegment(pointClicked, Polygon.interactDistance);
         if (projection.withinMinimumDistance) {
             this.polygon.setCurrentState(this.closedState);
         }
