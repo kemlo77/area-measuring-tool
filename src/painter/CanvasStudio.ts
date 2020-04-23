@@ -6,7 +6,7 @@ import { Coordinate } from '../Coordinate.js';
 export class CanvasStudio {
 
     private static instance: CanvasStudio;
-    private strategy: PaintingStrategy;
+    private strategy: PaintingStrategy = CanvasPolygonPainter.getInstance();
 
     private constructor() { }
 
@@ -22,18 +22,21 @@ export class CanvasStudio {
         this.strategy = strategy;
     }
 
-    public paintStill(motif: any): void {
-        if(motif instanceof Polygon) {
-            this.setStrategy(CanvasPolygonPainter.getInstance());
+    public paintStill(motifs: any[]): void {
+        this.strategy.clearTheStillCanvas();
+        for (const motif of motifs) {
+            if (motif instanceof Polygon) {
+                this.setStrategy(CanvasPolygonPainter.getInstance());
 
-        } else {
-            throw new Error('Unknown object to paint');
+            } else {
+                throw new Error('Unknown object to paint');
+            }
+            this.strategy.drawStill(motif);
         }
-        this.strategy.drawStill(motif);
     }
 
     public paintMovement(motif: any, mousePosition: Coordinate): void {
-        if(motif instanceof Polygon) {
+        if (motif instanceof Polygon) {
             this.setStrategy(CanvasPolygonPainter.getInstance());
 
         } else {

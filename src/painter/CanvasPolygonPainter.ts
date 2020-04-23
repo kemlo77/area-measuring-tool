@@ -27,7 +27,6 @@ export class CanvasPolygonPainter extends CanvasPainter {
 
 
     drawStill(motif: any): void {
-        this.clearTheStillCanvas();
         // draw 'segments' not marked as moving
         // draw dots
         const polygon: Polygon = motif as Polygon;
