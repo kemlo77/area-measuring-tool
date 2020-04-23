@@ -3,25 +3,30 @@ export class Point {
     public y: number;
 
 
-    constructor(x?: number, y?: number) {
-        if (x === null || y === null) {
-            x = 0;
-            y = 0;
+    constructor(point?: Point)
+    constructor(x: number, y: number)
+    constructor(xOrPoint?: Point | number, y?: number) {
+        if (xOrPoint === undefined || xOrPoint === null) {
+            this.x = 0;
+            this.y = 0;
+        } else if (xOrPoint instanceof Point) {
+            this.x = xOrPoint.x;
+            this.y = xOrPoint.y;
+        } else if (typeof xOrPoint === 'number'){
+            if(typeof y !== 'undefined'){
+                this.x=xOrPoint;
+                this.y=y;
+            } else {
+                throw new Error('Invalid parameters');
+            }
         }
-        else {
-            this.x = x;
-            this.y = y;
-        }
-
     }
 
-    // copying values from point to the current Point-object
     copyValues(copyFromThisPoint: Point): void {
         this.x = copyFromThisPoint.x;
         this.y = copyFromThisPoint.y;
     }
 
-    // clone a point
     clonePoint(): Point {
         const copiedPoint: Point = new Point(this.x, this.y);
         return copiedPoint;
@@ -36,7 +41,6 @@ export class Point {
         return this;
     }
 
-    // move a point
     translate(distX: number, distY: number): Point {
         this.x += distX;
         this.y += distY;
