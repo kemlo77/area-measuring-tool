@@ -1,8 +1,23 @@
 {
     "compilerOptions": {
-        "outDir": "./built",
+        // "module": "commonjs", 
         "allowJs": true,
-        "target": "es6"
+        "removeComments": false,
+        "sourceMap": true,
+        "baseUrl": "types",
+        "typeRoots": [
+            "node_modules/@types"
+        ],
+        "target": "es6",
+        "lib": [
+            "es2016",
+            "dom"
+        ],
+        "rootDir": "src",
+        "outDir": "./built",
+        "types": [
+            "mocha"
+        ]
     },
     "include": [
         "./src/**/*"
