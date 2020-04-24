@@ -6,19 +6,22 @@ export class Vector {
 
 
     // TODO: ytterligare konstruktor där man anger x och y-komponent
-    constructor(punkt1?: Point, punkt2?: Point) {
-        if (punkt1 === null || punkt2 === null) {
-            this.x = 0;
-            this.y = 0;
-        }
-        else {
-            this.x = punkt2.x - punkt1.x;
-            this.y = punkt2.y - punkt1.y;
+
+    constructor(xComponent: number, yComponent: number)
+    constructor(point1: Point, point2: Point)
+    constructor(pointOrXComponent: Point | number, pointOrYComponent: Point | number) {
+        if (pointOrXComponent instanceof Point && pointOrYComponent instanceof Point) {
+            this.x = pointOrYComponent.x - pointOrXComponent.x;
+            this.y = pointOrYComponent.y - pointOrXComponent.y;
+        } else if (typeof pointOrXComponent === 'number' && typeof pointOrYComponent === 'number') {
+            this.x = pointOrXComponent;
+            this.y = pointOrYComponent;
+        } else {
+            throw new Error('Invalid parameters');
         }
 
     }
 
-    // calculate lenght of a vector
     get length(): number {
         return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
     }

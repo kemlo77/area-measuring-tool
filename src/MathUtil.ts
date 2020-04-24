@@ -96,9 +96,9 @@ export class MathUtil {
 			const normAB: number = vectorAB.length;
 			// page 136 in "Elementary Linear Algebra" [Anton, Rorres], 7th edition
 			// projecting AC on AB. The new vector is AD
-			const vectorAD: Vector = new Vector(null, null); // TODO: skapa ytterligare konstruktor hos Vector där man anger x och y-komponent
-			vectorAD.x = dotproductABAC * vectorAB.x / Math.pow(normAB, 2);
-			vectorAD.y = dotproductABAC * vectorAB.y / Math.pow(normAB, 2);
+			const vectorADcomponentX: number = dotproductABAC * vectorAB.x / Math.pow(normAB, 2);
+			const vectorADcomponentY: number = dotproductABAC * vectorAB.y / Math.pow(normAB, 2);
+			const vectorAD: Vector = new Vector(vectorADcomponentX,vectorADcomponentY);
 			const normAD: number = vectorAD.length;
 			const pointD: Point = new Point(pointA.x + vectorAD.x, pointA.y + vectorAD.y);
 			// kollar så inte det är längre från a->d än vad det är a->b
