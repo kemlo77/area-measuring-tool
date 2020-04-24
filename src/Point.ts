@@ -19,6 +19,8 @@ export class Point {
             } else {
                 throw new Error('Invalid parameters');
             }
+        } else {
+            throw new Error('Invalid parameters');
         }
     }
 
@@ -27,13 +29,8 @@ export class Point {
         this.y = copyFromThisPoint.y;
     }
 
-    clonePoint(): Point {
-        const copiedPoint: Point = new Point(this.x, this.y);
-        return copiedPoint;
-    }
-
     // rotate a point around the Origin
-    rotate(angle: number): Point {
+    rotateClockwise(angle: number): Point {
         const tempX: number = this.x;
         const tempY: number = this.y;
         this.x = tempX * Math.cos(angle) + tempY * Math.sin(angle);
@@ -50,7 +47,7 @@ export class Point {
     // return the angle between the x-axis and a vector AB (where A is in the Origin and B is the point checked)
     getTheAngle(): number {
         const arctanAngle: number = Math.atan(this.y / this.x);
-        if (this.y > 0) {
+        if (this.y >= 0) {
             // if the point is in q1
             if (this.x >= 0) { return arctanAngle; }
             // if the point is in q2
@@ -64,16 +61,20 @@ export class Point {
         }
     }
 
-    // returning the nearest point or null if all points are outside minDistanceIn
-    nearestPointWithinDistance(points: Point[], minDistanceIn: number, skipPoint?: Point): Point {
+    // returning the nearest point or null if all points are outside maxDistance
+    // TODO: döp om variabler så att dom är mer logiska
+    nearestPointWithinDistance(points: Point[], maxDistance: number, skipPoint?: Point): Point {
+        // TODO: man kan nog skippa följande rad
         if (typeof skipPoint === 'undefined') { skipPoint = null; }
-        let localMinDistance: number = minDistanceIn;
+
+        // TODO: man kanske kan skriva om koden nedanför med en schysst "forEach  .. accumulator"
+        let localMinDistance: number = maxDistance;
         let closestPointWithinMinDistance: Point = null;
         for (const point of points) {
             if (point === skipPoint) { continue; }
             const pointDistance: number = this.distanceToOtherPoint(point);
             if (pointDistance < localMinDistance) {
-                // if it is closer than minDistanceIn, or nearer than any other previously saved, it is saved
+                // if it is closer than maxDistance, or nearer than any other previously saved, it is saved
                 closestPointWithinMinDistance = point;
                 localMinDistance = pointDistance;
             }

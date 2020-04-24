@@ -7,10 +7,10 @@ export class MathUtil {
 	// Checking if two segments AB and CD intersect
 	static calculateIntersect(segmentAB: Segment, segmentCD: Segment): Point {
 		// inspiration på http://alienryderflex.com/intersect/
-		const pointA: Point = segmentAB.p1.clonePoint();
-		let pointB: Point = segmentAB.p2.clonePoint();
-		const pointC: Point = segmentCD.p1.clonePoint();
-		const pointD: Point = segmentCD.p2.clonePoint();
+		const pointA: Point = new Point(segmentAB.p1);
+		let pointB: Point = new Point(segmentAB.p2);
+		const pointC: Point = new Point(segmentCD.p1);
+		const pointD: Point = new Point(segmentCD.p2);
 
 		const ax: number = pointA.x;
 		const ay: number = pointA.y;
@@ -24,8 +24,8 @@ export class MathUtil {
 		const theta: number = pointB.getTheAngle();
 		// Rotate the system so that point B is on the positive x-axis
 		pointB = new Point(distAB, 0);
-		pointC.rotate(theta);
-		pointD.rotate(theta);
+		pointC.rotateClockwise(theta);
+		pointD.rotateClockwise(theta);
 		// The case if CD is parallell with the x-axis
 		// if C.y is equal to D.y (or very close to it)
 		if (Math.abs(pointC.y - pointD.y) < 0.000001) {
@@ -33,14 +33,14 @@ export class MathUtil {
 			if ((Math.abs(pointC.y) < 0.000001) || (Math.abs(pointD.y) < 0.000001)) {
 				if ((0 <= pointC.x && pointC.x <= pointB.x)) {
 					// Rotate and translate point C to the original coordinate system
-					pointC.rotate(-theta)
+					pointC.rotateClockwise(-theta)
 						.translate(ax, ay);
 					// return point of intersection
 					return pointC;
 				}
 				if ((0 <= pointD.x && pointD.x <= pointB.x)) {
 					// Rotate and translate point D to the original coordinate system
-					pointD.rotate(-theta)
+					pointD.rotateClockwise(-theta)
 						.translate(ax, ay);
 					// return point of intersection
 					return pointD;
@@ -74,7 +74,7 @@ export class MathUtil {
 			}
 		}
 		// Rotate and translate point E to the original coordinate system
-		pointE.rotate(-theta)
+		pointE.rotateClockwise(-theta)
 			.translate(ax, ay);
 		// Arriving here if it is an intersect
 		return pointE;
@@ -83,8 +83,8 @@ export class MathUtil {
 
 	// projecting the point C onto the segment AB. Returning the new point D on the segment and the distance CD
 	static projectVector(segmentAB: Segment, pointC: Point): ProjectionResult {
-		const pointA: Point = segmentAB.p1.clonePoint();
-		const pointB: Point = segmentAB.p2.clonePoint();
+		const pointA: Point = new Point(segmentAB.p1);
+		const pointB: Point = new Point(segmentAB.p2);
 		// create vectors
 		const vectorAB: Vector = new Vector(pointA, pointB);
 		const vectorAC: Vector = new Vector(pointA, pointC);
