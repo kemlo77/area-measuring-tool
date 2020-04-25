@@ -66,6 +66,21 @@ describe('Polygon', () => {
         expect(square.verticesExceptMovePoint.length).to.equal(3);
     });
 
+    it('arrayRotate() - forward one step', () => {
+        const rotatedLetters: string[] = Polygon.arrayRotate(['a', 'b', 'c', 'd'], 1);
+        expect(rotatedLetters).to.eql(['b', 'c', 'd', 'a']);
+    });
+
+    it('arrayRotate() - rotating 0 steps', () => {
+        const rotatedLetters: string[] = Polygon.arrayRotate(['a', 'b', 'c', 'd'], 0);
+        expect(rotatedLetters).to.eql(['a', 'b', 'c', 'd']);
+    });
+
+    it('arrayRotate() - rotating backward one step', () => {
+        const rotatedLetters: string[] = Polygon.arrayRotate(['a', 'b', 'c', 'd'], -1);
+        expect(rotatedLetters).to.eql(['d', 'a', 'b', 'c']);
+    });
+
 
 
 

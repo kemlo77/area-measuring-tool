@@ -162,7 +162,20 @@ export class Polygon {
 
 
     rotateVertices(steps: number): void {
-        this.vertices = MathUtil.arrayRotate(this.vertices, steps);
+        this.vertices = Polygon.arrayRotate(this.vertices, steps);
+    }
+
+    static arrayRotate(arr: any[], steps: number): any[] {
+        if (steps > 0) {
+            for (let step = 0; step < steps; step++) {
+                arr.push(arr.shift());
+            }
+        } else {
+            for (let step = 0; step < Math.abs(steps); step++) {
+                arr.unshift(arr.pop());
+            }
+        }
+        return arr;
     }
 
     makeThisVertexFirst(vertex: Point): void {
@@ -178,15 +191,29 @@ export class Polygon {
 
     getPrecedingVertex(vertex: Point): Point {
         const index: number = this.vertices.indexOf(vertex);
-        const indexOfPreceding: number = MathUtil.moduloInPolygon(index - 1, this.vertices.length);
+        const indexOfPreceding: number = Polygon.moduloInPolygon(index - 1, this.vertices.length);
         return this.vertices[indexOfPreceding];
     }
 
     getFollowingVertex(vertex: Point): Point {
         const index: number = this.vertices.indexOf(vertex);
-        const indexOfFollowing: number = MathUtil.moduloInPolygon(index + 1, this.vertices.length);
+        const indexOfFollowing: number = Polygon.moduloInPolygon(index + 1, this.vertices.length);
         return this.vertices[indexOfFollowing];
     }
+
+    // function to translate negative indexes in a polygon.
+    // (e.g. index -2 in a polygon with 6 sides is 4)
+    // also if index is larger. For example input 7 will return
+    // TODO: skriv om denna så att man anger sitt orena index och sin array, så plockar man ut array.length i denna metoden.
+    static moduloInPolygon(indexIn: number, arrayLength: number): number {
+        while (indexIn < 0) {
+            indexIn += arrayLength;
+        }
+        return (indexIn % arrayLength);
+    }
+
+
+
 
 
 }

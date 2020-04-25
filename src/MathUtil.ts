@@ -30,7 +30,7 @@ export class MathUtil {
 		// if C.y is equal to D.y (or very close to it)
 		if (Math.abs(pointC.y - pointD.y) < 0.000001) {
 			// if C and thus also D are on the x-axis (or very close to it)
-			if ((Math.abs(pointC.y) < 0.000001) || (Math.abs(pointD.y) < 0.000001)) {
+			if ((Math.abs(pointC.y) < 0.000001)) {
 				if ((0 <= pointC.x && pointC.x <= pointB.x)) {
 					// Rotate and translate point C to the original coordinate system
 					pointC.rotateClockwise(-theta)
@@ -62,17 +62,6 @@ export class MathUtil {
 		if (pointE.x < -0.000001 || (pointE.x - pointB.x) > 0.000001) {
 			return null;
 		}
-		// The case if the point E is not in segment CD
-		if (pointC.x < pointD.x) {
-			if ((pointE.x - pointC.x) < -0.000001 || (pointE.x - pointD.x) > 0.000001) {
-				return null;
-			}
-		}
-		else {
-			if ((pointE.x - pointC.x) > 0.000001 || (pointE.x - pointD.x) < -0.000001) {
-				return null;
-			}
-		}
 		// Rotate and translate point E to the original coordinate system
 		pointE.rotateClockwise(-theta)
 			.translate(ax, ay);
@@ -81,64 +70,30 @@ export class MathUtil {
 	}
 
 
-	// projecting the point C onto the segment AB. Returning the new point D on the segment and the distance CD
-	static projectVector(segmentAB: Segment, pointC: Point): ProjectionResult {
+	static projectPointOntoSegment(segmentAB: Segment, pointC: Point): ProjectionResult {
 		const pointA: Point = new Point(segmentAB.p1);
 		const pointB: Point = new Point(segmentAB.p2);
-		// create vectors
+
 		const vectorAB: Vector = new Vector(pointA, pointB);
 		const vectorAC: Vector = new Vector(pointA, pointC);
-		// calculate dot product
-		const dotproductABAC: number = MathUtil.dotProduct(vectorAB, vectorAC);
-		// if dotproduct_AB_AC is larger than zero the angle is acute and then C is an interesting point
+
+		const dotproductABAC: number = Vector.dotProduct(vectorAB, vectorAC);
+		// if dotproduct_AB_AC is larger than zero the angle is acute and then C can be projected on segment
 		if (dotproductABAC >= 0) {
-			// the norm (length of AB)
-			const normAB: number = vectorAB.length;
+
 			// page 136 in "Elementary Linear Algebra" [Anton, Rorres], 7th edition
 			// projecting AC on AB. The new vector is AD
-			const vectorADcomponentX: number = dotproductABAC * vectorAB.x / Math.pow(normAB, 2);
-			const vectorADcomponentY: number = dotproductABAC * vectorAB.y / Math.pow(normAB, 2);
-			const vectorAD: Vector = new Vector(vectorADcomponentX,vectorADcomponentY);
-			const normAD: number = vectorAD.length;
+			const vectorADcomponentX: number = dotproductABAC * vectorAB.x / Math.pow(vectorAB.norm, 2);
+			const vectorADcomponentY: number = dotproductABAC * vectorAB.y / Math.pow(vectorAB.norm, 2);
+			const vectorAD: Vector = new Vector(vectorADcomponentX, vectorADcomponentY);
 			const pointD: Point = new Point(pointA.x + vectorAD.x, pointA.y + vectorAD.y);
-			// kollar så inte det är längre från a->d än vad det är a->b
 			// checking so that A->D is shorter than A->B
-			if (normAD <= normAB) {
+			if (vectorAD.norm <= vectorAB.norm) {
 				const vectorDC: Vector = new Vector(pointD, pointC);
-				const normDC: number = vectorDC.length;
-				return { successful: true, norm: normDC, point: pointD };
+				return { successful: true, norm: vectorDC.norm, point: pointD };
 			}
 		}
 		return { successful: false, norm: null, point: null };
-	}
-
-	// function to translate negative indexes in a polygon.
-	// (e.g. index -2 in a polygon with 6 sides is 4)
-	// also if index is larger. For example input 7 will return
-	// TODO: skriv om denna så att man anger sitt orena index och sin array, så plockar man ut array.length i denna metoden.
-	static moduloInPolygon(indexIn: number, arrayLength: number): number {
-		while (indexIn < 0) {
-			indexIn += arrayLength;
-		}
-		return (indexIn % arrayLength);
-	}
-
-	// calculate the dot product between to vectors
-	static dotProduct(vector1: Vector, vector2: Vector): number {
-		return (vector1.x * vector2.x + vector1.y * vector2.y);
-	}
-
-	static arrayRotate(arr: any[], steps: number): any[] {
-		if (steps > 0) {
-			for (let step = 0; step < steps; step++) {
-				arr.push(arr.shift());
-			}
-		} else {
-			for (let step = 0; step < Math.abs(steps); step++) {
-				arr.unshift(arr.pop());
-			}
-		}
-		return arr;
 	}
 
 }

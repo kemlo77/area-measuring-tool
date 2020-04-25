@@ -103,7 +103,7 @@ export class ClosedState implements PolygonState {
                 if (segment.containsThisVertex(precedingVertex) || segment.containsThisVertex(followingVertex)) {
                     continue;
                 }
-                if (MathUtil.calculateIntersect(thePotentialNewSegment, segment) !== null) {
+                if (thePotentialNewSegment.intersectsThisSegment(segment)) {
                     return true;
                 }
             }
@@ -117,11 +117,11 @@ export class ClosedState implements PolygonState {
         let smallestDistance: number = minDistanceIn;
         let withinMinimumDistance: boolean = false;
         let segmentProjectedOn: Segment = null;
-        let closestPoint: Point = new Point();
+        let closestPoint: Point = new Point(); // TODO: skulle det gå skriva om utan att skapa en sån här point
 
         for (const segment of segments) {
             // projecting point on segment
-            const projectionResult: ProjectionResult = MathUtil.projectVector(segment, nyPunkt);
+            const projectionResult: ProjectionResult = MathUtil.projectPointOntoSegment(segment, nyPunkt);
             // if it was between 0 and minDistanceIn
             if (projectionResult.successful && projectionResult.norm < minDistanceIn) {
                 withinMinimumDistance = true;
