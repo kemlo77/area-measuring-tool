@@ -1,4 +1,3 @@
-import { Polygon } from './Polygon.js';
 import { Point } from './Point.js';
 import { Segment } from './Segment.js';
 import { PaintableSegment } from './PaintableSegment.js';

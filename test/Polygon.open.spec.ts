@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import { Polygon } from '../built/Polygon';
 import { PaintableSegment } from '../src/PaintableSegment';
+import { Segment } from '../built/Segment';
 
 
 describe('Polygon - open', () => {
@@ -137,11 +138,12 @@ describe('Polygon - open', () => {
             const shape: Polygon = new Polygon();
             shape.handleLeftClick({ x: 100, y: 200 });
             shape.handleLeftClick({ x: 300, y: 400 });
-            expect(shape.segments.length).is.equal(1);
-            expect(shape.segments[0].p1.x).is.equal(100);
-            expect(shape.segments[0].p1.y).is.equal(200);
-            expect(shape.segments[0].p2.x).is.equal(300);
-            expect(shape.segments[0].p2.y).is.equal(400);
+            const segments: Segment[] = shape.segments;
+            expect(segments.length).is.equal(1);
+            expect(segments[0].p1.x).is.equal(100);
+            expect(segments[0].p1.y).is.equal(200);
+            expect(segments[0].p2.x).is.equal(300);
+            expect(segments[0].p2.y).is.equal(400);
         });
 
         it('calculateSegments() - three vertices', () => {
@@ -149,16 +151,17 @@ describe('Polygon - open', () => {
             shape.handleLeftClick({ x: 100, y: 200 });
             shape.handleLeftClick({ x: 300, y: 400 });
             shape.handleLeftClick({ x: 500, y: 600 });
-            expect(shape.segments.length).is.equal(2);
-            expect(shape.segments[0].p1.x).is.equal(100);
-            expect(shape.segments[0].p1.y).is.equal(200);
-            expect(shape.segments[0].p2.x).is.equal(300);
-            expect(shape.segments[0].p2.y).is.equal(400);
+            const segments: Segment[] = shape.segments;
+            expect(segments.length).is.equal(2);
+            expect(segments[0].p1.x).is.equal(100);
+            expect(segments[0].p1.y).is.equal(200);
+            expect(segments[0].p2.x).is.equal(300);
+            expect(segments[0].p2.y).is.equal(400);
 
-            expect(shape.segments[1].p1.x).is.equal(300);
-            expect(shape.segments[1].p1.y).is.equal(400);
-            expect(shape.segments[1].p2.x).is.equal(500);
-            expect(shape.segments[1].p2.y).is.equal(600);
+            expect(segments[1].p1.x).is.equal(300);
+            expect(segments[1].p1.y).is.equal(400);
+            expect(segments[1].p2.x).is.equal(500);
+            expect(segments[1].p2.y).is.equal(600);
         });
 
         it('getPaintableStillSegments()', () => {
@@ -166,16 +169,17 @@ describe('Polygon - open', () => {
             square.handleLeftClick({ x: 100, y: 200 });
             square.handleLeftClick({ x: 300, y: 400 });
             square.handleLeftClick({ x: 500, y: 600 });
-            expect(square.getPaintableStillSegments().length).is.equal(2);
-            expect(square.getPaintableStillSegments()[0].p1.x).is.equal(100);
-            expect(square.getPaintableStillSegments()[0].p1.y).is.equal(200);
-            expect(square.getPaintableStillSegments()[0].p2.x).is.equal(300);
-            expect(square.getPaintableStillSegments()[0].p2.y).is.equal(400);
+            const paintableSegments: PaintableSegment[] = square.getPaintableStillSegments();
+            expect(paintableSegments.length).is.equal(2);
+            expect(paintableSegments[0].p1.x).is.equal(100);
+            expect(paintableSegments[0].p1.y).is.equal(200);
+            expect(paintableSegments[0].p2.x).is.equal(300);
+            expect(paintableSegments[0].p2.y).is.equal(400);
 
-            expect(square.getPaintableStillSegments()[1].p1.x).is.equal(300);
-            expect(square.getPaintableStillSegments()[1].p1.y).is.equal(400);
-            expect(square.getPaintableStillSegments()[1].p2.x).is.equal(500);
-            expect(square.getPaintableStillSegments()[1].p2.y).is.equal(600);
+            expect(paintableSegments[1].p1.x).is.equal(300);
+            expect(paintableSegments[1].p1.y).is.equal(400);
+            expect(paintableSegments[1].p2.x).is.equal(500);
+            expect(paintableSegments[1].p2.y).is.equal(600);
         });
 
         it('calculatePaintableMovingSegments() - 1 or more vertices added', () => {

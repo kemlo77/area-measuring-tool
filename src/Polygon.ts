@@ -3,10 +3,10 @@ import { Point } from './Point.js';
 import { PolygonState } from './PolygonState.js';
 import { Segment } from './Segment.js';
 import { ClosedState } from './ClosedState.js';
-import { MathUtil } from './MathUtil.js';
 import { Coordinate } from './Coordinate.js';
 import { PaintableSegment } from './PaintableSegment.js';
 import { UnselectedState } from './UnselectedState.js';
+import { MoveState } from './MoveState.js';
 
 export class Polygon {
     public vertices: Point[];
@@ -78,6 +78,10 @@ export class Polygon {
 
     get isSelected(): boolean {
         return !(this.currentState instanceof UnselectedState);
+    }
+
+    get isMoving(): boolean {
+        return this.currentState instanceof MoveState;
     }
 
     getPaintableStillSegments(): PaintableSegment[] {

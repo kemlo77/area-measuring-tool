@@ -24,10 +24,8 @@ export class ClosedState implements PolygonState {
         const vertexSelectedForMove: Point = pointClicked.nearestPointWithinDistance(this.polygon.vertices, Polygon.interactDistance);
         if (vertexSelectedForMove !== null) {
             this.beginMovingThisVertex(vertexSelectedForMove);
-
         }
         else {
-            // on vertex (new point)
             // if the click occured near a segment, insert a new point
             const projection: PointToSegmentProjection = this.checkIfCloseToSegment(pointClicked, Polygon.interactDistance);
             if (projection.withinMinimumDistance) {
@@ -158,8 +156,8 @@ export class ClosedState implements PolygonState {
     calculateSegments(): Segment[] {
         const calculatedSegments: Segment[] = new Array();
         for (const vertex of this.polygon.vertices) {
-            const precedingVertex: Point = this.polygon.getPrecedingVertex(vertex);
-            const currentSegment: Segment = new Segment(precedingVertex, vertex);
+            const followingVertex: Point = this.polygon.getFollowingVertex(vertex);
+            const currentSegment: Segment = new Segment(vertex, followingVertex);
             calculatedSegments.push(currentSegment);
         }
         return calculatedSegments;
