@@ -1,11 +1,25 @@
 import { expect } from 'chai';
 import { Polygon } from '../built/Polygon';
 import { Point } from '../built/Point';
+import { Segment } from '../built/Segment';
+import { PaintableSegment } from '../src/PaintableSegment';
 
 
 describe('Polygon - move', () => {
 
     describe('Moving', () => {
+
+        it('moving vertex in triangle', () => {
+            const triangle: Polygon = new Polygon();
+            triangle.handleLeftClick({ x: 100, y: 100 });
+            triangle.handleLeftClick({ x: 300, y: 100 });
+            triangle.handleLeftClick({ x: 200, y: 300 });
+            triangle.handleLeftClick({ x: 100, y: 100 }); // closing
+            triangle.handleLeftClick({ x: 100, y: 100 }); // marking for move
+            expect(triangle.isMoving).is.equal(true);
+            triangle.handleLeftClick({ x: 110, y: 110 }); // moved
+            expect(triangle.isMoving).is.equal(false);
+        });
 
         for (let step = 0; step < 4; step++) {
             const square: Polygon = getSquare();
@@ -147,6 +161,83 @@ describe('Polygon - move', () => {
                 expect(square.vertices[step].x).to.equal(100); // no move should have occured
                 expect(square.vertices[step].y).to.equal(100);
                 expect(square.isClosed).to.equal(true, 'Polygon not closed.');
+            });
+        }
+
+
+    });
+
+    describe('Getting segments', () => {
+
+
+        it('calculateSegments() - three vertices', () => {
+            const shape: Polygon = new Polygon();
+            shape.handleLeftClick({ x: 100, y: 100 });
+            shape.handleLeftClick({ x: 300, y: 100 });
+            shape.handleLeftClick({ x: 150, y: 300 });
+            shape.handleLeftClick({ x: 100, y: 100 }); // closing it
+            shape.handleLeftClick({ x: 100, y: 100 }); // marking for move
+            const segments: Segment[] = shape.segments;
+            expect(segments.length).is.equal(3);
+            expect(segments[0].p1.x).is.equal(100);
+            expect(segments[0].p1.y).is.equal(100);
+            expect(segments[0].p2.x).is.equal(300);
+            expect(segments[0].p2.y).is.equal(100);
+
+            expect(segments[1].p1.x).is.equal(300);
+            expect(segments[1].p1.y).is.equal(100);
+            expect(segments[1].p2.x).is.equal(150);
+            expect(segments[1].p2.y).is.equal(300);
+
+            expect(segments[2].p1.x).is.equal(150);
+            expect(segments[2].p1.y).is.equal(300);
+            expect(segments[2].p2.x).is.equal(100);
+            expect(segments[2].p2.y).is.equal(100);
+        });
+
+        for (let step = 0; step < 6; step++) {
+            it('getPaintableStillSegments() - ' + step, () => {
+                const shape: Polygon = new Polygon();
+                shape.handleLeftClick({ x: 100, y: 100 });
+                shape.handleLeftClick({ x: 150, y: 100 }); // extra
+                shape.handleLeftClick({ x: 200, y: 100 });
+                shape.handleLeftClick({ x: 200, y: 150 }); // extra
+                shape.handleLeftClick({ x: 200, y: 200 });
+                shape.handleLeftClick({ x: 100, y: 200 });
+                shape.handleLeftClick({ x: 100, y: 100 }); // closing
+                shape.rotateVertices(1);
+                shape.handleLeftClick({ x: 100, y: 100 }); // marking for move
+                const paintableStillSegments: PaintableSegment[] = shape.getPaintableStillSegments();
+                expect(paintableStillSegments.length).is.equal(4);
+                paintableStillSegments.forEach((segment) => {
+                    const movePointInSegmentsFirst: boolean = segment.p1.x === 100 && segment.p1.y === 100;
+                    const movePointInSegmentsSecond: boolean = segment.p1.x === 100 && segment.p1.y === 100;
+                    expect(movePointInSegmentsFirst).to.equal(false);
+                    expect(movePointInSegmentsSecond).to.equal(false);
+                });
+            });
+        }
+
+        for (let step = 0; step < 6; step++) {
+            it('calculatePaintableMovingSegments() - ' + step, () => {
+                const shape: Polygon = new Polygon();
+                shape.handleLeftClick({ x: 100, y: 100 });
+                shape.handleLeftClick({ x: 150, y: 100 }); // extra
+                shape.handleLeftClick({ x: 200, y: 100 });
+                shape.handleLeftClick({ x: 200, y: 150 }); // extra
+                shape.handleLeftClick({ x: 200, y: 200 });
+                shape.handleLeftClick({ x: 100, y: 200 });
+                shape.handleLeftClick({ x: 100, y: 100 }); // closing
+                shape.rotateVertices(1);
+                shape.handleLeftClick({ x: 100, y: 100 }); // marking for move
+                const paintableMovingSegments: PaintableSegment[] = shape.getPaintableMovingSegments({ x: 10, y: 10 });
+                expect(paintableMovingSegments.length).is.equal(2);
+
+                paintableMovingSegments.forEach((segment) => {
+                    const movePointInSegmentsFirst: boolean = segment.p1.x === 10 && segment.p1.y === 10;
+                    const movePointInSegmentsSecond: boolean = segment.p2.x === 10 && segment.p2.y === 10;
+                    expect(movePointInSegmentsFirst || movePointInSegmentsSecond).to.equal(true);
+                });
             });
         }
 

@@ -109,7 +109,7 @@ export class ClosedState implements PolygonState {
         return false;
     }
 
-
+    // returns the segment that was closest to the clicked point if it is within the minumum distance
     checkIfCloseToSegment(nyPunkt: Point, minDistanceIn: number): PointToSegmentProjection {
         const segments: Segment[] = this.polygon.segments;
         let smallestDistance: number = minDistanceIn;

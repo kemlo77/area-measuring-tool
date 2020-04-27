@@ -80,9 +80,6 @@ describe('Polygon', () => {
         expect(rotatedLetters).to.eql(['d', 'a', 'b', 'c']);
     });
 
-    
-
-
 });
 
 function getSquare(): Polygon {
