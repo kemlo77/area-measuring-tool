@@ -1,8 +1,19 @@
 import { expect } from 'chai';
 import { Polygon } from '../built/Polygon';
+import { Point } from '../built/Point';
 
 let rectangle: Polygon;
 
+
+function getSquare(): Polygon {
+    const square: Polygon = new Polygon();
+    square.handleLeftClick({ x: 100, y: 100 });
+    square.handleLeftClick({ x: 200, y: 100 });
+    square.handleLeftClick({ x: 200, y: 200 });
+    square.handleLeftClick({ x: 100, y: 200 });
+    square.handleLeftClick({ x: 100, y: 100 });
+    return square;
+}
 
 
 describe('Polygon', () => {
@@ -23,22 +34,22 @@ describe('Polygon', () => {
 
     });
 
-
-    it('Area', () => {
-        expect(rectangle.area).to.equal(10000);
+    it('segments()', () => {
+        expect(rectangle.segments.length).to.equal(8);
     });
 
-    it('isClosed', () => {
-        expect(rectangle.isClosed).to.equal(true);
-    });
-
-    it('perimeterLength', () => {
-        expect(rectangle.perimeterLength).to.equal(400);
+    it('numberOfVertices()', () => {
+        expect(rectangle.numberOfVertices).to.equal(8);
     });
 
     it('numberOfSegments - closed', () => {
         const square: Polygon = getSquare();
         expect(square.numberOfSegments).to.equal(4);
+    });
+
+    it('numberOfSegments - not  even a single vertex', () => {
+        const square: Polygon = new Polygon();
+        expect(square.numberOfSegments).to.equal(0);
     });
 
     it('numberOfSegments - just the first vertex', () => {
@@ -54,6 +65,16 @@ describe('Polygon', () => {
         expect(square.numberOfSegments).to.equal(1);
     });
 
+    it('firstVertex()', () => {
+        expect(rectangle.firstVertex.x).to.equal(100);
+        expect(rectangle.firstVertex.y).to.equal(100);
+    });
+
+    it('lastVertex()', () => {
+        expect(rectangle.lastVertex.x).to.equal(100);
+        expect(rectangle.lastVertex.y).to.equal(150);
+    });
+
     it('verticesExceptMovePoint - no movePoint selected', () => {
         const square: Polygon = getSquare();
         expect(square.verticesExceptMovePoint.length).to.equal(4);
@@ -64,6 +85,111 @@ describe('Polygon', () => {
         square.handleLeftClick({ x: 100, y: 100 });
         expect(square.verticesExceptMovePoint.length).to.equal(3);
     });
+
+    it('isClosed', () => {
+        expect(rectangle.isClosed).to.equal(true);
+    });
+
+    it('isSelected - selected', () => {
+        expect(rectangle.isSelected).to.equal(true);
+    });
+
+    it('isSelected - not selected', () => {
+        rectangle.handleLeftClick({ x: 10, y: 10 });
+        expect(rectangle.isSelected).to.equal(false);
+    });
+
+    it('isMoving - not moving', () => {
+        expect(rectangle.isMoving).to.equal(false);
+    });
+
+    it('isMoving - moving', () => {
+        rectangle.handleLeftClick({ x: 100, y: 100 });
+        expect(rectangle.isMoving).to.equal(true);
+    });
+
+    it('getPaintableStillSegments', () => {
+        expect(rectangle.getPaintableStillSegments().length).to.equal(8);
+    });
+
+    it('getPaintableMovingSegments', () => {
+        expect(rectangle.getPaintableMovingSegments().length).to.equal(0);
+    });
+
+
+
+    it('reversePolygonDirection()', () => {
+        const triangle: Polygon = new Polygon();
+        triangle.handleLeftClick({ x: 100, y: 100 });
+        triangle.handleLeftClick({ x: 300, y: 100 });
+        triangle.handleLeftClick({ x: 200, y: 300 });
+        triangle.handleLeftClick({ x: 100, y: 100 });
+        triangle.reversePolygonDirection();
+        expect(triangle.vertices[0].x).to.equal(200);
+        expect(triangle.vertices[0].y).to.equal(300);
+        expect(triangle.vertices[1].x).to.equal(300);
+        expect(triangle.vertices[1].y).to.equal(100);
+        expect(triangle.vertices[2].x).to.equal(100);
+        expect(triangle.vertices[2].y).to.equal(100);
+    });
+
+    it('makeDirectionClockWise()', () => {
+        const triangle: Polygon = new Polygon();
+        triangle.handleLeftClick({ x: 100, y: 100 });
+        triangle.handleLeftClick({ x: 300, y: 100 });
+        triangle.handleLeftClick({ x: 200, y: 300 });
+        triangle.handleLeftClick({ x: 100, y: 100 });
+        expect(triangle.isCounterclockwise).to.equal(false);
+        triangle.makeDirectionCounterclockWise();
+        expect(triangle.isCounterclockwise).to.equal(true);
+        triangle.makeDirectionClockWise();
+        expect(triangle.isCounterclockwise).to.equal(false);
+    });
+
+
+
+
+
+    it('Area - when polygon closed', () => {
+        expect(rectangle.area).to.equal(10000);
+    });
+
+    it('Area - when polygon not closed', () => {
+        const shape: Polygon = new Polygon();
+        expect(shape.area).to.equal(0);
+    });
+
+
+
+    it('perimeterLength', () => {
+        expect(rectangle.perimeterLength).to.equal(400);
+    });
+
+    it('rotateVertices()', () => {
+        const triangle: Polygon = new Polygon();
+        triangle.handleLeftClick({ x: 100, y: 100 });
+        triangle.handleLeftClick({ x: 300, y: 100 });
+        triangle.handleLeftClick({ x: 200, y: 300 });
+        triangle.handleLeftClick({ x: 100, y: 100 });
+        triangle.rotateVertices(1);
+
+        expect(triangle.vertices[0].x).to.equal(300);
+        expect(triangle.vertices[0].y).to.equal(100);
+
+        expect(triangle.vertices[1].x).to.equal(200);
+        expect(triangle.vertices[1].y).to.equal(300);
+
+        expect(triangle.vertices[2].x).to.equal(100);
+        expect(triangle.vertices[2].y).to.equal(100);
+
+
+
+
+    });
+
+
+
+
 
     it('arrayRotate() - forward one step', () => {
         const rotatedLetters: string[] = Polygon.arrayRotate(['a', 'b', 'c', 'd'], 1);
@@ -82,34 +208,4 @@ describe('Polygon', () => {
 
 });
 
-function getSquare(): Polygon {
-    const square: Polygon = new Polygon();
-    square.handleLeftClick({ x: 100, y: 100 });
-    square.handleLeftClick({ x: 200, y: 100 });
-    square.handleLeftClick({ x: 200, y: 200 });
-    square.handleLeftClick({ x: 100, y: 200 });
-    square.handleLeftClick({ x: 100, y: 100 });
-    return square;
-}
 
-
-
-// Antal segment
-// Totala längden av alla segment
-// Arean
-// Clockwise
-// Closed returnerar true om den är closed
-// clockwise enforced
-
-
-
-// when closed
-// adding a vertex to a segment
-
-
-// Erasing
-// TODO: kolla om det finns nåt kvar av erase att testa (se ClosedState)
-
-
-// Moving
-// TODO: kolla om det finns nåt kvar av detta att testa i ClosedState eller MoveState

@@ -50,12 +50,12 @@ export class Polygon {
         }
     }
 
-    get lastVertex(): Point {
-        return this.vertices[this.vertices.length - 1];
-    }
-
     get firstVertex(): Point {
         return this.vertices[0];
+    }
+
+    get lastVertex(): Point {
+        return this.vertices[this.vertices.length - 1];
     }
 
     get verticesExceptMovePoint(): Point[] {

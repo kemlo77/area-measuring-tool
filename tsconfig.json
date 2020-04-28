@@ -2,6 +2,7 @@
     "compilerOptions": {
         "allowJs": true,
         "removeComments": false,
+        "noImplicitAny": true,
         "sourceMap": true,
         "baseUrl": "types",
         "typeRoots": [
