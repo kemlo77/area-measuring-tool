@@ -22,17 +22,24 @@ function handleClick(isLeftClick: boolean, mousePosition: Coordinate): void {
 
 
 	if (isLeftClick) {
-		if (getSelectedPolygon() === null) {
-			listOfPolygons.push(new Polygon());
-		}
 		// kolla om nån redan är vald
-		// isf fortsätt som vanligt
+		if (getSelectedPolygon() === null) {
+			// kolla om nån blir vald genom vänsterklick. Ta den första träffen och avbryt sen
+			for(const polygon of listOfPolygons) {
+				polygon.handleLeftClick(mousePosition);
+				if(polygon.isSelected) {
+					break;
+				}
+			}
+			// om fortfarande ingen vald, skapa en ny
+			if(getSelectedPolygon()=== null){
+				listOfPolygons.push(new Polygon());
+				getSelectedPolygon().handleLeftClick(mousePosition);
+			}
+		} else {
+			getSelectedPolygon().handleLeftClick(mousePosition);
+		}
 
-		// om ingen är vald
-		// kolla om nån blir vald genom vänsterklick. Ta den första träffen och avbryt sen
-		// annars skapa en ny
-
-		getSelectedPolygon().handleLeftClick(mousePosition);
 	}
 	else {
 		// om nån är vald, så reagera på högerklicket. Annars inget.

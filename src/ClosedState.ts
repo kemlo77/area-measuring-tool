@@ -7,7 +7,6 @@ import { Segment } from './Segment.js';
 import { MathUtil } from './MathUtil.js';
 import { Coordinate } from './Coordinate.js';
 import { PaintableSegment } from './PaintableSegment.js';
-import { PointToSegmentProjection } from './PointToSegmentProjection.js';
 import { UnselectedState } from './UnselectedState.js';
 import { Vector } from './Vector.js';
 
@@ -27,15 +26,17 @@ export class ClosedState implements PolygonState {
         }
         else {
             // if the click occured near a segment, insert a new point
-            const projection: PointToSegmentProjection = this.checkIfCloseToSegment(pointClicked, Polygon.interactDistance);
-            if (projection.withinMinimumDistance) {
+            const segmentClicked: Segment = this.findClosestSegment(pointClicked, Polygon.interactDistance);
+            if (segmentClicked !== null) {
+                const projectionVector: Vector = MathUtil.projectPointOntoSegment(segmentClicked, pointClicked);
+                const candidatePoint: Point = new Point(pointClicked.x+projectionVector.x,pointClicked.y+projectionVector.y);
                 // calculating distance to both points on clicked segment
                 // so that it is not possible to insert a point too close to another
-                const segmPointDist1: number = projection.projectionPointOnSegment.distanceToOtherPoint(projection.segmentProjectedOn.p1);
-                const segmPointDist2: number = projection.projectionPointOnSegment.distanceToOtherPoint(projection.segmentProjectedOn.p2);
+                const segmPointDist1: number = candidatePoint.distanceToOtherPoint(segmentClicked.p1);
+                const segmPointDist2: number = candidatePoint.distanceToOtherPoint(segmentClicked.p2);
                 if (((segmPointDist1 > Polygon.minimumDistanceBetweenPoints) && (segmPointDist2 > Polygon.minimumDistanceBetweenPoints))) {
                     // inserting the point in the segment-array
-                    this.polygon.insertVertex(projection.projectionPointOnSegment, projection.segmentProjectedOn.p1);
+                    this.polygon.insertVertex(candidatePoint, segmentClicked.p1);
                 } else {
                     console.warn('New vertex too close to other vertex.');
                 }
@@ -65,9 +66,9 @@ export class ClosedState implements PolygonState {
             }
         }
         else {
-            const projection: PointToSegmentProjection = this.checkIfCloseToSegment(pointClicked, Polygon.interactDistance);
-            if (projection.withinMinimumDistance) {
-                this.removeSelectedSegment(projection.segmentProjectedOn);
+            const segmentClicked: Segment = this.findClosestSegment(pointClicked, Polygon.interactDistance);
+            if (segmentClicked !== null) {
+                this.removeSelectedSegment(segmentClicked);
             }
         }
     }
@@ -109,37 +110,21 @@ export class ClosedState implements PolygonState {
         return false;
     }
 
-    // returns the segment that was closest to the clicked point if it is within the minumum distance
-    checkIfCloseToSegment(nyPunkt: Point, minDistanceIn: number): PointToSegmentProjection {
-        const segments: Segment[] = this.polygon.segments;
-        let smallestDistance: number = minDistanceIn;
-        let withinMinimumDistance: boolean = false;
+    findClosestSegment(candidatePoint: Point, minDistanceIn: number): Segment {
+        let smallestRecordedDistance: number = minDistanceIn;
         let segmentProjectedOn: Segment = null;
-        let closestPoint: Point = new Point(); // TODO: skulle det gå skriva om utan att skapa en sån här point
 
-        for (const segment of segments) {
-            // projecting point on segment
-            const projectionVector: Vector = MathUtil.projectPointOntoSegment(segment, nyPunkt);
-            // if it was between 0 and minDistanceIn
+        for (const segment of this.polygon.segments) {
+            const projectionVector: Vector = MathUtil.projectPointOntoSegment(segment, candidatePoint);
+
             if (projectionVector !== null && projectionVector.norm < minDistanceIn) {
-                withinMinimumDistance = true;
-                if (projectionVector.norm < smallestDistance) {
-                    // if it is closer than minDistanceIn and closer than last saved, it is saved
-                    smallestDistance = projectionVector.norm;
-                    closestPoint = new Point(nyPunkt.x + projectionVector.x, nyPunkt.y + projectionVector.y);
+                if (projectionVector.norm < smallestRecordedDistance) {
+                    smallestRecordedDistance = projectionVector.norm;
                     segmentProjectedOn = segment;
                 }
             }
         }
-        const projectionPointOnSegment: Point = closestPoint;
-
-        this.trimUnnecessaryCoordinatePrecision(projectionPointOnSegment);
-
-        return {
-            withinMinimumDistance,
-            segmentProjectedOn,
-            projectionPointOnSegment
-        };
+        return segmentProjectedOn;
     }
 
     trimUnnecessaryCoordinatePrecision(point: Point): void {

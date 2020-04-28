@@ -5,7 +5,6 @@ import { Point } from './Point.js';
 import { ClosedState } from './ClosedState.js';
 import { Coordinate } from './Coordinate.js';
 import { PaintableSegment } from './PaintableSegment.js';
-import { PointToSegmentProjection } from './PointToSegmentProjection.js';
 
 export class UnselectedState implements PolygonState {
 
@@ -19,8 +18,8 @@ export class UnselectedState implements PolygonState {
 
 
     handleLeftClick(pointClicked: Point): void {
-        const projection: PointToSegmentProjection = this.closedState.checkIfCloseToSegment(pointClicked, Polygon.interactDistance);
-        if (projection.withinMinimumDistance) {
+        const segmentClicked: Segment = this.closedState.findClosestSegment(pointClicked, Polygon.interactDistance);
+        if (segmentClicked !== null) {
             this.polygon.setCurrentState(this.closedState);
         }
     }
