@@ -102,68 +102,65 @@ describe('MathUtil', () => {
     for (let step = -10; step < 4; step += 2) {
         it('calculateIntersect() - segments ontop of eachother ' + step, () => {
             const segmentA: Segment = new Segment(new Point(0, -5), new Point(0, 5));
-            const segmentB: Segment = new Segment(new Point(0, step), new Point(0, (step+8)));
+            const segmentB: Segment = new Segment(new Point(0, step), new Point(0, (step + 8)));
             expect(MathUtil.calculateIntersect(segmentA, segmentB)).not.to.equal(null);
         });
     }
 
-        it('calculateIntersect() - along same line but not overlapping' , () => {
-            const segmentA: Segment = new Segment(new Point(0, -5), new Point(0, 5));
-            const segmentB: Segment = new Segment(new Point(0, -10), new Point(0, -6));
-            expect(MathUtil.calculateIntersect(segmentA, segmentB)).to.equal(null);
-            const segmentC: Segment = new Segment(new Point(0, 6), new Point(0, 10));
-            expect(MathUtil.calculateIntersect(segmentA, segmentC)).to.equal(null);
+    it('calculateIntersect() - along same line but not overlapping', () => {
+        const segmentA: Segment = new Segment(new Point(0, -5), new Point(0, 5));
+        const segmentB: Segment = new Segment(new Point(0, -10), new Point(0, -6));
+        expect(MathUtil.calculateIntersect(segmentA, segmentB)).to.equal(null);
+        const segmentC: Segment = new Segment(new Point(0, 6), new Point(0, 10));
+        expect(MathUtil.calculateIntersect(segmentA, segmentC)).to.equal(null);
+    });
+
+
+    it('calculateIntersect() - parallel', () => {
+        const segmentA: Segment = new Segment(new Point(0, -5), new Point(0, 5));
+        const segmentB: Segment = new Segment(new Point(2, -5), new Point(2, 5));
+        expect(MathUtil.calculateIntersect(segmentA, segmentB)).to.equal(null);
+
+        const segmentC: Segment = new Segment(new Point(-2, -5), new Point(-2, 5));
+        expect(MathUtil.calculateIntersect(segmentA, segmentC)).to.equal(null);
+    });
+
+    it('calculateIntersect() - to short to intersect 1', () => {
+        const segmentA: Segment = new Segment(new Point(-1, 1), new Point(-10, 10));
+        const segmentB: Segment = new Segment(new Point(2, -3), new Point(5, 20));
+        expect(MathUtil.calculateIntersect(segmentA, segmentB)).to.equal(null);
+    });
+
+
+    it('calculateIntersect() - to short to intersect 2', () => {
+        const segmentA: Segment = new Segment(new Point(-1, 1), new Point(-10, 10));
+        const segmentB: Segment = new Segment(new Point(2, 3), new Point(10, 4));
+        expect(MathUtil.calculateIntersect(segmentA, segmentB)).to.equal(null);
+    });
+
+    it('calculateIntersect() - to short to intersect 3', () => {
+        const segmentA: Segment = new Segment(new Point(-1, 1), new Point(-2, 10));
+        const segmentB: Segment = new Segment(new Point(-3, 3), new Point(-10, 4));
+        expect(MathUtil.calculateIntersect(segmentA, segmentB)).to.equal(null);
+    });
+
+    [1, 5, 10].forEach((yValue) => {
+        it('projectPointOntoSegment() - succesful projection ' + yValue, () => {
+            const segment: Segment = new Segment(new Point(0, 1), new Point(0, 10));
+            const point: Point = new Point(1, yValue);
+            expect(MathUtil.projectPointOntoSegment(segment, point).norm).to.equal(1);
+            expect(MathUtil.projectPointOntoSegment(segment, point).x).to.equal(-1);
+            expect(MathUtil.projectPointOntoSegment(segment, point).y).to.equal(0);
         });
+    });
 
-
-        it('calculateIntersect() - parallel' , () => {
-            const segmentA: Segment = new Segment(new Point(0, -5), new Point(0, 5));
-            const segmentB: Segment = new Segment(new Point(2, -5), new Point(2, 5));
-            expect(MathUtil.calculateIntersect(segmentA, segmentB)).to.equal(null);
-
-            const segmentC: Segment = new Segment(new Point(-2, -5), new Point(-2, 5));
-            expect(MathUtil.calculateIntersect(segmentA, segmentC)).to.equal(null);
+    [0.99, 10.01].forEach((yValue) => {
+        it('projectPointOntoSegment() - unsuccesful projection ' + yValue, () => {
+            const segment: Segment = new Segment(new Point(0, 1), new Point(0, 10));
+            const point: Point = new Point(1, yValue);
+            expect(MathUtil.projectPointOntoSegment(segment, point)).to.equal(null);
         });
-
-        it('calculateIntersect() - to short to intersect 1' , () => {
-            const segmentA: Segment = new Segment(new Point(-1, 1), new Point(-10, 10));
-            const segmentB: Segment = new Segment(new Point(2, -3), new Point(5, 20));
-            expect(MathUtil.calculateIntersect(segmentA, segmentB)).to.equal(null);
-        });
-
-
-        it('calculateIntersect() - to short to intersect 1' , () => {
-            const segmentA: Segment = new Segment(new Point(-1, 1), new Point(-10, 10));
-            const segmentB: Segment = new Segment(new Point(2, 3), new Point(10, 4));
-            expect(MathUtil.calculateIntersect(segmentA, segmentB)).to.equal(null);
-        });
-
-        it('calculateIntersect() - to short to intersect 2' , () => {
-            const segmentA: Segment = new Segment(new Point(-1, 1), new Point(-2, 10));
-            const segmentB: Segment = new Segment(new Point(-3, 3), new Point(-10, 4));
-            expect(MathUtil.calculateIntersect(segmentA, segmentB)).to.equal(null);
-        });
-
-        [1,5,10].forEach((yValue)=>{
-            it('projectPointOntoSegment() - succesful projection' , () => {
-                const segment: Segment = new Segment(new Point(0, 1), new Point(0, 10));
-                const point: Point = new Point(1,yValue);
-                expect(MathUtil.projectPointOntoSegment(segment,point).successful).to.equal(true);
-                expect(MathUtil.projectPointOntoSegment(segment,point).norm).to.equal(1);
-                expect(MathUtil.projectPointOntoSegment(segment,point).point.x).to.equal(0);
-                expect(MathUtil.projectPointOntoSegment(segment,point).point.y).to.equal(yValue);
-            });
-        });
-
-        [0.99, 10.01].forEach((yValue)=>{
-            it('projectPointOntoSegment() - succesful projection' , () => {
-                const segment: Segment = new Segment(new Point(0, 1), new Point(0, 10));
-                const point: Point = new Point(1,yValue);
-                expect(MathUtil.projectPointOntoSegment(segment,point).successful).to.equal(false);
-                expect(MathUtil.projectPointOntoSegment(segment,point).norm).to.equal(null);
-                expect(MathUtil.projectPointOntoSegment(segment,point).point).to.equal(null);
-            });
-        });
+    });
 
 
 });

@@ -5,11 +5,11 @@ import { Point } from './Point.js';
 import { OpenState } from './OpenState.js';
 import { Segment } from './Segment.js';
 import { MathUtil } from './MathUtil.js';
-import { ProjectionResult } from './ProjectionResult.js';
 import { Coordinate } from './Coordinate.js';
 import { PaintableSegment } from './PaintableSegment.js';
 import { PointToSegmentProjection } from './PointToSegmentProjection.js';
 import { UnselectedState } from './UnselectedState.js';
+import { Vector } from './Vector.js';
 
 export class ClosedState implements PolygonState {
 
@@ -119,14 +119,14 @@ export class ClosedState implements PolygonState {
 
         for (const segment of segments) {
             // projecting point on segment
-            const projectionResult: ProjectionResult = MathUtil.projectPointOntoSegment(segment, nyPunkt);
+            const projectionVector: Vector = MathUtil.projectPointOntoSegment(segment, nyPunkt);
             // if it was between 0 and minDistanceIn
-            if (projectionResult.successful && projectionResult.norm < minDistanceIn) {
+            if (projectionVector !== null && projectionVector.norm < minDistanceIn) {
                 withinMinimumDistance = true;
-                if (projectionResult.norm < smallestDistance) {
+                if (projectionVector.norm < smallestDistance) {
                     // if it is closer than minDistanceIn and closer than last saved, it is saved
-                    smallestDistance = projectionResult.norm;
-                    closestPoint = projectionResult.point;
+                    smallestDistance = projectionVector.norm;
+                    closestPoint = new Point(nyPunkt.x + projectionVector.x, nyPunkt.y + projectionVector.y);
                     segmentProjectedOn = segment;
                 }
             }

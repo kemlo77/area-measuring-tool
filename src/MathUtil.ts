@@ -1,7 +1,6 @@
 import { Point } from './Point.js';
 import { Segment } from './Segment.js';
 import { Vector } from './Vector.js';
-import { ProjectionResult } from './ProjectionResult.js';
 
 export class MathUtil {
 	// Checking if two segments AB and CD intersect
@@ -69,8 +68,8 @@ export class MathUtil {
 		return pointE;
 	}
 
-
-	static projectPointOntoSegment(segmentAB: Segment, pointC: Point): ProjectionResult {
+	// returns a vector from the point being projected to the projection point on the segment
+	static projectPointOntoSegment(segmentAB: Segment, pointC: Point): Vector {
 		const pointA: Point = new Point(segmentAB.p1);
 		const pointB: Point = new Point(segmentAB.p2);
 
@@ -89,11 +88,11 @@ export class MathUtil {
 			const pointD: Point = new Point(pointA.x + vectorAD.x, pointA.y + vectorAD.y);
 			// checking so that A->D is shorter than A->B
 			if (vectorAD.norm <= vectorAB.norm) {
-				const vectorDC: Vector = new Vector(pointD, pointC);
-				return { successful: true, norm: vectorDC.norm, point: pointD };
+				const vectorCD: Vector = new Vector(pointC, pointD);
+				return vectorCD;
 			}
 		}
-		return { successful: false, norm: null, point: null };
+		return null;
 	}
 
 }
