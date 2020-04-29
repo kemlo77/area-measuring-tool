@@ -25,18 +25,12 @@ export class ClosedState implements PolygonState {
             this.beginMovingThisVertex(vertexSelectedForMove);
         }
         else {
-            // if the click occured near a segment, insert a new point
             const segmentClicked: Segment = this.findClosestSegment(pointClicked, Polygon.interactDistance);
             if (segmentClicked !== null) {
-                const projectionVector: Vector = MathUtil.projectPointOntoSegment(segmentClicked, pointClicked);
-                const candidatePoint: Point = new Point(pointClicked.x+projectionVector.x,pointClicked.y+projectionVector.y);
-                // calculating distance to both points on clicked segment
-                // so that it is not possible to insert a point too close to another
-                const segmPointDist1: number = candidatePoint.distanceToOtherPoint(segmentClicked.p1);
-                const segmPointDist2: number = candidatePoint.distanceToOtherPoint(segmentClicked.p2);
-                if (((segmPointDist1 > Polygon.minimumDistanceBetweenPoints) && (segmPointDist2 > Polygon.minimumDistanceBetweenPoints))) {
-                    // inserting the point in the segment-array
-                    this.polygon.insertVertex(candidatePoint, segmentClicked.p1);
+                const candidateVertex: Point = this.candidatePointOnSegment(segmentClicked, pointClicked);
+                if (this.notToCloseToNeighborsOnSegment(segmentClicked,candidateVertex)) {
+                    // TODO: det vore pedagogiskt om det var segmentet man angav. Borde hanteras av Polygon
+                    this.polygon.insertVertex(candidateVertex, segmentClicked.p1);
                 } else {
                     console.warn('New vertex too close to other vertex.');
                 }
@@ -44,6 +38,19 @@ export class ClosedState implements PolygonState {
                 this.polygon.setCurrentState(new UnselectedState(this.polygon, this));
             }
         }
+    }
+
+    candidatePointOnSegment(segment: Segment, pointClicked: Point): Point {
+        const projectionVector: Vector = MathUtil.projectPointOntoSegment(segment, pointClicked);
+        return new Point(pointClicked.x + projectionVector.x, pointClicked.y + projectionVector.y);
+    }
+
+    notToCloseToNeighborsOnSegment(segment: Segment, candidateVertex: Point): boolean {
+        const segmPointDist1: number = candidateVertex.distanceToOtherPoint(segment.p1);
+        const segmPointDist2: number = candidateVertex.distanceToOtherPoint(segment.p2);
+        const closeToP1: boolean = segmPointDist1 > Polygon.minimumDistanceBetweenPoints;
+        const closeToP2: boolean = segmPointDist2 > Polygon.minimumDistanceBetweenPoints;
+        return closeToP1 && closeToP2;
     }
 
     beginMovingThisVertex(vertex: Point): void {
