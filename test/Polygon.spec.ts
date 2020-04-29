@@ -140,7 +140,7 @@ describe('Polygon', () => {
         triangle.handleLeftClick({ x: 200, y: 300 });
         triangle.handleLeftClick({ x: 100, y: 100 });
         expect(triangle.isCounterclockwise).to.equal(false);
-        triangle.makeDirectionCounterclockWise();
+        triangle.makeDirectionCounterClockwise();
         expect(triangle.isCounterclockwise).to.equal(true);
         triangle.makeDirectionClockWise();
         expect(triangle.isCounterclockwise).to.equal(false);

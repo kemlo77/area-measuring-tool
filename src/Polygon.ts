@@ -13,22 +13,21 @@ export class Polygon {
     public movePoint: Point;
     private currentState: PolygonState;
     private enforceNonComplex: boolean;
-    private readonly enforceClockwise: boolean;
     public static readonly minimumDistanceBetweenPoints: number = 8;
     public static readonly interactDistance: number = 5;
-    public static readonly useIntegerCoords: boolean = false;
 
     constructor() {
         this.vertices = new Array();
         this.movePoint = null;
         this.currentState = new OpenState(this);
         this.enforceNonComplex = true;
-        this.enforceClockwise = false;
     }
 
     get enforceNonComplexPolygon(): boolean {
         return this.enforceNonComplex;
     }
+
+    
 
     get segments(): Segment[] {
         return this.currentState.calculateSegments();
@@ -84,6 +83,10 @@ export class Polygon {
         return this.currentState instanceof MoveState;
     }
 
+    get isOpen(): boolean{
+        return this.currentState instanceof OpenState;
+    }
+
     getPaintableStillSegments(): PaintableSegment[] {
         return this.currentState.calculatePaintableStillSegments();
     }
@@ -94,9 +97,6 @@ export class Polygon {
 
     setCurrentState(state: PolygonState): void {
         this.currentState = state;
-        if (this.enforceClockwise) {
-            this.makeDirectionClockWise();
-        }
     }
 
     handleLeftClick(position: Coordinate): void {
@@ -114,13 +114,13 @@ export class Polygon {
     }
 
     makeDirectionClockWise(): void {
-        if (this.isClosed && this.isCounterclockwise) {
+        if (!this.isOpen && this.isCounterclockwise) {
             this.reversePolygonDirection();
         }
     }
 
-    makeDirectionCounterclockWise(): void {
-        if (this.isClosed && !this.isCounterclockwise) {
+    makeDirectionCounterClockwise(): void {
+        if (!this.isOpen && !this.isCounterclockwise) {
             this.reversePolygonDirection();
         }
     }
@@ -131,7 +131,7 @@ export class Polygon {
     }
 
     get isCounterclockwise(): boolean {
-        if (this.isClosed) {
+        if (!this.isOpen) {
             if (this.gaussShoelace() > 0) {
                 return false;
             }
@@ -144,7 +144,7 @@ export class Polygon {
     }
 
     get area(): number {
-        if (this.isClosed) {
+        if (!this.isOpen) {
             return Math.abs(this.gaussShoelace());
         } else {
             return 0;
@@ -207,7 +207,7 @@ export class Polygon {
 
     // function to translate negative indexes in a polygon.
     // (e.g. index -2 in a polygon with 6 sides is 4)
-    // also if index is larger. For example input 7 will return
+    // also if index is larger. For example input 7 will return 
     // TODO: skriv om denna så att man anger sitt orena index och sin array, så plockar man ut array.length i denna metoden.
     static moduloInPolygon(indexIn: number, arrayLength: number): number {
         while (indexIn < 0) {
