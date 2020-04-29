@@ -33,7 +33,7 @@ export class OpenState implements PolygonState {
             else {
                 if (pointClicked.noneOfThesePointsTooClose(this.polygon.vertices, Polygon.minimumDistanceBetweenPoints)) {
                     if (this.noIntersectingSegmentsWhenAddingSegment(pointClicked)) {
-                        this.addVertex(pointClicked);
+                        this.polygon.addVertex(pointClicked);
                     } else {
                         console.warn('New segment intersects with existing segment.');
                     }
@@ -44,21 +44,17 @@ export class OpenState implements PolygonState {
         }
         else {
             if (this.polygon.numberOfVertices === 0) {
-                this.addVertex(pointClicked);
+                this.polygon.addVertex(pointClicked);
             }
             else {
                 if (pointClicked.notTooCloseToPoint(this.polygon.firstVertex, Polygon.minimumDistanceBetweenPoints)) {
-                    this.addVertex(pointClicked);
+                    this.polygon.addVertex(pointClicked);
                 } else {
                     console.warn('Too close to first point');
                 }
 
             }
         }
-    }
-
-    addVertex(vertex: Point): void {
-        this.polygon.vertices.push(vertex);
     }
 
     noIntersectingSegmentsWhenAddingSegment(pointClicked: Point): boolean {
@@ -87,9 +83,8 @@ export class OpenState implements PolygonState {
     }
 
     handleRightClick(pointClicked: Point): void {
-        this.polygon.vertices.pop();
+        this.polygon.removeLastVertex();
     }
-
 
     closePolygon(): void {
         this.polygon.setCurrentState(new ClosedState(this.polygon));
@@ -97,12 +92,12 @@ export class OpenState implements PolygonState {
 
     calculateSegments(): Segment[] {
         const calculatedSegments: Segment[] = new Array();
-        for (let index = 1; index < this.polygon.vertices.length; index++) {
-            const firstPoint: Point = this.polygon.vertices[index - 1];
-            const secondPoint: Point = this.polygon.vertices[index];
-            const currentSegment: Segment = new Segment(firstPoint, secondPoint);
+        for (const currentVertex of this.polygon.vertices) {
+            const followingVertex: Point = this.polygon.getFollowingVertex(currentVertex);
+            const currentSegment: Segment = new Segment(currentVertex, followingVertex);
             calculatedSegments.push(currentSegment);
         }
+        calculatedSegments.pop(); // since polygon is open
         return calculatedSegments;
     }
 

@@ -27,14 +27,10 @@ export class Polygon {
         return this.enforceNonComplex;
     }
 
-    
+
 
     get segments(): Segment[] {
         return this.currentState.calculateSegments();
-    }
-
-    get numberOfVertices(): number {
-        return this.vertices.length;
     }
 
     get numberOfSegments(): number {
@@ -49,27 +45,7 @@ export class Polygon {
         }
     }
 
-    get firstVertex(): Point {
-        return this.vertices[0];
-    }
 
-    get lastVertex(): Point {
-        return this.vertices[this.vertices.length - 1];
-    }
-
-    get verticesExceptMovePoint(): Point[] {
-        if (this.movePoint === null) {
-            return this.vertices;
-        } else {
-            const verticesWithoutMovePoint: Point[] = new Array();
-            for (const vertex of this.vertices) {
-                if (vertex !== this.movePoint) {
-                    verticesWithoutMovePoint.push(vertex);
-                }
-            }
-            return verticesWithoutMovePoint;
-        }
-    }
 
     get isClosed(): boolean {
         return this.currentState instanceof ClosedState;
@@ -83,8 +59,19 @@ export class Polygon {
         return this.currentState instanceof MoveState;
     }
 
-    get isOpen(): boolean{
+    get isOpen(): boolean {
         return this.currentState instanceof OpenState;
+    }
+
+
+    handleLeftClick(position: Coordinate): void {
+        const leftClickedPoint: Point = new Point(position.x, position.y);
+        this.currentState.handleLeftClick(leftClickedPoint);
+    }
+
+    handleRightClick(position: Coordinate): void {
+        const rightClickedPoint: Point = new Point(position.x, position.y);
+        this.currentState.handleRightClick(rightClickedPoint);
     }
 
     getPaintableStillSegments(): PaintableSegment[] {
@@ -99,19 +86,12 @@ export class Polygon {
         this.currentState = state;
     }
 
-    handleLeftClick(position: Coordinate): void {
-        const leftClickedPoint: Point = new Point(position.x, position.y);
-        this.currentState.handleLeftClick(leftClickedPoint);
-    }
 
-    handleRightClick(position: Coordinate): void {
-        const rightClickedPoint: Point = new Point(position.x, position.y);
-        this.currentState.handleRightClick(rightClickedPoint);
-    }
 
     reversePolygonDirection(): void {
         this.vertices.reverse();
     }
+
 
     makeDirectionClockWise(): void {
         if (!this.isOpen && this.isCounterclockwise) {
@@ -125,10 +105,7 @@ export class Polygon {
         }
     }
 
-    insertVertex(newVertex: Point, insertAfterThisVertex: Point): void {
-        const oldPointIndex = this.vertices.indexOf(insertAfterThisVertex);
-        this.vertices.splice(oldPointIndex + 1, 0, newVertex);
-    }
+
 
     get isCounterclockwise(): boolean {
         if (!this.isOpen) {
@@ -165,27 +142,51 @@ export class Polygon {
     }
 
 
-    rotateVertices(steps: number): void {
-        this.vertices = Polygon.arrayRotate(this.vertices, steps);
+
+
+    get firstVertex(): Point {
+        return this.vertices[0];
     }
 
-    static arrayRotate(arr: any[], steps: number): any[] {
-        if (steps > 0) {
-            for (let step = 0; step < steps; step++) {
-                arr.push(arr.shift());
-            }
+    get lastVertex(): Point {
+        return this.vertices[this.vertices.length - 1];
+    }
+
+    get verticesExceptMovePoint(): Point[] {
+        if (this.movePoint === null) {
+            return this.vertices;
         } else {
-            for (let step = 0; step < Math.abs(steps); step++) {
-                arr.unshift(arr.pop());
+            const verticesWithoutMovePoint: Point[] = new Array();
+            for (const vertex of this.vertices) {
+                if (vertex !== this.movePoint) {
+                    verticesWithoutMovePoint.push(vertex);
+                }
             }
+            return verticesWithoutMovePoint;
         }
-        return arr;
+    }
+
+    get numberOfVertices(): number {
+        return this.vertices.length;
     }
 
     makeThisVertexFirst(vertex: Point): void {
         while (vertex !== this.vertices[0]) {
             this.rotateVertices(1);
         }
+    }
+
+    addVertex(newVertex: Point): void {
+        this.vertices.push(newVertex);
+    }
+
+    removeLastVertex(): void {
+        this.vertices.pop();
+    }
+
+    insertVertex(newVertex: Point, insertAfterThisVertex: Point): void {
+        const oldPointIndex = this.vertices.indexOf(insertAfterThisVertex);
+        this.vertices.splice(oldPointIndex + 1, 0, newVertex);
     }
 
     ejectVertex(vertexToRemove: Point): void {
@@ -203,6 +204,23 @@ export class Polygon {
         const index: number = this.vertices.indexOf(vertex);
         const indexOfFollowing: number = Polygon.moduloInPolygon(index + 1, this.vertices.length);
         return this.vertices[indexOfFollowing];
+    }
+
+    rotateVertices(steps: number): void {
+        this.vertices = Polygon.arrayRotate(this.vertices, steps);
+    }
+
+    static arrayRotate(arr: any[], steps: number): any[] {
+        if (steps > 0) {
+            for (let step = 0; step < steps; step++) {
+                arr.push(arr.shift());
+            }
+        } else {
+            for (let step = 0; step < Math.abs(steps); step++) {
+                arr.unshift(arr.pop());
+            }
+        }
+        return arr;
     }
 
     // function to translate negative indexes in a polygon.
