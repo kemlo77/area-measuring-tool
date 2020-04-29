@@ -61,25 +61,18 @@ export class Point {
         }
     }
 
-    // returning the nearest point or null if all points are outside maxDistance
-    // TODO: döp om variabler så att dom är mer logiska
-    nearestPointWithinDistance(points: Point[], maxDistance: number, skipPoint?: Point): Point {
-        // TODO: man kan nog skippa följande rad
-        if (typeof skipPoint === 'undefined') { skipPoint = null; }
-
-        // TODO: man kanske kan skriva om koden nedanför med en schysst "forEach  .. accumulator"
-        let localMinDistance: number = maxDistance;
-        let closestPointWithinMinDistance: Point = null;
+    nearestPointWithinDistance(points: Point[], distance: number, skipPoint?: Point): Point {
+        let smallestObservedDistance: number = distance;
+        let closestPointWithinDistance: Point = null;
         for (const point of points) {
             if (point === skipPoint) { continue; }
             const pointDistance: number = this.distanceToOtherPoint(point);
-            if (pointDistance < localMinDistance) {
-                // if it is closer than maxDistance, or nearer than any other previously saved, it is saved
-                closestPointWithinMinDistance = point;
-                localMinDistance = pointDistance;
+            if (pointDistance < smallestObservedDistance) {
+                closestPointWithinDistance = point;
+                smallestObservedDistance = pointDistance;
             }
         }
-        return closestPointWithinMinDistance;
+        return closestPointWithinDistance;
     }
 
     // Check the distance between two points
