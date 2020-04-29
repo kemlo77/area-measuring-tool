@@ -171,7 +171,7 @@ export class Polygon {
     }
 
     makeThisVertexFirst(vertex: Point): void {
-        while (vertex !== this.vertices[0]) {
+        while (this.vertices[0]!== vertex) {
             this.rotateVertices(1);
         }
     }
@@ -184,9 +184,9 @@ export class Polygon {
         this.vertices.pop();
     }
 
-    insertVertex(newVertex: Point, insertAfterThisVertex: Point): void {
-        const oldPointIndex = this.vertices.indexOf(insertAfterThisVertex);
-        this.vertices.splice(oldPointIndex + 1, 0, newVertex);
+    insertVertex(newVertex: Point, segment: Segment): void {
+        const pointBeforeIndex = this.vertices.indexOf(segment.p1);
+        this.vertices.splice(pointBeforeIndex + 1, 0, newVertex);
     }
 
     ejectVertex(vertexToRemove: Point): void {

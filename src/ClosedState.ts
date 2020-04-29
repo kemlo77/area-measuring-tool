@@ -25,12 +25,11 @@ export class ClosedState implements PolygonState {
             this.beginMovingThisVertex(vertexSelectedForMove);
         }
         else {
-            const segmentClicked: Segment = this.findClosestSegment(pointClicked, Polygon.interactDistance);
+            const segmentClicked: Segment = this.nearestSegmentWithinDistance(pointClicked, Polygon.interactDistance);
             if (segmentClicked !== null) {
                 const candidateVertex: Point = this.candidatePointOnSegment(segmentClicked, pointClicked);
                 if (this.notToCloseToNeighborsOnSegment(segmentClicked,candidateVertex)) {
-                    // TODO: det vore pedagogiskt om det var segmentet man angav. Borde hanteras av Polygon
-                    this.polygon.insertVertex(candidateVertex, segmentClicked.p1);
+                    this.polygon.insertVertex(candidateVertex, segmentClicked);
                 } else {
                     console.warn('New vertex too close to other vertex.');
                 }
@@ -46,11 +45,11 @@ export class ClosedState implements PolygonState {
     }
 
     notToCloseToNeighborsOnSegment(segment: Segment, candidateVertex: Point): boolean {
-        const segmPointDist1: number = candidateVertex.distanceToOtherPoint(segment.p1);
-        const segmPointDist2: number = candidateVertex.distanceToOtherPoint(segment.p2);
-        const closeToP1: boolean = segmPointDist1 > Polygon.minimumDistanceBetweenPoints;
-        const closeToP2: boolean = segmPointDist2 > Polygon.minimumDistanceBetweenPoints;
-        return closeToP1 && closeToP2;
+        const distanceToP1: number = candidateVertex.distanceToOtherPoint(segment.p1);
+        const distanceToP2: number = candidateVertex.distanceToOtherPoint(segment.p2);
+        const farEnoughFromP1: boolean = distanceToP1 > Polygon.minimumDistanceBetweenPoints;
+        const farEnoughFromP2: boolean = distanceToP2 > Polygon.minimumDistanceBetweenPoints;
+        return farEnoughFromP1 && farEnoughFromP2;
     }
 
     beginMovingThisVertex(vertex: Point): void {
@@ -73,7 +72,7 @@ export class ClosedState implements PolygonState {
             }
         }
         else {
-            const segmentClicked: Segment = this.findClosestSegment(pointClicked, Polygon.interactDistance);
+            const segmentClicked: Segment = this.nearestSegmentWithinDistance(pointClicked, Polygon.interactDistance);
             if (segmentClicked !== null) {
                 this.removeSelectedSegment(segmentClicked);
             }
@@ -117,7 +116,7 @@ export class ClosedState implements PolygonState {
         return false;
     }
 
-    findClosestSegment(candidatePoint: Point, minDistanceIn: number): Segment {
+    nearestSegmentWithinDistance(candidatePoint: Point, minDistanceIn: number): Segment {
         let smallestRecordedDistance: number = minDistanceIn;
         let segmentProjectedOn: Segment = null;
 
