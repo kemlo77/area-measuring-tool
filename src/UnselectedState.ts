@@ -5,6 +5,8 @@ import { Point } from './Point.js';
 import { ClosedState } from './ClosedState.js';
 import { Coordinate } from './Coordinate.js';
 import { PaintableSegment } from './PaintableSegment.js';
+import { MathUtil } from './MathUtil.js';
+import { Vector } from './Vector.js';
 
 export class UnselectedState implements PolygonState {
 
@@ -18,10 +20,19 @@ export class UnselectedState implements PolygonState {
 
 
     handleLeftClick(pointClicked: Point): void {
-        const segmentClicked: Segment = this.closedState.findClosestSegment(pointClicked, Polygon.interactDistance);
-        if (segmentClicked !== null) {
+        if (this.anySegmentClicked(pointClicked)) {
             this.polygon.setCurrentState(this.closedState);
         }
+    }
+
+    anySegmentClicked(pointClicked: Point): boolean {
+        for (const segment of this.polygon.segments) {
+            const vector: Vector = MathUtil.projectPointOntoSegment(segment, pointClicked);
+            if (vector !== null && vector.norm < Polygon.interactDistance) {
+                return true;
+            }
+        }
+        return false;
     }
 
     handleRightClick(pointClicked: Point): void {
@@ -37,7 +48,7 @@ export class UnselectedState implements PolygonState {
     }
 
     calculatePaintableMovingSegments(mousePosition: Coordinate): PaintableSegment[] {
-        return new Array<PaintableSegment>();
+        return this.closedState.calculatePaintableMovingSegments(mousePosition);
     }
 
 }

@@ -17,7 +17,7 @@ describe('Polygon - unselected', () => {
         expect(square.isSelected).to.equal(true);
     });
 
-    it('handleLeftClick() failing to reselect', () => {
+    it('handleLeftClick() failing to reselect 1', () => {
         const square: Polygon = getSquare();
         square.handleLeftClick({ x: 10, y: 10 }); // unselecting
         square.handleLeftClick({ x: 10, y: 10 }); // reselecting
@@ -25,7 +25,7 @@ describe('Polygon - unselected', () => {
     });
 
 
-    it('handleLeftClick() failing to reselect', () => {
+    it('handleLeftClick() failing to reselect 2', () => {
         const square: Polygon = getSquare();
         square.handleLeftClick({ x: 10, y: 10 }); // unselecting
         square.handleRightClick({ x: 10, y: 10 }); // reselecting
@@ -44,13 +44,13 @@ describe('Polygon - unselected', () => {
         expect(square.getPaintableStillSegments().length).to.equal(4);
     });
 
-    it('calculatePaintableMovingSegments()', () => {
+    it('calculatePaintableMovingSegments() 1', () => {
         const square: Polygon = getSquare();
         square.handleLeftClick({ x: 10, y: 10 }); // unselecting
         expect(square.getPaintableMovingSegments({ x: 10, y: 10 }).length).to.equal(0);
     });
 
-    it('calculatePaintableMovingSegments()', () => {
+    it('calculatePaintableMovingSegments() 2', () => {
         const square: Polygon = getSquare();
         square.handleLeftClick({ x: 10, y: 10 }); // unselecting
         expect(square.getPaintableMovingSegments({ x: 10, y: 10 }).length).to.equal(0);

@@ -35,7 +35,7 @@ describe('Polygon - move', () => {
 
         for (let step = 0; step < 4; step++) {
             const square: Polygon = getSquare();
-            it('Not possible to move vertex too close to existing vertex' + step, () => {
+            it('Not possible to move vertex too close to existing vertex A' + step, () => {
                 square.rotateVertices(-step);
                 square.handleLeftClick({ x: 100, y: 100 });
                 square.handleLeftClick({ x: 200 - Polygon.minimumDistanceBetweenPoints + 1, y: 199 }); // clicking near another vertex
@@ -48,7 +48,7 @@ describe('Polygon - move', () => {
 
         for (let step = 0; step < 4; step++) {
             const square: Polygon = getSquare();
-            it('Possible to move vertex when NOT too close to other vertex ' + step, () => {
+            it('Possible to move vertex when NOT too close to other vertex B' + step, () => {
                 square.rotateVertices(-step);
                 square.handleLeftClick({ x: 100, y: 100 });
                 square.handleLeftClick({ x: 200 - Polygon.minimumDistanceBetweenPoints, y: 199 }); // clicking near another vertex
@@ -69,7 +69,7 @@ describe('Polygon - move', () => {
 
         for (let step = 0; step < 4; step++) {
             const square: Polygon = getSquare();
-            it('vertices next to new vertex are possible to move', () => {
+            it('vertices next to new vertex are possible to move ' + step, () => {
                 square.rotateVertices(-step);
 
                 const vertexBefore: Point = square.vertices[step];

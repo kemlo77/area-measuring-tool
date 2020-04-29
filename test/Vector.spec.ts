@@ -13,13 +13,13 @@ describe('Vector', () => {
         expect(vector.y).to.equal(2);
     });
 
-    it('constructor - from x- and y-component', () => {
+    it('constructor - from x- and y-component 1', () => {
         const vector: Vector = new Vector(3, 4);
         expect(vector.x).to.equal(3);
         expect(vector.y).to.equal(4);
     });
 
-    it('constructor - from x- and y-component', () => {
+    it('constructor - from x- and y-component 2', () => {
         expect(() => new Vector('3', '4')).to.throw(/Invalid parameters/);
     });
 

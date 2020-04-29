@@ -127,17 +127,6 @@ export class ClosedState implements PolygonState {
         return segmentProjectedOn;
     }
 
-    trimUnnecessaryCoordinatePrecision(point: Point): void {
-        if (Polygon.useIntegerCoords) {
-            point.x = Math.round(point.x);
-            point.y = Math.round(point.y);
-        } else {
-            point.x = Math.round(point.x * 100) / 100;
-            point.y = Math.round(point.y * 100) / 100;
-        }
-    }
-
-
     calculateSegments(): Segment[] {
         const calculatedSegments: Segment[] = new Array();
         for (const vertex of this.polygon.vertices) {
