@@ -11,7 +11,7 @@ describe('Polygon - closed', () => {
         const square: Polygon = getSquare();
         it('Mark for move ' + step, () => {
             square.rotateVertices(step);
-            square.handleLeftClick({ x: 100, y: 100 });
+            square.handleLeftMouseDown({ x: 100, y: 100 });
             expect(square.isMoving).to.equal(true, 'Polygon not moving');
         });
     }
@@ -32,7 +32,8 @@ describe('Polygon - closed', () => {
         rectangle.handleLeftClick({ x: 100, y: 100 });
         expect(rectangle.vertices.length).to.equal(4, ' wrong number of vertices before');
         expect(rectangle.isClosed).to.equal(true, ' not closed');
-        rectangle.handleLeftClick({ x: 104 , y: 150 });
+        rectangle.handleLeftMouseDown({ x: 104 , y: 150 });
+        expect(rectangle.isMoving).to.equal(true, ' not moving');
         expect(rectangle.vertices.length).to.equal(5, ' wrong number of vertices after');
         
     });
@@ -43,8 +44,9 @@ describe('Polygon - closed', () => {
             const square: Polygon = getSquare();
             it('Adding vertex to segment ' + step, () => {
                 square.rotateVertices(step);
-                square.handleLeftClick({ x: 150, y: 100 });
+                square.handleLeftMouseDown({ x: 150, y: 100 });
                 expect(square.vertices.length).to.equal(5);
+                expect(square.isMoving).to.equal(true);
             });
         }
 

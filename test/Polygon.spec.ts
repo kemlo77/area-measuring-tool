@@ -82,7 +82,7 @@ describe('Polygon', () => {
 
     it('verticesExceptMovePoint - with a movePoint selected', () => {
         const square: Polygon = getSquare();
-        square.handleLeftClick({ x: 100, y: 100 });
+        square.handleLeftMouseDown({ x: 100, y: 100 });
         expect(square.verticesExceptMovePoint.length).to.equal(3);
     });
 
@@ -104,7 +104,7 @@ describe('Polygon', () => {
     });
 
     it('isMoving - moving', () => {
-        rectangle.handleLeftClick({ x: 100, y: 100 });
+        rectangle.handleLeftMouseDown({ x: 100, y: 100 });
         expect(rectangle.isMoving).to.equal(true);
     });
 

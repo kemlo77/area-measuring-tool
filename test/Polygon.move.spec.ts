@@ -15,9 +15,9 @@ describe('Polygon - move', () => {
             triangle.handleLeftClick({ x: 300, y: 100 });
             triangle.handleLeftClick({ x: 200, y: 300 });
             triangle.handleLeftClick({ x: 100, y: 100 }); // closing
-            triangle.handleLeftClick({ x: 100, y: 100 }); // marking for move
+            triangle.handleLeftMouseDown({ x: 100, y: 100 }); // marking for move
             expect(triangle.isMoving).is.equal(true);
-            triangle.handleLeftClick({ x: 110, y: 110 }); // moved
+            triangle.handleLeftMouseUp({ x: 110, y: 110 }); // moved
             expect(triangle.isMoving).is.equal(false);
         });
 
@@ -25,8 +25,8 @@ describe('Polygon - move', () => {
             const square: Polygon = getSquare();
             it('All vertices are normally possible to move ' + step, () => {
                 square.rotateVertices(-step);
-                square.handleLeftClick({ x: 100, y: 100 });
-                square.handleLeftClick({ x: 50, y: 50 });
+                square.handleLeftMouseDown({ x: 100, y: 100 });
+                square.handleLeftMouseUp({ x: 50, y: 50 });
                 expect(square.vertices[step].x).to.equal(50);
                 expect(square.vertices[step].y).to.equal(50);
                 expect(square.isClosed).to.equal(true, 'Polygon not closed.');
@@ -50,8 +50,8 @@ describe('Polygon - move', () => {
             const square: Polygon = getSquare();
             it('Possible to move vertex when NOT too close to other vertex B' + step, () => {
                 square.rotateVertices(-step);
-                square.handleLeftClick({ x: 100, y: 100 });
-                square.handleLeftClick({ x: 200 - Polygon.minimumDistanceBetweenPoints, y: 199 }); // clicking near another vertex
+                square.handleLeftMouseDown({ x: 100, y: 100 });
+                square.handleLeftMouseUp({ x: 200 - Polygon.minimumDistanceBetweenPoints, y: 199 }); // clicking near another vertex
                 square.handleRightClick({ x: 10, y: 10 });  // right  clicking in the void to abort move
                 expect(square.vertices[step].x).not.to.equal(100);
                 expect(square.vertices[step].y).not.to.equal(100);
@@ -61,7 +61,7 @@ describe('Polygon - move', () => {
 
         it('Aborting a move', () => {
             const square: Polygon = getSquare();
-            square.handleLeftClick({ x: 100, y: 100 });
+            square.handleLeftMouseDown({ x: 100, y: 100 });
             expect(square.isClosed).is.equal(false);
             square.handleRightClick({ x: 10, y: 10 }); // aborting
             expect(square.isClosed).is.equal(true);
@@ -75,22 +75,24 @@ describe('Polygon - move', () => {
                 const vertexBefore: Point = square.vertices[step];
 
                 // adding vertex
-                square.handleLeftClick({ x: 150, y: 100 });
+                square.handleLeftMouseDown({ x: 150, y: 100 });
+                expect(square.isMoving).to.equal(true);
+                square.handleLeftMouseUp({ x: 150, y: 100 });
                 expect(square.numberOfSegments).is.equal(5);
 
                 const addedVertex: Point = square.getFollowingVertex(vertexBefore);
                 const vertexAfter: Point = square.getFollowingVertex(addedVertex);
 
                 // moving vertex before added point
-                square.handleLeftClick({ x: 100, y: 100 });
-                square.handleLeftClick({ x: 90, y: 100 });
+                square.handleLeftMouseDown({ x: 100, y: 100 });
+                square.handleLeftMouseUp({ x: 90, y: 100 });
                 expect(vertexBefore.x).to.equal(90);
                 expect(vertexBefore.y).to.equal(100);
                 expect(square.isClosed).to.equal(true, 'Polygon not closed.');
 
                 // moving vertex before added point
-                square.handleLeftClick({ x: 200, y: 100 });
-                square.handleLeftClick({ x: 210, y: 100 });
+                square.handleLeftMouseDown({ x: 200, y: 100 });
+                square.handleLeftMouseUp({ x: 210, y: 100 });
                 expect(vertexAfter.x).to.equal(210);
                 expect(vertexAfter.y).to.equal(100);
                 expect(square.isClosed).to.equal(true, 'Polygon not closed.');
@@ -119,14 +121,14 @@ describe('Polygon - move', () => {
             it('Not possible to move when move creates intersection (neighbouring segments) ' + step, () => {
                 square.rotateVertices(-step);
                 // side 1
-                square.handleLeftClick({ x: 100, y: 100 });
+                square.handleLeftMouseDown({ x: 100, y: 100 });
                 square.handleLeftClick({ x: 150, y: 250 }); // moving here should not work
                 square.handleRightClick({ x: 10, y: 10 });  // right  clicking in the void to abort move
                 expect(square.vertices[step].x).to.equal(100); // no move should have occured
                 expect(square.vertices[step].y).to.equal(100);
                 expect(square.isClosed).to.equal(true, 'Polygon not closed.');
                 // side 2
-                square.handleLeftClick({ x: 100, y: 100 });
+                square.handleLeftMouseDown({ x: 100, y: 100 });
                 square.handleLeftClick({ x: 250, y: 150 }); // moving here should not work
                 square.handleRightClick({ x: 10, y: 10 });  // right  clicking in the void to abort move
                 expect(square.vertices[step].x).to.equal(100); // no move should have occured
@@ -148,14 +150,14 @@ describe('Polygon - move', () => {
             it('Not possible to move when move creates intersection (not neighbouring segments) ' + step, () => {
                 square.rotateVertices(-step);
                 // side 1
-                square.handleLeftClick({ x: 100, y: 100 });
+                square.handleLeftMouseDown({ x: 100, y: 100 });
                 square.handleLeftClick({ x: 125, y: 175 }); // moving here should not work
                 square.handleRightClick({ x: 10, y: 10 });  // right  clicking in the void to abort move
                 expect(square.vertices[step].x).to.equal(100); // no move should have occured
                 expect(square.vertices[step].y).to.equal(100);
                 expect(square.isClosed).to.equal(true, 'Polygon not closed.');
                 // side 2
-                square.handleLeftClick({ x: 100, y: 100 });
+                square.handleLeftMouseDown({ x: 100, y: 100 });
                 square.handleLeftClick({ x: 175, y: 125 }); // moving here should not work
                 square.handleRightClick({ x: 10, y: 10 });  // right  clicking in the void to abort move
                 expect(square.vertices[step].x).to.equal(100); // no move should have occured
@@ -206,7 +208,7 @@ describe('Polygon - move', () => {
                 shape.handleLeftClick({ x: 100, y: 200 });
                 shape.handleLeftClick({ x: 100, y: 100 }); // closing
                 shape.rotateVertices(1);
-                shape.handleLeftClick({ x: 100, y: 100 }); // marking for move
+                shape.handleLeftMouseDown({ x: 100, y: 100 }); // marking for move
                 const paintableStillSegments: PaintableSegment[] = shape.getPaintableStillSegments();
                 expect(paintableStillSegments.length).is.equal(4);
                 paintableStillSegments.forEach((segment) => {
@@ -229,7 +231,7 @@ describe('Polygon - move', () => {
                 shape.handleLeftClick({ x: 100, y: 200 });
                 shape.handleLeftClick({ x: 100, y: 100 }); // closing
                 shape.rotateVertices(1);
-                shape.handleLeftClick({ x: 100, y: 100 }); // marking for move
+                shape.handleLeftMouseDown({ x: 100, y: 100 }); // marking for move
                 const paintableMovingSegments: PaintableSegment[] = shape.getPaintableMovingSegments({ x: 10, y: 10 });
                 expect(paintableMovingSegments.length).is.equal(2);
 

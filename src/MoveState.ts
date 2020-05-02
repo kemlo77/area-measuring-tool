@@ -15,6 +15,18 @@ export class MoveState implements PolygonState {
     }
 
     handleLeftClick(pointClicked: Point): void {
+        //
+    }
+
+    handleRightClick(pointClicked: Point): void {
+        this.abortTheMove();
+    }
+
+    handleLeftMouseDown(pointClicked: Point): void {
+        //
+    }
+
+    handleLeftMouseUp(pointClicked: Point): void {
         if (pointClicked.noneOfThesePointsTooClose(this.polygon.verticesExceptMovePoint, Polygon.minimumDistanceBetweenPoints)) {
             if (this.noIntersectingSegmentsWhenMoving(pointClicked)) {
                 this.moveSelectedVertexTo(pointClicked);
@@ -26,19 +38,7 @@ export class MoveState implements PolygonState {
         }
     }
 
-    handleRightClick(pointClicked: Point): void {
-        this.cancelTheMove();
-    }
-
-    handleLeftMouseDown(pointClicked: Point): void {
-        //
-    }
-
-    handleLeftMouseUp(pointClicked: Point): void {
-        //
-    }
-
-    cancelTheMove(): void {
+    abortTheMove(): void {
         this.polygon.movePoint = null;
         this.polygon.setCurrentState(new ClosedState(this.polygon));
     }
