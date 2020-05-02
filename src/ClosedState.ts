@@ -21,19 +21,9 @@ export class ClosedState implements PolygonState {
 
     handleLeftClick(pointClicked: Point): void {
         const vertexSelectedForMove: Point = pointClicked.nearestPointWithinDistance(this.polygon.vertices, Polygon.interactDistance);
-        if (vertexSelectedForMove !== null) {
-            this.beginMovingThisVertex(vertexSelectedForMove);
-        }
-        else {
+        if (vertexSelectedForMove === null) {
             const segmentClicked: Segment = this.nearestSegmentWithinDistance(pointClicked, Polygon.interactDistance);
-            if (segmentClicked !== null) {
-                const candidateVertex: Point = this.candidatePointOnSegment(segmentClicked, pointClicked);
-                if (this.notToCloseToNeighborsOnSegment(segmentClicked,candidateVertex)) {
-                    this.polygon.insertVertex(candidateVertex, segmentClicked);
-                } else {
-                    console.warn('New vertex too close to other vertex.');
-                }
-            } else {
+            if (segmentClicked === null) {
                 this.polygon.setCurrentState(new UnselectedState(this.polygon, this));
             }
         }
@@ -77,6 +67,31 @@ export class ClosedState implements PolygonState {
                 this.removeSelectedSegment(segmentClicked);
             }
         }
+    }
+
+    handleLeftMouseDown(pointClicked: Point): void {
+        const vertexSelectedForMove: Point = pointClicked.nearestPointWithinDistance(this.polygon.vertices, Polygon.interactDistance);
+        if (vertexSelectedForMove !== null) {
+            this.beginMovingThisVertex(vertexSelectedForMove);
+        }
+        else {
+            const segmentClicked: Segment = this.nearestSegmentWithinDistance(pointClicked, Polygon.interactDistance);
+            if (segmentClicked !== null) {
+                const candidateVertex: Point = this.candidatePointOnSegment(segmentClicked, pointClicked);
+                if (this.notToCloseToNeighborsOnSegment(segmentClicked, candidateVertex)) {
+                    this.polygon.insertVertex(candidateVertex, segmentClicked);
+                    this.beginMovingThisVertex(candidateVertex);
+                } else {
+                    console.warn('New vertex too close to other vertex.');
+                }
+            } else {
+                this.polygon.setCurrentState(new UnselectedState(this.polygon, this));
+            }
+        }
+    }
+
+    handleLeftMouseUp(pointClicked: Point): void {
+        //
     }
 
     removeSelectedSegment(segment: Segment): void {

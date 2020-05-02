@@ -74,6 +74,16 @@ export class Polygon {
         this.currentState.handleRightClick(rightClickedPoint);
     }
 
+    handleLeftMouseDown(position: Coordinate): void {
+        const rightClickedPoint: Point = new Point(position.x, position.y);
+        this.currentState.handleLeftMouseDown(rightClickedPoint);
+    }
+
+    handleLeftMouseUp(position: Coordinate): void {
+        const rightClickedPoint: Point = new Point(position.x, position.y);
+        this.currentState.handleLeftMouseUp(rightClickedPoint);
+    }
+
     getPaintableStillSegments(): PaintableSegment[] {
         return this.currentState.calculatePaintableStillSegments();
     }

@@ -39,6 +39,14 @@ export class UnselectedState implements PolygonState {
         //
     }
 
+    handleLeftMouseDown(pointClicked: Point): void {
+        //
+    }
+
+    handleLeftMouseUp(pointClicked: Point): void {
+        //
+    }
+
     calculateSegments(): Segment[] {
         return this.closedState.calculateSegments();
     }

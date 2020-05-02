@@ -9,6 +9,10 @@ export interface PolygonState {
 
     handleRightClick(pointClicked: Point): void;
 
+    handleLeftMouseDown(pointClicked: Point): void;
+
+    handleLeftMouseUp(pointClicked: Point): void;
+
     calculateSegments(): Segment[];
 
     calculatePaintableStillSegments(): PaintableSegment[];

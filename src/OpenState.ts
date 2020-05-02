@@ -86,6 +86,14 @@ export class OpenState implements PolygonState {
         this.polygon.removeLastVertex();
     }
 
+    handleLeftMouseDown(pointClicked: Point): void {
+        //
+    }
+
+    handleLeftMouseUp(pointClicked: Point): void {
+        //
+    }
+
     closePolygon(): void {
         this.polygon.setCurrentState(new ClosedState(this.polygon));
     }

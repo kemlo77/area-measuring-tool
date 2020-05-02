@@ -30,6 +30,14 @@ export class MoveState implements PolygonState {
         this.cancelTheMove();
     }
 
+    handleLeftMouseDown(pointClicked: Point): void {
+        //
+    }
+
+    handleLeftMouseUp(pointClicked: Point): void {
+        //
+    }
+
     cancelTheMove(): void {
         this.polygon.movePoint = null;
         this.polygon.setCurrentState(new ClosedState(this.polygon));

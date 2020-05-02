@@ -28,11 +28,13 @@
 		}
 	</style>
 
-	<script type="module">import { init, getMousePos, canvasLeftClicked, canvasRightClicked } from "./built/main.js";
+	<script type="module">import { init, canvasMouseMovement, canvasLeftClicked, canvasRightClicked, canvasMouseDown, canvasMouseUp } from "./built/main.js";
 		window.init = init;
-		window.getMousePos = getMousePos;
+		window.canvasMouseMovement = canvasMouseMovement;
 		window.canvasLeftClicked = canvasLeftClicked;
 		window.canvasRightClicked = canvasRightClicked;
+		window.canvasMouseDown = canvasMouseDown;
+		window.canvasMouseUp = canvasMouseUp;
 	</script>
 
 </head>
@@ -57,8 +59,9 @@
 	<BR>
 	<div id="viewport">
 		<canvas id="background" width="1000" height="480" style="z-index: 1;"></canvas>
-		<canvas id="foreground" width="1000" height="480" style="z-index: 2;" onMouseMove="getMousePos(event,this.id);"
-			onClick="canvasLeftClicked(event,this.id)" oncontextmenu="canvasRightClicked(event,this.id);"></canvas>
+		<canvas id="foreground" width="1000" height="480" style="z-index: 2;" onMouseMove="canvasMouseMovement(event,this.id);"
+			onClick="canvasLeftClicked(event,this.id)" onmousedown="canvasMouseDown(event,this.id);"
+			onmouseup="canvasMouseUp(event,this.id);" oncontextmenu="canvasRightClicked(event,this.id);"></canvas>
 	</div>
 
 </body>
