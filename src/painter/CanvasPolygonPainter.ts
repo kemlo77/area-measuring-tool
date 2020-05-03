@@ -50,7 +50,7 @@ export class CanvasPolygonPainter extends CanvasPainter {
         const segments: PaintableSegment[] = polygon.getPaintableMovingSegments(mousePosition);
         if (segments.length > 0) {
             for (const segment of segments) {
-                this.drawOneMovingSegment(segment, this.moveColor);
+                this.drawOneMovingSegment(segment, this.defaultColor);
             }
             this.saveExtremes(segments);
         }
@@ -62,7 +62,7 @@ export class CanvasPolygonPainter extends CanvasPainter {
     // draw a point with inner and outer color
     drawDoubleDot(dot2paint: Coordinate, outerColor: string, innerColor: string): void {
         // outer color (larger)
-        this.drawDot(dot2paint, 4, outerColor);
+        this.drawDot(dot2paint, 5, outerColor);
         // inner color (smaler drawn on top of the other)
         this.drawDot(dot2paint, 2, innerColor);
     }
@@ -86,7 +86,7 @@ export class CanvasPolygonPainter extends CanvasPainter {
     drawLine(startP: Coordinate, endP: Coordinate, lineColor: string, ctx: CanvasRenderingContext2D): void {
         ctx.strokeStyle = 'rgba(' + lineColor + ',1)';
         ctx.beginPath();
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 3;
         ctx.moveTo(startP.x, startP.y);
         ctx.lineTo(endP.x, endP.y);
         ctx.closePath();
