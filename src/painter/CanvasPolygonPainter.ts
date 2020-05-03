@@ -25,18 +25,17 @@ export class CanvasPolygonPainter extends CanvasPainter {
     }
 
 
-
     drawStill(motif: any): void {
-        // draw 'segments' not marked as moving
-        // draw dots
         const polygon: Polygon = motif as Polygon;
+
         polygon.getPaintableStillSegments().forEach((it) => { this.drawOneStillSegment(it, this.defaultColor); });
+
         if (polygon.isSelected) {
             for (const vertex of polygon.vertices) {
                 if (vertex === polygon.movePoint) {
                     continue;
                 }
-                this.drawDoubleDot(vertex, this.defaultColor, this.whiteColor);
+                this.drawFilledDot(vertex, this.defaultColor, this.whiteColor);
             }
         }
 
@@ -44,7 +43,6 @@ export class CanvasPolygonPainter extends CanvasPainter {
 
     drawMovement(motif: any, mousePosition: Coordinate): void {
         this.clearUsedCanvas();
-        // draw 'segments' marked as moving
         const polygon: Polygon = motif as Polygon;
 
         const segments: PaintableSegment[] = polygon.getPaintableMovingSegments(mousePosition);
@@ -57,13 +55,8 @@ export class CanvasPolygonPainter extends CanvasPainter {
 
     }
 
-
-
-    // draw a point with inner and outer color
-    drawDoubleDot(dot2paint: Coordinate, outerColor: string, innerColor: string): void {
-        // outer color (larger)
+    drawFilledDot(dot2paint: Coordinate, outerColor: string, innerColor: string): void {
         this.drawDot(dot2paint, 4, outerColor);
-        // inner color (smaler drawn on top of the other)
         this.drawDot(dot2paint, 2, innerColor);
     }
 
@@ -92,9 +85,6 @@ export class CanvasPolygonPainter extends CanvasPainter {
         ctx.closePath();
         ctx.stroke();
     }
-
-
-
 
 
     saveExtremes(arrayWithSegments: PaintableSegment[]): void {
