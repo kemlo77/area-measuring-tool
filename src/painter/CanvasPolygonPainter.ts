@@ -38,12 +38,6 @@ export class CanvasPolygonPainter extends CanvasPainter {
                 }
                 this.drawDoubleDot(vertex, this.defaultColor, this.whiteColor);
             }
-            if (polygon.numberOfVertices > 0) {
-                this.drawDoubleDot(polygon.firstVertex, this.defaultColor, this.greenColor);
-            }
-            if (polygon.isClosed) {
-                this.drawDoubleDot(polygon.lastVertex, this.defaultColor, this.redColor);
-            }
         }
 
     }
@@ -122,7 +116,11 @@ export class CanvasPolygonPainter extends CanvasPainter {
     }
 
     clearUsedCanvas(): void {
-        this.movementCanvasCtx.clearRect(this.oldXMin - 2, this.oldYMin - 2, this.oldXMax - this.oldXMin + 4, this.oldYMax - this.oldYMin + 4);
+        const xOffset: number = this.oldXMin - 2;
+        const yOffset: number = this.oldYMin - 2;
+        const width: number = this.oldXMax - this.oldXMin + 4;
+        const height: number = this.oldYMax - this.oldYMin + 4;
+        this.movementCanvasCtx.clearRect(xOffset, yOffset, width, height);
 
         this.oldXMin = 0;
         this.oldXMax = 1;

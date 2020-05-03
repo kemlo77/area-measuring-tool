@@ -8,7 +8,8 @@
         "no-console": [true, "log"],
         "quotemark": [true, "single"],
         "semicolon": [true, "always"],
-        "typedef": [true, "parameter", "call-signature", "member-variable-declaration"]
+        "typedef": [true, "parameter", "call-signature", "member-variable-declaration"],
+        "max-line-length": [true, 120]
     },
     "rulesDirectory": []
 }

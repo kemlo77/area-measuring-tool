@@ -17,6 +17,7 @@ export class OpenState implements PolygonState {
 
 
     handleLeftClick(pointClicked: Point): void {
+        const minimumDistance: number = Polygon.minimumDistanceBetweenPoints;
         if (this.polygon.numberOfVertices >= 2) {
             if (pointClicked.closeEnoughToPoint(this.polygon.firstVertex, Polygon.interactDistance)) {
                 if (this.polygon.numberOfSegments >= 2) {
@@ -31,7 +32,7 @@ export class OpenState implements PolygonState {
                 }
             }
             else {
-                if (pointClicked.noneOfThesePointsTooClose(this.polygon.vertices, Polygon.minimumDistanceBetweenPoints)) {
+                if (pointClicked.noneOfThesePointsTooClose(this.polygon.vertices, minimumDistance)) {
                     if (this.noIntersectingSegmentsWhenAddingSegment(pointClicked)) {
                         this.polygon.addVertex(pointClicked);
                     } else {
@@ -47,7 +48,7 @@ export class OpenState implements PolygonState {
                 this.polygon.addVertex(pointClicked);
             }
             else {
-                if (pointClicked.notTooCloseToPoint(this.polygon.firstVertex, Polygon.minimumDistanceBetweenPoints)) {
+                if (pointClicked.notTooCloseToPoint(this.polygon.firstVertex, minimumDistance)) {
                     this.polygon.addVertex(pointClicked);
                 } else {
                     console.warn('Too close to first point');

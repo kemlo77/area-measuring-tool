@@ -20,7 +20,8 @@ export class ClosedState implements PolygonState {
 
 
     handleLeftClick(pointClicked: Point): void {
-        const vertexSelectedForMove: Point = pointClicked.nearestPointWithinDistance(this.polygon.vertices, Polygon.interactDistance);
+        const vertexSelectedForMove: Point =
+            pointClicked.nearestPointWithinDistance(this.polygon.vertices, Polygon.interactDistance);
         if (vertexSelectedForMove === null) {
             const segmentClicked: Segment = this.nearestSegmentWithinDistance(pointClicked, Polygon.interactDistance);
             if (segmentClicked === null) {
@@ -48,7 +49,8 @@ export class ClosedState implements PolygonState {
     }
 
     handleRightClick(pointClicked: Point): void {
-        const removeCandidateVertex: Point = pointClicked.nearestPointWithinDistance(this.polygon.vertices, Polygon.interactDistance);
+        const removeCandidateVertex: Point =
+            pointClicked.nearestPointWithinDistance(this.polygon.vertices, Polygon.interactDistance);
 
         if (removeCandidateVertex !== null) {
             if (this.polygon.numberOfSegments > 3) {
@@ -70,7 +72,8 @@ export class ClosedState implements PolygonState {
     }
 
     handleLeftMouseDown(pointClicked: Point): void {
-        const vertexSelectedForMove: Point = pointClicked.nearestPointWithinDistance(this.polygon.vertices, Polygon.interactDistance);
+        const vertexSelectedForMove: Point =
+            pointClicked.nearestPointWithinDistance(this.polygon.vertices, Polygon.interactDistance);
         if (vertexSelectedForMove !== null) {
             this.beginMovingThisVertex(vertexSelectedForMove);
         }

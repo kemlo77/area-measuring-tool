@@ -48,7 +48,7 @@ export class Polygon {
 
 
     get isClosed(): boolean {
-        return this.currentState instanceof ClosedState;
+        return !(this.currentState instanceof OpenState);
     }
 
     get isSelected(): boolean {
@@ -235,8 +235,9 @@ export class Polygon {
 
     // function to translate negative indexes in a polygon.
     // (e.g. index -2 in a polygon with 6 sides is 4)
-    // also if index is larger. For example input 7 will return 
-    // TODO: skriv om denna så att man anger sitt orena index och sin array, så plockar man ut array.length i denna metoden.
+    // also if index is larger. For example input 7 will return
+    // TODO: skriv om denna så att man anger sitt orena index och sin array,
+    // så plockar man ut array.length i denna metoden.
     static moduloInPolygon(indexIn: number, arrayLength: number): number {
         while (indexIn < 0) {
             indexIn += arrayLength;

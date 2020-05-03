@@ -27,7 +27,8 @@ export class MoveState implements PolygonState {
     }
 
     handleLeftMouseUp(pointClicked: Point): void {
-        if (pointClicked.noneOfThesePointsTooClose(this.polygon.verticesExceptMovePoint, Polygon.minimumDistanceBetweenPoints)) {
+        const verticesToCheck: Point[] = this.polygon.verticesExceptMovePoint;
+        if (pointClicked.noneOfThesePointsTooClose(verticesToCheck, Polygon.minimumDistanceBetweenPoints)) {
             if (this.noIntersectingSegmentsWhenMoving(pointClicked)) {
                 this.moveSelectedVertexTo(pointClicked);
             } else {
@@ -68,7 +69,7 @@ export class MoveState implements PolygonState {
             const precedingSegment: Segment = new Segment(precedingVertex, candidateLocation);
             const followingSegment: Segment = new Segment(candidateLocation, followingVertex);
 
-            // general idea: no need to check if neighbouring segments intersect with current segment (being checked)
+            // no need to check if neighbouring segments intersect with current segment
             for (const segment of segments) {
 
                 if (segment.containsThisVertex(this.polygon.movePoint)) { continue; }

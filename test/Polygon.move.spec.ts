@@ -38,7 +38,9 @@ describe('Polygon - move', () => {
             it('Not possible to move vertex too close to existing vertex A' + step, () => {
                 square.rotateVertices(-step);
                 square.handleLeftClick({ x: 100, y: 100 });
-                square.handleLeftClick({ x: 200 - Polygon.minimumDistanceBetweenPoints + 1, y: 199 }); // clicking near another vertex
+                // clicking near another vertex
+                square.handleLeftClick({ x: 200 - Polygon.minimumDistanceBetweenPoints + 1, y: 199 });
+
                 square.handleRightClick({ x: 10, y: 10 });  // right  clicking in the void to abort move
                 expect(square.vertices[step].x).to.equal(100);
                 expect(square.vertices[step].y).to.equal(100);
@@ -51,7 +53,10 @@ describe('Polygon - move', () => {
             it('Possible to move vertex when NOT too close to other vertex B' + step, () => {
                 square.rotateVertices(-step);
                 square.handleLeftMouseDown({ x: 100, y: 100 });
-                square.handleLeftMouseUp({ x: 200 - Polygon.minimumDistanceBetweenPoints, y: 199 }); // clicking near another vertex
+
+                // clicking near another vertex
+                square.handleLeftMouseUp({ x: 200 - Polygon.minimumDistanceBetweenPoints, y: 199 });
+
                 square.handleRightClick({ x: 10, y: 10 });  // right  clicking in the void to abort move
                 expect(square.vertices[step].x).not.to.equal(100);
                 expect(square.vertices[step].y).not.to.equal(100);
@@ -62,7 +67,7 @@ describe('Polygon - move', () => {
         it('Aborting a move', () => {
             const square: Polygon = getSquare();
             square.handleLeftMouseDown({ x: 100, y: 100 });
-            expect(square.isClosed).is.equal(false);
+            expect(square.isMoving).is.equal(true);
             square.handleRightClick({ x: 10, y: 10 }); // aborting
             expect(square.isClosed).is.equal(true);
         });
@@ -106,7 +111,10 @@ describe('Polygon - move', () => {
             it('Not possible to move vertex too close to existing vertex' + step, () => {
                 square.rotateVertices(-step);
                 square.handleLeftClick({ x: 100, y: 100 });
-                square.handleLeftClick({ x: 200 - Polygon.minimumDistanceBetweenPoints + 1, y: 199 }); // clicking near another vertex
+
+                // clicking near another vertex
+                square.handleLeftClick({ x: 200 - Polygon.minimumDistanceBetweenPoints + 1, y: 199 });
+
                 square.handleRightClick({ x: 10, y: 10 });  // right  clicking in the void to abort move
                 expect(square.vertices[step].x).to.equal(100);
                 expect(square.vertices[step].y).to.equal(100);
