@@ -43,10 +43,7 @@ export class ClosedState implements PolygonState {
         return farEnoughFromP1 && farEnoughFromP2;
     }
 
-    beginMovingThisVertex(vertex: Point): void {
-        this.polygon.movePoint = vertex;
-        this.polygon.setCurrentState(new MoveState(this.polygon));
-    }
+
 
     handleRightClick(pointClicked: Point): void {
         const removeCandidateVertex: Point =
@@ -75,7 +72,7 @@ export class ClosedState implements PolygonState {
         const vertexSelectedForMove: Point =
             pointClicked.nearestPointWithinDistance(this.polygon.vertices, Polygon.interactDistance);
         if (vertexSelectedForMove !== null) {
-            this.beginMovingThisVertex(vertexSelectedForMove);
+            this.beginMovingThisVertex(vertexSelectedForMove, pointClicked);
         }
         else {
             const segmentClicked: Segment = this.nearestSegmentWithinDistance(pointClicked, Polygon.interactDistance);
@@ -83,7 +80,7 @@ export class ClosedState implements PolygonState {
                 const candidateVertex: Point = this.candidatePointOnSegment(segmentClicked, pointClicked);
                 if (this.notToCloseToNeighborsOnSegment(segmentClicked, candidateVertex)) {
                     this.polygon.insertVertex(candidateVertex, segmentClicked);
-                    this.beginMovingThisVertex(candidateVertex);
+                    this.beginMovingThisVertex(candidateVertex, pointClicked);
                 } else {
                     console.warn('New vertex too close to other vertex.');
                 }
@@ -91,6 +88,12 @@ export class ClosedState implements PolygonState {
                 this.polygon.setCurrentState(new UnselectedState(this.polygon, this));
             }
         }
+    }
+
+    beginMovingThisVertex(vertex: Point, pointClicked: Point): void {
+        this.polygon.movePoint = vertex;
+        this.polygon.mousePositionAtMoveStart = pointClicked;
+        this.polygon.setCurrentState(new MoveState(this.polygon));
     }
 
     handleLeftMouseUp(pointClicked: Point): void {
