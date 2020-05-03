@@ -12,7 +12,6 @@ export class Polygon {
     public vertices: Point[];
     public movePoint: Point;
     private currentState: PolygonState;
-    private enforceNonComplex: boolean;
     public static readonly minimumDistanceBetweenPoints: number = 8;
     public static readonly interactDistance: number = 5;
 
@@ -20,14 +19,7 @@ export class Polygon {
         this.vertices = new Array();
         this.movePoint = null;
         this.currentState = new OpenState(this);
-        this.enforceNonComplex = true;
     }
-
-    get enforceNonComplexPolygon(): boolean {
-        return this.enforceNonComplex;
-    }
-
-
 
     get segments(): Segment[] {
         return this.currentState.calculateSegments();

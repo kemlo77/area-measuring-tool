@@ -45,12 +45,7 @@ export class MoveState implements PolygonState {
     }
 
     noIntersectingSegmentsWhenMoving(candidateLocation: Point): boolean {
-        if (this.polygon.enforceNonComplexPolygon) {
-            return this.movedSegmentsDoNotIntersect(candidateLocation);
-        }
-        else {
-            return true;
-        }
+        return this.movedSegmentsDoNotIntersect(candidateLocation);
     }
 
     moveSelectedVertexTo(toPoint: Point): void {
@@ -102,7 +97,7 @@ export class MoveState implements PolygonState {
     calculatePaintableStillSegments(): PaintableSegment[] {
         const paintableSegment: PaintableSegment[] = new Array();
         for (const segment of this.polygon.segments) {
-            if(segment.doesNotContainThisVertex(this.polygon.movePoint)){
+            if (segment.doesNotContainThisVertex(this.polygon.movePoint)) {
                 paintableSegment.push({ p1: segment.p1, p2: segment.p2 });
             }
         }

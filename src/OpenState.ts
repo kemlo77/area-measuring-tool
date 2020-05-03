@@ -59,28 +59,18 @@ export class OpenState implements PolygonState {
     }
 
     noIntersectingSegmentsWhenAddingSegment(pointClicked: Point): boolean {
-        if (this.polygon.enforceNonComplexPolygon) {
-            const candidateSegment: Segment = new Segment(this.polygon.lastVertex, pointClicked);
-            const segmentsToCheck: Segment[] = this.polygon.segments;
-            segmentsToCheck.pop(); // not checking with the last segment (they have a common vertex)
-            return candidateSegment.doesNotIntersectAnyOfTheseSegments(segmentsToCheck);
-        }
-        else {
-            return true;
-        }
+        const candidateSegment: Segment = new Segment(this.polygon.lastVertex, pointClicked);
+        const segmentsToCheck: Segment[] = this.polygon.segments;
+        segmentsToCheck.pop(); // not checking with the last segment (they have a common vertex)
+        return candidateSegment.doesNotIntersectAnyOfTheseSegments(segmentsToCheck);
     }
 
     noIntersectingSegmentsWhenClosing(): boolean {
-        if (this.polygon.enforceNonComplexPolygon) {
-            const newSegment: Segment = new Segment(this.polygon.lastVertex, this.polygon.firstVertex);
-            const segmentsToCheck: Segment[] = this.polygon.segments;
-            segmentsToCheck.shift(); // not checking with the first and
-            segmentsToCheck.pop(); // last segment (they have a common vertex)
-            return newSegment.doesNotIntersectAnyOfTheseSegments(segmentsToCheck);
-        }
-        else {
-            return true;
-        }
+        const newSegment: Segment = new Segment(this.polygon.lastVertex, this.polygon.firstVertex);
+        const segmentsToCheck: Segment[] = this.polygon.segments;
+        segmentsToCheck.shift(); // not checking with the first and
+        segmentsToCheck.pop(); // last segment (they have a common vertex)
+        return newSegment.doesNotIntersectAnyOfTheseSegments(segmentsToCheck);
     }
 
     handleRightClick(pointClicked: Point): void {

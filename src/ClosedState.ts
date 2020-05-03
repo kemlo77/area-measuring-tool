@@ -107,12 +107,7 @@ export class ClosedState implements PolygonState {
     }
 
     noIntersectingSegmentsWhenRemovingVertex(removeCandidateVertex: Point): boolean {
-        if (this.polygon.enforceNonComplexPolygon) {
-            return !this.checkIfRemovedPointCausesSegmentIntersect(removeCandidateVertex);
-        }
-        else {
-            return true;
-        }
+        return !this.checkIfRemovedPointCausesSegmentIntersect(removeCandidateVertex);
     }
 
     private checkIfRemovedPointCausesSegmentIntersect(deleteCandidateVertex: Point): boolean {
