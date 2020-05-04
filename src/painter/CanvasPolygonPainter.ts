@@ -48,7 +48,7 @@ export class CanvasPolygonPainter extends CanvasPainter {
         const segments: PaintableSegment[] = polygon.getPaintableMovingSegments(mousePosition);
         if (segments.length > 0) {
             for (const segment of segments) {
-                this.drawOneMovingSegment(segment, this.moveColor);
+                this.drawOneMovingSegment(segment, this.defaultColor);
             }
             this.saveExtremes(segments);
         }
@@ -79,7 +79,7 @@ export class CanvasPolygonPainter extends CanvasPainter {
     drawLine(startP: Coordinate, endP: Coordinate, lineColor: string, ctx: CanvasRenderingContext2D): void {
         ctx.strokeStyle = 'rgba(' + lineColor + ',1)';
         ctx.beginPath();
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 3;
         ctx.moveTo(startP.x, startP.y);
         ctx.lineTo(endP.x, endP.y);
         ctx.closePath();

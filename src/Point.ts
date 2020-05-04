@@ -12,16 +12,20 @@ export class Point {
         } else if (xOrPoint instanceof Point) {
             this.x = xOrPoint.x;
             this.y = xOrPoint.y;
-        } else if (typeof xOrPoint === 'number'){
-            if(typeof y !== 'undefined'){
-                this.x=xOrPoint;
-                this.y=y;
+        } else if (typeof xOrPoint === 'number') {
+            if (typeof y !== 'undefined') {
+                this.x = xOrPoint;
+                this.y = y;
             } else {
                 throw new Error('Invalid parameters');
             }
         } else {
             throw new Error('Invalid parameters');
         }
+    }
+
+    hasSameCoordinateAs(otherPoint: Point): boolean {
+        return (this.x === otherPoint.x && this.y === otherPoint.y);
     }
 
     copyValues(copyFromThisPoint: Point): void {

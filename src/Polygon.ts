@@ -2,7 +2,6 @@ import { OpenState } from './OpenState.js';
 import { Point } from './Point.js';
 import { PolygonState } from './PolygonState.js';
 import { Segment } from './Segment.js';
-import { ClosedState } from './ClosedState.js';
 import { Coordinate } from './Coordinate.js';
 import { PaintableSegment } from './PaintableSegment.js';
 import { UnselectedState } from './UnselectedState.js';
@@ -11,8 +10,8 @@ import { MoveState } from './MoveState.js';
 export class Polygon {
     public vertices: Point[];
     public movePoint: Point;
+    public mousePositionAtMoveStart: Point;
     private currentState: PolygonState;
-    private enforceNonComplex: boolean;
     public static readonly minimumDistanceBetweenPoints: number = 8;
     public static readonly interactDistance: number = 5;
 
@@ -20,14 +19,7 @@ export class Polygon {
         this.vertices = new Array();
         this.movePoint = null;
         this.currentState = new OpenState(this);
-        this.enforceNonComplex = true;
     }
-
-    get enforceNonComplexPolygon(): boolean {
-        return this.enforceNonComplex;
-    }
-
-
 
     get segments(): Segment[] {
         return this.currentState.calculateSegments();
