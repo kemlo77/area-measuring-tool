@@ -3,18 +3,14 @@ import { Coordinate } from './Coordinate.js';
 import { CanvasStudio } from './painter/CanvasStudio.js';
 
 const listOfPolygons: Polygon[] = new Array();
-let firstPolygon: Polygon;
 
 
 export function init(): void {
-	firstPolygon = new Polygon();
+	// TODO: vad ska denna metod göra egentligen
 }
 
 export function canvasLeftClicked(event: MouseEvent, canvasId: string): void {
 	const coordinate: Coordinate = getMouseCoordinate(event, canvasId);
-	if (listOfPolygons.length === 0) {
-		listOfPolygons.push(new Polygon());
-	}
 
 	// kolla om nån redan är vald
 	if (getSelectedPolygon() === null) {
@@ -25,17 +21,23 @@ export function canvasLeftClicked(event: MouseEvent, canvasId: string): void {
 				break;
 			}
 		}
-		// om fortfarande ingen vald, skapa en ny
-		if (getSelectedPolygon() === null) {
-			listOfPolygons.push(new Polygon());
-			getSelectedPolygon().handleLeftClick(coordinate);
-		}
 	} else {
 		getSelectedPolygon().handleLeftClick(coordinate);
 	}
 
 	paintAllStill();
 	paintSelectedMovement(coordinate);
+}
+
+export function addNewPolygon(): void {
+	listOfPolygons.push(new Polygon());
+}
+
+export function removeSelectedPolygon(): void {
+	const index: number = listOfPolygons.indexOf(getSelectedPolygon());
+	listOfPolygons.splice(index, 1);
+	// TODO: clear moving canvas
+	paintAllStill();
 }
 
 
@@ -83,11 +85,6 @@ function getMouseCoordinate(event: MouseEvent, elementId: string): Coordinate {
 	const x: number = event.clientX - rect.left;
 	const y: number = event.clientY - rect.top;
 	return { x, y };
-}
-
-export function clearEntirely(): void {
-	firstPolygon = new Polygon();
-	// CanvasStudio.getInstance().paintStill(firstPolygon);
 }
 
 

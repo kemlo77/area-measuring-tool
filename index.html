@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <meta charset="UTF-8">
-<html>
+<html lang="en" xml:lang="en">
 
 <head>
+	<title>Non complex polygon</Title>
 	<style type="text/css">
 		canvas {
 			border: 1px solid black;
@@ -11,57 +12,40 @@
 		}
 
 		#viewport {
-			/**
-				 * Position relative so that canvas elements
-				 * inside of it will be relative to the parent
-				 */
 			position: relative;
 		}
 
 		#viewport canvas {
-			/**
-				 * Position absolute provides canvases to be able
-				 * to be layered on top of each other
-				 * Be sure to remember a z-index!
-				 */
 			position: absolute;
 		}
 	</style>
 
-	<script type="module">import { init, canvasMouseMovement, canvasLeftClicked, canvasRightClicked, canvasMouseDown, canvasMouseUp } from "./built/main.js";
+	<script type="module">import { init, addNewPolygon, removeSelectedPolygon, canvasMouseMovement, canvasLeftClicked, canvasRightClicked, canvasMouseDown, canvasMouseUp } from "./built/main.js";
 		window.init = init;
 		window.canvasMouseMovement = canvasMouseMovement;
 		window.canvasLeftClicked = canvasLeftClicked;
 		window.canvasRightClicked = canvasRightClicked;
 		window.canvasMouseDown = canvasMouseDown;
 		window.canvasMouseUp = canvasMouseUp;
+		window.addNewPolygon = addNewPolygon;
+		window.removeSelectedPolygon = removeSelectedPolygon;
 	</script>
 
 </head>
 
 <body oncontextmenu="return false;" onload="init();">
-	Praktiska<BR>
-	<button type="button" onClick="firstPolygon.reversePolygon()">�ndra med/motsols</button>
-	<button type="button" onClick="clearEntirely()">clear canvas</button>
-	<button type="button" onClick="firstPolygon.revolFirstIndex(0);drawPolygon(firstPolygon)">Change starting
-		point</button>
-	<BR><BR><BR>
-	Test<BR>
-	<button type="button" onClick="testFunk2()"># of segments? and closed?</button>
-	<button type="button" onClick="drawPolygon(firstPolygon)">drawPolygon</button>
-	<button type="button" onClick="testFunk4()">Gauss shoelace</button>
-	<BR>
-	<button type="button" onClick="testFunk()">test</button>
-	<button type="button" onClick="testFunk3()">testfunk3</button>
-	<BR>
-	<button type="button" onClick="testFunk8()">rita rad</button>
-	<button type="button" onClick="checkIfComplex(firstPolygon)">kolla intersects mellan segment</button>
-	<BR>
+	Create non-complex polygons<br><br>
+	<button type="button" onclick="addNewPolygon();">Add new polygon</button>
+	<button type="button" onclick="removeSelectedPolygon();">Remove selected polygon</button>
+	<br><br>
 	<div id="viewport">
-		<canvas id="background" width="1000" height="480" style="z-index: 1;"></canvas>
-		<canvas id="foreground" width="1000" height="480" style="z-index: 2;" onMouseMove="canvasMouseMovement(event,this.id);"
-			onClick="canvasLeftClicked(event,this.id)" onmousedown="canvasMouseDown(event,this.id);"
-			onmouseup="canvasMouseUp(event,this.id);" oncontextmenu="canvasRightClicked(event,this.id);"></canvas>
+		<canvas id="background" width="1000" height="800" style="z-index: 1;"></canvas>
+		<canvas id="foreground" width="1000" height="800" style="z-index: 2;"
+			onmousemove="canvasMouseMovement(event,this.id);" 
+			onclick="canvasLeftClicked(event,this.id);"
+			onmousedown="canvasMouseDown(event,this.id);" 
+			onmouseup="canvasMouseUp(event,this.id);"
+			oncontextmenu="canvasRightClicked(event,this.id);"></canvas>
 	</div>
 
 </body>
