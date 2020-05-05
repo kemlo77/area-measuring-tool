@@ -30,7 +30,13 @@ export function canvasLeftClicked(event: MouseEvent, canvasId: string): void {
 }
 
 export function addNewPolygon(): void {
-	listOfPolygons.push(new Polygon());
+	if(noSelectedPolygons()) {
+		listOfPolygons.push(new Polygon());
+	}
+}
+
+function noSelectedPolygons(): boolean {
+	return listOfPolygons.every((it)=>{return it.isClosed;});
 }
 
 export function removeSelectedPolygon(): void {
@@ -96,6 +102,8 @@ function getSelectedPolygon(): Polygon {
 	}
 	return null;
 }
+
+
 
 function paintAllStill(): void {
 	const canvasStudio: CanvasStudio = CanvasStudio.getInstance();

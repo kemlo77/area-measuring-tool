@@ -111,12 +111,7 @@ export class Polygon {
 
     get isCounterclockwise(): boolean {
         if (!this.isOpen) {
-            if (this.gaussShoelace() > 0) {
-                return false;
-            }
-            else {
-                return true;
-            }
+            return !(this.gaussShoelace() > 0);
         } else {
             return null;
         }
@@ -173,7 +168,7 @@ export class Polygon {
     }
 
     makeThisVertexFirst(vertex: Point): void {
-        while (this.vertices[0]!== vertex) {
+        while (this.vertices[0] !== vertex) {
             this.rotateVertices(1);
         }
     }
