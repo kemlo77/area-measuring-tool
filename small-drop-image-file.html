@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<html lang="en" xml:lang="en">
+
+<head>
+    <title>Berit</title>
+    <style type="text/css">
+        body {
+            background-color: powderblue;
+        }
+
+        canvas {
+            border: 2px solid;
+        }
+    </style>
+    <script type="module">import { dropHandler, dragOverHandler, resizeCanvas, delayedResizeCanvas } from "./built/imageDrop.js";
+        window.onresize = delayedResizeCanvas
+        window.onload = resizeCanvas
+        window.document.getElementById("canvasDiv").ondrop = dropHandler;
+        window.document.getElementById("canvasDiv").ondragover = dragOverHandler;
+    </script>
+</head>
+
+<body>
+    Tralala<br><br>
+    <div id= "canvasDiv"><br><br>
+          <canvas></canvas><br>
+    </div>
+</body>
+
+</html>
