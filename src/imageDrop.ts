@@ -66,7 +66,7 @@ export const delayedResizeCanvas = debounce(() => resizeCanvas(), 250)
 
 export function resizeCanvas() {
     console.log('Resizing canvas');
-    var theCanvas = document.querySelector('canvas');
+    const theCanvas = document.querySelector('canvas');
     theCanvas.width = window.innerWidth * 0.9;
     theCanvas.height = window.innerHeight * 0.8;
 }

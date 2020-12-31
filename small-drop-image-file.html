@@ -14,10 +14,12 @@
         }
     </style>
     <script type="module">import { dropHandler, dragOverHandler, resizeCanvas, delayedResizeCanvas } from "./built/imageDrop.js";
-        window.onresize = delayedResizeCanvas
-        window.onload = resizeCanvas
-        window.document.getElementById("canvasDiv").ondrop = dropHandler;
-        window.document.getElementById("canvasDiv").ondragover = dragOverHandler;
+        window.addEventListener("load", function () {resizeCanvas();},false);
+        window.addEventListener("resize", function () {delayedResizeCanvas();},false);
+        window.document.getElementById("canvasDiv")
+            .addEventListener("drop", function () {dropHandler(event);}, false);
+        window.document.getElementById("canvasDiv")
+        .addEventListener("dragover", function () {dragOverHandler(event);}, false);
     </script>
 </head>
 
