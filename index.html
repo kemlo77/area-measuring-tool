@@ -20,32 +20,33 @@
 		}
 	</style>
 
-	<script type="module">import { init, addNewPolygon, removeSelectedPolygon, canvasMouseMovement, canvasLeftClicked, canvasRightClicked, canvasMouseDown, canvasMouseUp } from "./built/main.js";
-		window.init = init;
-		window.canvasMouseMovement = canvasMouseMovement;
-		window.canvasLeftClicked = canvasLeftClicked;
-		window.canvasRightClicked = canvasRightClicked;
-		window.canvasMouseDown = canvasMouseDown;
-		window.canvasMouseUp = canvasMouseUp;
-		window.addNewPolygon = addNewPolygon;
-		window.removeSelectedPolygon = removeSelectedPolygon;
+	<script type="module">import { addNewPolygon, removeSelectedPolygon, canvasMouseMovement, canvasLeftClicked, canvasRightClicked, canvasMouseDown, canvasMouseUp } from "./built/main.js";
+		window.document.getElementById("foreground")
+			.addEventListener("click", function () { canvasLeftClicked(event, this.id); });
+		window.document.getElementById("foreground")
+			.addEventListener("mousemove", function () { canvasMouseMovement(event, this.id); });
+		window.document.getElementById("foreground")
+			.addEventListener("mousedown", function () { canvasMouseDown(event, this.id); });
+		window.document.getElementById("foreground")
+			.addEventListener("mouseup", function () { canvasMouseUp(event, this.id); });
+		window.document.getElementById("foreground")
+			.addEventListener("contextmenu", function () { canvasRightClicked(event, this.id); });
+		window.document.getElementById("addPolygon")
+			.addEventListener("click", function () { addNewPolygon(); });
+		window.document.getElementById("removePolygon")
+			.addEventListener("click", function () { removeSelectedPolygon(); });
 	</script>
 
 </head>
 
-<body oncontextmenu="return false;" onload="init();">
+<body oncontextmenu="return false;">
 	Create non-complex polygons<br><br>
-	<button type="button" onclick="addNewPolygon();">Add new polygon</button>
-	<button type="button" onclick="removeSelectedPolygon();">Remove selected polygon</button>
+	<button id="addPolygon">Add new polygon</button>
+	<button id="removePolygon">Remove selected polygon</button>
 	<br><br>
 	<div id="viewport">
 		<canvas id="background" width="1000" height="800" style="z-index: 1;"></canvas>
-		<canvas id="foreground" width="1000" height="800" style="z-index: 2;"
-			onmousemove="canvasMouseMovement(event,this.id);" 
-			onclick="canvasLeftClicked(event,this.id);"
-			onmousedown="canvasMouseDown(event,this.id);" 
-			onmouseup="canvasMouseUp(event,this.id);"
-			oncontextmenu="canvasRightClicked(event,this.id);"></canvas>
+		<canvas id="foreground" width="1000" height="800" style="z-index: 2;"></canvas>
 	</div>
 
 </body>
