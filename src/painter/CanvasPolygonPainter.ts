@@ -28,7 +28,8 @@ export class CanvasPolygonPainter extends CanvasPainter {
     drawStill(motif: any): void {
         const polygon: Polygon = motif as Polygon;
 
-        polygon.getPaintableStillSegments().forEach((it) => { this.drawOneStillSegment(it, this.defaultColor); });
+        polygon.getPaintableStillSegments()
+            .forEach((it) => { this.drawOneStillSegment(it, this.defaultColor); });
 
         if (polygon.isSelected) {
             for (const vertex of polygon.vertices) {

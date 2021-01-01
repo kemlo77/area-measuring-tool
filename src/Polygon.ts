@@ -182,7 +182,7 @@ export class Polygon {
     }
 
     insertVertex(newVertex: Point, segment: Segment): void {
-        const pointBeforeIndex = this.vertices.indexOf(segment.p1);
+        const pointBeforeIndex: number = this.vertices.indexOf(segment.p1);
         this.vertices.splice(pointBeforeIndex + 1, 0, newVertex);
     }
 
@@ -209,11 +209,11 @@ export class Polygon {
 
     static arrayRotate(arr: any[], steps: number): any[] {
         if (steps > 0) {
-            for (let step = 0; step < steps; step++) {
+            for (let step: number = 0; step < steps; step++) {
                 arr.push(arr.shift());
             }
         } else {
-            for (let step = 0; step < Math.abs(steps); step++) {
+            for (let step: number = 0; step < Math.abs(steps); step++) {
                 arr.unshift(arr.pop());
             }
         }
