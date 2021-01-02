@@ -14,18 +14,18 @@
         }
     </style>
     <script type="module">import { dropHandler, dragOverHandler, resizeCanvas, delayedResizeCanvas } from "./built/imageDrop.js";
-        window.addEventListener("load", function () {resizeCanvas();},false);
-        window.addEventListener("resize", function () {delayedResizeCanvas();},false);
+        window.addEventListener("load", function () { resizeCanvas(); });
+        window.addEventListener("resize", function () { delayedResizeCanvas(); });
         window.document.getElementById("canvasDiv")
-            .addEventListener("drop", function () {dropHandler(event);}, false);
+            .addEventListener("drop", function () { dropHandler(event); });
         window.document.getElementById("canvasDiv")
-        .addEventListener("dragover", function () {dragOverHandler(event);}, false);
+            .addEventListener("dragover", function () { dragOverHandler(event); });
     </script>
 </head>
 
 <body>
     Tralala<br><br>
-    <div id= "canvasDiv"><br><br>
+    <div id="canvasDiv"><br><br>
           <canvas></canvas><br>
     </div>
 </body>

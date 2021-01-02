@@ -1,24 +1,34 @@
-
+let imageFile: File;
 
 export function dropHandler(ev: DragEvent): void {
     ev.preventDefault();
     const file: File = ev.dataTransfer.files[0];
-    const imageTypes: Array<string> = ['image/png', 'image/gif', 'image/bmp', 'image/jpeg'];
-    const fileType: string = file.type;
-    if (imageTypes.includes(fileType)) {
-        const reader: FileReader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = (): void => {
-            const image: HTMLImageElement = new Image();
-            image.src = reader.result.toString();
-            image.onload = (): void => {
-                drawImageToCanvas(image);
-            };
-        };
+    if (fileIsImageType(file)) {
+        imageFile = file;
+        readImageFileAndDrawToCanvas(file);
     } else {
-        console.log(fileType + ' is not supported');
-        clearTheCanvas();
+        alert(file.type + ' is not supported');
+        imageFile = null; // TODO: Ok att rensa tidigare bild?
+        clearTheCanvas(); // -- // --
     }
+}
+
+function fileIsImageType(file: File): boolean {
+    const fileType: string = file.type;
+    const imageTypes: Array<string> = ['image/png', 'image/gif', 'image/bmp', 'image/jpeg'];
+    return imageTypes.includes(fileType);
+}
+
+function readImageFileAndDrawToCanvas(file: File): void {
+    const reader: FileReader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (): void => {
+        const image: HTMLImageElement = new Image();
+        image.src = reader.result.toString();
+        image.onload = (): void => {
+            drawImageToCanvas(image);
+        };
+    };
 }
 
 function clearTheCanvas(): void {
@@ -45,7 +55,6 @@ function drawImageToCanvas(image: HTMLImageElement): void {
 
 export function dragOverHandler(ev: DragEvent): void {
     console.log('File(s) in drop zone');
-    // Prevent default behavior (Prevent file from being opened)
     ev.preventDefault();
 }
 
@@ -68,4 +77,7 @@ export function resizeCanvas(): void {
     const theCanvas: HTMLCanvasElement = document.querySelector('canvas');
     theCanvas.width = window.innerWidth * 0.9;
     theCanvas.height = window.innerHeight * 0.8;
+    if (imageFile !== null) {
+        readImageFileAndDrawToCanvas(imageFile);
+    }
 }
