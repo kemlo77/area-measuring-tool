@@ -8,13 +8,13 @@ export function dropHandler(ev: DragEvent): void {
     if (imageTypes.includes(fileType)) {
         const reader: FileReader = new FileReader();
         reader.readAsDataURL(file);
-        reader.onload = () => {
+        reader.onload = (): void => {
             const image: HTMLImageElement = new Image();
             image.src = reader.result.toString();
-            image.onload = () => {
+            image.onload = (): void => {
                 drawImageToCanvas(image);
-            }
-        }
+            };
+        };
     } else {
         console.log(fileType + ' is not supported');
         clearTheCanvas();
@@ -52,21 +52,20 @@ export function dragOverHandler(ev: DragEvent): void {
 
 function debounce<F extends Function>(func: F, wait: number): F {
     let timeoutID: number;
-    console.log(timeoutID);
     return <any>function (this: any, ...args: any[]) {
         clearTimeout(timeoutID);
-        const context = this;
-        timeoutID = window.setTimeout(function () {
+        const context: any = this;
+        timeoutID = window.setTimeout(() => {
             func.apply(context, args);
         }, wait);
     };
 }
 
-export const delayedResizeCanvas = debounce(() => resizeCanvas(), 250)
+export const delayedResizeCanvas: any = debounce((): void => resizeCanvas(), 250);
 
-export function resizeCanvas() {
+export function resizeCanvas(): void {
     console.log('Resizing canvas');
-    const theCanvas = document.querySelector('canvas');
+    const theCanvas: HTMLCanvasElement = document.querySelector('canvas');
     theCanvas.width = window.innerWidth * 0.9;
     theCanvas.height = window.innerHeight * 0.8;
 }
