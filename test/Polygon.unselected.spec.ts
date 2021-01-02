@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { Polygon } from '../built/Polygon';
+import { Polygon } from '../built/polygon/Polygon';
 
 
 describe('Polygon - unselected', () => {

@@ -1,13 +1,13 @@
 import { expect } from 'chai';
-import { Polygon } from '../built/Polygon';
-import { PaintableSegment } from '../src/PaintableSegment';
-import { Segment } from '../built/Segment';
+import { Polygon } from '../built/polygon/Polygon';
+import { PaintableSegment } from '../src/polygon/PaintableSegment';
+import { Segment } from '../built/polygon/Segment';
 
 
 describe('Polygon - closed', () => {
 
 
-    for (let step = 0; step < 4; step++) {
+    for (let step: number = 0; step < 4; step++) {
         const square: Polygon = getSquare();
         it('Mark for move ' + step, () => {
             square.rotateVertices(step);
@@ -40,7 +40,7 @@ describe('Polygon - closed', () => {
 
     describe('Adding vertex to segment', () => {
 
-        for (let step = 0; step < 4; step++) {
+        for (let step: number = 0; step < 4; step++) {
             const square: Polygon = getSquare();
             it('Adding vertex to segment ' + step, () => {
                 square.rotateVertices(step);
@@ -50,7 +50,7 @@ describe('Polygon - closed', () => {
             });
         }
 
-        for (let step = 0; step < 4; step++) {
+        for (let step: number = 0; step < 4; step++) {
             const square: Polygon = getSquare();
             it('Trying to add vertex to segment - to close to existing vertex' + step, () => {
                 square.rotateVertices(step);
@@ -63,7 +63,7 @@ describe('Polygon - closed', () => {
 
     describe('Delete', () => {
 
-        for (let step = 0; step < 8; step++) {
+        for (let step: number = 0; step < 8; step++) {
             const vShape: Polygon = new Polygon();
             vShape.handleLeftClick({ x: 100, y: 100 });
             vShape.handleLeftClick({ x: 100, y: 150 }); // extra vertex
@@ -83,7 +83,7 @@ describe('Polygon - closed', () => {
             });
         }
 
-        for (let step = 0; step < 3; step++) {
+        for (let step: number = 0; step < 3; step++) {
             const triangle: Polygon = new Polygon();
             triangle.handleLeftClick({ x: 100, y: 100 });
             triangle.handleLeftClick({ x: 300, y: 100 });
@@ -97,7 +97,7 @@ describe('Polygon - closed', () => {
             });
         }
 
-        for (let step = 0; step < 4; step++) {
+        for (let step: number = 0; step < 4; step++) {
             const square: Polygon = getSquare();
             it('Trying to remove point but not within minimum distance ' + step, () => {
                 square.rotateVertices(step);
@@ -107,7 +107,7 @@ describe('Polygon - closed', () => {
             });
         }
 
-        for (let step = 0; step < 4; step++) {
+        for (let step: number = 0; step < 4; step++) {
             const square: Polygon = getSquare();
             it('All points are possible to remove normally ' + step, () => {
                 square.rotateVertices(step);
@@ -117,7 +117,7 @@ describe('Polygon - closed', () => {
             });
         }
 
-        for (let step = 0; step < 4; step++) {
+        for (let step: number = 0; step < 4; step++) {
             const square: Polygon = getSquare();
             it('Erasing segment and thus opening the polygon ' + step, () => {
                 square.rotateVertices(step);
@@ -127,7 +127,7 @@ describe('Polygon - closed', () => {
             });
         }
 
-        for (let step = 0; step < 4; step++) {
+        for (let step: number = 0; step < 4; step++) {
             const square: Polygon = getSquare();
             it('trying to erase segment but not within minimum segment distance ' + step, () => {
                 square.rotateVertices(step);

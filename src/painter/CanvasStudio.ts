@@ -1,7 +1,7 @@
 import { PaintingStrategy } from './PaintingStrategy.js';
-import { Polygon } from '../Polygon.js';
+import { Polygon } from '../polygon/Polygon.js';
 import { CanvasPolygonPainter } from './CanvasPolygonPainter.js';
-import { Coordinate } from '../Coordinate.js';
+import { Coordinate } from '../polygon/Coordinate.js';
 
 export class CanvasStudio {
 

@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { MathUtil } from '../built/MathUtil.js';
-import { Point } from '../built/Point.js';
-import { Segment } from '../built/Segment.js';
+import { MathUtil } from '../built/polygon/MathUtil.js';
+import { Point } from '../built/polygon/Point.js';
+import { Segment } from '../built/polygon/Segment.js';
 
 
 describe('MathUtil', () => {
@@ -99,7 +99,7 @@ describe('MathUtil', () => {
         });
     });
 
-    for (let step = -10; step < 4; step += 2) {
+    for (let step: number = -10; step < 4; step += 2) {
         it('calculateIntersect() - segments ontop of eachother ' + step, () => {
             const segmentA: Segment = new Segment(new Point(0, -5), new Point(0, 5));
             const segmentB: Segment = new Segment(new Point(0, step), new Point(0, (step + 8)));

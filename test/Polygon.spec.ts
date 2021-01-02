@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { Polygon } from '../built/Polygon';
-import { Point } from '../built/Point';
+import { Polygon } from '../built/polygon/Polygon';
+import { Point } from '../built/polygon/Point';
 
 let rectangle: Polygon;
 

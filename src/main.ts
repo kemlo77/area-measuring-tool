@@ -1,5 +1,5 @@
-import { Polygon } from './Polygon.js';
-import { Coordinate } from './Coordinate.js';
+import { Polygon } from './polygon/Polygon.js';
+import { Coordinate } from './polygon/Coordinate.js';
 import { CanvasStudio } from './painter/CanvasStudio.js';
 
 const listOfPolygons: Polygon[] = new Array();
