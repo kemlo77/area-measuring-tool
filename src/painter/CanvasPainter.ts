@@ -33,7 +33,4 @@ export abstract class CanvasPainter implements PaintingStrategy {
         this.movementCanvasCtx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
     }
 
-
-
-
 }

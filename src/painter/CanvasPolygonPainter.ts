@@ -43,7 +43,7 @@ export class CanvasPolygonPainter extends CanvasPainter {
     }
 
     drawMovement(motif: any, mousePosition: Coordinate): void {
-        this.clearUsedCanvas();
+        this.clearUsedPartOfCanvas();
         const polygon: Polygon = motif as Polygon;
 
         const segments: PaintableSegment[] = polygon.getPaintableMovingSegments(mousePosition);
@@ -106,7 +106,7 @@ export class CanvasPolygonPainter extends CanvasPainter {
         }
     }
 
-    clearUsedCanvas(): void {
+    clearUsedPartOfCanvas(): void {
         const xOffset: number = this.oldXMin - 2;
         const yOffset: number = this.oldYMin - 2;
         const width: number = this.oldXMax - this.oldXMin + 4;
