@@ -44,4 +44,8 @@ export class CanvasStudio {
         }
         this.strategy.drawMovement(motif, mousePosition);
     }
+
+    public clearTheMovementCanvas(): void {
+        this.strategy.clearTheMovementCanvas();
+    }
 }
