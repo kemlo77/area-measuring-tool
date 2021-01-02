@@ -1,4 +1,4 @@
-import { Coordinate } from '../Coordinate';
+import { Coordinate } from '../polygon/Coordinate';
 
 export interface PaintingStrategy {
     drawStill(motif: any): void;

@@ -1,7 +1,7 @@
 import { CanvasPainter } from './CanvasPainter.js';
-import { Coordinate } from '../Coordinate.js';
-import { PaintableSegment } from '../PaintableSegment.js';
-import { Polygon } from '../Polygon.js';
+import { Coordinate } from '../polygon/Coordinate.js';
+import { PaintableSegment } from '../polygon/PaintableSegment.js';
+import { Polygon } from '../polygon/Polygon.js';
 
 export class CanvasPolygonPainter extends CanvasPainter {
 

@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { Point } from '../built/Point.js';
+import { Point } from '../built/polygon/Point.js';
 
 
 describe('Point', () => {

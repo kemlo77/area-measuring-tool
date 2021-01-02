@@ -1,8 +1,8 @@
 import { expect } from 'chai';
-import { Polygon } from '../built/Polygon';
-import { Point } from '../built/Point';
-import { Segment } from '../built/Segment';
-import { PaintableSegment } from '../src/PaintableSegment';
+import { Polygon } from '../built/polygon/Polygon';
+import { Point } from '../built/polygon/Point';
+import { Segment } from '../built/polygon/Segment';
+import { PaintableSegment } from '../src/polygon/PaintableSegment';
 
 
 describe('Polygon - move', () => {
@@ -21,7 +21,7 @@ describe('Polygon - move', () => {
             expect(triangle.isMoving).is.equal(false);
         });
 
-        for (let step = 0; step < 4; step++) {
+        for (let step: number = 0; step < 4; step++) {
             const square: Polygon = getSquare();
             it('All vertices are normally possible to move ' + step, () => {
                 square.rotateVertices(-step);
@@ -33,7 +33,7 @@ describe('Polygon - move', () => {
             });
         }
 
-        for (let step = 0; step < 4; step++) {
+        for (let step: number = 0; step < 4; step++) {
             const square: Polygon = getSquare();
             it('Not possible to move vertex too close to existing vertex A' + step, () => {
                 square.rotateVertices(-step);
@@ -48,7 +48,7 @@ describe('Polygon - move', () => {
             });
         }
 
-        for (let step = 0; step < 4; step++) {
+        for (let step: number = 0; step < 4; step++) {
             const square: Polygon = getSquare();
             it('Possible to move vertex when NOT too close to other vertex B' + step, () => {
                 square.rotateVertices(-step);
@@ -72,7 +72,7 @@ describe('Polygon - move', () => {
             expect(square.isClosed).is.equal(true);
         });
 
-        for (let step = 0; step < 4; step++) {
+        for (let step: number = 0; step < 4; step++) {
             const square: Polygon = getSquare();
             it('vertices next to new vertex are possible to move ' + step, () => {
                 square.rotateVertices(-step);
@@ -106,7 +106,7 @@ describe('Polygon - move', () => {
             });
         }
 
-        for (let step = 0; step < 4; step++) {
+        for (let step: number = 0; step < 4; step++) {
             const square: Polygon = getSquare();
             it('Not possible to move vertex too close to existing vertex' + step, () => {
                 square.rotateVertices(-step);
@@ -124,7 +124,7 @@ describe('Polygon - move', () => {
 
 
 
-        for (let step = 0; step < 4; step++) {
+        for (let step: number = 0; step < 4; step++) {
             const square: Polygon = getSquare();
             it('Not possible to move when move creates intersection (neighbouring segments) ' + step, () => {
                 square.rotateVertices(-step);
@@ -146,7 +146,7 @@ describe('Polygon - move', () => {
         }
 
 
-        for (let step = 0; step < 6; step++) {
+        for (let step: number = 0; step < 6; step++) {
             const square: Polygon = new Polygon();
             square.handleLeftClick({ x: 100, y: 100 });
             square.handleLeftClick({ x: 200, y: 100 });
@@ -205,7 +205,7 @@ describe('Polygon - move', () => {
             expect(segments[2].p2.y).is.equal(100);
         });
 
-        for (let step = 0; step < 6; step++) {
+        for (let step: number = 0; step < 6; step++) {
             it('getPaintableStillSegments() - ' + step, () => {
                 const shape: Polygon = new Polygon();
                 shape.handleLeftClick({ x: 100, y: 100 });
@@ -228,7 +228,7 @@ describe('Polygon - move', () => {
             });
         }
 
-        for (let step = 0; step < 6; step++) {
+        for (let step: number = 0; step < 6; step++) {
             it('calculatePaintableMovingSegments() - ' + step, () => {
                 const shape: Polygon = new Polygon();
                 shape.handleLeftClick({ x: 100, y: 100 });
