@@ -9,24 +9,47 @@
             background-color: powderblue;
         }
 
+        #viewport {
+            position: relative;
+        }
+
         canvas {
-            border: 2px solid;
+			border: 1px solid black;
+			background-color: transparent;
+			cursor: crosshair;
+		}
+
+        #viewport canvas {
+            position: absolute;
+        }
+
+        #filterLayer {
+            background-color: white;
+            opacity: 0.5;
+            z-index: 2;
+        }
+
+        #imageLayer {
+            background-color: white;
+            z-index:1;
         }
     </style>
-    <script type="module">import { dropHandler, dragOverHandler, resizeCanvas, delayedResizeCanvas } from "./built/imageDrop.js";
-        window.addEventListener("load", function () { resizeCanvas(); });
-        window.addEventListener("resize", function () { delayedResizeCanvas(); });
-        window.document.getElementById("canvasDiv")
+    <script type="module">
+        import { dropHandler, dragOverHandler, adjustCanvas, delayedAdjustCanvas } from "./built/imageDrop.js";
+        window.addEventListener("load", function () { adjustCanvas(); });
+        window.addEventListener("resize", function () { delayedAdjustCanvas(); });
+        window.document.getElementById("viewport")
             .addEventListener("drop", function () { dropHandler(event); });
-        window.document.getElementById("canvasDiv")
+        window.document.getElementById("viewport")
             .addEventListener("dragover", function () { dragOverHandler(event); });
     </script>
 </head>
 
 <body>
     Tralala<br><br>
-    <div id="canvasDiv"><br><br>
-          <canvas></canvas><br>
+    <div id="viewport">
+        <canvas id="filterLayer"></canvas>
+        <canvas id="imageLayer"></canvas>
     </div>
 </body>
 
