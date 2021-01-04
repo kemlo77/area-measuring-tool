@@ -1,4 +1,4 @@
-let imageFile: File;
+let imageFile: File = null;
 const imageCanvas: HTMLCanvasElement = document.querySelector('canvas#imageLayer');
 const filterCanvas: HTMLCanvasElement = document.querySelector('canvas#filterLayer');
 const imageContext: CanvasRenderingContext2D = imageCanvas.getContext('2d');
@@ -42,7 +42,7 @@ function clearImageCanvas(): void {
 
 function drawImageToCanvas(image: HTMLImageElement): void {
     imageContext.drawImage(image, 0, 0, image.width, image.height,
-         0, 0, imageCanvas.clientWidth, imageCanvas.clientHeight);
+        0, 0, imageCanvas.clientWidth, imageCanvas.clientHeight);
 }
 
 export function dragOverHandler(ev: DragEvent): void { ev.preventDefault(); }
@@ -65,7 +65,7 @@ export function adjustCanvas(): void {
 
     //canvas.width = image.width;
     //canvas.height = image.height;
-    
+
     if (imageFile !== null) {
         readImageFileAndDrawToCanvas(imageFile);
     }
@@ -82,4 +82,9 @@ function debounce<F extends Function>(func: F, wait: number): F {
             func.apply(context, args);
         }, wait);
     };
+}
+
+export function adjustOpacity(value: number): void {
+    const percentage: number = 1- value/100;
+    filterCanvas.style.opacity =  percentage.toString();
 }

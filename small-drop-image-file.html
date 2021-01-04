@@ -9,15 +9,21 @@
             background-color: powderblue;
         }
 
+        .slider {
+            width: 90%;
+            height: 15px;
+            border-radius: 5px;
+        }
+
         #viewport {
             position: relative;
         }
 
         canvas {
-			border: 1px solid black;
-			background-color: transparent;
-			cursor: crosshair;
-		}
+            border: 1px solid black;
+            background-color: transparent;
+            cursor: crosshair;
+        }
 
         #viewport canvas {
             position: absolute;
@@ -31,22 +37,25 @@
 
         #imageLayer {
             background-color: white;
-            z-index:1;
+            z-index: 1;
         }
     </style>
     <script type="module">
-        import { dropHandler, dragOverHandler, adjustCanvas, delayedAdjustCanvas } from "./built/imageDrop.js";
+        import { dropHandler, dragOverHandler, adjustCanvas, delayedAdjustCanvas, adjustOpacity } from "./built/imageDrop.js";
         window.addEventListener("load", function () { adjustCanvas(); });
         window.addEventListener("resize", function () { delayedAdjustCanvas(); });
         window.document.getElementById("viewport")
             .addEventListener("drop", function () { dropHandler(event); });
         window.document.getElementById("viewport")
             .addEventListener("dragover", function () { dragOverHandler(event); });
+        window.document.getElementById("opacitySlider")
+            .addEventListener("change", function () { adjustOpacity(this.value) });
     </script>
 </head>
 
 <body>
     Tralala<br><br>
+    <input type="range" min="0" max="100" value="50" class="slider" id="opacitySlider"><br>
     <div id="viewport">
         <canvas id="filterLayer"></canvas>
         <canvas id="imageLayer"></canvas>
