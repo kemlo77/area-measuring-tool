@@ -25,40 +25,40 @@ export class CanvasPolygonPainter extends CanvasPainter {
     }
 
 
-    drawStill(motif: any): void {
+    drawStill(motif: any, color: string): void {
         const polygon: Polygon = motif as Polygon;
 
         polygon.getPaintableStillSegments()
-            .forEach((it) => { this.drawOneStillSegment(it, this.defaultColor); });
+            .forEach((it) => { this.drawOneStillSegment(it, color); });
 
         if (polygon.isSelected) {
             for (const vertex of polygon.vertices) {
                 if (vertex === polygon.movePoint) {
                     continue;
                 }
-                this.drawFilledDot(vertex, this.defaultColor, this.whiteColor);
+                this.drawHollowDot(vertex, color);
             }
         }
 
     }
 
-    drawMovement(motif: any, mousePosition: Coordinate): void {
+    drawMovement(motif: any, mousePosition: Coordinate, color: string): void {
         this.clearUsedPartOfCanvas();
         const polygon: Polygon = motif as Polygon;
 
         const segments: PaintableSegment[] = polygon.getPaintableMovingSegments(mousePosition);
         if (segments.length > 0) {
             for (const segment of segments) {
-                this.drawOneMovingSegment(segment, this.defaultColor);
+                this.drawOneMovingSegment(segment, color);
             }
             this.saveExtremes(segments);
         }
 
     }
 
-    drawFilledDot(dot2paint: Coordinate, outerColor: string, innerColor: string): void {
+    drawHollowDot(dot2paint: Coordinate, outerColor: string): void {
         this.drawDot(dot2paint, 4, outerColor);
-        this.drawDot(dot2paint, 2, innerColor);
+        this.drawDot(dot2paint, 2, '255,255,255');
     }
 
     drawDot(dot2paint: Coordinate, diam: number, rgbIn: string): void {

@@ -9,15 +9,9 @@ export abstract class CanvasPainter implements PaintingStrategy {
     private canvasWidth: number = this.canvasBackground.width;
     private canvasHeight: number = this.canvasBackground.height;
 
-    moveColor: string = '255,128,0';
-    defaultColor: string = '0,80,120';
-    redColor: string = '255,0,0';
-    greenColor: string = '0,255,0';
-    whiteColor: string = '255,255,255';
 
-
-    abstract drawStill(motif: any): void;
-    abstract drawMovement(modif: any, mousePosition: Coordinate): void;
+    abstract drawStill(motif: any, color: string): void;
+    abstract drawMovement(modif: any, mousePosition: Coordinate, color: string): void;
 
     // clear the canvas
     clearBothCanvas(): void {
