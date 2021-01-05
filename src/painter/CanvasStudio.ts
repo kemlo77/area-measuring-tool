@@ -31,7 +31,7 @@ export class CanvasStudio {
             } else {
                 throw new Error('Unknown object to paint');
             }
-            this.strategy.drawStill(motif);
+            this.strategy.drawStill(motif, '0,80,120');
         }
     }
 
@@ -42,7 +42,7 @@ export class CanvasStudio {
         } else {
             throw new Error('Unknown object to paint');
         }
-        this.strategy.drawMovement(motif, mousePosition);
+        this.strategy.drawMovement(motif, mousePosition, '0,80,120');
     }
 
     public clearTheMovementCanvas(): void {
