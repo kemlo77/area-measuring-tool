@@ -2,6 +2,7 @@
 import { Coordinate } from './polygon/Coordinate.js';
 import { CanvasStudio } from './painter/CanvasStudio.js';
 import { PolygonArea } from './PolygonArea.js';
+import { AreaType } from './AreaType.js';
 
 const listOfPolygons: PolygonArea[] = new Array();
 const canvasStudio: CanvasStudio = CanvasStudio.getInstance();
@@ -28,7 +29,7 @@ export function canvasLeftClicked(event: MouseEvent, canvasId: string): void {
 
 export function addNewPolygon(): void {
 	if (noSelectedPolygons()) {
-		listOfPolygons.push(new PolygonArea());
+		listOfPolygons.push(new PolygonArea(AreaType.POSITIVE));
 	}
 }
 

@@ -1,26 +1,38 @@
 import { Polygon } from './polygon/Polygon.js';
+import {AreaType } from './AreaType.js';
 
 export class PolygonArea extends Polygon {
 
-    private _color: string;
+    private static positiveColor: string = '0,80,120';
+    private static negativeColor: string = '128,0,0';
+    private type: AreaType;
 
-    constructor(color?: string) {
+
+    constructor(type: AreaType) {
         super();
-        if(color === undefined || color === null) {
-            this._color = '0,80,120';
-        } else {
-            // TODO: check that color-string is correct, use regex
-            this._color = color;
-        }
+        this.type = type;
     }
 
     get color(): string {
-        return this._color;
+        if (this.type === AreaType.POSITIVE) {
+            return PolygonArea.positiveColor;
+        } else {
+            return PolygonArea.negativeColor;
+        }
     }
 
-    set color(color: string) {
+    static setPositiveColor(color: string): void {
+        // TODO: kolla att strängen som kommer har rätt format
+        PolygonArea.positiveColor = color;
+    }
 
-        this._color = color;
+    static setNegativeColor(color: string): void {
+        // TODO: kolla att strängen som kommer har rätt format
+        PolygonArea.negativeColor = color;
+    }
+
+    get areaType(): AreaType {
+        return this.type;
     }
 
     makeDirectionClockWise(): void {
@@ -34,8 +46,6 @@ export class PolygonArea extends Polygon {
             this.reversePolygonDirection();
         }
     }
-
-
 
     get isCounterclockwise(): boolean {
         if (!this.isOpen) {
