@@ -37,8 +37,6 @@ export class Polygon {
         }
     }
 
-
-
     get isClosed(): boolean {
         return !(this.currentState instanceof OpenState);
     }
@@ -54,7 +52,6 @@ export class Polygon {
     get isOpen(): boolean {
         return this.currentState instanceof OpenState;
     }
-
 
     handleLeftClick(position: Coordinate): void {
         const leftClickedPoint: Point = new Point(position.x, position.y);
@@ -88,58 +85,9 @@ export class Polygon {
         this.currentState = state;
     }
 
-
-
     reversePolygonDirection(): void {
         this.vertices.reverse();
     }
-
-
-    makeDirectionClockWise(): void {
-        if (!this.isOpen && this.isCounterclockwise) {
-            this.reversePolygonDirection();
-        }
-    }
-
-    makeDirectionCounterClockwise(): void {
-        if (!this.isOpen && !this.isCounterclockwise) {
-            this.reversePolygonDirection();
-        }
-    }
-
-
-
-    get isCounterclockwise(): boolean {
-        if (!this.isOpen) {
-            return (this.gaussShoelace() <= 0);
-        } else {
-            return null;
-        }
-    }
-
-    get area(): number {
-        if (!this.isOpen) {
-            return Math.abs(this.gaussShoelace());
-        } else {
-            return 0;
-        }
-    }
-
-    private gaussShoelace(): number {
-        let theSum: number = 0;
-        for (const segment of this.segments) {
-            theSum += segment.p1.x * segment.p2.y - segment.p1.y * segment.p2.x;
-        }
-        const area: number = theSum / 2;
-        return area;
-    }
-
-    get perimeterLength(): number {
-        return this.segments.reduce((sum, it) => sum + it.length, 0);
-    }
-
-
-
 
     get firstVertex(): Point {
         return this.vertices[0];
@@ -173,6 +121,23 @@ export class Polygon {
         }
     }
 
+    rotateVertices(steps: number): void {
+        this.vertices = Polygon.arrayRotate(this.vertices, steps);
+    }
+
+    static arrayRotate(arr: any[], steps: number): any[] {
+        if (steps > 0) {
+            for (let step: number = 0; step < steps; step++) {
+                arr.push(arr.shift());
+            }
+        } else {
+            for (let step: number = 0; step < Math.abs(steps); step++) {
+                arr.unshift(arr.pop());
+            }
+        }
+        return arr;
+    }
+
     addVertex(newVertex: Point): void {
         this.vertices.push(newVertex);
     }
@@ -201,23 +166,6 @@ export class Polygon {
         const index: number = this.vertices.indexOf(vertex);
         const indexOfFollowing: number = Polygon.moduloInPolygon(index + 1, this.vertices.length);
         return this.vertices[indexOfFollowing];
-    }
-
-    rotateVertices(steps: number): void {
-        this.vertices = Polygon.arrayRotate(this.vertices, steps);
-    }
-
-    static arrayRotate(arr: any[], steps: number): any[] {
-        if (steps > 0) {
-            for (let step: number = 0; step < steps; step++) {
-                arr.push(arr.shift());
-            }
-        } else {
-            for (let step: number = 0; step < Math.abs(steps); step++) {
-                arr.unshift(arr.pop());
-            }
-        }
-        return arr;
     }
 
     // function to translate negative indexes in a polygon.

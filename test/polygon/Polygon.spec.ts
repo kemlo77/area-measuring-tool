@@ -132,37 +132,8 @@ describe('Polygon', () => {
         expect(triangle.vertices[2].y).to.equal(100);
     });
 
-    it('makeDirectionClockWise()', () => {
-        const triangle: Polygon = new Polygon();
-        triangle.handleLeftClick({ x: 100, y: 100 });
-        triangle.handleLeftClick({ x: 300, y: 100 });
-        triangle.handleLeftClick({ x: 200, y: 300 });
-        triangle.handleLeftClick({ x: 100, y: 100 });
-        expect(triangle.isCounterclockwise).to.equal(false);
-        triangle.makeDirectionCounterClockwise();
-        expect(triangle.isCounterclockwise).to.equal(true);
-        triangle.makeDirectionClockWise();
-        expect(triangle.isCounterclockwise).to.equal(false);
-    });
 
 
-
-
-
-    it('Area - when polygon closed', () => {
-        expect(rectangle.area).to.equal(10000);
-    });
-
-    it('Area - when polygon not closed', () => {
-        const shape: Polygon = new Polygon();
-        expect(shape.area).to.equal(0);
-    });
-
-
-
-    it('perimeterLength', () => {
-        expect(rectangle.perimeterLength).to.equal(400);
-    });
 
     it('rotateVertices()', () => {
         const triangle: Polygon = new Polygon();
