@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { MathUtil } from '../built/polygon/MathUtil.js';
-import { Point } from '../built/polygon/Point.js';
-import { Segment } from '../built/polygon/Segment.js';
+import { MathUtil } from '../../built/polygon/MathUtil.js';
+import { Point } from '../../built/polygon/Point.js';
+import { Segment } from '../../built/polygon/Segment.js';
 
 
 describe('MathUtil', () => {

@@ -1,8 +1,8 @@
 import { expect } from 'chai';
-import { Polygon } from '../built/polygon/Polygon';
-import { Point } from '../built/polygon/Point';
-import { Segment } from '../built/polygon/Segment';
-import { PaintableSegment } from '../src/polygon/PaintableSegment';
+import { Polygon } from '../../built/polygon/Polygon';
+import { Point } from '../../built/polygon/Point';
+import { Segment } from '../../built/polygon/Segment';
+import { PaintableSegment } from '../../src/polygon/PaintableSegment';
 
 
 describe('Polygon - move', () => {

@@ -6,7 +6,7 @@
     "scripts": {
         "eslint": "eslint -c .eslintrc --ext .ts src/*",
         "build": "tsc",
-        "test": "mocha",
+        "test": "mocha --recursive",
         "coverage": "nyc npm run test",
         "polygonTest": "nyc mocha test/**/Polygon.spec.ts",
         "sonar": "node sonar-project.js"
