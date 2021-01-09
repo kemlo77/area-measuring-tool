@@ -1,68 +1,41 @@
-import { CanvasPainter } from './CanvasPainter.js';
-import { Coordinate } from '../polygon/Coordinate.js';
-import { PaintableSegment } from '../polygon/PaintableSegment.js';
-import { PolygonArea } from '../PolygonArea.js';
+import { PaintableSegment } from '../polygon/PaintableSegment';
+import { Polygon } from '../polygon/Polygon.js';
+import { AbstractPainter } from './AbstractPainter.js';
 
 
-export class CanvasPolygonAreaPainter extends CanvasPainter {
+export abstract class AbstractPolygonPainter extends AbstractPainter {
 
     private oldXMin: number = 0;
     private oldXMax: number = 1;
     private oldYMin: number = 0;
     private oldYMax: number = 1;
 
-
-    private static instance: CanvasPolygonAreaPainter;
-
-    private constructor() {
-        super();
-    }
-
-    public static getInstance(): CanvasPolygonAreaPainter {
-        if (!CanvasPolygonAreaPainter.instance) {
-            CanvasPolygonAreaPainter.instance = new CanvasPolygonAreaPainter();
-        }
-        return CanvasPolygonAreaPainter.instance;
-    }
-
-
-    drawStill(motif: any): void {
-        const polygon: PolygonArea = motif as PolygonArea;
-
+    drawStillPolygon(polygon: Polygon, color: string): void {
         polygon.getPaintableStillSegments()
-            .forEach((it) => { this.drawOneSegment(it, polygon.color, this.stillCanvasCtx); });
+            .forEach((it) => { this.drawOneSegment(it, color, this.stillCanvasCtx); });
 
         if (polygon.isSelected) {
-            for (const vertex of polygon.vertices) {
-                if (vertex === polygon.movePoint) {
-                    continue;
-                }
-                this.drawHollowDot(vertex, polygon.color, this.stillCanvasCtx);
-            }
+            polygon.vertices
+                .filter((it) => it !== polygon.movePoint)
+                .forEach((it) => { this.drawHollowDot(it, color, this.stillCanvasCtx); });
         }
-
     }
 
-    drawMovement(motif: any, mousePosition: Coordinate): void {
-        this.clearUsedPartOfCanvas();
-        const polygon: PolygonArea = motif as PolygonArea;
-
-        const segments: PaintableSegment[] = polygon.getPaintableMovingSegments(mousePosition);
+    drawMovingSegments(segments: PaintableSegment[], color: string):void {
         if (segments.length > 0) {
             for (const segment of segments) {
-                this.drawOneSegment(segment, polygon.color, this.movementCanvasCtx);
+                this.drawOneSegment(segment, color, this.movementCanvasCtx);
             }
             this.saveExtremes(segments);
         }
-
     }
 
-    private drawOneSegment(segment2draw: PaintableSegment, lineColor: string, ctx: CanvasRenderingContext2D): void {
+    drawOneSegment(segment2draw: PaintableSegment, lineColor: string, ctx: CanvasRenderingContext2D): void {
         this.drawLine(segment2draw.p1, segment2draw.p2, lineColor, ctx);
     }
 
 
-    private saveExtremes(arrayWithSegments: PaintableSegment[]): void {
+    saveExtremes(arrayWithSegments: PaintableSegment[]): void {
         this.oldXMin = arrayWithSegments[0].p1.x;
         this.oldXMax = arrayWithSegments[0].p1.x;
         this.oldYMin = arrayWithSegments[0].p1.y;
@@ -80,7 +53,7 @@ export class CanvasPolygonAreaPainter extends CanvasPainter {
         }
     }
 
-    private clearUsedPartOfCanvas(): void {
+    clearUsedPartOfCanvas(): void {
         const xOffset: number = this.oldXMin - 2;
         const yOffset: number = this.oldYMin - 2;
         const width: number = this.oldXMax - this.oldXMin + 4;

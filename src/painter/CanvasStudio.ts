@@ -1,14 +1,14 @@
 import { PaintingStrategy } from './PaintingStrategy.js';
 import { Polygon } from '../polygon/Polygon.js';
-import { CanvasPolygonPainter } from './CanvasPolygonPainter.js';
+import { PolygonPainter } from './PolygonPainter.js';
 import { Coordinate } from '../polygon/Coordinate.js';
 import { PolygonArea } from '../PolygonArea.js';
-import { CanvasPolygonAreaPainter } from './CanvasPolygonAreaPainter.js';
+import { PolygonAreaPainter } from './PolygonAreaPainter.js';
 
 export class CanvasStudio {
 
     private static instance: CanvasStudio;
-    private strategy: PaintingStrategy = CanvasPolygonPainter.getInstance();
+    private strategy: PaintingStrategy = PolygonPainter.getInstance();
 
     private constructor() { }
 
@@ -41,9 +41,9 @@ export class CanvasStudio {
 
     private setStrategyGivenThisObject(object: any): void {
         if (object instanceof PolygonArea) {
-            this.setStrategy(CanvasPolygonAreaPainter.getInstance());
+            this.setStrategy(PolygonAreaPainter.getInstance());
         } else if (object instanceof Polygon) {
-            this.setStrategy(CanvasPolygonPainter.getInstance());
+            this.setStrategy(PolygonPainter.getInstance());
         } else {
             throw new Error('Unknown object to paint');
         }

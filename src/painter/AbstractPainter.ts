@@ -1,7 +1,7 @@
 import { PaintingStrategy } from './PaintingStrategy.js';
 import { Coordinate } from '../polygon/Coordinate.js';
 
-export abstract class CanvasPainter implements PaintingStrategy {
+export abstract class AbstractPainter implements PaintingStrategy {
     private canvasBackground: HTMLCanvasElement = document.getElementById('background') as HTMLCanvasElement;
     movementCanvasCtx: CanvasRenderingContext2D = this.canvasBackground.getContext('2d');
     private canvasForeground: HTMLCanvasElement = document.getElementById('foreground') as HTMLCanvasElement;
