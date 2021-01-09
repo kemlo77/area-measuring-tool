@@ -3,24 +3,25 @@ import { CanvasStudio } from './painter/CanvasStudio.js';
 import { PolygonArea } from './PolygonArea.js';
 import { AreaType } from './AreaType.js';
 import { Polygon } from './polygon/Polygon.js';
+import { InteractiveShape } from './polygon/InteractiveShape.js';
 
-const listOfPolygons: Polygon[] = new Array();
+const listOfShapes: InteractiveShape[] = new Array();
 const canvasStudio: CanvasStudio = CanvasStudio.getInstance();
 
 export function canvasLeftClicked(event: MouseEvent, canvasId: string): void {
 	const coordinate: Coordinate = getMouseCoordinate(event, canvasId);
 
 	// kolla om nån redan är vald
-	if (getSelectedPolygon() === null) {
+	if (getSelectedShape() === null) {
 		// kolla om nån blir vald genom vänsterklick. Ta den första träffen och avbryt sen
-		for (const polygon of listOfPolygons) {
-			polygon.handleLeftClick(coordinate);
-			if (polygon.isSelected) {
+		for (const shape of listOfShapes) {
+			shape.handleLeftClick(coordinate);
+			if (shape.isSelected) {
 				break;
 			}
 		}
 	} else {
-		getSelectedPolygon().handleLeftClick(coordinate);
+		getSelectedShape().handleLeftClick(coordinate);
 	}
 
 	paintAllStill();
@@ -28,44 +29,44 @@ export function canvasLeftClicked(event: MouseEvent, canvasId: string): void {
 }
 
 export function addNewPolygonArea(isPositive: boolean): void {
-	if (noSelectedPolygons()) {
+	if (noSelectedShapes()) {
 		if(isPositive) {
-			listOfPolygons.push(new PolygonArea(AreaType.POSITIVE));
+			listOfShapes.push(new PolygonArea(AreaType.POSITIVE));
 		} else {
-			listOfPolygons.push(new PolygonArea(AreaType.NEGATIVE));
+			listOfShapes.push(new PolygonArea(AreaType.NEGATIVE));
 		}
 	}
 }
 
 export function addNewPolygon(): void {
-	if (noSelectedPolygons()) {
-			listOfPolygons.push(new Polygon());
+	if (noSelectedShapes()) {
+			listOfShapes.push(new Polygon());
 	}
 }
 
-function noSelectedPolygons(): boolean {
-	return listOfPolygons.every((it) => { return it.isClosed; });
+function noSelectedShapes(): boolean {
+	return listOfShapes.every((it) => { return !it.isSelected; });
 }
 
-export function removeSelectedPolygon(): void {
-	const selectedPolygon: Polygon = getSelectedPolygon();
-	if (selectedPolygon !== null) {
-		removePolygonFromList(selectedPolygon);
+export function removeSelectedShape(): void {
+	const selectedShape: InteractiveShape = getSelectedShape();
+	if (selectedShape !== null) {
+		removeShapeFromList(selectedShape);
 		canvasStudio.clearTheMovementCanvas(); // TODO: Feature envy?
 		paintAllStill();
 	}
 }
 
-function removePolygonFromList(polygon: Polygon): void {
-	const index: number = listOfPolygons.indexOf(polygon);
-	listOfPolygons.splice(index, 1);
+function removeShapeFromList(shape: InteractiveShape): void {
+	const index: number = listOfShapes.indexOf(shape);
+	listOfShapes.splice(index, 1);
 }
 
 export function canvasRightClicked(event: MouseEvent, canvasId: string): void {
 	const coordinate: Coordinate = getMouseCoordinate(event, canvasId);
-	const selectedPolygon: Polygon = getSelectedPolygon();
-	if (selectedPolygon !== null) {
-		selectedPolygon.handleRightClick(coordinate);
+	const selectedShape: InteractiveShape = getSelectedShape();
+	if (selectedShape !== null) {
+		selectedShape.handleRightClick(coordinate);
 		paintAllStill();
 		paintSelectedMovement(coordinate);
 	}
@@ -79,9 +80,9 @@ export function canvasMouseMovement(event: MouseEvent, canvasId: string): void {
 export function canvasMouseDown(event: MouseEvent, canvasId: string): void {
 	if (event.button === 0) { // left mouse button
 		const coordinate: Coordinate = getMouseCoordinate(event, canvasId);
-		const selectedPolygon: Polygon = getSelectedPolygon();
-		if (selectedPolygon !== null) {
-			selectedPolygon.handleLeftMouseDown(coordinate);
+		const selectedShape: InteractiveShape = getSelectedShape();
+		if (selectedShape !== null) {
+			selectedShape.handleLeftMouseDown(coordinate);
 			paintAllStill();
 			paintSelectedMovement(coordinate);
 		}
@@ -91,9 +92,9 @@ export function canvasMouseDown(event: MouseEvent, canvasId: string): void {
 export function canvasMouseUp(event: MouseEvent, canvasId: string): void {
 	if (event.button === 0) { // left mouse button
 		const coordinate: Coordinate = getMouseCoordinate(event, canvasId);
-		const selectedPolygon: Polygon = getSelectedPolygon();
-		if (selectedPolygon !== null) {
-			selectedPolygon.handleLeftMouseUp(coordinate);
+		const selectedShape: InteractiveShape = getSelectedShape();
+		if (selectedShape !== null) {
+			selectedShape.handleLeftMouseUp(coordinate);
 			paintAllStill();
 			paintSelectedMovement(coordinate);
 		}
@@ -107,22 +108,22 @@ function getMouseCoordinate(event: MouseEvent, elementId: string): Coordinate {
 	return { x, y };
 }
 
-function getSelectedPolygon(): Polygon {
-	for (const polygon of listOfPolygons) {
-		if (polygon.isSelected) {
-			return polygon;
+function getSelectedShape(): InteractiveShape {
+	for (const shape of listOfShapes) {
+		if (shape.isSelected) {
+			return shape;
 		}
 	}
 	return null;
 }
 
 function paintAllStill(): void {
-	canvasStudio.paintStill(listOfPolygons);
+	canvasStudio.paintStill(listOfShapes);
 }
 
 function paintSelectedMovement(mousePosition: Coordinate): void {
-	const selectedPolygon: Polygon = getSelectedPolygon();
-	if (selectedPolygon !== null) {
-		canvasStudio.paintMovement(selectedPolygon, mousePosition);
+	const selectedShape: InteractiveShape = getSelectedShape();
+	if (selectedShape !== null) {
+		canvasStudio.paintMovement(selectedShape, mousePosition);
 	}
 }
