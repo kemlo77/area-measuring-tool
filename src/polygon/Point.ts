@@ -1,4 +1,6 @@
-export class Point {
+import { Coordinate } from './Coordinate';
+
+export class Point implements Coordinate{
     public x: number;
     public y: number;
 
