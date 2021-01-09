@@ -2,9 +2,9 @@ import { Point } from './Point.js';
 import { Segment } from './Segment.js';
 import { Vector } from './Vector.js';
 
-export class MathUtil {
+export module MathUtil {
 	// Checking if two segments AB and CD intersect
-	static calculateIntersect(segmentAB: Segment, segmentCD: Segment): Point {
+	export function calculateIntersect(segmentAB: Segment, segmentCD: Segment): Point {
 		// inspiration på http://alienryderflex.com/intersect/
 		const pointA: Point = new Point(segmentAB.p1);
 		let pointB: Point = new Point(segmentAB.p2);
@@ -69,7 +69,7 @@ export class MathUtil {
 	}
 
 	// returns a vector from the point being projected to the projection point on the segment
-	static projectPointOntoSegment(segmentAB: Segment, pointC: Point): Vector {
+	export function projectPointOntoSegment(segmentAB: Segment, pointC: Point): Vector {
 		const pointA: Point = new Point(segmentAB.p1);
 		const pointB: Point = new Point(segmentAB.p2);
 
