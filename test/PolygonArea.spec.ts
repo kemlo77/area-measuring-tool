@@ -1,27 +1,29 @@
 import { expect } from 'chai';
 import { PolygonArea } from '../built/PolygonArea';
 import {AreaType } from '../built/AreaType.js';
+import { Coordinate } from '../src/polygon/Coordinate';
 
-let rectangle: PolygonArea;
+
 
 
 describe('PolygonArea', () => {
 
 
-
-    beforeEach(() => {
-        rectangle = new PolygonArea(AreaType.POSITIVE);
-        rectangle.handleLeftClick({ x: 100, y: 100 }); // upper left
-        rectangle.handleLeftClick({ x: 150, y: 100 });
-        rectangle.handleLeftClick({ x: 200, y: 100 }); // upper right
-        rectangle.handleLeftClick({ x: 200, y: 150 });
-        rectangle.handleLeftClick({ x: 200, y: 200 }); // lower right
-        rectangle.handleLeftClick({ x: 150, y: 200 });
-        rectangle.handleLeftClick({ x: 100, y: 200 }); // lower left
-        rectangle.handleLeftClick({ x: 100, y: 150 });
-        rectangle.handleLeftClick({ x: 100, y: 100 }); // closing
-
+    it('constructor - one argument', () => {
+        const polygonArea: PolygonArea = new PolygonArea(AreaType.POSITIVE);
+        expect(polygonArea.areaType).to.equal(AreaType.POSITIVE);
+        expect(polygonArea.vertices.length).to.equal(0);
+        expect(polygonArea.isClosed).to.equal(false);
     });
+
+    it('constructor - two arguments', () => {
+        const coordinates: Coordinate[] = [{ x: 100, y: 100 }, { x: 300, y: 100 }, { x: 150, y: 300 }];
+        const polygonArea: PolygonArea = new PolygonArea(AreaType.POSITIVE, coordinates);
+        expect(polygonArea.areaType).to.equal(AreaType.POSITIVE);
+        expect(polygonArea.vertices.length).to.equal(3);
+        expect(polygonArea.isClosed).to.equal(true);
+    });
+
 
     it('different types have different color', () => {
         const positiveArea: PolygonArea = new PolygonArea(AreaType.POSITIVE);

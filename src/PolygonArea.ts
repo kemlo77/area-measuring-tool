@@ -1,5 +1,6 @@
 import { Polygon } from './polygon/Polygon.js';
 import {AreaType } from './AreaType.js';
+import { Coordinate } from './polygon/Coordinate.js';
 
 export class PolygonArea extends Polygon {
 
@@ -8,8 +9,13 @@ export class PolygonArea extends Polygon {
     private type: AreaType;
 
 
-    constructor(type: AreaType) {
-        super();
+    constructor(type: AreaType, vertices?: Array<Coordinate>) {
+        const verticesGiven: boolean = (vertices !== undefined && vertices !== null);
+        if(verticesGiven) {
+            super(vertices);
+        } else {
+            super();
+        }
         this.type = type;
     }
 
