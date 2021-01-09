@@ -1,43 +1,43 @@
 import { CanvasPainter } from './CanvasPainter.js';
 import { Coordinate } from '../polygon/Coordinate.js';
 import { PaintableSegment } from '../polygon/PaintableSegment.js';
-import { Polygon } from '../polygon/Polygon.js';
+import { PolygonArea } from '../PolygonArea.js';
 
-export class CanvasPolygonPainter extends CanvasPainter {
+
+export class CanvasPolygonAreaPainter extends CanvasPainter {
 
     private oldXMin: number = 0;
     private oldXMax: number = 1;
     private oldYMin: number = 0;
     private oldYMax: number = 1;
-    private _color: string = '0,0,0';
 
 
-    private static instance: CanvasPolygonPainter;
+    private static instance: CanvasPolygonAreaPainter;
 
     private constructor() {
         super();
     }
 
-    public static getInstance(): CanvasPolygonPainter {
-        if (!CanvasPolygonPainter.instance) {
-            CanvasPolygonPainter.instance = new CanvasPolygonPainter();
+    public static getInstance(): CanvasPolygonAreaPainter {
+        if (!CanvasPolygonAreaPainter.instance) {
+            CanvasPolygonAreaPainter.instance = new CanvasPolygonAreaPainter();
         }
-        return CanvasPolygonPainter.instance;
+        return CanvasPolygonAreaPainter.instance;
     }
 
 
     drawStill(motif: any): void {
-        const polygon: Polygon = motif as Polygon;
+        const polygon: PolygonArea = motif as PolygonArea;
 
         polygon.getPaintableStillSegments()
-            .forEach((it) => { this.drawOneSegment(it, this._color, this.stillCanvasCtx); });
+            .forEach((it) => { this.drawOneSegment(it, polygon.color, this.stillCanvasCtx); });
 
         if (polygon.isSelected) {
             for (const vertex of polygon.vertices) {
                 if (vertex === polygon.movePoint) {
                     continue;
                 }
-                this.drawHollowDot(vertex, this._color, this.stillCanvasCtx);
+                this.drawHollowDot(vertex, polygon.color, this.stillCanvasCtx);
             }
         }
 
@@ -45,12 +45,12 @@ export class CanvasPolygonPainter extends CanvasPainter {
 
     drawMovement(motif: any, mousePosition: Coordinate): void {
         this.clearUsedPartOfCanvas();
-        const polygon: Polygon = motif as Polygon;
+        const polygon: PolygonArea = motif as PolygonArea;
 
         const segments: PaintableSegment[] = polygon.getPaintableMovingSegments(mousePosition);
         if (segments.length > 0) {
             for (const segment of segments) {
-                this.drawOneSegment(segment, this._color, this.movementCanvasCtx);
+                this.drawOneSegment(segment, polygon.color, this.movementCanvasCtx);
             }
             this.saveExtremes(segments);
         }
@@ -60,6 +60,7 @@ export class CanvasPolygonPainter extends CanvasPainter {
     private drawOneSegment(segment2draw: PaintableSegment, lineColor: string, ctx: CanvasRenderingContext2D): void {
         this.drawLine(segment2draw.p1, segment2draw.p2, lineColor, ctx);
     }
+
 
     private saveExtremes(arrayWithSegments: PaintableSegment[]): void {
         this.oldXMin = arrayWithSegments[0].p1.x;

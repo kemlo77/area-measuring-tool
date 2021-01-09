@@ -1,10 +1,10 @@
-
 import { Coordinate } from './polygon/Coordinate.js';
 import { CanvasStudio } from './painter/CanvasStudio.js';
 import { PolygonArea } from './PolygonArea.js';
 import { AreaType } from './AreaType.js';
+import { Polygon } from './polygon/Polygon.js';
 
-const listOfPolygons: PolygonArea[] = new Array();
+const listOfPolygons: Polygon[] = new Array();
 const canvasStudio: CanvasStudio = CanvasStudio.getInstance();
 
 export function canvasLeftClicked(event: MouseEvent, canvasId: string): void {
@@ -27,9 +27,19 @@ export function canvasLeftClicked(event: MouseEvent, canvasId: string): void {
 	paintSelectedMovement(coordinate);
 }
 
+export function addNewPolygonArea(isPositive: boolean): void {
+	if (noSelectedPolygons()) {
+		if(isPositive) {
+			listOfPolygons.push(new PolygonArea(AreaType.POSITIVE));
+		} else {
+			listOfPolygons.push(new PolygonArea(AreaType.NEGATIVE));
+		}
+	}
+}
+
 export function addNewPolygon(): void {
 	if (noSelectedPolygons()) {
-		listOfPolygons.push(new PolygonArea(AreaType.POSITIVE));
+			listOfPolygons.push(new Polygon());
 	}
 }
 
@@ -38,7 +48,7 @@ function noSelectedPolygons(): boolean {
 }
 
 export function removeSelectedPolygon(): void {
-	const selectedPolygon: PolygonArea = getSelectedPolygon();
+	const selectedPolygon: Polygon = getSelectedPolygon();
 	if (selectedPolygon !== null) {
 		removePolygonFromList(selectedPolygon);
 		canvasStudio.clearTheMovementCanvas(); // TODO: Feature envy?
@@ -46,14 +56,14 @@ export function removeSelectedPolygon(): void {
 	}
 }
 
-function removePolygonFromList(polygon: PolygonArea): void {
+function removePolygonFromList(polygon: Polygon): void {
 	const index: number = listOfPolygons.indexOf(polygon);
 	listOfPolygons.splice(index, 1);
 }
 
 export function canvasRightClicked(event: MouseEvent, canvasId: string): void {
 	const coordinate: Coordinate = getMouseCoordinate(event, canvasId);
-	const selectedPolygon: PolygonArea = getSelectedPolygon();
+	const selectedPolygon: Polygon = getSelectedPolygon();
 	if (selectedPolygon !== null) {
 		selectedPolygon.handleRightClick(coordinate);
 		paintAllStill();
@@ -69,7 +79,7 @@ export function canvasMouseMovement(event: MouseEvent, canvasId: string): void {
 export function canvasMouseDown(event: MouseEvent, canvasId: string): void {
 	if (event.button === 0) { // left mouse button
 		const coordinate: Coordinate = getMouseCoordinate(event, canvasId);
-		const selectedPolygon: PolygonArea = getSelectedPolygon();
+		const selectedPolygon: Polygon = getSelectedPolygon();
 		if (selectedPolygon !== null) {
 			selectedPolygon.handleLeftMouseDown(coordinate);
 			paintAllStill();
@@ -81,7 +91,7 @@ export function canvasMouseDown(event: MouseEvent, canvasId: string): void {
 export function canvasMouseUp(event: MouseEvent, canvasId: string): void {
 	if (event.button === 0) { // left mouse button
 		const coordinate: Coordinate = getMouseCoordinate(event, canvasId);
-		const selectedPolygon: PolygonArea = getSelectedPolygon();
+		const selectedPolygon: Polygon = getSelectedPolygon();
 		if (selectedPolygon !== null) {
 			selectedPolygon.handleLeftMouseUp(coordinate);
 			paintAllStill();
@@ -97,7 +107,7 @@ function getMouseCoordinate(event: MouseEvent, elementId: string): Coordinate {
 	return { x, y };
 }
 
-function getSelectedPolygon(): PolygonArea {
+function getSelectedPolygon(): Polygon {
 	for (const polygon of listOfPolygons) {
 		if (polygon.isSelected) {
 			return polygon;
@@ -111,7 +121,7 @@ function paintAllStill(): void {
 }
 
 function paintSelectedMovement(mousePosition: Coordinate): void {
-	const selectedPolygon: PolygonArea = getSelectedPolygon();
+	const selectedPolygon: Polygon = getSelectedPolygon();
 	if (selectedPolygon !== null) {
 		canvasStudio.paintMovement(selectedPolygon, mousePosition);
 	}
