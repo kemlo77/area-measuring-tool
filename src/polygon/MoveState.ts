@@ -14,6 +14,7 @@ export class MoveState implements PolygonState {
         this.polygon = polygon;
     }
 
+    /* istanbul ignore next */
     handleLeftClick(pointClicked: Point): void {
         //
     }
@@ -22,6 +23,7 @@ export class MoveState implements PolygonState {
         this.abortTheMove();
     }
 
+    /* istanbul ignore next */
     handleLeftMouseDown(pointClicked: Point): void {
         //
     }

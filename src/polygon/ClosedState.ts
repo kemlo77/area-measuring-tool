@@ -96,6 +96,7 @@ export class ClosedState implements PolygonState {
         this.polygon.setCurrentState(new MoveState(this.polygon));
     }
 
+    /* istanbul ignore next */
     handleLeftMouseUp(pointClicked: Point): void {
         //
     }

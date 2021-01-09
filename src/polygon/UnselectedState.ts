@@ -35,14 +35,17 @@ export class UnselectedState implements PolygonState {
         return false;
     }
 
+    /* istanbul ignore next */
     handleRightClick(pointClicked: Point): void {
         //
     }
 
+    /* istanbul ignore next */
     handleLeftMouseDown(pointClicked: Point): void {
         //
     }
 
+    /* istanbul ignore next */
     handleLeftMouseUp(pointClicked: Point): void {
         //
     }
