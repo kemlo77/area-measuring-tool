@@ -23,24 +23,6 @@ describe('PolygonArea', () => {
 
     });
 
-
-
-
-
-
-    it('makeDirectionClockWise()', () => {
-        const triangle: PolygonArea = new PolygonArea(AreaType.POSITIVE);
-        triangle.handleLeftClick({ x: 100, y: 100 });
-        triangle.handleLeftClick({ x: 300, y: 100 });
-        triangle.handleLeftClick({ x: 200, y: 300 });
-        triangle.handleLeftClick({ x: 100, y: 100 });
-        expect(triangle.isCounterclockwise).to.equal(false);
-        triangle.makeDirectionCounterClockwise();
-        expect(triangle.isCounterclockwise).to.equal(true);
-        triangle.makeDirectionClockWise();
-        expect(triangle.isCounterclockwise).to.equal(false);
-    });
-
     it('different types have different color', () => {
         const positiveArea: PolygonArea = new PolygonArea(AreaType.POSITIVE);
         const negativeArea: PolygonArea = new PolygonArea(AreaType.NEGATIVE);
@@ -64,23 +46,6 @@ describe('PolygonArea', () => {
         expect(negativeArea.areaType).to.equal(AreaType.NEGATIVE);
     });
 
-
-
-
-    it('Area - when polygon closed', () => {
-        expect(rectangle.area).to.equal(10000);
-    });
-
-    it('Area - when polygon not closed', () => {
-        const shape: PolygonArea = new PolygonArea(AreaType.POSITIVE);
-        expect(shape.area).to.equal(0);
-    });
-
-
-
-    it('perimeterLength', () => {
-        expect(rectangle.perimeterLength).to.equal(400);
-    });
 
 
 

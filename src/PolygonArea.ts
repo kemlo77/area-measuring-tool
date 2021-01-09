@@ -35,46 +35,6 @@ export class PolygonArea extends Polygon {
         return this.type;
     }
 
-    makeDirectionClockWise(): void {
-        if (!this.isOpen && this.isCounterclockwise) {
-            this.reversePolygonDirection();
-        }
-    }
-
-    makeDirectionCounterClockwise(): void {
-        if (!this.isOpen && !this.isCounterclockwise) {
-            this.reversePolygonDirection();
-        }
-    }
-
-    get isCounterclockwise(): boolean {
-        if (!this.isOpen) {
-            return (this.gaussShoelace() < 0);
-        } else {
-            return null;
-        }
-    }
-
-    get area(): number {
-        if (!this.isOpen) {
-            return Math.abs(this.gaussShoelace());
-        } else {
-            return 0;
-        }
-    }
-
-    private gaussShoelace(): number {
-        let theSum: number = 0;
-        for (const segment of this.segments) {
-            theSum += segment.p1.x * segment.p2.y - segment.p1.y * segment.p2.x;
-        }
-        const area: number = theSum / 2;
-        return area;
-    }
-
-    get perimeterLength(): number {
-        return this.segments.reduce((sum, it) => sum + it.length, 0);
-    }
     
 
 }
