@@ -34,6 +34,11 @@ describe('Polygons', () => {
         expect(Polygons.isClockwise(triangle)).to.equal(false);
     });
 
+    it('isClockwise called for open polygon', () => {
+        const triangle: Polygon = new Polygon();
+        expect(Polygons.isClockwise(triangle)).to.equal(null);
+    });
+
     it('Area - when polygon closed', () => {
         expect(Polygons.area(rectangle)).to.equal(10000);
     });

@@ -15,10 +15,16 @@ export class Polygon {
     public static readonly minimumDistanceBetweenPoints: number = 8;
     public static readonly interactDistance: number = 5;
 
-    constructor() {
+    constructor(vertices?: Array<Coordinate>) {
         this.vertices = new Array();
         this.movePoint = null;
         this.currentState = new OpenState(this);
+
+        const verticesGiven: boolean = (vertices !== undefined && vertices !== null);
+        if (verticesGiven) {
+            vertices.forEach((coordinate) => this.handleLeftClick(coordinate));
+            this.handleLeftClick(vertices[0]);
+        }
     }
 
     get segments(): Segment[] {

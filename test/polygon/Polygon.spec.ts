@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import { Polygon } from '../../built/polygon/Polygon';
+import { Polygons } from '../../built/polygon/Polygons';
 
 let rectangle: Polygon;
 
@@ -32,6 +33,25 @@ describe('Polygon', () => {
         rectangle.handleLeftClick({ x: 100, y: 100 }); // closing
 
     });
+
+    it('constructor with arguments', () => {
+        const rectangle: Polygon = new Polygon([
+            { x: 100, y: 100 },
+            { x: 200, y: 100 },
+            { x: 200, y: 200 },
+            { x: 100, y: 200}
+        ]);
+        expect(rectangle.isClosed).to.equal(true);
+        expect(Polygons.area(rectangle)).to.equal(10000);
+    });
+
+    it('constructor with argument null', () => {
+        const rectangle: Polygon = new Polygon(null);
+        expect(rectangle.isClosed).to.equal(false);
+        expect(rectangle.numberOfVertices).to.equal(0);
+    });
+
+
 
     it('segments()', () => {
         expect(rectangle.segments.length).to.equal(8);
