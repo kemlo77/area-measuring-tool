@@ -5,14 +5,12 @@ import { Polygons } from '../../built/polygon/Polygons';
 let rectangle: Polygon;
 
 
-function getSquare(): Polygon {
-    const square: Polygon = new Polygon();
-    square.handleLeftClick({ x: 100, y: 100 });
-    square.handleLeftClick({ x: 200, y: 100 });
-    square.handleLeftClick({ x: 200, y: 200 });
-    square.handleLeftClick({ x: 100, y: 200 });
-    square.handleLeftClick({ x: 100, y: 100 });
-    return square;
+function getSquarePolygon(): Polygon {
+    return new Polygon([{ x: 100, y: 100 }, { x: 200, y: 100 }, { x: 200, y: 200 }, { x: 100, y: 200 }]);
+}
+
+function getTrianglePolygon(): Polygon {
+    return new Polygon([{ x: 100, y: 100 }, { x: 300, y: 100 }, { x: 200, y: 300 }]);
 }
 
 
@@ -35,12 +33,7 @@ describe('Polygon', () => {
     });
 
     it('constructor with arguments', () => {
-        const rectangle: Polygon = new Polygon([
-            { x: 100, y: 100 },
-            { x: 200, y: 100 },
-            { x: 200, y: 200 },
-            { x: 100, y: 200}
-        ]);
+        const rectangle: Polygon = getSquarePolygon();
         expect(rectangle.isClosed).to.equal(true);
         expect(Polygons.area(rectangle)).to.equal(10000);
     });
@@ -62,7 +55,7 @@ describe('Polygon', () => {
     });
 
     it('numberOfSegments - closed', () => {
-        const square: Polygon = getSquare();
+        const square: Polygon = getSquarePolygon();
         expect(square.numberOfSegments).to.equal(4);
     });
 
@@ -95,12 +88,12 @@ describe('Polygon', () => {
     });
 
     it('verticesExceptMovePoint - no movePoint selected', () => {
-        const square: Polygon = getSquare();
+        const square: Polygon = getSquarePolygon();
         expect(square.verticesExceptMovePoint.length).to.equal(4);
     });
 
     it('verticesExceptMovePoint - with a movePoint selected', () => {
-        const square: Polygon = getSquare();
+        const square: Polygon = getSquarePolygon();
         square.handleLeftMouseDown({ x: 100, y: 100 });
         expect(square.verticesExceptMovePoint.length).to.equal(3);
     });
@@ -138,11 +131,7 @@ describe('Polygon', () => {
 
 
     it('reversePolygonDirection()', () => {
-        const triangle: Polygon = new Polygon();
-        triangle.handleLeftClick({ x: 100, y: 100 });
-        triangle.handleLeftClick({ x: 300, y: 100 });
-        triangle.handleLeftClick({ x: 200, y: 300 });
-        triangle.handleLeftClick({ x: 100, y: 100 });
+        const triangle: Polygon = getTrianglePolygon();
         triangle.reversePolygonDirection();
         expect(triangle.vertices[0].x).to.equal(200);
         expect(triangle.vertices[0].y).to.equal(300);
@@ -156,11 +145,7 @@ describe('Polygon', () => {
 
 
     it('rotateVertices()', () => {
-        const triangle: Polygon = new Polygon();
-        triangle.handleLeftClick({ x: 100, y: 100 });
-        triangle.handleLeftClick({ x: 300, y: 100 });
-        triangle.handleLeftClick({ x: 200, y: 300 });
-        triangle.handleLeftClick({ x: 100, y: 100 });
+        const triangle: Polygon = getTrianglePolygon();
         triangle.rotateVertices(1);
 
         expect(triangle.vertices[0].x).to.equal(300);
@@ -171,14 +156,7 @@ describe('Polygon', () => {
 
         expect(triangle.vertices[2].x).to.equal(100);
         expect(triangle.vertices[2].y).to.equal(100);
-
-
-
-
     });
-
-
-
 
 
     it('arrayRotate() - forward one step', () => {
@@ -194,6 +172,17 @@ describe('Polygon', () => {
     it('arrayRotate() - rotating backward one step', () => {
         const rotatedLetters: string[] = Polygon.arrayRotate(['a', 'b', 'c', 'd'], -1);
         expect(rotatedLetters).to.eql(['d', 'a', 'b', 'c']);
+    });
+
+    it('create new polygon using old polygon', () => {
+        const oldtriangle: Polygon = getTrianglePolygon();
+        const newTriangle: Polygon = new Polygon(oldtriangle.vertices);
+        expect(newTriangle.vertices[0].x).to.equal(100);
+        expect(newTriangle.vertices[0].y).to.equal(100);
+        expect(newTriangle.vertices[1].x).to.equal(300);
+        expect(newTriangle.vertices[1].y).to.equal(100);
+        expect(newTriangle.vertices[2].x).to.equal(200);
+        expect(newTriangle.vertices[2].y).to.equal(300);
     });
 
 });

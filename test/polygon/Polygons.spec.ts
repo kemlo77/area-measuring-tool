@@ -2,33 +2,24 @@ import { expect } from 'chai';
 import { Polygon } from '../../built/polygon/Polygon';
 import { Polygons } from '../../built/polygon/Polygons';
 
-let rectangle: Polygon;
+const rectangle: Polygon = new Polygon([
+    { x: 100, y: 100 }, // upper left
+    { x: 150, y: 100 },
+    { x: 200, y: 100 }, // upper right
+    { x: 200, y: 150 },
+    { x: 200, y: 200 }, // lower right
+    { x: 150, y: 200 },
+    { x: 100, y: 200 }, // lower left
+    { x: 100, y: 150 }
+]);
 
 
 describe('Polygons', () => {
 
 
-
-    beforeEach(() => {
-        rectangle = new Polygon();
-        rectangle.handleLeftClick({ x: 100, y: 100 }); // upper left
-        rectangle.handleLeftClick({ x: 150, y: 100 });
-        rectangle.handleLeftClick({ x: 200, y: 100 }); // upper right
-        rectangle.handleLeftClick({ x: 200, y: 150 });
-        rectangle.handleLeftClick({ x: 200, y: 200 }); // lower right
-        rectangle.handleLeftClick({ x: 150, y: 200 });
-        rectangle.handleLeftClick({ x: 100, y: 200 }); // lower left
-        rectangle.handleLeftClick({ x: 100, y: 150 });
-        rectangle.handleLeftClick({ x: 100, y: 100 }); // closing
-
-    });
-
     it('isClockwise', () => {
-        const triangle: Polygon = new Polygon();
-        triangle.handleLeftClick({ x: 100, y: 100 });
-        triangle.handleLeftClick({ x: 300, y: 100 });
-        triangle.handleLeftClick({ x: 200, y: 300 });
-        triangle.handleLeftClick({ x: 100, y: 100 });
+        const triangle: Polygon = new Polygon([{ x: 100, y: 100 }, { x: 300, y: 100 }, { x: 200, y: 300 }]);
+
         expect(Polygons.isClockwise(triangle)).to.equal(true);
         triangle.reversePolygonDirection();
         expect(Polygons.isClockwise(triangle)).to.equal(false);

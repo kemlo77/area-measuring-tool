@@ -10,11 +10,12 @@ describe('Polygon - move', () => {
     describe('Moving', () => {
 
         it('moving vertex in triangle', () => {
-            const triangle: Polygon = new Polygon();
-            triangle.handleLeftClick({ x: 100, y: 100 });
-            triangle.handleLeftClick({ x: 300, y: 100 });
-            triangle.handleLeftClick({ x: 200, y: 300 });
-            triangle.handleLeftClick({ x: 100, y: 100 }); // closing
+            const triangle: Polygon = new Polygon([
+                { x: 100, y: 100 },
+                { x: 300, y: 100 },
+                { x: 200, y: 300 }
+            ]);
+
             triangle.handleLeftMouseDown({ x: 100, y: 100 }); // marking for move
             expect(triangle.isMoving).is.equal(true);
             triangle.handleLeftMouseUp({ x: 110, y: 110 }); // moved
@@ -22,7 +23,7 @@ describe('Polygon - move', () => {
         });
 
         for (let step: number = 0; step < 4; step++) {
-            const square: Polygon = getSquare();
+            const square: Polygon = getSquarePolygon();
             it('All vertices are normally possible to move ' + step, () => {
                 square.rotateVertices(-step);
                 square.handleLeftMouseDown({ x: 100, y: 100 });
@@ -34,7 +35,7 @@ describe('Polygon - move', () => {
         }
 
         for (let step: number = 0; step < 4; step++) {
-            const square: Polygon = getSquare();
+            const square: Polygon = getSquarePolygon();
             it('Not possible to move vertex too close to existing vertex A' + step, () => {
                 square.rotateVertices(-step);
                 square.handleLeftClick({ x: 100, y: 100 });
@@ -49,7 +50,7 @@ describe('Polygon - move', () => {
         }
 
         for (let step: number = 0; step < 4; step++) {
-            const square: Polygon = getSquare();
+            const square: Polygon = getSquarePolygon();
             it('Possible to move vertex when NOT too close to other vertex B' + step, () => {
                 square.rotateVertices(-step);
                 square.handleLeftMouseDown({ x: 100, y: 100 });
@@ -65,7 +66,7 @@ describe('Polygon - move', () => {
         }
 
         it('Aborting a move', () => {
-            const square: Polygon = getSquare();
+            const square: Polygon = getSquarePolygon();
             square.handleLeftMouseDown({ x: 100, y: 100 });
             expect(square.isMoving).is.equal(true);
             square.handleRightClick({ x: 10, y: 10 }); // aborting
@@ -73,7 +74,7 @@ describe('Polygon - move', () => {
         });
 
         for (let step: number = 0; step < 4; step++) {
-            const square: Polygon = getSquare();
+            const square: Polygon = getSquarePolygon();
             it('vertices next to new vertex are possible to move ' + step, () => {
                 square.rotateVertices(-step);
 
@@ -107,7 +108,7 @@ describe('Polygon - move', () => {
         }
 
         for (let step: number = 0; step < 4; step++) {
-            const square: Polygon = getSquare();
+            const square: Polygon = getSquarePolygon();
             it('Not possible to move vertex too close to existing vertex' + step, () => {
                 square.rotateVertices(-step);
                 square.handleLeftClick({ x: 100, y: 100 });
@@ -125,7 +126,7 @@ describe('Polygon - move', () => {
 
 
         for (let step: number = 0; step < 4; step++) {
-            const square: Polygon = getSquare();
+            const square: Polygon = getSquarePolygon();
             it('Not possible to move when move creates intersection (neighbouring segments) ' + step, () => {
                 square.rotateVertices(-step);
                 // side 1
@@ -147,14 +148,15 @@ describe('Polygon - move', () => {
 
 
         for (let step: number = 0; step < 6; step++) {
-            const square: Polygon = new Polygon();
-            square.handleLeftClick({ x: 100, y: 100 });
-            square.handleLeftClick({ x: 200, y: 100 });
-            square.handleLeftClick({ x: 200, y: 190 });
-            square.handleLeftClick({ x: 110, y: 110 });
-            square.handleLeftClick({ x: 190, y: 200 });
-            square.handleLeftClick({ x: 100, y: 200 });
-            square.handleLeftClick({ x: 100, y: 100 });
+            const square: Polygon = new Polygon([
+                { x: 100, y: 100 },
+                { x: 200, y: 100 },
+                { x: 200, y: 190 },
+                { x: 110, y: 110 },
+                { x: 190, y: 200 },
+                { x: 100, y: 200 }
+            ]);
+
             it('Not possible to move when move creates intersection (not neighbouring segments) ' + step, () => {
                 square.rotateVertices(-step);
                 // side 1
@@ -181,11 +183,12 @@ describe('Polygon - move', () => {
 
 
         it('calculateSegments() - three vertices', () => {
-            const shape: Polygon = new Polygon();
-            shape.handleLeftClick({ x: 100, y: 100 });
-            shape.handleLeftClick({ x: 300, y: 100 });
-            shape.handleLeftClick({ x: 150, y: 300 });
-            shape.handleLeftClick({ x: 100, y: 100 }); // closing it
+            const shape: Polygon = new Polygon([
+                { x: 100, y: 100 },
+                { x: 300, y: 100 },
+                { x: 150, y: 300 }
+            ]);
+
             shape.handleLeftClick({ x: 100, y: 100 }); // marking for move
             const segments: Segment[] = shape.segments;
             expect(segments.length).is.equal(3);
@@ -207,14 +210,15 @@ describe('Polygon - move', () => {
 
         for (let step: number = 0; step < 6; step++) {
             it('getPaintableStillSegments() - ' + step, () => {
-                const shape: Polygon = new Polygon();
-                shape.handleLeftClick({ x: 100, y: 100 });
-                shape.handleLeftClick({ x: 150, y: 100 }); // extra
-                shape.handleLeftClick({ x: 200, y: 100 });
-                shape.handleLeftClick({ x: 200, y: 150 }); // extra
-                shape.handleLeftClick({ x: 200, y: 200 });
-                shape.handleLeftClick({ x: 100, y: 200 });
-                shape.handleLeftClick({ x: 100, y: 100 }); // closing
+                const shape: Polygon = new Polygon([
+                    { x: 100, y: 100 },
+                    { x: 150, y: 100 }, // extra
+                    { x: 200, y: 100 },
+                    { x: 200, y: 150 }, // extra
+                    { x: 200, y: 200 },
+                    { x: 100, y: 200 }
+                ]);
+
                 shape.rotateVertices(1);
                 shape.handleLeftMouseDown({ x: 100, y: 100 }); // marking for move
                 const paintableStillSegments: PaintableSegment[] = shape.getPaintableStillSegments();
@@ -230,14 +234,15 @@ describe('Polygon - move', () => {
 
         for (let step: number = 0; step < 6; step++) {
             it('calculatePaintableMovingSegments() - ' + step, () => {
-                const shape: Polygon = new Polygon();
-                shape.handleLeftClick({ x: 100, y: 100 });
-                shape.handleLeftClick({ x: 150, y: 100 }); // extra
-                shape.handleLeftClick({ x: 200, y: 100 });
-                shape.handleLeftClick({ x: 200, y: 150 }); // extra
-                shape.handleLeftClick({ x: 200, y: 200 });
-                shape.handleLeftClick({ x: 100, y: 200 });
-                shape.handleLeftClick({ x: 100, y: 100 }); // closing
+                const shape: Polygon = new Polygon([
+                    { x: 100, y: 100 },
+                    { x: 150, y: 100 }, // extra
+                    { x: 200, y: 100 },
+                    { x: 200, y: 150 }, // extra
+                    { x: 200, y: 200 },
+                    { x: 100, y: 200 }
+                ]);
+
                 shape.rotateVertices(1);
                 shape.handleLeftMouseDown({ x: 100, y: 100 }); // marking for move
                 const paintableMovingSegments: PaintableSegment[] = shape.getPaintableMovingSegments({ x: 10, y: 10 });
@@ -256,12 +261,6 @@ describe('Polygon - move', () => {
 
 });
 
-function getSquare(): Polygon {
-    const square: Polygon = new Polygon();
-    square.handleLeftClick({ x: 100, y: 100 });
-    square.handleLeftClick({ x: 200, y: 100 });
-    square.handleLeftClick({ x: 200, y: 200 });
-    square.handleLeftClick({ x: 100, y: 200 });
-    square.handleLeftClick({ x: 100, y: 100 });
-    return square;
+function getSquarePolygon(): Polygon {
+    return new Polygon([{ x: 100, y: 100 }, { x: 200, y: 100 }, { x: 200, y: 200 }, { x: 100, y: 200 }]);
 }

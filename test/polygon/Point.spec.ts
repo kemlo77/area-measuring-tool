@@ -40,7 +40,7 @@ describe('Point', () => {
     });
 
 
-    const rotatingTest = [
+    const rotatingTest: { description: string, x: number, y: number, angle: number }[] = [
         { description: '0   degres', x: 1, y: 0, angle: 0 },
         { description: '45  degrees', x: Math.sqrt(2) / 2, y: -Math.sqrt(2) / 2, angle: Math.PI * 0.25 },
         { description: '90  degrees', x: 0, y: -1, angle: Math.PI * 0.5 },
@@ -61,7 +61,7 @@ describe('Point', () => {
     });
 
 
-    const runs = [
+    const runs: { description: string, x: number, y: number, expected: number }[] = [
         { description: '0   degres', x: 1, y: 0, expected: 0 },
         { description: '45  degrees', x: 1, y: 1, expected: Math.PI * 0.25 },
         { description: '90  degrees', x: 0, y: 1, expected: Math.PI * 0.5 },
@@ -157,28 +157,28 @@ describe('Point', () => {
         expect(noneTooClose).to.equal(false);
     });
 
-    it('closeEnoughToPoint() - close enough', ()=>{
+    it('closeEnoughToPoint() - close enough', () => {
         const pointA: Point = new Point(0, 0);
         const pointB: Point = new Point(5, 0);
-        expect(pointA.closeEnoughToPoint(pointB,6)).to.equal(true);
+        expect(pointA.closeEnoughToPoint(pointB, 6)).to.equal(true);
     });
 
-    it('closeEnoughToPoint() - not close enough', ()=>{
+    it('closeEnoughToPoint() - not close enough', () => {
         const pointA: Point = new Point(0, 0);
         const pointB: Point = new Point(5, 0);
-        expect(pointA.closeEnoughToPoint(pointB,4)).to.equal(false);
+        expect(pointA.closeEnoughToPoint(pointB, 4)).to.equal(false);
     });
 
-    it('notTooCloseToPoint() - too close', ()=>{
+    it('notTooCloseToPoint() - too close', () => {
         const pointA: Point = new Point(0, 0);
         const pointB: Point = new Point(5, 0);
-        expect(pointA.notTooCloseToPoint(pointB,6)).to.equal(false);
+        expect(pointA.notTooCloseToPoint(pointB, 6)).to.equal(false);
     });
 
-    it('notTooCloseToPoint() - not too close', ()=>{
+    it('notTooCloseToPoint() - not too close', () => {
         const pointA: Point = new Point(0, 0);
         const pointB: Point = new Point(5, 0);
-        expect(pointA.notTooCloseToPoint(pointB,4)).to.equal(true);
+        expect(pointA.notTooCloseToPoint(pointB, 4)).to.equal(true);
     });
 
 

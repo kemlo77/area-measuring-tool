@@ -205,12 +205,6 @@ describe('Polygon - open', () => {
 
 });
 
-function getSquare(): Polygon {
-    const square: Polygon = new Polygon();
-    square.handleLeftClick({ x: 100, y: 100 });
-    square.handleLeftClick({ x: 200, y: 100 });
-    square.handleLeftClick({ x: 200, y: 200 });
-    square.handleLeftClick({ x: 100, y: 200 });
-    square.handleLeftClick({ x: 100, y: 100 });
-    return square;
+function getSquarePolygon(): Polygon {
+    return new Polygon([{ x: 100, y: 100 }, { x: 200, y: 100 }, { x: 200, y: 200 }, { x: 100, y: 200 }]);
 }
