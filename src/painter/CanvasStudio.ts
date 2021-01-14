@@ -4,6 +4,8 @@ import { PolygonPainter } from './PolygonPainter.js';
 import { Coordinate } from '../polygon/Coordinate.js';
 import { PolygonArea } from '../PolygonArea.js';
 import { PolygonAreaPainter } from './PolygonAreaPainter.js';
+import { Line } from '../line/Line.js';
+import { LinePainter } from './LinePainter.js';
 
 export class CanvasStudio {
 
@@ -18,9 +20,6 @@ export class CanvasStudio {
         }
         return CanvasStudio.instance;
     }
-
-
-
 
     public paintStill(motifs: any[]): void {
         this.strategy.clearTheStillCanvas();
@@ -44,6 +43,8 @@ export class CanvasStudio {
             this.setStrategy(PolygonAreaPainter.getInstance());
         } else if (object instanceof Polygon) {
             this.setStrategy(PolygonPainter.getInstance());
+        } else if (object instanceof Line) {
+            this.setStrategy(LinePainter.getInstance());
         } else {
             throw new Error('Unknown object to paint');
         }

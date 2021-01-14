@@ -1,27 +1,21 @@
 import { PaintableSegment } from '../polygon/PaintableSegment';
-import { Polygon } from '../polygon/Polygon.js';
 import { AbstractPainter } from './AbstractPainter.js';
 
 
-export abstract class AbstractPolygonPainter extends AbstractPainter {
+export abstract class AbstractSegmentPainter extends AbstractPainter {
 
     private oldXMin: number = 0;
     private oldXMax: number = 1;
     private oldYMin: number = 0;
     private oldYMax: number = 1;
 
-    drawStillPolygon(polygon: Polygon, color: string): void {
-        polygon.getPaintableStillSegments()
-            .forEach((it) => { this.drawOneSegment(it, color, this.stillCanvasCtx); });
+    drawStillSegments(segments: PaintableSegment[], color: string): void {
+        segments.forEach((it) => { this.drawOneSegment(it, color, this.stillCanvasCtx); });
 
-        if (polygon.isSelected) {
-            polygon.vertices
-                .filter((it) => it !== polygon.movePoint)
-                .forEach((it) => { this.drawHollowDot(it, color, this.stillCanvasCtx); });
-        }
     }
 
     drawMovingSegments(segments: PaintableSegment[], color: string):void {
+        //TODO: kan man skriva om detta så att det görs med forEach istället?
         if (segments.length > 0) {
             for (const segment of segments) {
                 this.drawOneSegment(segment, color, this.movementCanvasCtx);

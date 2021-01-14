@@ -18,13 +18,13 @@ export class UnselectedState implements LineState {
 
 
     handleLeftClick(pointClicked: Point): void {
-        //
-    }
-
-    handleLeftMouseDown(pointClicked: Point): void {
         if (this.isTheLineClicked(pointClicked)) {
             this.line.setCurrentState(new CompleteState(this.line));
         }
+    }
+
+    handleLeftMouseDown(pointClicked: Point): void {
+        //
     }
 
     private isTheLineClicked(pointClicked: Point): boolean {

@@ -1,9 +1,9 @@
 import { Coordinate } from '../polygon/Coordinate.js';
 import { PaintableSegment } from '../polygon/PaintableSegment.js';
 import { Polygon } from '../polygon/Polygon.js';
-import { AbstractPolygonPainter } from './AbstractPolygonPainter.js';
+import { AbstractSegmentPainter } from './AbstractSegmentPainter.js';
 
-export class PolygonPainter extends AbstractPolygonPainter {
+export class PolygonPainter extends AbstractSegmentPainter {
 
     private _color: string = '0,0,0';
 
@@ -23,7 +23,13 @@ export class PolygonPainter extends AbstractPolygonPainter {
 
     drawStill(motif: any): void {
         const polygon: Polygon = motif as Polygon;
-        this.drawStillPolygon(polygon, this._color);
+        this.drawStillSegments(polygon.getPaintableStillSegments(), this._color);
+
+        if (polygon.isSelected) {
+            polygon.vertices
+                .filter((it) => it !== polygon.movePoint)
+                .forEach((it) => { this.drawHollowDot(it, this._color, this.stillCanvasCtx); });
+        }
     }
 
     drawMovement(motif: any, mousePosition: Coordinate): void {

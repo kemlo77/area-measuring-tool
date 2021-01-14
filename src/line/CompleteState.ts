@@ -27,9 +27,9 @@ export class CompleteState implements LineState {
             this.line.movePoint = this.line.p1;
             this.line.setCurrentState(new MoveState(this.line));
         } else if (pointClicked.closeEnoughToPoint(this.line.p2, Line.interactDistance)) {
-            this.line.movePoint = this.line.p1;
+            this.line.movePoint = this.line.p2;
             this.line.setCurrentState(new MoveState(this.line));
-        } else if (!this.theSegmentIsClicked(pointClicked)) {
+        } else if (this.theSegmentIsNotClicked(pointClicked)) {
             this.line.setCurrentState(new UnselectedState(this.line));
         }
     }
@@ -38,14 +38,13 @@ export class CompleteState implements LineState {
         return new Segment(this.line.p1, this.line.p2);
     }
 
-    private theSegmentIsClicked(pointClicked: Point): boolean {
+    private theSegmentIsNotClicked(pointClicked: Point): boolean {
         const vector: Vector = MathUtil.projectPointOntoSegment(this.theLineSegment(), pointClicked);
         if (vector !== null && vector.norm < Line.interactDistance) {
-            return true;
-        } else {
             return false;
+        } else {
+            return true;
         }
-
     }
 
     handleLeftMouseUp(pointClicked: Point): void {

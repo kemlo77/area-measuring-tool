@@ -1,5 +1,6 @@
 import { Coordinate } from '../polygon/Coordinate';
 import { InteractiveShape } from '../polygon/InteractiveShape';
+import { PaintableSegment } from '../polygon/PaintableSegment';
 import { Point } from '../polygon/Point.js';
 import { Segment } from '../polygon/Segment.js';
 import { InitialState } from './InitialState.js';
@@ -8,17 +9,15 @@ import { UnselectedState } from './UnselectedState.js';
 
 export class Line implements InteractiveShape {
 
-    private _p1: Point;
-    private _p2: Point;
-    private _movePoint: Point;
+    private _p1: Point = null;
+    private _p2: Point = null;
+    private _movePoint: Point = null;
     private currentState: LineState;
     public static readonly minimumDistanceBetweenPoints: number = 8;
     public static readonly interactDistance: number = 5;
 
     constructor() {
-        this._movePoint = null;
         this.currentState = new InitialState(this);
-        //
     }
 
     setCurrentState(state: LineState): void {
@@ -59,6 +58,14 @@ export class Line implements InteractiveShape {
 
     get segment(): Segment {
         return this.currentState.calculateSegment();
+    }
+
+    getPaintableStillSegment(): PaintableSegment {
+        return this.currentState.calculatePaintableStillSegment();
+    }
+
+    getPaintableMovingSegment(mousePosition: Coordinate): PaintableSegment {
+        return this.currentState.calculatePaintableMovingSegment(mousePosition);
     }
 
 

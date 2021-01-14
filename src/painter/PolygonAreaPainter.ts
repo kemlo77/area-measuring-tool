@@ -1,10 +1,10 @@
 import { Coordinate } from '../polygon/Coordinate.js';
 import { PaintableSegment } from '../polygon/PaintableSegment.js';
 import { PolygonArea } from '../PolygonArea.js';
-import { AbstractPolygonPainter } from './AbstractPolygonPainter.js';
+import { AbstractSegmentPainter } from './AbstractSegmentPainter.js';
 
 
-export class PolygonAreaPainter extends AbstractPolygonPainter {
+export class PolygonAreaPainter extends AbstractSegmentPainter {
 
     private static instance: PolygonAreaPainter;
 
@@ -21,7 +21,13 @@ export class PolygonAreaPainter extends AbstractPolygonPainter {
 
     drawStill(motif: any): void {
         const polygon: PolygonArea = motif as PolygonArea;
-        this.drawStillPolygon(polygon, polygon.color);
+        this.drawStillSegments(polygon.getPaintableStillSegments(), polygon.color);
+
+        if (polygon.isSelected) {
+            polygon.vertices
+                .filter((it) => it !== polygon.movePoint)
+                .forEach((it) => { this.drawHollowDot(it, polygon.color, this.stillCanvasCtx); });
+        }
 
     }
 
