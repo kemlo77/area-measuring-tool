@@ -1,0 +1,67 @@
+import { Coordinate } from '../polygon/Coordinate.js';
+import { PaintableSegment } from '../polygon/PaintableSegment.js';
+import { Point } from '../polygon/Point.js';
+import { Segment } from '../polygon/Segment.js';
+import { UnselectedState } from '../line/UnselectedState.js';
+import { Line } from './Line.js';
+import { LineState } from './LineState.js';
+import { MoveState } from './MoveState.js';
+import { Vector } from '../polygon/Vector.js';
+import { MathUtil } from '../polygon/MathUtil.js';
+
+export class CompleteState implements LineState {
+
+    private line: Line;
+
+    constructor(line: Line) {
+        this.line = line;
+    }
+
+
+    handleLeftClick(pointClicked: Point): void {
+        //
+    }
+
+    handleLeftMouseDown(pointClicked: Point): void {
+        if (pointClicked.closeEnoughToPoint(this.line.p1, Line.interactDistance)) {
+            this.line.movePoint = this.line.p1;
+            this.line.setCurrentState(new MoveState(this.line));
+        } else if (pointClicked.closeEnoughToPoint(this.line.p2, Line.interactDistance)) {
+            this.line.movePoint = this.line.p1;
+            this.line.setCurrentState(new MoveState(this.line));
+        } else if (!this.theSegmentIsClicked(pointClicked)) {
+            this.line.setCurrentState(new UnselectedState(this.line));
+        }
+    }
+
+    private theLineSegment(): Segment {
+        return new Segment(this.line.p1, this.line.p2);
+    }
+
+    private theSegmentIsClicked(pointClicked: Point): boolean {
+        const vector: Vector = MathUtil.projectPointOntoSegment(this.theLineSegment(), pointClicked);
+        if (vector !== null && vector.norm < Line.interactDistance) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    handleLeftMouseUp(pointClicked: Point): void {
+        // Does nothing
+    }
+
+    calculateSegment(): Segment {
+        return this.theLineSegment();
+    }
+
+    calculatePaintableStillSegment(): PaintableSegment {
+        return this.theLineSegment();
+    }
+
+    calculatePaintableMovingSegment(mousePosition: Coordinate): PaintableSegment {
+        return this.theLineSegment();
+    }
+
+}

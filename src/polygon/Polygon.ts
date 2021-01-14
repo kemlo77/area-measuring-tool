@@ -71,13 +71,13 @@ export class Polygon implements InteractiveShape {
     }
 
     handleLeftMouseDown(position: Coordinate): void {
-        const rightClickedPoint: Point = new Point(position.x, position.y);
-        this.currentState.handleLeftMouseDown(rightClickedPoint);
+        const leftMouseDownPoint: Point = new Point(position.x, position.y);
+        this.currentState.handleLeftMouseDown(leftMouseDownPoint);
     }
 
     handleLeftMouseUp(position: Coordinate): void {
-        const rightClickedPoint: Point = new Point(position.x, position.y);
-        this.currentState.handleLeftMouseUp(rightClickedPoint);
+        const leftMouseUpPoint: Point = new Point(position.x, position.y);
+        this.currentState.handleLeftMouseUp(leftMouseUpPoint);
     }
 
     getPaintableStillSegments(): PaintableSegment[] {

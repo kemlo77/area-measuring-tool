@@ -25,6 +25,8 @@ export class UnselectedState implements PolygonState {
         }
     }
 
+    //TODO: skulle denna funktion kunna vara privat?
+    //TODO: Gå igenom andra filer och sök funktioner som skulle kunna vara privata
     anySegmentClicked(pointClicked: Point): boolean {
         for (const segment of this.polygon.segments) {
             const vector: Vector = MathUtil.projectPointOntoSegment(segment, pointClicked);

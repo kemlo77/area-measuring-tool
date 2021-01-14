@@ -11,10 +11,7 @@ export class Segment {
     }
 
     get length(): number {
-        const xDelta: number = this.p1.x - this.p2.x;
-        const yDelta: number = this.p1.y - this.p2.y;
-        const segmentLength: number = Math.sqrt(xDelta * xDelta + yDelta * yDelta);
-        return segmentLength;
+        return this.p1.distanceToOtherPoint(this.p2);
     }
 
     containsThisVertex(vertex: Point): boolean {

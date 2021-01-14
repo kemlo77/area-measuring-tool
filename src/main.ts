@@ -4,6 +4,7 @@ import { PolygonArea } from './PolygonArea.js';
 import { AreaType } from './AreaType.js';
 import { Polygon } from './polygon/Polygon.js';
 import { InteractiveShape } from './polygon/InteractiveShape.js';
+import { Line } from './line/Line.js';
 
 const listOfShapes: InteractiveShape[] = new Array();
 const canvasStudio: CanvasStudio = CanvasStudio.getInstance();
@@ -30,7 +31,7 @@ export function canvasLeftClicked(event: MouseEvent, canvasId: string): void {
 
 export function addNewPolygonArea(isPositive: boolean): void {
 	if (noSelectedShapes()) {
-		if(isPositive) {
+		if (isPositive) {
 			listOfShapes.push(new PolygonArea(AreaType.POSITIVE));
 		} else {
 			listOfShapes.push(new PolygonArea(AreaType.NEGATIVE));
@@ -40,7 +41,13 @@ export function addNewPolygonArea(isPositive: boolean): void {
 
 export function addNewPolygon(): void {
 	if (noSelectedShapes()) {
-			listOfShapes.push(new Polygon());
+		listOfShapes.push(new Polygon());
+	}
+}
+
+export function addNewLine(): void {
+	if (noSelectedShapes()) {
+		listOfShapes.push(new Line());
 	}
 }
 

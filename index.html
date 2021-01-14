@@ -20,7 +20,7 @@
 		}
 	</style>
 
-	<script type="module">import { addNewPolygon, addNewPolygonArea, removeSelectedShape, canvasMouseMovement, canvasLeftClicked, canvasRightClicked, canvasMouseDown, canvasMouseUp } from "./built/main.js";
+	<script type="module">import { addNewPolygon, addNewPolygonArea, addNewLine, removeSelectedShape, canvasMouseMovement, canvasLeftClicked, canvasRightClicked, canvasMouseDown, canvasMouseUp } from "./built/main.js";
 		window.document.getElementById("foreground")
 			.addEventListener("click", function () { canvasLeftClicked(event, this.id); });
 		window.document.getElementById("foreground")
@@ -37,8 +37,10 @@
 			.addEventListener("click", function () { addNewPolygonArea(false); });
 		window.document.getElementById("addRegularPolygon")
 			.addEventListener("click", function () { addNewPolygon(); });
-		window.document.getElementById("removePolygon")
-			.addEventListener("click", function () { removeSelectedPolygon(); });
+		window.document.getElementById("addLine")
+			.addEventListener("click", function () { addNewLine(); });
+		window.document.getElementById("removeSelectedShape")
+			.addEventListener("click", function () { removeSelectedShape(); });
 	</script>
 
 </head>
@@ -48,7 +50,8 @@
 	<button id="addPositivePolygon">Add positive polygon</button>
 	<button id="addNegativePolygon">Add negative polygon</button>
 	<button id="addRegularPolygon">Add regular polygon</button>
-	<button id="removePolygon">Remove selected polygon</button>
+	<button id="addLine">Add line</button>
+	<button id="removeSelectedShape">Remove selected shape</button>
 	<br><br>
 	<div id="viewport">
 		<canvas id="background" width="1000" height="800" style="z-index: 1;"></canvas>
