@@ -1,4 +1,6 @@
+import { Coordinate } from '../polygon/Coordinate';
 import { PaintableSegment } from '../polygon/PaintableSegment';
+import { Point } from '../polygon/Point';
 import { AbstractPainter } from './AbstractPainter.js';
 
 
@@ -14,14 +16,11 @@ export abstract class AbstractSegmentPainter extends AbstractPainter {
 
     }
 
-    drawMovingSegments(segments: PaintableSegment[], color: string):void {
-        //TODO: kan man skriva om detta så att det görs med forEach istället?
-        if (segments.length > 0) {
-            for (const segment of segments) {
-                this.drawOneSegment(segment, color, this.movementCanvasCtx);
-            }
-            this.saveExtremes(segments);
-        }
+    drawMovingSegments(segments: PaintableSegment[], color: string): void {
+        segments.forEach((it) => {
+            this.drawOneSegment(it, color, this.movementCanvasCtx);
+        });
+        this.saveExtremes(segments);
     }
 
     drawOneSegment(segment2draw: PaintableSegment, lineColor: string, ctx: CanvasRenderingContext2D): void {
@@ -30,20 +29,25 @@ export abstract class AbstractSegmentPainter extends AbstractPainter {
 
 
     saveExtremes(arrayWithSegments: PaintableSegment[]): void {
-        this.oldXMin = arrayWithSegments[0].p1.x;
-        this.oldXMax = arrayWithSegments[0].p1.x;
-        this.oldYMin = arrayWithSegments[0].p1.y;
-        this.oldYMax = arrayWithSegments[0].p1.y;
-        for (const segment of arrayWithSegments) {
-            if (this.oldXMin > segment.p1.x) { this.oldXMin = segment.p1.x; }
-            if (this.oldXMax < segment.p1.x) { this.oldXMax = segment.p1.x; }
-            if (this.oldYMin > segment.p1.y) { this.oldYMin = segment.p1.y; }
-            if (this.oldYMax < segment.p1.y) { this.oldYMax = segment.p1.y; }
+        if (arrayWithSegments.length > 0) {
 
-            if (this.oldXMin > segment.p2.x) { this.oldXMin = segment.p2.x; }
-            if (this.oldXMax < segment.p2.x) { this.oldXMax = segment.p2.x; }
-            if (this.oldYMin > segment.p2.y) { this.oldYMin = segment.p2.y; }
-            if (this.oldYMax < segment.p2.y) { this.oldYMax = segment.p2.y; }
+            const coordinates: Coordinate[] = new Array();
+            arrayWithSegments.forEach((segment) => {
+                coordinates.push(segment.p1);
+                coordinates.push(segment.p2);
+            });
+            this.oldXMax = coordinates
+                .map((coordinate) => coordinate.x)
+                .reduce((previous, current) => Math.max(previous, current));
+            this.oldXMin = coordinates
+                .map((coordinate) => coordinate.x)
+                .reduce((previous, current) => Math.min(previous, current));
+            this.oldYMax = coordinates
+                .map((coordinate) => coordinate.y)
+                .reduce((previous, current) => Math.max(previous, current));
+            this.oldYMin = coordinates
+                .map((coordinate) => coordinate.y)
+                .reduce((previous, current) => Math.min(previous, current));
         }
     }
 
