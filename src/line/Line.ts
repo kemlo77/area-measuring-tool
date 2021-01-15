@@ -3,8 +3,10 @@ import { InteractiveShape } from '../polygon/InteractiveShape';
 import { PaintableSegment } from '../polygon/PaintableSegment';
 import { Point } from '../polygon/Point.js';
 import { Segment } from '../polygon/Segment.js';
+import { CompleteState } from './CompleteState.js';
 import { InitialState } from './InitialState.js';
 import { LineState } from './LineState.js';
+import { MoveState } from './MoveState.js';
 import { UnselectedState } from './UnselectedState.js';
 
 export class Line implements InteractiveShape {
@@ -30,6 +32,14 @@ export class Line implements InteractiveShape {
 
     get isSelected(): boolean {
         return !(this.currentState instanceof UnselectedState);
+    }
+
+    get isMoving(): boolean {
+        return this.currentState instanceof MoveState;
+    }
+
+    get isComplete(): boolean {
+        return this.currentState instanceof CompleteState;
     }
 
     get p1(): Point {

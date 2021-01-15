@@ -1,6 +1,5 @@
 import { Coordinate } from '../polygon/Coordinate';
 import { PaintableSegment } from '../polygon/PaintableSegment';
-import { Point } from '../polygon/Point';
 import { AbstractPainter } from './AbstractPainter.js';
 
 

@@ -42,9 +42,10 @@ export class PolygonPainter extends AbstractSegmentPainter {
             this.drawHollowDot(polygon.getPrecedingVertex(polygon.movePoint), this._color, this.movementCanvasCtx);
             this.drawHollowDot(polygon.getFollowingVertex(polygon.movePoint), this._color, this.movementCanvasCtx);
         } else if (polygon.isOpen) {
-            this.drawHollowDot(polygon.lastVertex, this._color, this.movementCanvasCtx);
+            if (polygon.vertices.length > 0) {
+                this.drawHollowDot(polygon.lastVertex, this._color, this.movementCanvasCtx);
+            }
         }
-
     }
 
 }
