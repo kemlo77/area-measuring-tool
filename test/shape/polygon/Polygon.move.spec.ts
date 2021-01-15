@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { Polygon } from '../../../built/polygon/Polygon';
-import { Point } from '../../../built/polygon/Point';
-import { Segment } from '../../../built/polygon/Segment';
+import { Polygon } from '../../../built/shape/polygon/Polygon';
+import { Point } from '../../../built/shape/Point';
+import { Segment } from '../../../built/shape/Segment';
 import { PaintableSegment } from '../../../src/shape/PaintableSegment';
 
 
