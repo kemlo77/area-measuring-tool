@@ -30,32 +30,33 @@ export abstract class AbstractSegmentPainter extends AbstractPainter {
 
     saveExtremes(arrayWithSegments: PaintableSegment[]): void {
         if (arrayWithSegments.length > 0) {
-
             const coordinates: Coordinate[] = new Array();
             arrayWithSegments.forEach((segment) => {
                 coordinates.push(segment.p1);
                 coordinates.push(segment.p2);
             });
-            this.oldXMax = coordinates
-                .map((coordinate) => coordinate.x)
-                .reduce((previous, current) => Math.max(previous, current));
-            this.oldXMin = coordinates
-                .map((coordinate) => coordinate.x)
-                .reduce((previous, current) => Math.min(previous, current));
-            this.oldYMax = coordinates
-                .map((coordinate) => coordinate.y)
-                .reduce((previous, current) => Math.max(previous, current));
-            this.oldYMin = coordinates
-                .map((coordinate) => coordinate.y)
-                .reduce((previous, current) => Math.min(previous, current));
+            const xCoordinates: number[] = coordinates.map((coordinate) => coordinate.x);
+            const yCoordinates: number[] = coordinates.map((coordinate) => coordinate.y);
+            this.oldXMax = this.maxValue(xCoordinates);
+            this.oldXMin = this.minValue(xCoordinates);
+            this.oldYMax = this.maxValue(yCoordinates);
+            this.oldYMin = this.minValue(yCoordinates);
         }
     }
 
+    private maxValue(numbers: number[]): number {
+        return numbers.reduce((previous, current) => Math.max(previous, current));
+    }
+
+    private minValue(numbers: number[]): number {
+        return numbers.reduce((previous, current) => Math.min(previous, current));
+    }
+
     clearUsedPartOfCanvas(): void {
-        const xOffset: number = this.oldXMin - 2;
-        const yOffset: number = this.oldYMin - 2;
-        const width: number = this.oldXMax - this.oldXMin + 4;
-        const height: number = this.oldYMax - this.oldYMin + 4;
+        const xOffset: number = this.oldXMin - 4;
+        const yOffset: number = this.oldYMin - 4;
+        const width: number = this.oldXMax - this.oldXMin + 8;
+        const height: number = this.oldYMax - this.oldYMin + 8;
         this.movementCanvasCtx.clearRect(xOffset, yOffset, width, height);
 
         this.oldXMin = 0;

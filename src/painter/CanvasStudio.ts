@@ -23,6 +23,7 @@ export class CanvasStudio {
 
     public paintStill(motifs: any[]): void {
         this.strategy.clearTheStillCanvas();
+        this.strategy.clearTheMovementCanvas();
         for (const motif of motifs) {
             this.setStrategyGivenThisObject(motif);
             this.strategy.drawStill(motif);
