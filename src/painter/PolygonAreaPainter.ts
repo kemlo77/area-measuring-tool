@@ -1,5 +1,5 @@
-import { Coordinate } from '../polygon/Coordinate.js';
-import { PaintableSegment } from '../polygon/PaintableSegment.js';
+import { Coordinate } from '../shape/Coordinate.js';
+import { PaintableSegment } from '../shape/PaintableSegment.js';
 import { PolygonArea } from '../PolygonArea.js';
 import { AbstractSegmentPainter } from './AbstractSegmentPainter.js';
 

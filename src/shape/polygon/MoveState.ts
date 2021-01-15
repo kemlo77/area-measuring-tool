@@ -1,10 +1,10 @@
 import { Polygon } from './Polygon.js';
 import { PolygonState } from './PolygonState.js';
-import { Point } from './Point.js';
+import { Point } from '../Point.js';
 import { ClosedState } from './ClosedState.js';
-import { Segment } from './Segment.js';
-import { Coordinate } from './Coordinate.js';
-import { PaintableSegment } from './PaintableSegment.js';
+import { Segment } from '../Segment.js';
+import { Coordinate } from '../Coordinate.js';
+import { PaintableSegment } from '../PaintableSegment.js';
 
 export class MoveState implements PolygonState {
 

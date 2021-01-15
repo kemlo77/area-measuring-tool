@@ -1,10 +1,10 @@
-import { Coordinate } from './polygon/Coordinate.js';
+import { Coordinate } from './shape/Coordinate.js';
 import { CanvasStudio } from './painter/CanvasStudio.js';
 import { PolygonArea } from './PolygonArea.js';
 import { AreaType } from './AreaType.js';
-import { Polygon } from './polygon/Polygon.js';
-import { InteractiveShape } from './polygon/InteractiveShape.js';
-import { Line } from './line/Line.js';
+import { Polygon } from './shape/polygon/Polygon.js';
+import { InteractiveShape } from './shape/InteractiveShape.js';
+import { Line } from './shape/line/Line.js';
 
 const listOfShapes: InteractiveShape[] = new Array();
 const canvasStudio: CanvasStudio = CanvasStudio.getInstance();

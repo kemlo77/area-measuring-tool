@@ -1,12 +1,12 @@
 import { Polygon } from './Polygon.js';
-import { Segment } from './Segment.js';
+import { Segment } from '../Segment.js';
 import { PolygonState } from './PolygonState.js';
-import { Point } from './Point.js';
+import { Point } from '../Point.js';
 import { ClosedState } from './ClosedState.js';
-import { Coordinate } from './Coordinate.js';
-import { PaintableSegment } from './PaintableSegment.js';
-import { MathUtil } from './MathUtil.js';
-import { Vector } from './Vector.js';
+import { Coordinate } from '../Coordinate.js';
+import { PaintableSegment } from '../PaintableSegment.js';
+import { MathUtil } from '../MathUtil.js';
+import { Vector } from '../Vector.js';
 
 export class UnselectedState implements PolygonState {
 

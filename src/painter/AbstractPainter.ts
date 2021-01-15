@@ -1,5 +1,5 @@
 import { PaintingStrategy } from './PaintingStrategy.js';
-import { Coordinate } from '../polygon/Coordinate.js';
+import { Coordinate } from '../shape/Coordinate.js';
 
 export abstract class AbstractPainter implements PaintingStrategy {
     private canvasBackground: HTMLCanvasElement = document.getElementById('background') as HTMLCanvasElement;

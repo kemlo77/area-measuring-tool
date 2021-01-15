@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { Polygon } from '../../built/polygon/Polygon';
-import { Polygons } from '../../built/polygon/Polygons';
+import { Polygon } from '../../../built/polygon/Polygon';
+import { Polygons } from '../../../built/polygon/Polygons';
 
 const rectangle: Polygon = new Polygon([
     { x: 100, y: 100 }, // upper left

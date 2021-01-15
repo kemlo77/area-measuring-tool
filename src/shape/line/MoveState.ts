@@ -1,7 +1,7 @@
-import { Coordinate } from '../polygon/Coordinate.js';
-import { PaintableSegment } from '../polygon/PaintableSegment.js';
-import { Point } from '../polygon/Point.js';
-import { Segment } from '../polygon/Segment.js';
+import { Coordinate } from '../Coordinate.js';
+import { PaintableSegment } from '../PaintableSegment.js';
+import { Point } from '../Point.js';
+import { Segment } from '../Segment.js';
 import { CompleteState } from './CompleteState.js';
 import { Line } from './Line.js';
 import { LineState } from './LineState.js';

@@ -1,10 +1,10 @@
 import { PaintingStrategy } from './PaintingStrategy.js';
-import { Polygon } from '../polygon/Polygon.js';
+import { Polygon } from '../shape/polygon/Polygon.js';
 import { PolygonPainter } from './PolygonPainter.js';
-import { Coordinate } from '../polygon/Coordinate.js';
+import { Coordinate } from '../shape/Coordinate.js';
 import { PolygonArea } from '../PolygonArea.js';
 import { PolygonAreaPainter } from './PolygonAreaPainter.js';
-import { Line } from '../line/Line.js';
+import { Line } from '../shape/line/Line.js';
 import { LinePainter } from './LinePainter.js';
 
 export class CanvasStudio {

@@ -1,6 +1,6 @@
-import { Polygon } from './polygon/Polygon.js';
+import { Polygon } from './shape/polygon/Polygon.js';
 import {AreaType } from './AreaType.js';
-import { Coordinate } from './polygon/Coordinate.js';
+import { Coordinate } from './shape/Coordinate.js';
 
 export class PolygonArea extends Polygon {
 

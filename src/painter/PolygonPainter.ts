@@ -1,6 +1,6 @@
-import { Coordinate } from '../polygon/Coordinate.js';
-import { PaintableSegment } from '../polygon/PaintableSegment.js';
-import { Polygon } from '../polygon/Polygon.js';
+import { Coordinate } from '../shape/Coordinate.js';
+import { PaintableSegment } from '../shape/PaintableSegment.js';
+import { Polygon } from '../shape/polygon/Polygon.js';
 import { AbstractSegmentPainter } from './AbstractSegmentPainter.js';
 
 export class PolygonPainter extends AbstractSegmentPainter {

@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { PolygonArea } from '../built/PolygonArea';
 import {AreaType } from '../built/AreaType.js';
-import { Coordinate } from '../src/polygon/Coordinate';
+import { Coordinate } from '../src/shape/Coordinate';
 
 
 

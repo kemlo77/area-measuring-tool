@@ -1,8 +1,8 @@
-import { Coordinate } from '../polygon/Coordinate';
-import { InteractiveShape } from '../polygon/InteractiveShape';
-import { PaintableSegment } from '../polygon/PaintableSegment';
-import { Point } from '../polygon/Point.js';
-import { Segment } from '../polygon/Segment.js';
+import { Coordinate } from '../Coordinate';
+import { InteractiveShape } from '../InteractiveShape';
+import { PaintableSegment } from '../PaintableSegment';
+import { Point } from '../Point.js';
+import { Segment } from '../Segment.js';
 import { CompleteState } from './CompleteState.js';
 import { InitialState } from './InitialState.js';
 import { LineState } from './LineState.js';

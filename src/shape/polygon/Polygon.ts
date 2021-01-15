@@ -1,12 +1,12 @@
 import { OpenState } from './OpenState.js';
-import { Point } from './Point.js';
+import { Point } from '../Point.js';
 import { PolygonState } from './PolygonState.js';
-import { Segment } from './Segment.js';
-import { Coordinate } from './Coordinate.js';
-import { PaintableSegment } from './PaintableSegment.js';
+import { Segment } from '../Segment.js';
+import { Coordinate } from '../Coordinate.js';
+import { PaintableSegment } from '../PaintableSegment.js';
 import { UnselectedState } from './UnselectedState.js';
 import { MoveState } from './MoveState.js';
-import { InteractiveShape } from './InteractiveShape.js';
+import { InteractiveShape } from '../InteractiveShape.js';
 
 export class Polygon implements InteractiveShape {
     public vertices: Point[];
