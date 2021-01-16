@@ -18,8 +18,22 @@ export class Line implements InteractiveShape {
     public static readonly minimumDistanceBetweenPoints: number = 8;
     public static readonly interactDistance: number = 5;
 
-    constructor() {
-        this.currentState = new InitialState(this);
+    //constructor()
+    constructor(coordinate1?: Coordinate, coordinate2?: Coordinate) {
+        if (this.isNullOrUndefined(coordinate1) && this.isNullOrUndefined(coordinate2)) {
+            this.currentState = new InitialState(this);
+        } else if (!this.isNullOrUndefined(coordinate1) && !this.isNullOrUndefined(coordinate2)) {
+            this._p1 = new Point(coordinate1.x, coordinate1.y);
+            this._p2 = new Point(coordinate1.x, coordinate1.y);
+            this.currentState = new CompleteState(this);
+        } else {
+            throw new Error('Invalid parameters');
+        }
+
+    }
+
+    private isNullOrUndefined(object: any): boolean {
+        return object === null || object === undefined;
     }
 
     setCurrentState(state: LineState): void {
