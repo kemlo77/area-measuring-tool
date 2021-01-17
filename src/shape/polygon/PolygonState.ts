@@ -1,6 +1,5 @@
 import { Point } from '../Point.js';
 import { Segment } from '../Segment.js';
-import { SimpleSegment } from '../SimpleSegment.js';
 import { Coordinate } from '../Coordinate.js';
 
 export interface PolygonState {
@@ -15,8 +14,8 @@ export interface PolygonState {
 
     calculateSegments(): Segment[];
 
-    calculatePaintableStillSegments(): SimpleSegment[];
+    calculateStillSegments(): Segment[];
 
-    calculatePaintableMovingSegments(mousePosition: Coordinate): SimpleSegment[];
+    calculateMovingSegments(mousePosition: Coordinate): Segment[];
 
 }

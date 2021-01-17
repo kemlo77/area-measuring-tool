@@ -162,30 +162,30 @@ describe('Polygon - closed', () => {
             expect(segments[2].p2.y).is.equal(100);
         });
 
-        it('getPaintableStillSegments()', () => {
+        it('getStillSegments()', () => {
             const shape: Polygon = getTrianglePolygon();
 
-            const paintableStillSegments: SimpleSegment[] = shape.getPaintableStillSegments();
-            expect(paintableStillSegments.length).is.equal(3);
-            expect(paintableStillSegments[0].p1.x).is.equal(100);
-            expect(paintableStillSegments[0].p1.y).is.equal(100);
-            expect(paintableStillSegments[0].p2.x).is.equal(300);
-            expect(paintableStillSegments[0].p2.y).is.equal(100);
+            const stillSegments: SimpleSegment[] = shape.getStillSegments();
+            expect(stillSegments.length).is.equal(3);
+            expect(stillSegments[0].p1.x).is.equal(100);
+            expect(stillSegments[0].p1.y).is.equal(100);
+            expect(stillSegments[0].p2.x).is.equal(300);
+            expect(stillSegments[0].p2.y).is.equal(100);
 
-            expect(paintableStillSegments[1].p1.x).is.equal(300);
-            expect(paintableStillSegments[1].p1.y).is.equal(100);
-            expect(paintableStillSegments[1].p2.x).is.equal(150);
-            expect(paintableStillSegments[1].p2.y).is.equal(300);
+            expect(stillSegments[1].p1.x).is.equal(300);
+            expect(stillSegments[1].p1.y).is.equal(100);
+            expect(stillSegments[1].p2.x).is.equal(150);
+            expect(stillSegments[1].p2.y).is.equal(300);
 
-            expect(paintableStillSegments[2].p1.x).is.equal(150);
-            expect(paintableStillSegments[2].p1.y).is.equal(300);
-            expect(paintableStillSegments[2].p2.x).is.equal(100);
-            expect(paintableStillSegments[2].p2.y).is.equal(100);
+            expect(stillSegments[2].p1.x).is.equal(150);
+            expect(stillSegments[2].p1.y).is.equal(300);
+            expect(stillSegments[2].p2.x).is.equal(100);
+            expect(stillSegments[2].p2.y).is.equal(100);
         });
 
-        it('calculatePaintableMovingSegments()', () => {
+        it('calculateMovingSegments()', () => {
             const shape: Polygon = getTrianglePolygon();
-            const movingSegments: SimpleSegment[] = shape.getPaintableMovingSegments({ x: 300, y: 400 });
+            const movingSegments: SimpleSegment[] = shape.getMovingSegments({ x: 300, y: 400 });
             expect(movingSegments.length).is.equal(0);
         });
 

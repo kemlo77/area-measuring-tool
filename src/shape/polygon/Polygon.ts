@@ -80,12 +80,12 @@ export class Polygon implements InteractiveShape {
         this.currentState.handleLeftMouseUp(leftMouseUpPoint);
     }
 
-    getPaintableStillSegments(): SimpleSegment[] {
-        return this.currentState.calculatePaintableStillSegments();
+    getStillSegments(): Segment[] {
+        return this.currentState.calculateStillSegments();
     }
 
-    getPaintableMovingSegments(mousePosition: Coordinate): SimpleSegment[] {
-        return this.currentState.calculatePaintableMovingSegments(mousePosition);
+    getMovingSegments(mousePosition: Coordinate): Segment[] {
+        return this.currentState.calculateMovingSegments(mousePosition);
     }
 
     setCurrentState(state: PolygonState): void {

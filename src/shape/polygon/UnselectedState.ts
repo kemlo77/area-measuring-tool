@@ -4,7 +4,6 @@ import { PolygonState } from './PolygonState.js';
 import { Point } from '../Point.js';
 import { ClosedState } from './ClosedState.js';
 import { Coordinate } from '../Coordinate.js';
-import { SimpleSegment } from '../SimpleSegment.js';
 import { MathUtil } from '../MathUtil.js';
 import { Vector } from '../Vector.js';
 
@@ -56,12 +55,12 @@ export class UnselectedState implements PolygonState {
         return this.closedState.calculateSegments();
     }
 
-    calculatePaintableStillSegments(): SimpleSegment[] {
-        return this.closedState.calculatePaintableStillSegments();
+    calculateStillSegments(): Segment[] {
+        return this.closedState.calculateStillSegments();
     }
 
-    calculatePaintableMovingSegments(mousePosition: Coordinate): SimpleSegment[] {
-        return this.closedState.calculatePaintableMovingSegments(mousePosition);
+    calculateMovingSegments(mousePosition: Coordinate): Segment[] {
+        return this.closedState.calculateMovingSegments(mousePosition);
     }
 
 }

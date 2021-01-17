@@ -4,7 +4,6 @@ import { PolygonState } from './PolygonState.js';
 import { Point } from '../Point.js';
 import { ClosedState } from './ClosedState.js';
 import { Coordinate } from '../Coordinate.js';
-import { SimpleSegment } from '../SimpleSegment.js';
 
 export class OpenState implements PolygonState {
 
@@ -100,21 +99,17 @@ export class OpenState implements PolygonState {
         return calculatedSegments;
     }
 
-    calculatePaintableStillSegments(): SimpleSegment[] {
-        const simpleSegment: SimpleSegment[] = new Array();
-        const calculatedSegments: Segment[] = this.calculateSegments();
-        for (const segment of calculatedSegments) {
-            simpleSegment.push({ p1: segment.p1, p2: segment.p2 });
-        }
-        return simpleSegment;
+    calculateStillSegments(): Segment[] {
+        return this.calculateSegments();
     }
 
-    calculatePaintableMovingSegments(mousePosition: Coordinate): SimpleSegment[] {
-        const simpleSegment: SimpleSegment[] = new Array();
+    calculateMovingSegments(mousePosition: Coordinate): Segment[] {
+        const mousePositionPoint: Point = new Point(mousePosition.x, mousePosition.y);
+        const movingSegment: Segment[] = new Array();
         if (this.polygon.numberOfVertices > 0) {
-            simpleSegment.push({ p1: this.polygon.lastVertex, p2: mousePosition });
+            movingSegment.push(new Segment(this.polygon.lastVertex, mousePositionPoint));
         }
-        return simpleSegment;
+        return movingSegment;
     }
 
 }

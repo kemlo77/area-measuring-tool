@@ -38,22 +38,22 @@ describe('Polygon - unselected', () => {
         expect(square.segments.length).to.equal(4);
     });
 
-    it('calculatePaintableStillSegments()', () => {
+    it('calculatetillSegments()', () => {
         const square: Polygon = getSquarePolygon();
         square.handleLeftClick({ x: 10, y: 10 }); // unselecting
-        expect(square.getPaintableStillSegments().length).to.equal(4);
+        expect(square.getStillSegments().length).to.equal(4);
     });
 
-    it('calculatePaintableMovingSegments() 1', () => {
+    it('calculateMovingSegments() 1', () => {
         const square: Polygon = getSquarePolygon();
         square.handleLeftClick({ x: 10, y: 10 }); // unselecting
-        expect(square.getPaintableMovingSegments({ x: 10, y: 10 }).length).to.equal(0);
+        expect(square.getMovingSegments({ x: 10, y: 10 }).length).to.equal(0);
     });
 
-    it('calculatePaintableMovingSegments() 2', () => {
+    it('calculateMovingSegments() 2', () => {
         const square: Polygon = getSquarePolygon();
         square.handleLeftClick({ x: 10, y: 10 }); // unselecting
-        expect(square.getPaintableMovingSegments({ x: 10, y: 10 }).length).to.equal(0);
+        expect(square.getMovingSegments({ x: 10, y: 10 }).length).to.equal(0);
     });
 
 });

@@ -120,12 +120,12 @@ describe('Polygon', () => {
         expect(rectangle.isMoving).to.equal(true);
     });
 
-    it('getPaintableStillSegments', () => {
-        expect(rectangle.getPaintableStillSegments().length).to.equal(8);
+    it('getStillSegments', () => {
+        expect(rectangle.getStillSegments().length).to.equal(8);
     });
 
-    it('getPaintableMovingSegments', () => {
-        expect(rectangle.getPaintableMovingSegments().length).to.equal(0);
+    it('getMovingSegments', () => {
+        expect(rectangle.getMovingSegments().length).to.equal(0);
     });
 
 

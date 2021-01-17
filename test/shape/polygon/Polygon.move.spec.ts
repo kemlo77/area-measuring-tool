@@ -209,7 +209,7 @@ describe('Polygon - move', () => {
         });
 
         for (let step: number = 0; step < 6; step++) {
-            it('getPaintableStillSegments() - ' + step, () => {
+            it('getStillSegments() - ' + step, () => {
                 const shape: Polygon = new Polygon([
                     { x: 100, y: 100 },
                     { x: 150, y: 100 }, // extra
@@ -221,9 +221,9 @@ describe('Polygon - move', () => {
 
                 shape.rotateVertices(1);
                 shape.handleLeftMouseDown({ x: 100, y: 100 }); // marking for move
-                const paintableStillSegments: SimpleSegment[] = shape.getPaintableStillSegments();
-                expect(paintableStillSegments.length).is.equal(4);
-                paintableStillSegments.forEach((segment) => {
+                const stillSegments: SimpleSegment[] = shape.getStillSegments();
+                expect(stillSegments.length).is.equal(4);
+                stillSegments.forEach((segment) => {
                     const movePointInSegmentsFirst: boolean = segment.p1.x === 100 && segment.p1.y === 100;
                     const movePointInSegmentsSecond: boolean = segment.p1.x === 100 && segment.p1.y === 100;
                     expect(movePointInSegmentsFirst).to.equal(false);
@@ -233,7 +233,7 @@ describe('Polygon - move', () => {
         }
 
         for (let step: number = 0; step < 6; step++) {
-            it('calculatePaintableMovingSegments() - ' + step, () => {
+            it('calculateMovingSegments() - ' + step, () => {
                 const shape: Polygon = new Polygon([
                     { x: 100, y: 100 },
                     { x: 150, y: 100 }, // extra
@@ -245,10 +245,10 @@ describe('Polygon - move', () => {
 
                 shape.rotateVertices(1);
                 shape.handleLeftMouseDown({ x: 100, y: 100 }); // marking for move
-                const paintableMovingSegments: SimpleSegment[] = shape.getPaintableMovingSegments({ x: 10, y: 10 });
-                expect(paintableMovingSegments.length).is.equal(2);
+                const movingSegments: SimpleSegment[] = shape.getMovingSegments({ x: 10, y: 10 });
+                expect(movingSegments.length).is.equal(2);
 
-                paintableMovingSegments.forEach((segment) => {
+                movingSegments.forEach((segment) => {
                     const movePointInSegmentsFirst: boolean = segment.p1.x === 10 && segment.p1.y === 10;
                     const movePointInSegmentsSecond: boolean = segment.p2.x === 10 && segment.p2.y === 10;
                     expect(movePointInSegmentsFirst || movePointInSegmentsSecond).to.equal(true);

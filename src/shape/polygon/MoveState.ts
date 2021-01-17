@@ -4,7 +4,6 @@ import { Point } from '../Point.js';
 import { ClosedState } from './ClosedState.js';
 import { Segment } from '../Segment.js';
 import { Coordinate } from '../Coordinate.js';
-import { SimpleSegment } from '../SimpleSegment.js';
 
 export class MoveState implements PolygonState {
 
@@ -102,24 +101,28 @@ export class MoveState implements PolygonState {
         return calculatedSegments;
     }
 
-    calculatePaintableStillSegments(): SimpleSegment[] {
-        const simpleSegment: SimpleSegment[] = new Array();
+    calculateStillSegments(): Segment[] {
+        //TODO: här går det skriva om med forEach och filter
+        const simpleSegment: Segment[] = new Array();
         for (const segment of this.polygon.segments) {
             if (segment.doesNotContainThisVertex(this.polygon.movePoint)) {
-                simpleSegment.push({ p1: segment.p1, p2: segment.p2 });
+                simpleSegment.push(segment);
             }
         }
         return simpleSegment;
     }
 
 
-    calculatePaintableMovingSegments(mousePosition: Coordinate): SimpleSegment[] {
-        const simpleSegment: SimpleSegment[] = new Array();
+    calculateMovingSegments(mousePosition: Coordinate): Segment[] {
+        //TODO: Här går det förenkla om Point har en constructor som tar Coordinate
+        const mousePositionPoint: Point = new Point(mousePosition.x, mousePosition.y);
+        const segments: Segment[] = new Array();
 
         const pointBefore: Point = this.polygon.getPrecedingVertex(this.polygon.movePoint);
         const pointAfter: Point = this.polygon.getFollowingVertex(this.polygon.movePoint);
-        simpleSegment.push({ p1: pointBefore, p2: mousePosition });
-        simpleSegment.push({ p1: pointAfter, p2: mousePosition });
-        return simpleSegment;
+
+        segments.push(new Segment(pointBefore, mousePositionPoint));
+        segments.push(new Segment(pointAfter, mousePositionPoint));
+        return segments;
     }
 }

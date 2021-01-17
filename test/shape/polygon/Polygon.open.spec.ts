@@ -164,12 +164,12 @@ describe('Polygon - open', () => {
             expect(segments[1].p2.y).is.equal(600);
         });
 
-        it('getPaintableStillSegments()', () => {
+        it('getStillSegments()', () => {
             const square: Polygon = new Polygon();
             square.handleLeftClick({ x: 100, y: 200 });
             square.handleLeftClick({ x: 300, y: 400 });
             square.handleLeftClick({ x: 500, y: 600 });
-            const simpleSegments: SimpleSegment[] = square.getPaintableStillSegments();
+            const simpleSegments: SimpleSegment[] = square.getStillSegments();
             expect(simpleSegments.length).is.equal(2);
             expect(simpleSegments[0].p1.x).is.equal(100);
             expect(simpleSegments[0].p1.y).is.equal(200);
@@ -182,11 +182,11 @@ describe('Polygon - open', () => {
             expect(simpleSegments[1].p2.y).is.equal(600);
         });
 
-        it('calculatePaintableMovingSegments() - 1 or more vertices added', () => {
+        it('calculateMovingSegments() - 1 or more vertices added', () => {
             const square: Polygon = new Polygon();
             square.handleLeftClick({ x: 100, y: 200 });
 
-            const movingSegments: SimpleSegment[] = square.getPaintableMovingSegments({ x: 300, y: 400 });
+            const movingSegments: SimpleSegment[] = square.getMovingSegments({ x: 300, y: 400 });
 
             expect(movingSegments.length).is.equal(1);
             expect(movingSegments[0].p1.x).is.equal(100);
@@ -196,9 +196,9 @@ describe('Polygon - open', () => {
 
         });
 
-        it('calculatePaintableMovingSegments() - no vertices added', () => {
+        it('calculateMovingSegments() - no vertices added', () => {
             const square: Polygon = new Polygon();
-            const movingSegments: SimpleSegment[] = square.getPaintableMovingSegments({ x: 300, y: 400 });
+            const movingSegments: SimpleSegment[] = square.getMovingSegments({ x: 300, y: 400 });
             expect(movingSegments.length).is.equal(0);
         });
     });

@@ -21,7 +21,7 @@ export class PolygonAreaPainter extends AbstractSegmentPainter {
 
     drawStill(motif: any): void {
         const polygon: PolygonArea = motif as PolygonArea;
-        this.drawStillSegments(polygon.getPaintableStillSegments(), polygon.color);
+        this.drawStillSegments(polygon.getStillSegments(), polygon.color);
 
         if (polygon.isSelected) {
             polygon.vertices
@@ -34,7 +34,7 @@ export class PolygonAreaPainter extends AbstractSegmentPainter {
     drawMovement(motif: any, mousePosition: Coordinate): void {
         const polygon: PolygonArea = motif as PolygonArea;
         this.clearUsedPartOfCanvas();
-        const segments: SimpleSegment[] = polygon.getPaintableMovingSegments(mousePosition);
+        const segments: SimpleSegment[] = polygon.getMovingSegments(mousePosition);
         this.drawMovingSegments(segments, polygon.color);
         if (polygon.isMoving) {
             this.drawHollowDot(polygon.getPrecedingVertex(polygon.movePoint), polygon.color, this.movementCanvasCtx);
