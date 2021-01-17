@@ -4,7 +4,7 @@ import { PolygonState } from './PolygonState.js';
 import { Point } from '../Point.js';
 import { ClosedState } from './ClosedState.js';
 import { Coordinate } from '../Coordinate.js';
-import { PaintableSegment } from '../PaintableSegment.js';
+import { SimpleSegment } from '../SimpleSegment.js';
 
 export class OpenState implements PolygonState {
 
@@ -100,21 +100,21 @@ export class OpenState implements PolygonState {
         return calculatedSegments;
     }
 
-    calculatePaintableStillSegments(): PaintableSegment[] {
-        const paintableSegment: PaintableSegment[] = new Array();
+    calculatePaintableStillSegments(): SimpleSegment[] {
+        const simpleSegment: SimpleSegment[] = new Array();
         const calculatedSegments: Segment[] = this.calculateSegments();
         for (const segment of calculatedSegments) {
-            paintableSegment.push({ p1: segment.p1, p2: segment.p2 });
+            simpleSegment.push({ p1: segment.p1, p2: segment.p2 });
         }
-        return paintableSegment;
+        return simpleSegment;
     }
 
-    calculatePaintableMovingSegments(mousePosition: Coordinate): PaintableSegment[] {
-        const paintableSegment: PaintableSegment[] = new Array();
+    calculatePaintableMovingSegments(mousePosition: Coordinate): SimpleSegment[] {
+        const simpleSegment: SimpleSegment[] = new Array();
         if (this.polygon.numberOfVertices > 0) {
-            paintableSegment.push({ p1: this.polygon.lastVertex, p2: mousePosition });
+            simpleSegment.push({ p1: this.polygon.lastVertex, p2: mousePosition });
         }
-        return paintableSegment;
+        return simpleSegment;
     }
 
 }

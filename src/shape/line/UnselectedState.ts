@@ -1,6 +1,5 @@
 import { Coordinate } from '../Coordinate.js';
 import { MathUtil } from '../MathUtil.js';
-import { PaintableSegment } from '../PaintableSegment.js';
 import { Point } from '../Point.js';
 import { Segment } from '../Segment.js';
 import { Vector } from '../Vector.js';
@@ -23,12 +22,8 @@ export class UnselectedState implements LineState {
         }
     }
 
-    handleLeftMouseDown(pointClicked: Point): void {
-        //
-    }
-
     private isTheLineClicked(pointClicked: Point): boolean {
-        const segment: Segment = this.theLineSegment();
+        const segment: Segment = this.calculateSegment();
         const vector: Vector = MathUtil.projectPointOntoSegment(segment, pointClicked);
         if (vector !== null && vector.norm < Line.interactDistance) {
             return true;
@@ -37,24 +32,27 @@ export class UnselectedState implements LineState {
         }
     }
 
-    private theLineSegment(): Segment {
-        return new Segment(this.line.p1, this.line.p2);
+
+    /* istanbul ignore next */
+    handleLeftMouseDown(pointClicked: Point): void {
+        //
     }
 
+    /* istanbul ignore next */
     handleLeftMouseUp(pointClicked: Point): void {
         //
     }
 
     calculateSegment(): Segment {
-        return this.theLineSegment();
+        return new Segment(this.line.p1, this.line.p2);
     }
 
-    calculatePaintableStillSegment(): PaintableSegment {
-        return this.theLineSegment();
+    calculateStillSegment(): Segment {
+        return this.calculateSegment();
     }
 
-    calculatePaintableMovingSegment(mousePosition: Coordinate): PaintableSegment {
-        return this.theLineSegment();
+    calculateMovingSegment(mousePosition: Coordinate): Segment {
+        return this.calculateSegment();
     }
 
 }

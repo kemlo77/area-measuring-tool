@@ -4,7 +4,7 @@ import { Point } from '../Point.js';
 import { ClosedState } from './ClosedState.js';
 import { Segment } from '../Segment.js';
 import { Coordinate } from '../Coordinate.js';
-import { PaintableSegment } from '../PaintableSegment.js';
+import { SimpleSegment } from '../SimpleSegment.js';
 
 export class MoveState implements PolygonState {
 
@@ -102,24 +102,24 @@ export class MoveState implements PolygonState {
         return calculatedSegments;
     }
 
-    calculatePaintableStillSegments(): PaintableSegment[] {
-        const paintableSegment: PaintableSegment[] = new Array();
+    calculatePaintableStillSegments(): SimpleSegment[] {
+        const simpleSegment: SimpleSegment[] = new Array();
         for (const segment of this.polygon.segments) {
             if (segment.doesNotContainThisVertex(this.polygon.movePoint)) {
-                paintableSegment.push({ p1: segment.p1, p2: segment.p2 });
+                simpleSegment.push({ p1: segment.p1, p2: segment.p2 });
             }
         }
-        return paintableSegment;
+        return simpleSegment;
     }
 
 
-    calculatePaintableMovingSegments(mousePosition: Coordinate): PaintableSegment[] {
-        const paintableSegment: PaintableSegment[] = new Array();
+    calculatePaintableMovingSegments(mousePosition: Coordinate): SimpleSegment[] {
+        const simpleSegment: SimpleSegment[] = new Array();
 
         const pointBefore: Point = this.polygon.getPrecedingVertex(this.polygon.movePoint);
         const pointAfter: Point = this.polygon.getFollowingVertex(this.polygon.movePoint);
-        paintableSegment.push({ p1: pointBefore, p2: mousePosition });
-        paintableSegment.push({ p1: pointAfter, p2: mousePosition });
-        return paintableSegment;
+        simpleSegment.push({ p1: pointBefore, p2: mousePosition });
+        simpleSegment.push({ p1: pointAfter, p2: mousePosition });
+        return simpleSegment;
     }
 }

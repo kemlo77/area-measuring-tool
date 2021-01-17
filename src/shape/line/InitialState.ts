@@ -1,6 +1,5 @@
 import { Coordinate } from '../Coordinate';
 import { MoveState } from './MoveState.js';
-import { PaintableSegment } from '../PaintableSegment.js';
 import { Point } from '../Point.js';
 import { Segment } from '../Segment.js';
 import { Line } from './Line.js';
@@ -31,15 +30,14 @@ export class InitialState implements LineState {
     }
 
     calculateSegment(): Segment {
-        //TODO: vad är snyggast? Att returnera en tom array eller null?
         return null;
     }
 
-    calculatePaintableStillSegment(): PaintableSegment {
+    calculateStillSegment(): Segment {
         return null;
     }
 
-    calculatePaintableMovingSegment(mousePosition: Coordinate): PaintableSegment {
+    calculateMovingSegment(mousePosition: Coordinate): Segment {
         return null;
     }
 

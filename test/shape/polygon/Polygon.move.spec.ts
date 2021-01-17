@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { Polygon } from '../../../built/shape/polygon/Polygon';
 import { Point } from '../../../built/shape/Point';
 import { Segment } from '../../../built/shape/Segment';
-import { PaintableSegment } from '../../../src/shape/PaintableSegment';
+import { SimpleSegment } from '../../../src/shape/SimpleSegment';
 
 
 describe('Polygon - move', () => {
@@ -221,7 +221,7 @@ describe('Polygon - move', () => {
 
                 shape.rotateVertices(1);
                 shape.handleLeftMouseDown({ x: 100, y: 100 }); // marking for move
-                const paintableStillSegments: PaintableSegment[] = shape.getPaintableStillSegments();
+                const paintableStillSegments: SimpleSegment[] = shape.getPaintableStillSegments();
                 expect(paintableStillSegments.length).is.equal(4);
                 paintableStillSegments.forEach((segment) => {
                     const movePointInSegmentsFirst: boolean = segment.p1.x === 100 && segment.p1.y === 100;
@@ -245,7 +245,7 @@ describe('Polygon - move', () => {
 
                 shape.rotateVertices(1);
                 shape.handleLeftMouseDown({ x: 100, y: 100 }); // marking for move
-                const paintableMovingSegments: PaintableSegment[] = shape.getPaintableMovingSegments({ x: 10, y: 10 });
+                const paintableMovingSegments: SimpleSegment[] = shape.getPaintableMovingSegments({ x: 10, y: 10 });
                 expect(paintableMovingSegments.length).is.equal(2);
 
                 paintableMovingSegments.forEach((segment) => {

@@ -1,6 +1,6 @@
 import { Point } from '../Point.js';
 import { Segment } from '../Segment.js';
-import { PaintableSegment } from '../PaintableSegment.js';
+import { SimpleSegment } from '../SimpleSegment.js';
 import { Coordinate } from '../Coordinate.js';
 
 export interface LineState {
@@ -13,8 +13,8 @@ export interface LineState {
 
     calculateSegment(): Segment;
 
-    calculatePaintableStillSegment(): PaintableSegment;
+    calculateStillSegment(): Segment;
 
-    calculatePaintableMovingSegment(mousePosition: Coordinate): PaintableSegment;
+    calculateMovingSegment(mousePosition: Coordinate): Segment;
 
 }

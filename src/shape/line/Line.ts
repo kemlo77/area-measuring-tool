@@ -1,6 +1,6 @@
 import { Coordinate } from '../Coordinate';
 import { InteractiveShape } from '../InteractiveShape';
-import { PaintableSegment } from '../PaintableSegment';
+import { SimpleSegment } from '../SimpleSegment';
 import { Point } from '../Point.js';
 import { Segment } from '../Segment.js';
 import { CompleteState } from './CompleteState.js';
@@ -23,9 +23,15 @@ export class Line implements InteractiveShape {
         if (this.isNullOrUndefined(coordinate1) && this.isNullOrUndefined(coordinate2)) {
             this.currentState = new InitialState(this);
         } else if (!this.isNullOrUndefined(coordinate1) && !this.isNullOrUndefined(coordinate2)) {
-            this._p1 = new Point(coordinate1.x, coordinate1.y);
-            this._p2 = new Point(coordinate1.x, coordinate1.y);
-            this.currentState = new CompleteState(this);
+            const point1: Point = new Point(coordinate1.x, coordinate1.y);
+            const point2: Point = new Point(coordinate2.x, coordinate2.y);
+            if(point1.distanceToOtherPoint(point2) > Line.minimumDistanceBetweenPoints) {
+                this._p1 = point1;
+                this._p2 = point2;
+                this.currentState = new CompleteState(this);
+            } else {
+                throw new Error('Invalid parameters - coordinates too close');    
+            }
         } else {
             throw new Error('Invalid parameters');
         }
@@ -84,12 +90,12 @@ export class Line implements InteractiveShape {
         return this.currentState.calculateSegment();
     }
 
-    getPaintableStillSegment(): PaintableSegment {
-        return this.currentState.calculatePaintableStillSegment();
+    getStillSegment(): Segment {
+        return this.currentState.calculateStillSegment();
     }
 
-    getPaintableMovingSegment(mousePosition: Coordinate): PaintableSegment {
-        return this.currentState.calculatePaintableMovingSegment(mousePosition);
+    getMovingSegment(mousePosition: Coordinate): Segment {
+        return this.currentState.calculateMovingSegment(mousePosition);
     }
 
 
@@ -100,7 +106,7 @@ export class Line implements InteractiveShape {
 
     /* istanbul ignore next */
     handleRightClick(position: Coordinate): void {
-        // Not used
+        //
     }
 
     handleLeftMouseDown(position: Coordinate): void {

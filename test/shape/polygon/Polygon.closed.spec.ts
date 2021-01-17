@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { Polygon } from '../../../built/shape/polygon/Polygon';
-import { PaintableSegment } from '../../../src/shape/PaintableSegment';
+import { SimpleSegment } from '../../../src/shape/SimpleSegment';
 import { Segment } from '../../../built/shape/Segment';
 
 
@@ -165,7 +165,7 @@ describe('Polygon - closed', () => {
         it('getPaintableStillSegments()', () => {
             const shape: Polygon = getTrianglePolygon();
 
-            const paintableStillSegments: PaintableSegment[] = shape.getPaintableStillSegments();
+            const paintableStillSegments: SimpleSegment[] = shape.getPaintableStillSegments();
             expect(paintableStillSegments.length).is.equal(3);
             expect(paintableStillSegments[0].p1.x).is.equal(100);
             expect(paintableStillSegments[0].p1.y).is.equal(100);
@@ -185,7 +185,7 @@ describe('Polygon - closed', () => {
 
         it('calculatePaintableMovingSegments()', () => {
             const shape: Polygon = getTrianglePolygon();
-            const movingSegments: PaintableSegment[] = shape.getPaintableMovingSegments({ x: 300, y: 400 });
+            const movingSegments: SimpleSegment[] = shape.getPaintableMovingSegments({ x: 300, y: 400 });
             expect(movingSegments.length).is.equal(0);
         });
 

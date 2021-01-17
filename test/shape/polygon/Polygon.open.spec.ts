@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { Polygon } from '../../../built/shape/polygon/Polygon';
-import { PaintableSegment } from '../../../src/shape/PaintableSegment';
+import { SimpleSegment } from '../../../src/shape/SimpleSegment';
 import { Segment } from '../../../built/shape/Segment';
 
 
@@ -169,24 +169,24 @@ describe('Polygon - open', () => {
             square.handleLeftClick({ x: 100, y: 200 });
             square.handleLeftClick({ x: 300, y: 400 });
             square.handleLeftClick({ x: 500, y: 600 });
-            const paintableSegments: PaintableSegment[] = square.getPaintableStillSegments();
-            expect(paintableSegments.length).is.equal(2);
-            expect(paintableSegments[0].p1.x).is.equal(100);
-            expect(paintableSegments[0].p1.y).is.equal(200);
-            expect(paintableSegments[0].p2.x).is.equal(300);
-            expect(paintableSegments[0].p2.y).is.equal(400);
+            const simpleSegments: SimpleSegment[] = square.getPaintableStillSegments();
+            expect(simpleSegments.length).is.equal(2);
+            expect(simpleSegments[0].p1.x).is.equal(100);
+            expect(simpleSegments[0].p1.y).is.equal(200);
+            expect(simpleSegments[0].p2.x).is.equal(300);
+            expect(simpleSegments[0].p2.y).is.equal(400);
 
-            expect(paintableSegments[1].p1.x).is.equal(300);
-            expect(paintableSegments[1].p1.y).is.equal(400);
-            expect(paintableSegments[1].p2.x).is.equal(500);
-            expect(paintableSegments[1].p2.y).is.equal(600);
+            expect(simpleSegments[1].p1.x).is.equal(300);
+            expect(simpleSegments[1].p1.y).is.equal(400);
+            expect(simpleSegments[1].p2.x).is.equal(500);
+            expect(simpleSegments[1].p2.y).is.equal(600);
         });
 
         it('calculatePaintableMovingSegments() - 1 or more vertices added', () => {
             const square: Polygon = new Polygon();
             square.handleLeftClick({ x: 100, y: 200 });
 
-            const movingSegments: PaintableSegment[] = square.getPaintableMovingSegments({ x: 300, y: 400 });
+            const movingSegments: SimpleSegment[] = square.getPaintableMovingSegments({ x: 300, y: 400 });
 
             expect(movingSegments.length).is.equal(1);
             expect(movingSegments[0].p1.x).is.equal(100);
@@ -198,7 +198,7 @@ describe('Polygon - open', () => {
 
         it('calculatePaintableMovingSegments() - no vertices added', () => {
             const square: Polygon = new Polygon();
-            const movingSegments: PaintableSegment[] = square.getPaintableMovingSegments({ x: 300, y: 400 });
+            const movingSegments: SimpleSegment[] = square.getPaintableMovingSegments({ x: 300, y: 400 });
             expect(movingSegments.length).is.equal(0);
         });
     });

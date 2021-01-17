@@ -3,7 +3,7 @@ import { Point } from '../Point.js';
 import { PolygonState } from './PolygonState.js';
 import { Segment } from '../Segment.js';
 import { Coordinate } from '../Coordinate.js';
-import { PaintableSegment } from '../PaintableSegment.js';
+import { SimpleSegment } from '../SimpleSegment.js';
 import { UnselectedState } from './UnselectedState.js';
 import { MoveState } from './MoveState.js';
 import { InteractiveShape } from '../InteractiveShape.js';
@@ -80,11 +80,11 @@ export class Polygon implements InteractiveShape {
         this.currentState.handleLeftMouseUp(leftMouseUpPoint);
     }
 
-    getPaintableStillSegments(): PaintableSegment[] {
+    getPaintableStillSegments(): SimpleSegment[] {
         return this.currentState.calculatePaintableStillSegments();
     }
 
-    getPaintableMovingSegments(mousePosition: Coordinate): PaintableSegment[] {
+    getPaintableMovingSegments(mousePosition: Coordinate): SimpleSegment[] {
         return this.currentState.calculatePaintableMovingSegments(mousePosition);
     }
 
