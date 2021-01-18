@@ -23,6 +23,10 @@ export class Vector {
         return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
     }
 
+    generateUnitVector(): Vector {
+        return new Vector( this.x/this.norm, this.y/this.norm);
+    }
+
     static dotProduct(vector1: Vector, vector2: Vector): number {
 		return (vector1.x * vector2.x + vector1.y * vector2.y);
 	}

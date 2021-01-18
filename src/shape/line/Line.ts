@@ -17,7 +17,6 @@ export class Line implements InteractiveShape {
     public static readonly minimumDistanceBetweenPoints: number = 8;
     public static readonly interactDistance: number = 5;
 
-    //constructor()
     constructor(coordinate1?: Coordinate, coordinate2?: Coordinate) {
         if (this.isNullOrUndefined(coordinate1) && this.isNullOrUndefined(coordinate2)) {
             this.currentState = new InitialState(this);

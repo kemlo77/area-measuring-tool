@@ -20,7 +20,7 @@
 		}
 	</style>
 
-	<script type="module">import { addNewPolygon, addNewPolygonArea, addNewLine, removeSelectedShape, canvasMouseMovement, canvasLeftClicked, canvasRightClicked, canvasMouseDown, canvasMouseUp } from "./built/main.js";
+	<script type="module">import { addNewPolygon, addNewPolygonArea, addNewLine, addNewRuler, removeSelectedShape, canvasMouseMovement, canvasLeftClicked, canvasRightClicked, canvasMouseDown, canvasMouseUp } from "./built/main.js";
 		window.document.getElementById("foreground")
 			.addEventListener("click", function () { canvasLeftClicked(event, this.id); });
 		window.document.getElementById("foreground")
@@ -39,6 +39,8 @@
 			.addEventListener("click", function () { addNewPolygon(); });
 		window.document.getElementById("addLine")
 			.addEventListener("click", function () { addNewLine(); });
+		window.document.getElementById("addRuler")
+			.addEventListener("click", function () { addNewRuler(); });
 		window.document.getElementById("removeSelectedShape")
 			.addEventListener("click", function () { removeSelectedShape(); });
 	</script>
@@ -51,6 +53,7 @@
 	<button id="addNegativePolygon">Add negative polygon</button>
 	<button id="addRegularPolygon">Add regular polygon</button>
 	<button id="addLine">Add line</button>
+	<button id="addRuler">Add ruler</button>
 	<button id="removeSelectedShape">Remove selected shape</button>
 	<br><br>
 	<div id="viewport">

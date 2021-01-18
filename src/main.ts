@@ -5,6 +5,7 @@ import { AreaType } from './AreaType.js';
 import { Polygon } from './shape/polygon/Polygon.js';
 import { InteractiveShape } from './shape/InteractiveShape.js';
 import { Line } from './shape/line/Line.js';
+import { Ruler } from './Ruler.js';
 
 const listOfShapes: InteractiveShape[] = new Array();
 const canvasStudio: CanvasStudio = CanvasStudio.getInstance();
@@ -48,6 +49,12 @@ export function addNewPolygon(): void {
 export function addNewLine(): void {
 	if (noSelectedShapes()) {
 		listOfShapes.push(new Line());
+	}
+}
+
+export function addNewRuler(): void {
+	if (noSelectedShapes()) {
+		listOfShapes.push(new Ruler());
 	}
 }
 

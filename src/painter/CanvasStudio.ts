@@ -6,6 +6,8 @@ import { PolygonArea } from '../PolygonArea.js';
 import { PolygonAreaPainter } from './PolygonAreaPainter.js';
 import { Line } from '../shape/line/Line.js';
 import { LinePainter } from './LinePainter.js';
+import { Ruler } from '../Ruler.js';
+import { RulerPainter } from './RulerPainter.js';
 
 export class CanvasStudio {
 
@@ -44,6 +46,8 @@ export class CanvasStudio {
             this.setStrategy(PolygonAreaPainter.getInstance());
         } else if (object instanceof Polygon) {
             this.setStrategy(PolygonPainter.getInstance());
+        } else if (object instanceof Ruler) {
+            this.setStrategy(RulerPainter.getInstance());
         } else if (object instanceof Line) {
             this.setStrategy(LinePainter.getInstance());
         } else {
