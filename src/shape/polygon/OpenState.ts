@@ -57,14 +57,14 @@ export class OpenState implements PolygonState {
         }
     }
 
-    noIntersectingSegmentsWhenAddingSegment(pointClicked: Point): boolean {
+    private noIntersectingSegmentsWhenAddingSegment(pointClicked: Point): boolean {
         const candidateSegment: Segment = new Segment(this.polygon.lastVertex, pointClicked);
         const segmentsToCheck: Segment[] = this.polygon.segments;
         segmentsToCheck.pop(); // not checking with the last segment (they have a common vertex)
         return candidateSegment.doesNotIntersectAnyOfTheseSegments(segmentsToCheck);
     }
 
-    noIntersectingSegmentsWhenClosing(): boolean {
+    private noIntersectingSegmentsWhenClosing(): boolean {
         const newSegment: Segment = new Segment(this.polygon.lastVertex, this.polygon.firstVertex);
         const segmentsToCheck: Segment[] = this.polygon.segments;
         segmentsToCheck.shift(); // not checking with the first and

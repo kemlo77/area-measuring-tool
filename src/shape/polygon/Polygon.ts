@@ -61,23 +61,19 @@ export class Polygon implements InteractiveShape {
     }
 
     handleLeftClick(position: Coordinate): void {
-        const leftClickedPoint: Point = new Point(position);
-        this.currentState.handleLeftClick(leftClickedPoint);
+        this.currentState.handleLeftClick(new Point(position));
     }
 
     handleRightClick(position: Coordinate): void {
-        const rightClickedPoint: Point = new Point(position);
-        this.currentState.handleRightClick(rightClickedPoint);
+        this.currentState.handleRightClick(new Point(position));
     }
 
     handleLeftMouseDown(position: Coordinate): void {
-        const leftMouseDownPoint: Point = new Point(position);
-        this.currentState.handleLeftMouseDown(leftMouseDownPoint);
+        this.currentState.handleLeftMouseDown(new Point(position));
     }
 
     handleLeftMouseUp(position: Coordinate): void {
-        const leftMouseUpPoint: Point = new Point(position);
-        this.currentState.handleLeftMouseUp(leftMouseUpPoint);
+        this.currentState.handleLeftMouseUp(new Point(position));
     }
 
     getStillSegments(): Segment[] {
@@ -108,13 +104,8 @@ export class Polygon implements InteractiveShape {
         if (this.movePoint === null) {
             return this.vertices;
         } else {
-            const verticesWithoutMovePoint: Point[] = new Array();
-            for (const vertex of this.vertices) {
-                if (vertex !== this.movePoint) {
-                    verticesWithoutMovePoint.push(vertex);
-                }
-            }
-            return verticesWithoutMovePoint;
+            return this.vertices
+                .filter((vertex) => vertex !== this.movePoint);
         }
     }
 

@@ -46,22 +46,22 @@ export class MoveState implements PolygonState {
 
     }
 
-    abortTheMove(): void {
+    private abortTheMove(): void {
         this.polygon.movePoint = null;
         this.polygon.setCurrentState(new ClosedState(this.polygon));
     }
 
-    noIntersectingSegmentsWhenMoving(candidateLocation: Point): boolean {
+    private noIntersectingSegmentsWhenMoving(candidateLocation: Point): boolean {
         return this.movedSegmentsDoNotIntersect(candidateLocation);
     }
 
-    moveSelectedVertexTo(toPoint: Point): void {
+    private moveSelectedVertexTo(toPoint: Point): void {
         this.polygon.movePoint.copyValues(toPoint); // copying values to point referenced by movePoint
         this.polygon.movePoint = null; // removing the reference
         this.polygon.setCurrentState(new ClosedState(this.polygon));
     }
 
-    movedSegmentsDoNotIntersect(candidateLocation: Point): boolean {
+    private movedSegmentsDoNotIntersect(candidateLocation: Point): boolean {
         const segments: Segment[] = this.calculateSegments();
         if (segments.length > 3) {
 
@@ -108,7 +108,6 @@ export class MoveState implements PolygonState {
 
 
     calculateMovingSegments(mousePosition: Coordinate): Segment[] {
-        //TODO: Här går det förenkla om Point har en constructor som tar Coordinate
         const mousePositionPoint: Point = new Point(mousePosition);
         const segments: Segment[] = new Array();
 

@@ -29,12 +29,12 @@ export class ClosedState implements PolygonState {
         }
     }
 
-    candidatePointOnSegment(segment: Segment, pointClicked: Point): Point {
+    private candidatePointOnSegment(segment: Segment, pointClicked: Point): Point {
         const projectionVector: Vector = MathUtil.projectPointOntoSegment(segment, pointClicked);
         return new Point(pointClicked.x + projectionVector.x, pointClicked.y + projectionVector.y);
     }
 
-    notToCloseToNeighborsOnSegment(segment: Segment, candidateVertex: Point): boolean {
+    private notToCloseToNeighborsOnSegment(segment: Segment, candidateVertex: Point): boolean {
         const distanceToP1: number = candidateVertex.distanceToOtherPoint(segment.p1);
         const distanceToP2: number = candidateVertex.distanceToOtherPoint(segment.p2);
         const farEnoughFromP1: boolean = distanceToP1 > Polygon.minimumDistanceBetweenPoints;
@@ -89,7 +89,7 @@ export class ClosedState implements PolygonState {
         }
     }
 
-    beginMovingThisVertex(vertex: Point, pointClicked: Point): void {
+    private beginMovingThisVertex(vertex: Point, pointClicked: Point): void {
         this.polygon.movePoint = vertex;
         this.polygon.mousePositionAtMoveStart = pointClicked;
         this.polygon.setCurrentState(new MoveState(this.polygon));
@@ -100,16 +100,16 @@ export class ClosedState implements PolygonState {
         //
     }
 
-    removeSelectedSegment(segment: Segment): void {
+    private removeSelectedSegment(segment: Segment): void {
         this.polygon.makeThisVertexFirst(segment.p2);
         this.polygon.setCurrentState(new OpenState(this.polygon));
     }
 
-    removeSelectedVertex(vertex: Point): void {
+    private removeSelectedVertex(vertex: Point): void {
         this.polygon.ejectVertex(vertex);
     }
 
-    noIntersectingSegmentsWhenRemovingVertex(removeCandidateVertex: Point): boolean {
+    private noIntersectingSegmentsWhenRemovingVertex(removeCandidateVertex: Point): boolean {
         return !this.checkIfRemovedPointCausesSegmentIntersect(removeCandidateVertex);
     }
 
@@ -132,7 +132,7 @@ export class ClosedState implements PolygonState {
         return false;
     }
 
-    nearestSegmentWithinDistance(candidatePoint: Point, minDistanceIn: number): Segment {
+    private nearestSegmentWithinDistance(candidatePoint: Point, minDistanceIn: number): Segment {
         let smallestRecordedDistance: number = minDistanceIn;
         let segmentProjectedOn: Segment = null;
 
