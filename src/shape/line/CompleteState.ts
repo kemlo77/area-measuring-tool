@@ -16,7 +16,7 @@ export class CompleteState implements LineState {
         this.line = line;
     }
 
-
+    /* istanbul ignore next */
     handleLeftClick(pointClicked: Point): void {
         //
     }
@@ -42,8 +42,9 @@ export class CompleteState implements LineState {
         }
     }
 
+    /* istanbul ignore next */
     handleLeftMouseUp(pointClicked: Point): void {
-        // Does nothing
+        //
     }
 
     calculateSegment(): Segment {
@@ -55,7 +56,7 @@ export class CompleteState implements LineState {
     }
 
     calculateMovingSegment(mousePosition: Coordinate): Segment {
-        return this.calculateSegment();
+        return null;
     }
 
 }

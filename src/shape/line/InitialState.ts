@@ -13,7 +13,7 @@ export class InitialState implements LineState {
         this.line = line;
     }
 
-
+    /* istanbul ignore next */
     handleLeftClick(pointClicked: Point): void {
         //
     }
@@ -25,6 +25,7 @@ export class InitialState implements LineState {
         this.line.setCurrentState(new MoveState(this.line));
     }
 
+    /* istanbul ignore next */
     handleLeftMouseUp(pointClicked: Point): void {
         //
     }

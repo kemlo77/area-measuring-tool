@@ -13,11 +13,12 @@ export class MoveState implements LineState {
         this.line = line;
     }
 
-
+    /* istanbul ignore next */
     handleLeftClick(pointClicked: Point): void {
         //
     }
 
+    /* istanbul ignore next */
     handleLeftMouseDown(pointClicked: Point): void {
         //
     }
@@ -31,7 +32,7 @@ export class MoveState implements LineState {
         }
     }
 
-    pointThatIsNotMoving(): Point {
+    private pointThatIsNotMoving(): Point {
         if (this.line.p1 === this.line.movePoint) {
             return this.line.p2;
         } else {

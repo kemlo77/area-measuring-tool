@@ -1,6 +1,5 @@
 import { Coordinate } from '../Coordinate';
 import { InteractiveShape } from '../InteractiveShape';
-import { SimpleSegment } from '../SimpleSegment';
 import { Point } from '../Point.js';
 import { Segment } from '../Segment.js';
 import { CompleteState } from './CompleteState.js';
@@ -47,7 +46,11 @@ export class Line implements InteractiveShape {
     }
 
     get length(): number {
-        return this._p1.distanceToOtherPoint(this._p2);
+        if(this.currentState instanceof InitialState || this.currentState instanceof MoveState) {
+            return 0;
+        } else {
+            return this.segment.length;
+        }
     }
 
     get isSelected(): boolean {

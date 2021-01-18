@@ -52,7 +52,7 @@ export class UnselectedState implements LineState {
     }
 
     calculateMovingSegment(mousePosition: Coordinate): Segment {
-        return this.calculateSegment();
+        return null;
     }
 
 }
