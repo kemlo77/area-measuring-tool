@@ -23,6 +23,20 @@ describe('Point', () => {
         expect(pointB.y).to.equal(2);
     });
 
+    it('constructor - with Coordinate', () => {
+        const pointA: Point = new Point({x:1, y:2});
+        expect(pointA.x).to.equal(1);
+        expect(pointA.y).to.equal(2);
+    });
+
+    it('constructor - with faulty x-Coordinate', () => {
+        expect(() => new Point({x:'asdf', y:2})).to.throw(/Invalid parameters/);
+    });
+
+    it('constructor - with faulty y-Coordinate', () => {
+        expect(() => new Point({x:1, y:'asdf'})).to.throw(/Invalid parameters/);
+    });
+
     it('constructor - with just one coordinate', () => {
         expect(() => new Point(1)).to.throw(/Invalid parameters/);
     });

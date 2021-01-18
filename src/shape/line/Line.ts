@@ -23,8 +23,8 @@ export class Line implements InteractiveShape {
         if (this.isNullOrUndefined(coordinate1) && this.isNullOrUndefined(coordinate2)) {
             this.currentState = new InitialState(this);
         } else if (!this.isNullOrUndefined(coordinate1) && !this.isNullOrUndefined(coordinate2)) {
-            const point1: Point = new Point(coordinate1.x, coordinate1.y);
-            const point2: Point = new Point(coordinate2.x, coordinate2.y);
+            const point1: Point = new Point(coordinate1);
+            const point2: Point = new Point(coordinate2);
             if(point1.distanceToOtherPoint(point2) > Line.minimumDistanceBetweenPoints) {
                 this._p1 = point1;
                 this._p2 = point2;
@@ -100,7 +100,7 @@ export class Line implements InteractiveShape {
 
 
     handleLeftClick(position: Coordinate): void {
-        const leftClickedPoint: Point = new Point(position.x, position.y);
+        const leftClickedPoint: Point = new Point(position);
         this.currentState.handleLeftClick(leftClickedPoint);
     }
 
@@ -110,12 +110,12 @@ export class Line implements InteractiveShape {
     }
 
     handleLeftMouseDown(position: Coordinate): void {
-        const leftMouseDownPoint: Point = new Point(position.x, position.y);
+        const leftMouseDownPoint: Point = new Point(position);
         this.currentState.handleLeftMouseDown(leftMouseDownPoint);
     }
 
     handleLeftMouseUp(position: Coordinate): void {
-        const leftMouseUpPoint: Point = new Point(position.x, position.y);
+        const leftMouseUpPoint: Point = new Point(position);
         this.currentState.handleLeftMouseUp(leftMouseUpPoint);
     }
 

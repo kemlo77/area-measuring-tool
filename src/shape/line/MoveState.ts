@@ -48,10 +48,8 @@ export class MoveState implements LineState {
     }
 
     calculateMovingSegment(mousePosition: Coordinate): Segment {
-        //TODO: det här borde kunna göras snyggare om Point hade en construktor
-        // som tar Coordinate
-        const point2: Point = new Point(mousePosition.x, mousePosition.y);
-        return new Segment(this.pointThatIsNotMoving(), point2);
+        const mousePositionPoint: Point = new Point(mousePosition);
+        return new Segment(this.pointThatIsNotMoving(), mousePositionPoint);
     }
 
 }

@@ -102,20 +102,14 @@ export class MoveState implements PolygonState {
     }
 
     calculateStillSegments(): Segment[] {
-        //TODO: här går det skriva om med forEach och filter
-        const simpleSegment: Segment[] = new Array();
-        for (const segment of this.polygon.segments) {
-            if (segment.doesNotContainThisVertex(this.polygon.movePoint)) {
-                simpleSegment.push(segment);
-            }
-        }
-        return simpleSegment;
+        return this.polygon.segments
+        .filter((segment) => segment.doesNotContainThisVertex(this.polygon.movePoint));
     }
 
 
     calculateMovingSegments(mousePosition: Coordinate): Segment[] {
         //TODO: Här går det förenkla om Point har en constructor som tar Coordinate
-        const mousePositionPoint: Point = new Point(mousePosition.x, mousePosition.y);
+        const mousePositionPoint: Point = new Point(mousePosition);
         const segments: Segment[] = new Array();
 
         const pointBefore: Point = this.polygon.getPrecedingVertex(this.polygon.movePoint);

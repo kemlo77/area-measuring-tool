@@ -104,7 +104,7 @@ export class OpenState implements PolygonState {
     }
 
     calculateMovingSegments(mousePosition: Coordinate): Segment[] {
-        const mousePositionPoint: Point = new Point(mousePosition.x, mousePosition.y);
+        const mousePositionPoint: Point = new Point(mousePosition);
         const movingSegment: Segment[] = new Array();
         if (this.polygon.numberOfVertices > 0) {
             movingSegment.push(new Segment(this.polygon.lastVertex, mousePositionPoint));

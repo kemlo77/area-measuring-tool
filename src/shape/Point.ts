@@ -1,29 +1,39 @@
 import { Coordinate } from './Coordinate';
 
-export class Point implements Coordinate{
+export class Point implements Coordinate {
     public x: number;
     public y: number;
 
 
-    constructor(point?: Point)
+    constructor(point?: Coordinate)
     constructor(x: number, y: number)
-    constructor(xOrPoint?: Point | number, y?: number) {
-        if (xOrPoint === undefined || xOrPoint === null) {
+    constructor(xOrCoordinate?: Coordinate | number, y?: number) {
+        if (xOrCoordinate === undefined || xOrCoordinate === null) {
             this.x = 0;
             this.y = 0;
-        } else if (xOrPoint instanceof Point) {
-            this.x = xOrPoint.x;
-            this.y = xOrPoint.y;
-        } else if (typeof xOrPoint === 'number') {
+        } else if (typeof xOrCoordinate === 'number') {
             if (typeof y !== 'undefined') {
-                this.x = xOrPoint;
+                this.x = xOrCoordinate;
                 this.y = y;
             } else {
                 throw new Error('Invalid parameters');
             }
+        } else if(typeof xOrCoordinate === 'string') {
+            throw new Error('Invalid parameters');
+        } else if (this.instanceOfCoordinate(xOrCoordinate)) {
+            this.x = xOrCoordinate.x;
+            this.y = xOrCoordinate.y;
         } else {
             throw new Error('Invalid parameters');
         }
+    }
+
+    private instanceOfCoordinate(object: any): object is Coordinate {
+        const hasExpectedFields: boolean = 'x' in object && 'y' in object;
+        const xIsNumber: boolean =(typeof object.x === 'number');
+        const yIsNumber: boolean =(typeof object.y === 'number');
+        return hasExpectedFields && xIsNumber && yIsNumber;
+        
     }
 
     hasSameCoordinateAs(otherPoint: Point): boolean {
