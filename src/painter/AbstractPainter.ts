@@ -21,12 +21,12 @@ export abstract class AbstractPainter implements PaintingStrategy {
         this.movementCanvasCtx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
     }
 
-    drawLine(startP: Coordinate, endP: Coordinate, lineColor: string, ctx: CanvasRenderingContext2D): void {
+    drawLine(p1: Coordinate, p2: Coordinate, width: number, lineColor: string, ctx: CanvasRenderingContext2D): void {
         ctx.strokeStyle = 'rgba(' + lineColor + ',1)';
         ctx.beginPath();
-        ctx.lineWidth = 3;
-        ctx.moveTo(startP.x, startP.y);
-        ctx.lineTo(endP.x, endP.y);
+        ctx.lineWidth = width;
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
         ctx.closePath();
         ctx.stroke();
     }

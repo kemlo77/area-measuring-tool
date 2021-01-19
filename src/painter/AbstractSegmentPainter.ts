@@ -10,20 +10,20 @@ export abstract class AbstractSegmentPainter extends AbstractPainter {
     private oldYMin: number = 0;
     private oldYMax: number = 1;
 
-    drawStillSegments(segments: SimpleSegment[], color: string): void {
-        segments.forEach((it) => { this.drawOneSegment(it, color, this.stillCanvasCtx); });
+    drawStillSegments(segments: SimpleSegment[], width: number, color: string): void {
+        segments.forEach((it) => { this.drawOneSegment(it, width, color, this.stillCanvasCtx); });
 
     }
 
-    drawMovingSegments(segments: SimpleSegment[], color: string): void {
+    drawMovingSegments(segments: SimpleSegment[], width: number, color: string): void {
         segments.forEach((it) => {
-            this.drawOneSegment(it, color, this.movementCanvasCtx);
+            this.drawOneSegment(it, width, color, this.movementCanvasCtx);
         });
         this.saveExtremes(segments);
     }
 
-    drawOneSegment(segment2draw: SimpleSegment, lineColor: string, ctx: CanvasRenderingContext2D): void {
-        this.drawLine(segment2draw.p1, segment2draw.p2, lineColor, ctx);
+    drawOneSegment(segment: SimpleSegment, width: number, lineColor: string, ctx: CanvasRenderingContext2D): void {
+        this.drawLine(segment.p1, segment.p2, width, lineColor, ctx);
     }
 
 
