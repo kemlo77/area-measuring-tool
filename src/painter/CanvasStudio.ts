@@ -1,12 +1,18 @@
 import { PaintingStrategy } from './PaintingStrategy.js';
-import { Polygon } from '../polygon/Polygon.js';
-import { CanvasPolygonPainter } from './CanvasPolygonPainter.js';
-import { Coordinate } from '../polygon/Coordinate.js';
+import { Polygon } from '../shape/polygon/Polygon.js';
+import { PolygonPainter } from './PolygonPainter.js';
+import { Coordinate } from '../shape/Coordinate.js';
+import { PolygonArea } from '../PolygonArea.js';
+import { PolygonAreaPainter } from './PolygonAreaPainter.js';
+import { Line } from '../shape/line/Line.js';
+import { LinePainter } from './LinePainter.js';
+import { Ruler } from '../Ruler.js';
+import { RulerPainter } from './RulerPainter.js';
 
 export class CanvasStudio {
 
     private static instance: CanvasStudio;
-    private strategy: PaintingStrategy = CanvasPolygonPainter.getInstance();
+    private strategy: PaintingStrategy = PolygonPainter.getInstance();
 
     private constructor() { }
 
@@ -17,35 +23,39 @@ export class CanvasStudio {
         return CanvasStudio.instance;
     }
 
-
-    private setStrategy(strategy: PaintingStrategy): void {
-        this.strategy = strategy;
-    }
-
     public paintStill(motifs: any[]): void {
         this.strategy.clearTheStillCanvas();
+        this.strategy.clearTheMovementCanvas();
         for (const motif of motifs) {
-            if (motif instanceof Polygon) {
-                this.setStrategy(CanvasPolygonPainter.getInstance());
-
-            } else {
-                throw new Error('Unknown object to paint');
-            }
-            this.strategy.drawStill(motif, '0,80,120');
+            this.setStrategyGivenThisObject(motif);
+            this.strategy.drawStill(motif);
         }
     }
 
     public paintMovement(motif: any, mousePosition: Coordinate): void {
-        if (motif instanceof Polygon) {
-            this.setStrategy(CanvasPolygonPainter.getInstance());
-
-        } else {
-            throw new Error('Unknown object to paint');
-        }
-        this.strategy.drawMovement(motif, mousePosition, '0,80,120');
+        this.setStrategyGivenThisObject(motif);
+        this.strategy.drawMovement(motif, mousePosition);
     }
 
     public clearTheMovementCanvas(): void {
         this.strategy.clearTheMovementCanvas();
+    }
+
+    private setStrategyGivenThisObject(object: any): void {
+        if (object instanceof PolygonArea) {
+            this.setStrategy(PolygonAreaPainter.getInstance());
+        } else if (object instanceof Polygon) {
+            this.setStrategy(PolygonPainter.getInstance());
+        } else if (object instanceof Ruler) {
+            this.setStrategy(RulerPainter.getInstance());
+        } else if (object instanceof Line) {
+            this.setStrategy(LinePainter.getInstance());
+        } else {
+            throw new Error('Unknown object to paint');
+        }
+    }
+
+    private setStrategy(strategy: PaintingStrategy): void {
+        this.strategy = strategy;
     }
 }
