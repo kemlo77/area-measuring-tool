@@ -15,7 +15,6 @@
         "@types/chai": "^4.2.11",
         "@types/mocha": "^7.0.2",
         "@typescript-eslint/eslint-plugin": "^4.11.1",
-        "@typescript-eslint/eslint-plugin-tslint": "^4.11.1",
         "@typescript-eslint/parser": "^4.11.1",
         "chai": "^4.2.0",
         "eslint": "^7.16.0",

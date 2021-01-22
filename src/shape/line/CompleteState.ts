@@ -35,11 +35,8 @@ export class CompleteState implements LineState {
 
     private theSegmentIsNotClicked(pointClicked: Point): boolean {
         const vector: Vector = MathUtil.projectPointOntoSegment(this.calculateSegment(), pointClicked);
-        if (vector !== null && vector.norm < Line.interactDistance) {
-            return false;
-        } else {
-            return true;
-        }
+        const segmentIsClicked: boolean = vector !== null && vector.norm < Line.interactDistance;
+        return !segmentIsClicked;
     }
 
     /* istanbul ignore next */

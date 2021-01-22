@@ -23,13 +23,9 @@ export class UnselectedState implements LineState {
     }
 
     private isTheLineClicked(pointClicked: Point): boolean {
-        const segment: Segment = this.calculateSegment();
-        const vector: Vector = MathUtil.projectPointOntoSegment(segment, pointClicked);
-        if (vector !== null && vector.norm < Line.interactDistance) {
-            return true;
-        } else {
-            return false;
-        }
+        const vector: Vector = MathUtil.projectPointOntoSegment(this.calculateSegment(), pointClicked);
+        const segmentIsClicked: boolean = vector !== null && vector.norm < Line.interactDistance;
+        return segmentIsClicked;
     }
 
 
