@@ -10,12 +10,7 @@ export class PolygonArea extends Polygon {
 
 
     constructor(type: AreaType, vertices?: Array<Coordinate>) {
-        const verticesGiven: boolean = (vertices !== undefined && vertices !== null);
-        if(verticesGiven) {
-            super(vertices);
-        } else {
-            super();
-        }
+        super(vertices);
         this.type = type;
     }
 
