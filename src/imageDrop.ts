@@ -50,21 +50,11 @@ export function dragOverHandler(ev: DragEvent): void { ev.preventDefault(); }
 export function adjustCanvas(): void {
     console.log('Resizing canvases');
 
-    imageCanvas.width = window.innerWidth * 0.9;
-    imageCanvas.height = window.innerHeight * 0.8;
-
-    filterCanvas.width = window.innerWidth * 0.9;
-    filterCanvas.height = window.innerHeight * 0.8;
-
-
-    //console.log('canvas.width: ' + canvas.width);
-    //console.log('canvas.clientWidth: ' + canvas.clientWidth);
-    //console.log('canvas.height: ' + canvas.height);
-    //console.log('canvas.clicentHeight: ' + canvas.clientHeight);
-
-
-    //canvas.width = image.width;
-    //canvas.height = image.height;
+    const canvases: NodeListOf<HTMLCanvasElement> = document.querySelectorAll('div#viewport canvas');
+    canvases.forEach( (canvas) => {
+        canvas.width = window.innerWidth*0.9;
+        canvas.height = window.innerHeight*0.8;
+    });
 
     if (imageFile !== null) {
         readImageFileAndDrawToCanvas(imageFile);

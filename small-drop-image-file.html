@@ -15,18 +15,23 @@
             border-radius: 5px;
         }
 
-        #viewport {
-            position: relative;
-        }
-
         canvas {
             border: 1px solid black;
             background-color: transparent;
             cursor: crosshair;
         }
 
+        #viewport {
+            position: relative;
+        }
+
         #viewport canvas {
             position: absolute;
+        }
+
+        #imageLayer {
+            background-color: white;
+            z-index: 1;
         }
 
         #filterLayer {
@@ -35,9 +40,12 @@
             z-index: 2;
         }
 
-        #imageLayer {
-            background-color: white;
-            z-index: 1;
+        #background {
+            z-index: 3;
+        }
+
+        #foreground {
+            z-index: 4;
         }
     </style>
     <script type="module">
@@ -51,14 +59,48 @@
         window.document.getElementById("opacitySlider")
             .addEventListener("change", function () { adjustOpacity(this.value) });
     </script>
+
+    <script type="module">import { addNewPolygon, addNewPolygonArea, addNewLine, addNewRuler, removeSelectedShape, canvasMouseMovement, canvasLeftClicked, canvasRightClicked, canvasMouseDown, canvasMouseUp } from "./built/main.js";
+        window.document.getElementById("foreground")
+            .addEventListener("click", function () { canvasLeftClicked(event, this.id); });
+        window.document.getElementById("foreground")
+            .addEventListener("mousemove", function () { canvasMouseMovement(event, this.id); });
+        window.document.getElementById("foreground")
+            .addEventListener("mousedown", function () { canvasMouseDown(event, this.id); });
+        window.document.getElementById("foreground")
+            .addEventListener("mouseup", function () { canvasMouseUp(event, this.id); });
+        window.document.getElementById("foreground")
+            .addEventListener("contextmenu", function () { canvasRightClicked(event, this.id); });
+        window.document.getElementById("addPositivePolygon")
+            .addEventListener("click", function () { addNewPolygonArea(true); });
+        window.document.getElementById("addNegativePolygon")
+            .addEventListener("click", function () { addNewPolygonArea(false); });
+        window.document.getElementById("addRegularPolygon")
+            .addEventListener("click", function () { addNewPolygon(); });
+        window.document.getElementById("addLine")
+            .addEventListener("click", function () { addNewLine(); });
+        window.document.getElementById("addRuler")
+            .addEventListener("click", function () { addNewRuler(); });
+        window.document.getElementById("removeSelectedShape")
+            .addEventListener("click", function () { removeSelectedShape(); });
+    </script>
 </head>
 
 <body>
-    Tralala<br><br>
+    Create non-complex polygons<br><br>
+	<button id="addPositivePolygon">Add positive polygon</button>
+	<button id="addNegativePolygon">Add negative polygon</button>
+	<button id="addRegularPolygon">Add regular polygon</button>
+	<button id="addLine">Add line</button>
+	<button id="addRuler">Add ruler</button>
+	<button id="removeSelectedShape">Remove selected shape</button>
+	<br><br>
     <input type="range" min="0" max="100" value="50" class="slider" id="opacitySlider"><br>
     <div id="viewport">
         <canvas id="filterLayer"></canvas>
         <canvas id="imageLayer"></canvas>
+        <canvas id="background"></canvas>
+		<canvas id="foreground"></canvas>
     </div>
 </body>
 
