@@ -75,10 +75,6 @@
             .addEventListener("click", function () { addNewPolygonArea(true); });
         window.document.getElementById("addNegativePolygon")
             .addEventListener("click", function () { addNewPolygonArea(false); });
-        window.document.getElementById("addRegularPolygon")
-            .addEventListener("click", function () { addNewPolygon(); });
-        window.document.getElementById("addLine")
-            .addEventListener("click", function () { addNewLine(); });
         window.document.getElementById("addRuler")
             .addEventListener("click", function () { addNewRuler(); });
         window.document.getElementById("removeSelectedShape")
@@ -90,8 +86,6 @@
     Create non-complex polygons<br><br>
 	<button id="addPositivePolygon">Add positive polygon</button>
 	<button id="addNegativePolygon">Add negative polygon</button>
-	<button id="addRegularPolygon">Add regular polygon</button>
-	<button id="addLine">Add line</button>
 	<button id="addRuler">Add ruler</button>
 	<button id="removeSelectedShape">Remove selected shape</button>
 	<br><br>

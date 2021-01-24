@@ -77,6 +77,7 @@ function removeShapeFromList(shape: InteractiveShape): void {
 }
 
 export function canvasRightClicked(event: MouseEvent, canvasId: string): void {
+	event.preventDefault();
 	const coordinate: Coordinate = getMouseCoordinate(event, canvasId);
 	const selectedShape: InteractiveShape = getSelectedShape();
 	if (selectedShape !== null) {
