@@ -159,14 +159,14 @@ describe('Polygon - move', () => {
                 square.rotateVertices(-step);
                 // side 1
                 square.handleLeftMouseDown({ x: 100, y: 100 });
-                square.handleLeftClick({ x: 125, y: 175 }); // moving here should not work
+                square.handleLeftMouseUp({ x: 125, y: 175 }); // moving here should not work
                 square.handleRightClick({ x: 10, y: 10 });  // right  clicking in the void to abort move
                 expect(square.vertices[step].x).to.equal(100); // no move should have occured
                 expect(square.vertices[step].y).to.equal(100);
                 expect(square.isClosed).to.equal(true, 'Polygon not closed.');
                 // side 2
                 square.handleLeftMouseDown({ x: 100, y: 100 });
-                square.handleLeftClick({ x: 175, y: 125 }); // moving here should not work
+                square.handleLeftMouseUp({ x: 175, y: 125 }); // moving here should not work
                 square.handleRightClick({ x: 10, y: 10 });  // right  clicking in the void to abort move
                 expect(square.vertices[step].x).to.equal(100); // no move should have occured
                 expect(square.vertices[step].y).to.equal(100);

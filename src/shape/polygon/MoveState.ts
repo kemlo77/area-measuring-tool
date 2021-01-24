@@ -68,8 +68,8 @@ export class MoveState implements PolygonState {
             const precedingVertex: Point = this.polygon.getPrecedingVertex(this.polygon.movePoint);
             const followingVertex: Point = this.polygon.getFollowingVertex(this.polygon.movePoint);
 
-            const precedingSegment: Segment = new Segment(precedingVertex, candidateLocation);
-            const followingSegment: Segment = new Segment(candidateLocation, followingVertex);
+            const segmentBeforeMovePoint: Segment = new Segment(precedingVertex, candidateLocation);
+            const segmentAfterMovePoint: Segment = new Segment(candidateLocation, followingVertex);
 
             // no need to check if neighbouring segments intersect with current segment
             for (const segment of segments) {
@@ -77,11 +77,11 @@ export class MoveState implements PolygonState {
                 if (segment.containsThisVertex(this.polygon.movePoint)) { continue; }
 
                 if (segment.doesNotContainThisVertex(precedingVertex)) {
-                    if (segment.intersectsThisSegment(precedingSegment)) { return false; }
+                    if (segment.intersectsThisSegment(segmentBeforeMovePoint)) { return false; }
                 }
 
                 if (segment.doesNotContainThisVertex(followingVertex)) {
-                    if (segment.intersectsThisSegment(followingSegment)) { return false; }
+                    if (segment.intersectsThisSegment(segmentAfterMovePoint)) { return false; }
                 }
             }
 
