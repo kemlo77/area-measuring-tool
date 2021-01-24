@@ -112,6 +112,35 @@ export class Polygon implements InteractiveShape {
         return this.vertices.length;
     }
 
+    get perimeterLength(): number {
+        return this.segments.reduce((sum, it) => sum + it.length, 0);
+    }
+
+    get area(): number {
+        if (!this.isOpen) {
+            return Math.abs(this.gaussShoelace());
+        } else {
+            return 0;
+        }
+    }
+
+    get isClockwise(): boolean {
+        if (!this.isOpen) {
+            return (this.gaussShoelace() > 0);
+        } else {
+            return null;
+        }
+    }
+
+    private gaussShoelace(): number {
+        let theSum: number = 0;
+        for (const segment of this.segments) {
+            theSum += segment.p1.x * segment.p2.y - segment.p1.y * segment.p2.x;
+        }
+        const area: number = theSum / 2;
+        return area;
+    }
+
     makeThisVertexFirst(vertex: Point): void {
         while (this.vertices[0] !== vertex) {
             this.rotateVertices(1);

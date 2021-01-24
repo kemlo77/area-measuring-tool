@@ -1,6 +1,5 @@
 import { expect } from 'chai';
 import { Polygon } from '../../../built/shape/polygon/Polygon';
-import { Polygons } from '../../../built/shape/polygon/Polygons';
 
 let rectangle: Polygon;
 
@@ -12,7 +11,6 @@ function getSquarePolygon(): Polygon {
 function getTrianglePolygon(): Polygon {
     return new Polygon([{ x: 100, y: 100 }, { x: 300, y: 100 }, { x: 200, y: 300 }]);
 }
-
 
 describe('Polygon', () => {
 
@@ -35,7 +33,7 @@ describe('Polygon', () => {
     it('constructor with arguments', () => {
         const rectangle: Polygon = getSquarePolygon();
         expect(rectangle.isClosed).to.equal(true);
-        expect(Polygons.area(rectangle)).to.equal(10000);
+        expect(rectangle.area).to.equal(10000);
     });
 
     it('constructor with argument null', () => {
@@ -183,6 +181,32 @@ describe('Polygon', () => {
         expect(newTriangle.vertices[1].y).to.equal(100);
         expect(newTriangle.vertices[2].x).to.equal(200);
         expect(newTriangle.vertices[2].y).to.equal(300);
+    });
+
+    it('isClockwise', () => {
+        const triangle: Polygon = new Polygon([{ x: 100, y: 100 }, { x: 300, y: 100 }, { x: 200, y: 300 }]);
+
+        expect(triangle.isClockwise).to.equal(true);
+        triangle.reversePolygonDirection();
+        expect(triangle.isClockwise).to.equal(false);
+    });
+
+    it('isClockwise called for open polygon', () => {
+        const triangle: Polygon = new Polygon();
+        expect(triangle.isClockwise).to.equal(null);
+    });
+
+    it('Area - when polygon closed', () => {
+        expect(rectangle.area).to.equal(10000);
+    });
+
+    it('Area - when polygon not closed', () => {
+        const shape: Polygon = new Polygon();
+        expect(shape.area).to.equal(0);
+    });
+
+    it('perimeterLength', () => {
+        expect(rectangle.perimeterLength).to.equal(400);
     });
 
 });
