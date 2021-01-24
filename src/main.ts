@@ -1,11 +1,11 @@
 import { Coordinate } from './shape/Coordinate.js';
 import { CanvasStudio } from './painter/CanvasStudio.js';
-import { PolygonArea } from './PolygonArea.js';
-import { AreaType } from './AreaType.js';
 import { Polygon } from './shape/polygon/Polygon.js';
 import { InteractiveShape } from './shape/InteractiveShape.js';
 import { Line } from './shape/line/Line.js';
 import { Ruler } from './Ruler.js';
+import { PositivePolygonArea } from './PositivePolygonArea.js';
+import { NegativePolygonArea } from './NegativePolygonArea.js';
 
 const listOfShapes: InteractiveShape[] = new Array();
 const canvasStudio: CanvasStudio = CanvasStudio.getInstance();
@@ -33,9 +33,9 @@ export function canvasLeftClicked(event: MouseEvent, canvasId: string): void {
 export function addNewPolygonArea(isPositive: boolean): void {
 	if (noSelectedShapes()) {
 		if (isPositive) {
-			listOfShapes.push(new PolygonArea(AreaType.POSITIVE));
+			listOfShapes.push(new PositivePolygonArea());
 		} else {
-			listOfShapes.push(new PolygonArea(AreaType.NEGATIVE));
+			listOfShapes.push(new NegativePolygonArea());
 		}
 	}
 }
