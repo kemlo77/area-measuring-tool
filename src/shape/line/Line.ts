@@ -1,5 +1,5 @@
-import { Coordinate } from '../Coordinate';
-import { InteractiveShape } from '../InteractiveShape';
+import { Coordinate } from '../Coordinate.js';
+import { InteractiveShape } from '../InteractiveShape.js';
 import { Point } from '../Point.js';
 import { Segment } from '../Segment.js';
 import { CompleteState } from './CompleteState.js';

@@ -1,5 +1,5 @@
 import { Coordinate } from '../shape/Coordinate.js';
-import { SimpleSegment } from '../shape/SimpleSegment.js';
+import { Segment } from '../shape/Segment.js';
 import { Polygon } from '../shape/polygon/Polygon.js';
 import { AbstractSegmentPainter } from './AbstractSegmentPainter.js';
 
@@ -36,7 +36,7 @@ export class PolygonPainter extends AbstractSegmentPainter {
         const polygon: Polygon = motif as Polygon;
 
         this.clearUsedPartOfCanvas();
-        const segments: SimpleSegment[] = polygon.getMovingSegments(mousePosition);
+        const segments: Segment[] = polygon.getMovingSegments(mousePosition);
         this.drawMovingSegments(segments, 3, this._color);
         if (polygon.isMoving) {
             this.drawHollowDot(polygon.getPrecedingVertex(polygon.movePoint), this._color, this.movementCanvasCtx);

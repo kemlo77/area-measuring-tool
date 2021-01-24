@@ -1,6 +1,5 @@
 import { Point } from '../Point.js';
 import { Segment } from '../Segment.js';
-import { SimpleSegment } from '../SimpleSegment.js';
 import { Coordinate } from '../Coordinate.js';
 
 export interface LineState {

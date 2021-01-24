@@ -1,8 +1,7 @@
 import { Point } from './Point.js';
 import { MathUtil } from './MathUtil.js';
-import { SimpleSegment } from './SimpleSegment.js';
 
-export class Segment implements SimpleSegment {
+export class Segment {
     public p1: Point;
     public p2: Point;
 

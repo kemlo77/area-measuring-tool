@@ -2,7 +2,6 @@ import { Ruler } from '../Ruler.js';
 import { Coordinate } from '../shape/Coordinate.js';
 import { Point } from '../shape/Point.js';
 import { Segment } from '../shape/Segment.js';
-import { SimpleSegment } from '../shape/SimpleSegment.js';
 import { Vector } from '../shape/Vector.js';
 import { AbstractSegmentPainter } from './AbstractSegmentPainter.js';
 

@@ -1,6 +1,5 @@
 import { expect } from 'chai';
 import { Polygon } from '../../../built/shape/polygon/Polygon';
-import { SimpleSegment } from '../../../src/shape/SimpleSegment';
 import { Segment } from '../../../built/shape/Segment';
 
 
@@ -169,24 +168,24 @@ describe('Polygon - open', () => {
             square.handleLeftClick({ x: 100, y: 200 });
             square.handleLeftClick({ x: 300, y: 400 });
             square.handleLeftClick({ x: 500, y: 600 });
-            const simpleSegments: SimpleSegment[] = square.getStillSegments();
-            expect(simpleSegments.length).is.equal(2);
-            expect(simpleSegments[0].p1.x).is.equal(100);
-            expect(simpleSegments[0].p1.y).is.equal(200);
-            expect(simpleSegments[0].p2.x).is.equal(300);
-            expect(simpleSegments[0].p2.y).is.equal(400);
+            const segments: Segment[] = square.getStillSegments();
+            expect(segments.length).is.equal(2);
+            expect(segments[0].p1.x).is.equal(100);
+            expect(segments[0].p1.y).is.equal(200);
+            expect(segments[0].p2.x).is.equal(300);
+            expect(segments[0].p2.y).is.equal(400);
 
-            expect(simpleSegments[1].p1.x).is.equal(300);
-            expect(simpleSegments[1].p1.y).is.equal(400);
-            expect(simpleSegments[1].p2.x).is.equal(500);
-            expect(simpleSegments[1].p2.y).is.equal(600);
+            expect(segments[1].p1.x).is.equal(300);
+            expect(segments[1].p1.y).is.equal(400);
+            expect(segments[1].p2.x).is.equal(500);
+            expect(segments[1].p2.y).is.equal(600);
         });
 
         it('calculateMovingSegments() - 1 or more vertices added', () => {
             const square: Polygon = new Polygon();
             square.handleLeftClick({ x: 100, y: 200 });
 
-            const movingSegments: SimpleSegment[] = square.getMovingSegments({ x: 300, y: 400 });
+            const movingSegments: Segment[] = square.getMovingSegments({ x: 300, y: 400 });
 
             expect(movingSegments.length).is.equal(1);
             expect(movingSegments[0].p1.x).is.equal(100);
@@ -198,7 +197,7 @@ describe('Polygon - open', () => {
 
         it('calculateMovingSegments() - no vertices added', () => {
             const square: Polygon = new Polygon();
-            const movingSegments: SimpleSegment[] = square.getMovingSegments({ x: 300, y: 400 });
+            const movingSegments: Segment[] = square.getMovingSegments({ x: 300, y: 400 });
             expect(movingSegments.length).is.equal(0);
         });
     });

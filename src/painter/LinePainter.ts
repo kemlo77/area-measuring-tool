@@ -1,6 +1,6 @@
 import { Line } from '../shape/line/Line.js';
 import { Coordinate } from '../shape/Coordinate.js';
-import { SimpleSegment } from '../shape/SimpleSegment.js';
+import { Segment } from '../shape/Segment.js';
 import { AbstractSegmentPainter } from './AbstractSegmentPainter.js';
 
 export class LinePainter extends AbstractSegmentPainter {
@@ -21,7 +21,7 @@ export class LinePainter extends AbstractSegmentPainter {
 
     drawStill(motif: any): void {
         const line: Line = motif as Line;
-        const segment: SimpleSegment = line.getStillSegment();
+        const segment: Segment = line.getStillSegment();
         if (segment !== null) {
             this.drawStillSegments([segment], 3, this._color);
             if(line.isComplete) {
@@ -33,7 +33,7 @@ export class LinePainter extends AbstractSegmentPainter {
 
     drawMovement(motif: any, mousePosition: Coordinate): void {
         const line: Line = motif as Line;
-        const segment: SimpleSegment = line.getMovingSegment(mousePosition);
+        const segment: Segment = line.getMovingSegment(mousePosition);
         if (segment !== null) {
             if(line.isMoving){
                 this.clearUsedPartOfCanvas();

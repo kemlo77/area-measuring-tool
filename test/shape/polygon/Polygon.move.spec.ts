@@ -2,8 +2,6 @@ import { expect } from 'chai';
 import { Polygon } from '../../../built/shape/polygon/Polygon';
 import { Point } from '../../../built/shape/Point';
 import { Segment } from '../../../built/shape/Segment';
-import { SimpleSegment } from '../../../src/shape/SimpleSegment';
-
 
 describe('Polygon - move', () => {
 
@@ -221,7 +219,7 @@ describe('Polygon - move', () => {
 
                 shape.rotateVertices(1);
                 shape.handleLeftMouseDown({ x: 100, y: 100 }); // marking for move
-                const stillSegments: SimpleSegment[] = shape.getStillSegments();
+                const stillSegments: Segment[] = shape.getStillSegments();
                 expect(stillSegments.length).is.equal(4);
                 stillSegments.forEach((segment) => {
                     const movePointInSegmentsFirst: boolean = segment.p1.x === 100 && segment.p1.y === 100;
@@ -245,7 +243,7 @@ describe('Polygon - move', () => {
 
                 shape.rotateVertices(1);
                 shape.handleLeftMouseDown({ x: 100, y: 100 }); // marking for move
-                const movingSegments: SimpleSegment[] = shape.getMovingSegments({ x: 10, y: 10 });
+                const movingSegments: Segment[] = shape.getMovingSegments({ x: 10, y: 10 });
                 expect(movingSegments.length).is.equal(2);
 
                 movingSegments.forEach((segment) => {

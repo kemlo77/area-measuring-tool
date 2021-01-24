@@ -3,7 +3,6 @@ import { Point } from '../Point.js';
 import { PolygonState } from './PolygonState.js';
 import { Segment } from '../Segment.js';
 import { Coordinate } from '../Coordinate.js';
-import { SimpleSegment } from '../SimpleSegment.js';
 import { UnselectedState } from './UnselectedState.js';
 import { MoveState } from './MoveState.js';
 import { InteractiveShape } from '../InteractiveShape.js';

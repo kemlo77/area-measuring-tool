@@ -1,5 +1,5 @@
 import { Coordinate } from '../shape/Coordinate';
-import { SimpleSegment } from '../shape/SimpleSegment';
+import { Segment } from '../shape/Segment';
 import { AbstractPainter } from './AbstractPainter.js';
 
 
@@ -10,24 +10,24 @@ export abstract class AbstractSegmentPainter extends AbstractPainter {
     private oldYMin: number = 0;
     private oldYMax: number = 1;
 
-    drawStillSegments(segments: SimpleSegment[], width: number, color: string): void {
+    drawStillSegments(segments: Segment[], width: number, color: string): void {
         segments.forEach((it) => { this.drawOneSegment(it, width, color, this.stillCanvasCtx); });
 
     }
 
-    drawMovingSegments(segments: SimpleSegment[], width: number, color: string): void {
+    drawMovingSegments(segments: Segment[], width: number, color: string): void {
         segments.forEach((it) => {
             this.drawOneSegment(it, width, color, this.movementCanvasCtx);
         });
         this.saveExtremes(segments);
     }
 
-    drawOneSegment(segment: SimpleSegment, width: number, lineColor: string, ctx: CanvasRenderingContext2D): void {
+    drawOneSegment(segment: Segment, width: number, lineColor: string, ctx: CanvasRenderingContext2D): void {
         this.drawLine(segment.p1, segment.p2, width, lineColor, ctx);
     }
 
 
-    saveExtremes(arrayWithSegments: SimpleSegment[]): void {
+    saveExtremes(arrayWithSegments: Segment[]): void {
         if (arrayWithSegments.length > 0) {
             const coordinates: Coordinate[] = new Array();
             arrayWithSegments.forEach((segment) => {
