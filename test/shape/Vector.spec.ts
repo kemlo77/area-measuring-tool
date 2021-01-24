@@ -36,6 +36,20 @@ describe('Vector', () => {
         expect(Vector.dotProduct(vector1, vector2)).to.equal(20);
     });
 
+    it('generateUnitVector', () => {
+        const vector1: Vector = new Vector(2, 2);
+        const unitVector: Vector = vector1.generateUnitVector();
+        expect(unitVector.x).to.be.closeTo(0.707106, 0.000001);
+        expect(unitVector.y).to.be.closeTo(0.707106, 0.000001);
+    });
+
+    it('generatePerpendicularUnitVector', () => {
+        const vector1: Vector = new Vector(2, 2);
+        const unitVector: Vector = vector1.generatePerpendicularUnitVector();
+        expect(unitVector.x).to.be.closeTo(0.707106, 0.000001);
+        expect(unitVector.y).to.be.closeTo(-0.707106, 0.000001);
+    });
+
 
 
 });
