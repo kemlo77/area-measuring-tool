@@ -3,8 +3,6 @@ import { PositivePolygonArea } from '../built/PositivePolygonArea';
 import { Coordinate } from '../src/shape/Coordinate';
 
 
-
-
 describe('PositivePolygonArea', () => {
 
 
@@ -12,6 +10,7 @@ describe('PositivePolygonArea', () => {
         const polygonArea: PositivePolygonArea = new PositivePolygonArea();
         expect(polygonArea.vertices.length).to.equal(0);
         expect(polygonArea.isClosed).to.equal(false);
+        expect(polygonArea.name).to.equal('Positive_0');
     });
 
     it('constructor - one arguments', () => {
@@ -19,6 +18,7 @@ describe('PositivePolygonArea', () => {
         const polygonArea: PositivePolygonArea = new PositivePolygonArea(coordinates);
         expect(polygonArea.vertices.length).to.equal(3);
         expect(polygonArea.isClosed).to.equal(true);
+        expect(polygonArea.name).to.equal('Positive_1');
     });
 
 
@@ -31,6 +31,12 @@ describe('PositivePolygonArea', () => {
         PositivePolygonArea.setColor('10,10,10');
         const polygonArea: PositivePolygonArea = new PositivePolygonArea();
         expect(polygonArea.color).to.equal('10,10,10');
+    });
+
+    it('setting the name', () => {
+        const area: PositivePolygonArea = new PositivePolygonArea();
+        area.name = 'newName';
+        expect(area.name).to.equal('newName');
     });
 
 });

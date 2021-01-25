@@ -18,7 +18,7 @@ export class Ruler extends Line {
         return Ruler._color;
     }
 
-    static set color(newColor: string) {
+    static setColor(newColor: string): void {
         Ruler._color = newColor;
     }
 

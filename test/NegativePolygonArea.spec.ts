@@ -12,6 +12,7 @@ describe('NegativePolygonArea', () => {
         const polygonArea: NegativePolygonArea = new NegativePolygonArea();
         expect(polygonArea.vertices.length).to.equal(0);
         expect(polygonArea.isClosed).to.equal(false);
+        expect(polygonArea.name).to.equal('Negative_0');
     });
 
     it('constructor - one arguments', () => {
@@ -19,6 +20,7 @@ describe('NegativePolygonArea', () => {
         const polygonArea: NegativePolygonArea = new NegativePolygonArea(coordinates);
         expect(polygonArea.vertices.length).to.equal(3);
         expect(polygonArea.isClosed).to.equal(true);
+        expect(polygonArea.name).to.equal('Negative_1');
     });
 
 
@@ -31,6 +33,12 @@ describe('NegativePolygonArea', () => {
         NegativePolygonArea.setColor('10,10,10');
         const polygonArea: NegativePolygonArea = new NegativePolygonArea();
         expect(polygonArea.color).to.equal('10,10,10');
+    });
+
+    it('setting the name', () => {
+        const area: NegativePolygonArea = new NegativePolygonArea();
+        area.name = 'newName';
+        expect(area.name).to.equal('newName');
     });
 
 });
