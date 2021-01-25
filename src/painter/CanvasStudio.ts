@@ -2,7 +2,7 @@ import { PaintingStrategy } from './PaintingStrategy.js';
 import { Polygon } from '../shape/polygon/Polygon.js';
 import { PolygonPainter } from './PolygonPainter.js';
 import { Coordinate } from '../shape/Coordinate.js';
-import { PolygonArea } from '../PolygonArea.js';
+import { AbstractPolygonArea } from '../AbstractPolygonArea.js';
 import { PolygonAreaPainter } from './PolygonAreaPainter.js';
 import { Line } from '../shape/line/Line.js';
 import { LinePainter } from './LinePainter.js';
@@ -42,7 +42,7 @@ export class CanvasStudio {
     }
 
     private setStrategyGivenThisObject(object: any): void {
-        if (object instanceof PolygonArea) {
+        if (object instanceof AbstractPolygonArea) {
             this.setStrategy(PolygonAreaPainter.getInstance());
         } else if (object instanceof Polygon) {
             this.setStrategy(PolygonPainter.getInstance());

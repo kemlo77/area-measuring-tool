@@ -10,15 +10,21 @@ describe('PositivePolygonArea', () => {
         const polygonArea: PositivePolygonArea = new PositivePolygonArea();
         expect(polygonArea.vertices.length).to.equal(0);
         expect(polygonArea.isClosed).to.equal(false);
-        expect(polygonArea.name).to.equal('Positive_0');
+        expect(polygonArea.name).to.match(/PolygonArea_[0-9]+/);
     });
 
     it('constructor - one arguments', () => {
-        const coordinates: Coordinate[] = [{ x: 100, y: 100 }, { x: 300, y: 100 }, { x: 150, y: 300 }];
+        const coordinates: Coordinate[] = [
+            { x: 100, y: 100 },
+            { x: 200, y: 100 },
+            { x: 200, y: 200 },
+            { x: 100, y: 200 }
+        ];
         const polygonArea: PositivePolygonArea = new PositivePolygonArea(coordinates);
-        expect(polygonArea.vertices.length).to.equal(3);
+        expect(polygonArea.vertices.length).to.equal(4);
         expect(polygonArea.isClosed).to.equal(true);
-        expect(polygonArea.name).to.equal('Positive_1');
+        expect(polygonArea.name).to.match(/PolygonArea_[0-9]+/);
+        expect(polygonArea.area).to.equal(10000);
     });
 
 

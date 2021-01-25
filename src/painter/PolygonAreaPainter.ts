@@ -1,6 +1,6 @@
 import { Coordinate } from '../shape/Coordinate.js';
 import { Segment } from '../shape/Segment.js';
-import { PolygonArea } from '../PolygonArea.js';
+import { AbstractPolygonArea } from '../AbstractPolygonArea.js';
 import { AbstractSegmentPainter } from './AbstractSegmentPainter.js';
 
 
@@ -20,7 +20,7 @@ export class PolygonAreaPainter extends AbstractSegmentPainter {
     }
 
     drawStill(motif: any): void {
-        const polygon: PolygonArea = motif as PolygonArea;
+        const polygon: AbstractPolygonArea = motif as AbstractPolygonArea;
         this.drawStillSegments(polygon.getStillSegments(), 3, polygon.color);
 
         if (polygon.isSelected) {
@@ -32,7 +32,7 @@ export class PolygonAreaPainter extends AbstractSegmentPainter {
     }
 
     drawMovement(motif: any, mousePosition: Coordinate): void {
-        const polygon: PolygonArea = motif as PolygonArea;
+        const polygon: AbstractPolygonArea = motif as AbstractPolygonArea;
         this.clearUsedPartOfCanvas();
         const segments: Segment[] = polygon.getMovingSegments(mousePosition);
         this.drawMovingSegments(segments, 3, polygon.color);

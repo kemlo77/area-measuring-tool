@@ -1,16 +1,14 @@
-import { PolygonArea } from './PolygonArea.js';
+import { AbstractPolygonArea } from './AbstractPolygonArea.js';
 import { Coordinate } from './shape/Coordinate.js';
 
-export class PositivePolygonArea extends PolygonArea {
+export class PositivePolygonArea extends AbstractPolygonArea {
 
     private static color: string = '0,80,120';
-    private static initializedObjects: number = 0;
     private _name: string;
 
     constructor(vertices?: Array<Coordinate>) {
         super(vertices);
-        this._name = 'Positive_' + PositivePolygonArea.initializedObjects;
-        PositivePolygonArea.initializedObjects++;
+        this._name = super.generateSerialName();
     }
 
     get color(): string {
