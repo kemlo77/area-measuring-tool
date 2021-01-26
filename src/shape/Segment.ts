@@ -2,12 +2,20 @@ import { Point } from './Point.js';
 import { MathUtil } from './MathUtil.js';
 
 export class Segment {
-    public p1: Point;
-    public p2: Point;
+    private _p1: Point;
+    private _p2: Point;
 
     constructor(punkt1: Point, punkt2: Point) {
-        this.p1 = punkt1;
-        this.p2 = punkt2;
+        this._p1 = punkt1;
+        this._p2 = punkt2;
+    }
+
+    get p1(): Point {
+        return this._p1;
+    }
+
+    get p2(): Point {
+        return this._p2;
     }
 
     get length(): number {

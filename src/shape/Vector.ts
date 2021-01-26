@@ -1,22 +1,30 @@
 import { Point } from './Point.js';
 
 export class Vector {
-    public x: number;
-    public y: number;
+    private _x: number;
+    private _y: number;
 
     constructor(xComponent: number, yComponent: number)
     constructor(point1: Point, point2: Point)
     constructor(pointOrXComponent: Point | number, pointOrYComponent: Point | number) {
         if (pointOrXComponent instanceof Point && pointOrYComponent instanceof Point) {
-            this.x = pointOrYComponent.x - pointOrXComponent.x;
-            this.y = pointOrYComponent.y - pointOrXComponent.y;
+            this._x = pointOrYComponent.x - pointOrXComponent.x;
+            this._y = pointOrYComponent.y - pointOrXComponent.y;
         } else if (typeof pointOrXComponent === 'number' && typeof pointOrYComponent === 'number') {
-            this.x = pointOrXComponent;
-            this.y = pointOrYComponent;
+            this._x = pointOrXComponent;
+            this._y = pointOrYComponent;
         } else {
             throw new Error('Invalid parameters');
         }
 
+    }
+
+    get x(): number {
+        return this._x;
+    }
+
+    get y(): number {
+        return this._y;
     }
 
     get norm(): number {

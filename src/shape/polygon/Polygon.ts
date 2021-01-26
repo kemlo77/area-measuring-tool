@@ -8,15 +8,15 @@ import { MoveState } from './MoveState.js';
 import { InteractiveShape } from '../InteractiveShape.js';
 
 export class Polygon implements InteractiveShape {
-    public vertices: Point[];
-    public movePoint: Point;
-    public mousePositionAtMoveStart: Point;
+    private _vertices: Point[];
+    private _movePoint: Point;
+    private _mousePositionAtMoveStart: Point;
     private currentState: PolygonState;
     public static readonly minimumDistanceBetweenPoints: number = 8;
     public static readonly interactDistance: number = 5;
 
     constructor(vertices?: Array<Coordinate>) {
-        this.vertices = new Array();
+        this._vertices = new Array();
         this.movePoint = null;
         this.currentState = new OpenState(this);
 
@@ -41,6 +41,26 @@ export class Polygon implements InteractiveShape {
         } else {
             return 0;
         }
+    }
+
+    get vertices(): Point[] {
+        return this._vertices;
+    }
+
+    get movePoint(): Point {
+        return this._movePoint;
+    }
+
+    set movePoint(point: Point) {
+        this._movePoint = point;
+    }
+
+    get mousePositionAtMoveStart(): Point {
+        return this._mousePositionAtMoveStart;
+    }
+
+    set mousePositionAtMoveStart(point: Point) {
+        this._mousePositionAtMoveStart = point;
     }
 
     get isClosed(): boolean {
@@ -148,7 +168,7 @@ export class Polygon implements InteractiveShape {
     }
 
     rotateVertices(steps: number): void {
-        this.vertices = Polygon.arrayRotate(this.vertices, steps);
+        this._vertices = Polygon.arrayRotate(this.vertices, steps);
     }
 
     static arrayRotate(arr: any[], steps: number): any[] {

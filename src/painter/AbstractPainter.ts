@@ -3,15 +3,23 @@ import { Coordinate } from '../shape/Coordinate.js';
 
 export abstract class AbstractPainter implements PaintingStrategy {
     private canvasBackground: HTMLCanvasElement = document.getElementById('background') as HTMLCanvasElement;
-    stillCanvasCtx: CanvasRenderingContext2D = this.canvasBackground.getContext('2d');
+    private _stillCanvasCtx: CanvasRenderingContext2D = this.canvasBackground.getContext('2d');
     private canvasForeground: HTMLCanvasElement = document.getElementById('foreground') as HTMLCanvasElement;
-    movementCanvasCtx: CanvasRenderingContext2D = this.canvasForeground.getContext('2d');
+    private _movementCanvasCtx: CanvasRenderingContext2D = this.canvasForeground.getContext('2d');
     private canvasWidth: number = this.canvasBackground.width;
     private canvasHeight: number = this.canvasBackground.height;
 
 
     abstract drawStill(motif: any): void;
     abstract drawMovement(modif: any, mousePosition: Coordinate): void;
+
+    get stillCanvasCtx(): CanvasRenderingContext2D {
+        return this._stillCanvasCtx;
+    }
+
+    get movementCanvasCtx(): CanvasRenderingContext2D {
+        return this._movementCanvasCtx;
+    }
 
     clearTheStillCanvas(): void {
         this.stillCanvasCtx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
