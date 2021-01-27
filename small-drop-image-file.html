@@ -84,17 +84,19 @@
 
 <body>
     Create non-complex polygons<br><br>
-	<button id="addPositivePolygon">Add positive polygon</button>
-	<button id="addNegativePolygon">Add negative polygon</button>
-	<button id="addRuler">Add ruler</button>
-	<button id="removeSelectedShape">Remove selected shape</button>
-	<br><br>
+    <button id="addPositivePolygon">Add positive polygon</button>
+    <button id="addNegativePolygon">Add negative polygon</button>
+    <button id="addRuler">Add ruler</button>
+    <button id="removeSelectedShape">Remove selected shape</button>
+    <br>
+    <div id="data">Area total: 0</div>
+    <br><br>
     <input type="range" min="0" max="100" value="50" class="slider" id="opacitySlider"><br>
     <div id="viewport">
         <canvas id="filterLayer"></canvas>
         <canvas id="imageLayer"></canvas>
         <canvas id="background"></canvas>
-		<canvas id="foreground"></canvas>
+        <canvas id="foreground"></canvas>
     </div>
 </body>
 

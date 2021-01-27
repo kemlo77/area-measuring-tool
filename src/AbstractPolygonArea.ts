@@ -15,5 +15,7 @@ export abstract class AbstractPolygonArea extends Polygon {
 
     abstract get color(): string;
 
+    abstract get name(): string;
+
 
 }

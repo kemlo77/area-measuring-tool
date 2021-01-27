@@ -6,9 +6,11 @@ import { Line } from './shape/line/Line.js';
 import { Ruler } from './Ruler.js';
 import { PositivePolygonArea } from './PositivePolygonArea.js';
 import { NegativePolygonArea } from './NegativePolygonArea.js';
+import { DataPresenter } from './presenter/DataPresenter.js';
 
 const listOfShapes: InteractiveShape[] = new Array();
 const canvasStudio: CanvasStudio = CanvasStudio.getInstance();
+const dataPresenter: DataPresenter = DataPresenter.getInstance();
 
 export function canvasLeftClicked(event: MouseEvent, canvasId: string): void {
 	const coordinate: Coordinate = getMouseCoordinate(event, canvasId);
@@ -114,6 +116,7 @@ export function canvasMouseUp(event: MouseEvent, canvasId: string): void {
 			paintSelectedMovement(coordinate);
 		}
 	}
+	dataPresenter.updatePresentation(listOfShapes);
 }
 
 function getMouseCoordinate(event: MouseEvent, elementId: string): Coordinate {
