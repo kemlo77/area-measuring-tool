@@ -38,8 +38,12 @@ export class DataPresenter {
     }
 
     private generateAreaTotalParagraph(area: number): HTMLParagraphElement {
+        return this.generateParagraph('Area total: ' + area);
+    }
+
+    private generateParagraph(paragraphtext: string): HTMLParagraphElement {
         const p: HTMLParagraphElement = document.createElement('p');
-        p.textContent = 'Area total: ' + area;
+        p.textContent = paragraphtext;
         return p;
     }
 
@@ -53,9 +57,8 @@ export class DataPresenter {
     private generateAreaParagraph(polygonArea: AbstractPolygonArea): HTMLParagraphElement {
         const perimeterLength: number = Math.round(polygonArea.perimeterLength * 100) / 100;
         const area: number = Math.round(polygonArea.area * 100) / 100;
-        const p: HTMLParagraphElement = document.createElement('p');
-        p.textContent = polygonArea.name + ': ' + area + ' in area ' + perimeterLength + ' in perimeter';
-        return p;
+        const paragraphtext: string = polygonArea.name + ': ' + area + ' in area ' + perimeterLength + ' in perimeter';
+        return this.generateParagraph(paragraphtext);
     }
 
     private onlyPolygonAreas(shapes: InteractiveShape[]): AbstractPolygonArea[] {
@@ -79,8 +82,6 @@ export class DataPresenter {
 
     private generateRulerParagraph(ruler: Ruler): HTMLParagraphElement {
         const rulerLength: number = Math.round(ruler.length * 100) / 100;
-        const p: HTMLParagraphElement = document.createElement('p');
-        p.textContent = ruler.name + ': ' + rulerLength + ' length';
-        return p;
+        return this.generateParagraph(ruler.name + ': ' + rulerLength + ' length');
     }
 }
