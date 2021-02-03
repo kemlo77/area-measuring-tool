@@ -20,8 +20,8 @@ export class DataPresenter {
     updatePresentation(shapes: InteractiveShape[]): void {
         this.removeAllChildNodes(this.dataDiv);
         this.addAreaTotalParagraph(shapes);
-        this.addAreaParagraphs(shapes);
-        this.addRulerParagraphs(shapes);
+        this.addAreaDivs(shapes);
+        this.addRulerDivs(shapes);
     }
 
 
@@ -47,18 +47,11 @@ export class DataPresenter {
         return p;
     }
 
-    private addAreaParagraphs(shapes: InteractiveShape[]): void {
+    private addAreaDivs(shapes: InteractiveShape[]): void {
         this.onlyPolygonAreas(shapes)
             .forEach((polygonArea) => {
-                this.dataDiv.appendChild(this.generateAreaParagraph(polygonArea));
+                this.dataDiv.appendChild(this.generateAreaDiv(polygonArea));
             });
-    }
-
-    private generateAreaParagraph(polygonArea: AbstractPolygonArea): HTMLParagraphElement {
-        const perimeterLength: number = Math.round(polygonArea.perimeterLength * 100) / 100;
-        const area: number = Math.round(polygonArea.area * 100) / 100;
-        const paragraphtext: string = polygonArea.name + ': ' + area + ' in area ' + perimeterLength + ' in perimeter';
-        return this.generateParagraph(paragraphtext);
     }
 
     private onlyPolygonAreas(shapes: InteractiveShape[]): AbstractPolygonArea[] {
@@ -67,10 +60,10 @@ export class DataPresenter {
             .map((shape) => shape as AbstractPolygonArea);
     }
 
-    private addRulerParagraphs(shapes: InteractiveShape[]): void {
+    private addRulerDivs(shapes: InteractiveShape[]): void {
         this.onlyRulers(shapes)
             .forEach((ruler) => {
-                this.dataDiv.appendChild(this.generateRulerParagraph(ruler));
+                this.dataDiv.appendChild(this.generateRulerDiv(ruler));
             });
     }
 
@@ -80,8 +73,48 @@ export class DataPresenter {
             .map((it) => it as Ruler);
     }
 
-    private generateRulerParagraph(ruler: Ruler): HTMLParagraphElement {
-        const rulerLength: number = Math.round(ruler.length * 100) / 100;
-        return this.generateParagraph(ruler.name + ': ' + rulerLength + ' length');
+    private generateRulerDiv(ruler: Ruler): HTMLDivElement {
+        const rulerLength: string = this.convertToRoundedNumberString(ruler.length);
+        const div: HTMLDivElement = document.createElement('div');
+        const nameInput: HTMLInputElement = this.generateTextInput(ruler.name);
+        div.appendChild(nameInput);
+        const areaInput: HTMLInputElement = this.generateNumberInput(rulerLength);
+        div.appendChild(areaInput);
+        return div;
     }
+
+    private generateAreaDiv(polygonArea: AbstractPolygonArea): HTMLDivElement {
+        const perimeterLength: string = this.convertToRoundedNumberString(polygonArea.perimeterLength);
+        const area: string = this.convertToRoundedNumberString(polygonArea.area);
+        const div: HTMLDivElement = document.createElement('div');
+        const nameInput: HTMLInputElement = this.generateTextInput(polygonArea.name);
+        nameInput.addEventListener('input', (event) => { polygonArea.name = (<HTMLInputElement>event.target).value; });
+        div.appendChild(nameInput);
+        const areaInput: HTMLInputElement = this.generateNumberInput(area);
+        div.appendChild(areaInput);
+        const perimeterInput: HTMLInputElement = this.generateNumberInput(perimeterLength);
+        div.appendChild(perimeterInput);
+        return div;
+    }
+
+    private generateTextInput(value: string): HTMLInputElement {
+        const inputElement: HTMLInputElement = document.createElement('input');
+        inputElement.setAttribute('type', 'text');
+        inputElement.setAttribute('value', value);
+        return inputElement;
+    }
+
+    private convertToRoundedNumberString(givenNumber: number): string {
+        const roundedNumber: number = Math.round(givenNumber * 100) / 100;
+        return roundedNumber.toString();
+    }
+
+    private generateNumberInput(value: string): HTMLInputElement {
+        const inputElement: HTMLInputElement = document.createElement('input');
+        inputElement.setAttribute('type', 'number');
+        inputElement.setAttribute('value', value);
+        return inputElement;
+    }
+
+
 }

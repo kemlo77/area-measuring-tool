@@ -8,7 +8,7 @@ export class NegativePolygonArea extends AbstractPolygonArea {
 
     constructor(vertices?: Array<Coordinate>) {
         super(vertices);
-        this._name = super.generateSerialName();
+        this._name = 'PolygonArea_' + this.id;
     }
 
     get color(): string {
