@@ -65,7 +65,7 @@
             .addEventListener("change", function () { adjustOpacity(this.value) });
     </script>
 
-    <script type="module">import { addNewPolygon, addNewPolygonArea, addNewLine, addNewRuler, removeSelectedShape, canvasMouseMovement, canvasLeftClicked, canvasRightClicked, canvasMouseDown, canvasMouseUp } from "./built/main.js";
+    <script type="module">import { addPositivePolygonArea, addNegativePolygonArea, addRuler, removeSelectedShape, canvasMouseMovement, canvasLeftClicked, canvasRightClicked, canvasMouseDown, canvasMouseUp } from "./built/main.js";
         window.document.getElementById("foreground")
             .addEventListener("click", function () { canvasLeftClicked(event, this.id); });
         window.document.getElementById("foreground")
@@ -77,11 +77,11 @@
         window.document.getElementById("foreground")
             .addEventListener("contextmenu", function () { canvasRightClicked(event, this.id); });
         window.document.getElementById("addPositivePolygon")
-            .addEventListener("click", function () { addNewPolygonArea(true); });
+            .addEventListener("click", function () { addPositivePolygonArea(true); });
         window.document.getElementById("addNegativePolygon")
-            .addEventListener("click", function () { addNewPolygonArea(false); });
+            .addEventListener("click", function () { addNegativePolygonArea(false); });
         window.document.getElementById("addRuler")
-            .addEventListener("click", function () { addNewRuler(); });
+            .addEventListener("click", function () { addRuler(); });
         window.document.getElementById("removeSelectedShape")
             .addEventListener("click", function () { removeSelectedShape(); });
     </script>

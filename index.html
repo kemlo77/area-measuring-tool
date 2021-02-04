@@ -20,7 +20,7 @@
 		}
 	</style>
 
-	<script type="module">import { addNewPolygon, addNewPolygonArea, addNewLine, addNewRuler, removeSelectedShape, canvasMouseMovement, canvasLeftClicked, canvasRightClicked, canvasMouseDown, canvasMouseUp } from "./built/main.js";
+	<script type="module">import { addPolygon, addLine, removeSelectedShape, canvasMouseMovement, canvasLeftClicked, canvasRightClicked, canvasMouseDown, canvasMouseUp } from "./built/old_main.js";
 		window.document.getElementById("foreground")
 			.addEventListener("click", function () { canvasLeftClicked(event, this.id); });
 		window.document.getElementById("foreground")
@@ -31,16 +31,10 @@
 			.addEventListener("mouseup", function () { canvasMouseUp(event, this.id); });
 		window.document.getElementById("foreground")
 			.addEventListener("contextmenu", function () { canvasRightClicked(event, this.id); });
-		window.document.getElementById("addPositivePolygon")
-			.addEventListener("click", function () { addNewPolygonArea(true); });
-		window.document.getElementById("addNegativePolygon")
-			.addEventListener("click", function () { addNewPolygonArea(false); });
 		window.document.getElementById("addRegularPolygon")
-			.addEventListener("click", function () { addNewPolygon(); });
+			.addEventListener("click", function () { addPolygon(); });
 		window.document.getElementById("addLine")
-			.addEventListener("click", function () { addNewLine(); });
-		window.document.getElementById("addRuler")
-			.addEventListener("click", function () { addNewRuler(); });
+			.addEventListener("click", function () { addLine(); });
 		window.document.getElementById("removeSelectedShape")
 			.addEventListener("click", function () { removeSelectedShape(); });
 	</script>
@@ -49,11 +43,8 @@
 
 <body oncontextmenu="return false;">
 	Create non-complex polygons<br><br>
-	<button id="addPositivePolygon">Add positive polygon</button>
-	<button id="addNegativePolygon">Add negative polygon</button>
 	<button id="addRegularPolygon">Add regular polygon</button>
 	<button id="addLine">Add line</button>
-	<button id="addRuler">Add ruler</button>
 	<button id="removeSelectedShape">Remove selected shape</button>
 	<br><br>
 	<div id="viewport">

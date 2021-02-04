@@ -87,6 +87,9 @@ export class DataPresenter {
         const perimeterLength: string = this.convertToRoundedNumberString(polygonArea.perimeterLength);
         const area: string = this.convertToRoundedNumberString(polygonArea.area);
         const div: HTMLDivElement = document.createElement('div');
+        if (polygonArea.isSelected) {
+            div.style.backgroundColor = 'yellow';
+        }
         const nameInput: HTMLInputElement = this.generateTextInput(polygonArea.name);
         nameInput.addEventListener('input', (event) => { polygonArea.name = (<HTMLInputElement>event.target).value; });
         div.appendChild(nameInput);
