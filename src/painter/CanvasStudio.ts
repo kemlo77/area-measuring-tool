@@ -14,7 +14,9 @@ export class CanvasStudio {
     private static instance: CanvasStudio;
     private strategy: PaintingStrategy = PolygonPainter.getInstance();
 
-    private constructor() { }
+    private constructor() {
+        //
+    }
 
     public static getInstance(): CanvasStudio {
         if (!CanvasStudio.instance) {

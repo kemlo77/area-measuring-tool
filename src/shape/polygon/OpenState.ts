@@ -89,7 +89,7 @@ export class OpenState implements PolygonState {
     }
 
     calculateSegments(): Segment[] {
-        const calculatedSegments: Segment[] = new Array();
+        const calculatedSegments: Segment[] = [];
         for (const currentVertex of this.polygon.vertices) {
             const followingVertex: Point = this.polygon.getFollowingVertex(currentVertex);
             const currentSegment: Segment = new Segment(currentVertex, followingVertex);
@@ -105,7 +105,7 @@ export class OpenState implements PolygonState {
 
     calculateMovingSegments(mousePosition: Coordinate): Segment[] {
         const mousePositionPoint: Point = new Point(mousePosition);
-        const movingSegment: Segment[] = new Array();
+        const movingSegment: Segment[] = [];
         if (this.polygon.numberOfVertices > 0) {
             movingSegment.push(new Segment(this.polygon.lastVertex, mousePositionPoint));
         }

@@ -21,21 +21,21 @@
 	</style>
 
 	<script type="module">import { addPolygon, addLine, removeSelectedShape, canvasMouseMovement, canvasLeftClicked, canvasRightClicked, canvasMouseDown, canvasMouseUp } from "./built/old_main.js";
-		window.document.getElementById("foreground")
+		document.getElementById("foreground")
 			.addEventListener("click", function () { canvasLeftClicked(event, this.id); });
-		window.document.getElementById("foreground")
+		document.getElementById("foreground")
 			.addEventListener("mousemove", function () { canvasMouseMovement(event, this.id); });
-		window.document.getElementById("foreground")
+		document.getElementById("foreground")
 			.addEventListener("mousedown", function () { canvasMouseDown(event, this.id); });
-		window.document.getElementById("foreground")
+		document.getElementById("foreground")
 			.addEventListener("mouseup", function () { canvasMouseUp(event, this.id); });
-		window.document.getElementById("foreground")
+		document.getElementById("foreground")
 			.addEventListener("contextmenu", function () { canvasRightClicked(event, this.id); });
-		window.document.getElementById("addRegularPolygon")
+		document.getElementById("addRegularPolygon")
 			.addEventListener("click", function () { addPolygon(); });
-		window.document.getElementById("addLine")
+		document.getElementById("addLine")
 			.addEventListener("click", function () { addLine(); });
-		window.document.getElementById("removeSelectedShape")
+		document.getElementById("removeSelectedShape")
 			.addEventListener("click", function () { removeSelectedShape(); });
 	</script>
 

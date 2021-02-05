@@ -92,7 +92,7 @@ export class MoveState implements PolygonState {
     // TODO: borde jag skriva om den här. Nu returnerar den samma segment som i closedState.
     // Borde det vara segmenten så som den ser ut i move?
     calculateSegments(): Segment[] {
-        const calculatedSegments: Segment[] = new Array();
+        const calculatedSegments: Segment[] = [];
         for (const vertex of this.polygon.vertices) {
             const followingVertex: Point = this.polygon.getFollowingVertex(vertex);
             const currentSegment: Segment = new Segment(vertex, followingVertex);
@@ -103,13 +103,13 @@ export class MoveState implements PolygonState {
 
     calculateStillSegments(): Segment[] {
         return this.polygon.segments
-        .filter((segment) => segment.doesNotContainThisVertex(this.polygon.movePoint));
+            .filter((segment) => segment.doesNotContainThisVertex(this.polygon.movePoint));
     }
 
 
     calculateMovingSegments(mousePosition: Coordinate): Segment[] {
         const mousePositionPoint: Point = new Point(mousePosition);
-        const segments: Segment[] = new Array();
+        const segments: Segment[] = [];
 
         const pointBefore: Point = this.polygon.getPrecedingVertex(this.polygon.movePoint);
         const pointAfter: Point = this.polygon.getFollowingVertex(this.polygon.movePoint);

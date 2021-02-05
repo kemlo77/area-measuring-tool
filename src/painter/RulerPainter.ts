@@ -35,15 +35,15 @@ export class RulerPainter extends AbstractSegmentPainter {
     }
 
     private generateRulerLines(segment: Segment): Segment[] {
-        const segments: Segment[] = new Array();
+        const segments: Segment[] = [];
         const vector: Vector = new Vector(segment.p1, segment.p2);
         const direction: Vector = vector.generateUnitVector();
         const perpendicular: Vector = vector.generatePerpendicularUnitVector();
-        let distanceBetweenLines: number = 15;
+        const distanceBetweenLines: number = 15;
         let distanceTravelled: number = 0;
         while (distanceTravelled + distanceBetweenLines < segment.length) {
             distanceTravelled += distanceBetweenLines;
-            let newPoint: Point = this.jumpToNewPoint(segment.p1, direction, distanceTravelled);
+            const newPoint: Point = this.jumpToNewPoint(segment.p1, direction, distanceTravelled);
             segments.push(this.generateRulerLine(newPoint, perpendicular));
         }
         segments.push(this.generateRulerLine(segment.p1, perpendicular));
@@ -52,14 +52,14 @@ export class RulerPainter extends AbstractSegmentPainter {
     }
 
     private generateRulerLine(point: Point, direction: Vector): Segment {
-        let point1: Point = this.jumpToNewPoint(point, direction, this.lineWidth / 2);
-        let point2: Point = this.jumpToNewPoint(point, direction, -this.lineWidth / 2);
+        const point1: Point = this.jumpToNewPoint(point, direction, this.lineWidth / 2);
+        const point2: Point = this.jumpToNewPoint(point, direction, -this.lineWidth / 2);
         return new Segment(point1, point2);
     }
 
     private jumpToNewPoint(point: Point, direction: Vector, distance: number): Point {
-        if (Math.abs(direction.norm-1) > 0.000001) { 
-            console.warn('direction given is not a unit vector. Has length: ' + direction.norm); 
+        if (Math.abs(direction.norm - 1) > 0.000001) {
+            console.warn('direction given is not a unit vector. Has length: ' + direction.norm);
         }
         const newPointX: number = point.x + direction.x * distance;
         const newPointY: number = point.y + direction.y * distance;

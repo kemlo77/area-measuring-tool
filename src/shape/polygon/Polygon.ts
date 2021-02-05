@@ -16,7 +16,7 @@ export class Polygon implements InteractiveShape {
     public static readonly interactDistance: number = 5;
 
     constructor(vertices?: Array<Coordinate>) {
-        this._vertices = new Array();
+        this._vertices = [];
         this.movePoint = null;
         this.currentState = new OpenState(this);
 

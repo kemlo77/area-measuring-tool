@@ -150,7 +150,7 @@ export class ClosedState implements PolygonState {
     }
 
     calculateSegments(): Segment[] {
-        const calculatedSegments: Segment[] = new Array();
+        const calculatedSegments: Segment[] = [];
         for (const vertex of this.polygon.vertices) {
             const followingVertex: Point = this.polygon.getFollowingVertex(vertex);
             const currentSegment: Segment = new Segment(vertex, followingVertex);
@@ -164,7 +164,7 @@ export class ClosedState implements PolygonState {
     }
 
     calculateMovingSegments(mousePosition: Coordinate): Segment[] {
-        return new Array();
+        return [];
     }
 
 }

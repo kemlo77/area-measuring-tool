@@ -4,85 +4,37 @@
 
 <head>
     <title>Berit</title>
-    <style type="text/css">
-        html,
-        body {
-            background-color: powderblue;
-            height: 100%;
-            width: 100%;
-        }
-
-        .slider {
-            width: 90%;
-            height: 15px;
-            border-radius: 5px;
-        }
-
-        canvas {
-            border: 1px solid black;
-            background-color: transparent;
-            cursor: crosshair;
-        }
-
-        #viewport {
-            height: 83%;
-            width: 100%;
-            background-color: burlywood;
-        }
-
-        #viewport canvas {
-            position: absolute;
-        }
-
-        #imageLayer {
-            background-color: white;
-            z-index: 1;
-        }
-
-        #filterLayer {
-            background-color: white;
-            opacity: 0.5;
-            z-index: 2;
-        }
-
-        #background {
-            z-index: 3;
-        }
-
-        #foreground {
-            z-index: 4;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
     <script type="module">
         import { dropHandler, dragOverHandler, adjustCanvas, delayedAdjustCanvas, adjustOpacity } from "./built/imageDrop.js";
-        window.addEventListener("load", function () { adjustCanvas(); });
-        window.addEventListener("resize", function () { delayedAdjustCanvas(); });
-        window.document.getElementById("viewport")
+        addEventListener("load", function () { adjustCanvas(); });
+        addEventListener("resize", function () { delayedAdjustCanvas(); });
+        document.getElementById("viewport")
             .addEventListener("drop", function () { dropHandler(event); });
-        window.document.getElementById("viewport")
+        document.getElementById("viewport")
             .addEventListener("dragover", function () { dragOverHandler(event); });
-        window.document.getElementById("opacitySlider")
+        document.getElementById("opacitySlider")
             .addEventListener("change", function () { adjustOpacity(this.value) });
     </script>
 
     <script type="module">import { addPositivePolygonArea, addNegativePolygonArea, addRuler, removeSelectedShape, canvasMouseMovement, canvasLeftClicked, canvasRightClicked, canvasMouseDown, canvasMouseUp } from "./built/main.js";
-        window.document.getElementById("foreground")
+        document.getElementById("foreground")
             .addEventListener("click", function () { canvasLeftClicked(event, this.id); });
-        window.document.getElementById("foreground")
+        document.getElementById("foreground")
             .addEventListener("mousemove", function () { canvasMouseMovement(event, this.id); });
-        window.document.getElementById("foreground")
+        document.getElementById("foreground")
             .addEventListener("mousedown", function () { canvasMouseDown(event, this.id); });
-        window.document.getElementById("foreground")
+        document.getElementById("foreground")
             .addEventListener("mouseup", function () { canvasMouseUp(event, this.id); });
-        window.document.getElementById("foreground")
+        document.getElementById("foreground")
             .addEventListener("contextmenu", function () { canvasRightClicked(event, this.id); });
-        window.document.getElementById("addPositivePolygon")
+        document.getElementById("addPositivePolygon")
             .addEventListener("click", function () { addPositivePolygonArea(true); });
-        window.document.getElementById("addNegativePolygon")
+        document.getElementById("addNegativePolygon")
             .addEventListener("click", function () { addNegativePolygonArea(false); });
-        window.document.getElementById("addRuler")
+        document.getElementById("addRuler")
             .addEventListener("click", function () { addRuler(); });
-        window.document.getElementById("removeSelectedShape")
+        document.getElementById("removeSelectedShape")
             .addEventListener("click", function () { removeSelectedShape(); });
     </script>
 </head>

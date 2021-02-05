@@ -1,0 +1,52 @@
+html,
+body {
+    background-color: powderblue;
+    height: 100%;
+    width: 100%;
+}
+
+.slider {
+    width: 90%;
+    height: 15px;
+    border-radius: 5px;
+}
+
+canvas {
+    border: 1px solid black;
+    background-color: transparent;
+    cursor: crosshair;
+}
+
+#viewport {
+    height: 83%;
+    width: 100%;
+    background-color: burlywood;
+}
+
+#viewport canvas {
+    position: absolute;
+}
+
+#imageLayer {
+    background-color: white;
+    z-index: 1;
+}
+
+#filterLayer {
+    background-color: white;
+    opacity: 0.5;
+    z-index: 2;
+}
+
+#background {
+    z-index: 3;
+}
+
+#foreground {
+    z-index: 4;
+}
+
+.selected {
+    background-color: yellow;
+    padding: 3px;
+}

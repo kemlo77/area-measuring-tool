@@ -6,7 +6,7 @@ import { PositivePolygonArea } from './PositivePolygonArea.js';
 import { NegativePolygonArea } from './NegativePolygonArea.js';
 import { DataPresenter } from './presenter/DataPresenter.js';
 
-const listOfShapes: InteractiveShape[] = new Array();
+const listOfShapes: InteractiveShape[] = [];
 const canvasStudio: CanvasStudio = CanvasStudio.getInstance();
 const dataPresenter: DataPresenter = DataPresenter.getInstance();
 

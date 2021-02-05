@@ -29,7 +29,7 @@ export abstract class AbstractSegmentPainter extends AbstractPainter {
 
     saveExtremes(arrayWithSegments: Segment[]): void {
         if (arrayWithSegments.length > 0) {
-            const coordinates: Coordinate[] = new Array();
+            const coordinates: Coordinate[] = [];
             arrayWithSegments.forEach((segment) => {
                 coordinates.push(segment.p1);
                 coordinates.push(segment.p2);

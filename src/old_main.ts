@@ -4,7 +4,7 @@ import { Polygon } from './shape/polygon/Polygon.js';
 import { InteractiveShape } from './shape/InteractiveShape.js';
 import { Line } from './shape/line/Line.js';
 
-const listOfShapes: InteractiveShape[] = new Array();
+const listOfShapes: InteractiveShape[] = [];
 const canvasStudio: CanvasStudio = CanvasStudio.getInstance();
 
 export function canvasLeftClicked(event: MouseEvent, canvasId: string): void {
