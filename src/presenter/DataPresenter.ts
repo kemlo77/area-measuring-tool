@@ -85,6 +85,7 @@ export class DataPresenter {
         }
 
         const nameInput: HTMLInputElement = this.generateTextInput(ruler.name);
+        nameInput.addEventListener('input', (event) => { ruler.name = (<HTMLInputElement>event.target).value; });
         div.appendChild(nameInput);
 
         const rulerLength: string = this.convertToRoundedNumberString(ruler.length * this.scaleFactor);
