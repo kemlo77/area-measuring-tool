@@ -1,14 +1,13 @@
 import { Coordinate } from './shape/Coordinate.js';
 import { CanvasStudio } from './painter/CanvasStudio.js';
 import { InteractiveShape } from './shape/InteractiveShape.js';
-import { Ruler } from './Ruler.js';
-import { PositivePolygonArea } from './PositivePolygonArea.js';
-import { NegativePolygonArea } from './NegativePolygonArea.js';
 import { DataPresenter } from './presenter/DataPresenter.js';
+import { ShapeFactory } from './ShapeFactory.js';
 
 const listOfShapes: InteractiveShape[] = [];
 const canvasStudio: CanvasStudio = CanvasStudio.getInstance();
 const dataPresenter: DataPresenter = DataPresenter.getInstance();
+const shapeFactory: ShapeFactory = new ShapeFactory();
 
 export function canvasLeftClicked(event: MouseEvent, canvasId: string): void {
 	const mousePosition: Coordinate = getMouseCoordinate(event, canvasId);
@@ -29,21 +28,12 @@ export function canvasLeftClicked(event: MouseEvent, canvasId: string): void {
 	updateVisuals(mousePosition);
 }
 
-export function addPositivePolygonArea(): void {
+export function addShape(name: string): void {
 	if (noShapeIsSelected()) {
-		listOfShapes.push(new PositivePolygonArea());
-	}
-}
-
-export function addNegativePolygonArea(): void {
-	if (noShapeIsSelected()) {
-		listOfShapes.push(new NegativePolygonArea());
-	}
-}
-
-export function addRuler(): void {
-	if (noShapeIsSelected()) {
-		listOfShapes.push(new Ruler());
+		const newShape: InteractiveShape = shapeFactory.getShape(name);
+		if (newShape !== null) {
+			listOfShapes.push(newShape);
+		}
 	}
 }
 
