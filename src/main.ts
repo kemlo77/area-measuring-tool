@@ -58,13 +58,35 @@ function removeShapeFromList(shape: InteractiveShape): void {
 
 export function canvasRightClicked(event: MouseEvent, canvasId: string): void {
 	event.preventDefault();
+	shapeReactsToMouseEvent(event, canvasId,
+		(shape: InteractiveShape, mousePosition: Coordinate) => shape.handleRightClick(mousePosition));
+}
+
+export function canvasMouseDown(event: MouseEvent, canvasId: string): void {
+	if (isLeftMouseButton(event)) {
+		shapeReactsToMouseEvent(event, canvasId,
+			(shape: InteractiveShape, mousePosition: Coordinate) => shape.handleLeftMouseDown(mousePosition));
+	}
+}
+
+export function canvasMouseUp(event: MouseEvent, canvasId: string): void {
+	if (isLeftMouseButton(event)) {
+		shapeReactsToMouseEvent(event, canvasId,
+			(shape: InteractiveShape, mousePosition: Coordinate) => shape.handleLeftMouseUp(mousePosition));
+	}
+}
+
+function shapeReactsToMouseEvent(
+	event: MouseEvent,
+	canvasId: string,
+	action: (shape: InteractiveShape, mousePosition: Coordinate) => void
+): void {
 	const mousePosition: Coordinate = getMouseCoordinate(event, canvasId);
 	const selectedShape: InteractiveShape = getSelectedShape();
 	if (selectedShape !== null) {
-		selectedShape.handleRightClick(mousePosition);
+		action(selectedShape, mousePosition);
 		updateVisuals(mousePosition);
 	}
-
 }
 
 export function canvasMouseMovement(event: MouseEvent, canvasId: string): void {
@@ -72,28 +94,8 @@ export function canvasMouseMovement(event: MouseEvent, canvasId: string): void {
 	paintSelectedMovement(coordinate);
 }
 
-export function canvasMouseDown(event: MouseEvent, canvasId: string): void {
-	if (event.button === 0) { // left mouse button
-		const mousePosition: Coordinate = getMouseCoordinate(event, canvasId);
-		const selectedShape: InteractiveShape = getSelectedShape();
-		if (selectedShape !== null) {
-			selectedShape.handleLeftMouseDown(mousePosition);
-			updateVisuals(mousePosition);
-		}
-	}
-
-}
-
-export function canvasMouseUp(event: MouseEvent, canvasId: string): void {
-	if (event.button === 0) { // left mouse button
-		const mousePosition: Coordinate = getMouseCoordinate(event, canvasId);
-		const selectedShape: InteractiveShape = getSelectedShape();
-		if (selectedShape !== null) {
-			selectedShape.handleLeftMouseUp(mousePosition);
-			updateVisuals(mousePosition);
-		}
-	}
-
+function isLeftMouseButton(event: MouseEvent): boolean {
+	return event.button === 0;
 }
 
 function getMouseCoordinate(event: MouseEvent, elementId: string): Coordinate {
