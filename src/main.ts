@@ -59,28 +59,26 @@ function removeShapeFromList(shape: InteractiveShape): void {
 export function canvasRightClicked(event: MouseEvent, canvasId: string): void {
 	event.preventDefault();
 	shapeReactsToMouseEvent(event, canvasId,
-		(shape: InteractiveShape, mousePosition: Coordinate) => shape.handleRightClick(mousePosition));
+		(shape, mousePosition) => shape.handleRightClick(mousePosition));
 }
 
 export function canvasMouseDown(event: MouseEvent, canvasId: string): void {
 	if (isLeftMouseButton(event)) {
 		shapeReactsToMouseEvent(event, canvasId,
-			(shape: InteractiveShape, mousePosition: Coordinate) => shape.handleLeftMouseDown(mousePosition));
+			(shape, mousePosition) => shape.handleLeftMouseDown(mousePosition));
 	}
 }
 
 export function canvasMouseUp(event: MouseEvent, canvasId: string): void {
 	if (isLeftMouseButton(event)) {
 		shapeReactsToMouseEvent(event, canvasId,
-			(shape: InteractiveShape, mousePosition: Coordinate) => shape.handleLeftMouseUp(mousePosition));
+			(shape, mousePosition) => shape.handleLeftMouseUp(mousePosition));
 	}
 }
 
-function shapeReactsToMouseEvent(
-	event: MouseEvent,
-	canvasId: string,
-	action: (shape: InteractiveShape, mousePosition: Coordinate) => void
-): void {
+type ShapeAction = (shape: InteractiveShape, mousePosition: Coordinate) => void;
+
+function shapeReactsToMouseEvent(event: MouseEvent, canvasId: string, action: ShapeAction): void {
 	const mousePosition: Coordinate = getMouseCoordinate(event, canvasId);
 	const selectedShape: InteractiveShape = getSelectedShape();
 	if (selectedShape !== null) {
@@ -88,7 +86,7 @@ function shapeReactsToMouseEvent(
 		updateVisuals(mousePosition);
 	}
 }
-
+ 
 export function canvasMouseMovement(event: MouseEvent, canvasId: string): void {
 	const coordinate: Coordinate = getMouseCoordinate(event, canvasId);
 	paintSelectedMovement(coordinate);

@@ -22,21 +22,21 @@
 
 	<script type="module">import { addPolygon, addLine, removeSelectedShape, canvasMouseMovement, canvasLeftClicked, canvasRightClicked, canvasMouseDown, canvasMouseUp } from "./built/old_main.js";
 		document.getElementById("foreground")
-			.addEventListener("click", function () { canvasLeftClicked(event, this.id); });
+			.addEventListener("click", (event) => { canvasLeftClicked(event, event.target.id); });
 		document.getElementById("foreground")
-			.addEventListener("mousemove", function () { canvasMouseMovement(event, this.id); });
+			.addEventListener("mousemove", (event) => { canvasMouseMovement(event, event.target.id); });
 		document.getElementById("foreground")
-			.addEventListener("mousedown", function () { canvasMouseDown(event, this.id); });
+			.addEventListener("mousedown", (event) => { canvasMouseDown(event, event.target.id); });
 		document.getElementById("foreground")
-			.addEventListener("mouseup", function () { canvasMouseUp(event, this.id); });
+			.addEventListener("mouseup", (event) => { canvasMouseUp(event, event.target.id); });
 		document.getElementById("foreground")
-			.addEventListener("contextmenu", function () { canvasRightClicked(event, this.id); });
+			.addEventListener("contextmenu", (event) => { canvasRightClicked(event, event.target.id); });
 		document.getElementById("addRegularPolygon")
-			.addEventListener("click", function () { addPolygon(); });
+			.addEventListener("click", () => { addPolygon(); });
 		document.getElementById("addLine")
-			.addEventListener("click", function () { addLine(); });
+			.addEventListener("click", () => { addLine(); });
 		document.getElementById("removeSelectedShape")
-			.addEventListener("click", function () { removeSelectedShape(); });
+			.addEventListener("click", () => { removeSelectedShape(); });
 	</script>
 
 </head>
