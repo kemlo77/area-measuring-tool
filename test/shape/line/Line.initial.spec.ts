@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import { Line } from '../../../built/shape/line/Line.js';
+import { Segment } from '../../../built/shape/Segment.js';
 
 
 describe('Line - initial', () => {
@@ -33,12 +34,14 @@ describe('Line - initial', () => {
 
     it('calculateStillSegment()', () => {
         const line: Line = new Line();
-        expect(line.getStillSegment()).to.equal(null);
+        const segments: Segment[] = line.getStillSegments();
+        expect(segments.length).to.equal(0);
     });
 
     it('calculateMovingSegment()', () => {
         const line: Line = new Line();
-        expect(line.getMovingSegment({ x: 8, y: 9 })).to.equal(null);
+        const segments: Segment[] = line.getMovingSegments({ x: 8, y: 9 });
+        expect(segments.length).to.equal(0);
     });
 
     it('handleLeftMouseDown()', () => {

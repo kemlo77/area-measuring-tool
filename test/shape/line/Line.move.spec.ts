@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import { Line } from '../../../built/shape/line/Line.js';
+import { Segment } from '../../../built/shape/Segment.js';
 
 
 function getLineInStateMoving(): Line {
@@ -33,12 +34,14 @@ describe('Line - move', () => {
 
     it('calculateStillSegment()', () => {
         const line: Line = getLineInStateMoving();
-        expect(line.getStillSegment()).to.equal(null);
+        const segments: Segment[] = line.getStillSegments();
+        expect(segments.length).to.equal(0);
     });
 
     it('calculateMovingSegment()', () => {
         const line: Line = getLineInStateMoving();
-        expect(line.getMovingSegment({ x: 100, y: 200 }).length).to.equal(80);
+        const segments: Segment[] = line.getMovingSegments({ x: 100, y: 200 });
+        expect(segments[0].length).to.equal(80);
     });
 
     it('handleLeftMouseDown() - succesful move', () => {

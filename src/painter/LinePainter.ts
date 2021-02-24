@@ -21,23 +21,23 @@ export class LinePainter extends AbstractSegmentPainter {
 
     drawStill(motif: any): void {
         const line: Line = motif as Line;
-        const segment: Segment = line.getStillSegment();
-        if (segment !== null) {
-            this.drawStillSegments([segment], 3, this._color);
-            if(line.isComplete) {
-                this.drawHollowDot(segment.p1, this._color, this.stillCanvasCtx);
-                this.drawHollowDot(segment.p2, this._color, this.stillCanvasCtx);
+        const segment: Segment[] = line.getStillSegments();
+        if (segment.length > 0) {
+            this.drawStillSegments(segment, 3, this._color);
+            if (line.isComplete) {
+                this.drawHollowDot(segment[0].p1, this._color, this.stillCanvasCtx);
+                this.drawHollowDot(segment[0].p2, this._color, this.stillCanvasCtx);
             }
         }
     }
 
     drawMovement(motif: any, mousePosition: Coordinate): void {
         const line: Line = motif as Line;
-        const segment: Segment = line.getMovingSegment(mousePosition);
-        if (segment !== null) {
-            if(line.isMoving){
+        const segment: Segment[] = line.getMovingSegments(mousePosition);
+        if (segment.length > 0) {
+            if (line.isMoving) {
                 this.clearUsedPartOfCanvas();
-                this.drawMovingSegments([segment], 3, this._color);
+                this.drawMovingSegments(segment, 3, this._color);
                 this.drawThePointNotMoving(line, this.movementCanvasCtx);
             }
 

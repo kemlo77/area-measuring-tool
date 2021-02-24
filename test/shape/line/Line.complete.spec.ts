@@ -42,17 +42,18 @@ describe('Line - complete', () => {
 
     it('calculateStillSegment()', () => {
         const line: Line = getLineInStateComplete();
-        expect(line.getStillSegment().length).to.equal(50);
-        const segment: Segment = line.getStillSegment();
-        expect(segment.p1.x).to.equal(10);
-        expect(segment.p1.y).to.equal(20);
-        expect(segment.p2.x).to.equal(40);
-        expect(segment.p2.y).to.equal(60);
+        const segments: Segment[] = line.getStillSegments();
+        expect(segments[0].length).to.equal(50);        
+        expect(segments[0].p1.x).to.equal(10);
+        expect(segments[0].p1.y).to.equal(20);
+        expect(segments[0].p2.x).to.equal(40);
+        expect(segments[0].p2.y).to.equal(60);
     });
 
     it('calculateMovingSegment()', () => {
         const line: Line = getLineInStateComplete();
-        expect(line.getMovingSegment({ x: 100, y: 200 })).to.equal(null);
+        const segments: Segment[] = line.getMovingSegments({ x: 100, y: 200 });
+        expect(segments.length).to.equal(0);
     });
 
     it('handleLeftMouseDown() - select p1 and begin move', () => {

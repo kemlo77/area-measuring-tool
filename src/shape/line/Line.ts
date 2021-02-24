@@ -1,5 +1,6 @@
 import { Coordinate } from '../Coordinate.js';
 import { InteractiveShape } from '../InteractiveShape.js';
+import { PaintableSegments } from '../PaintableSegments.js';
 import { Point } from '../Point.js';
 import { Segment } from '../Segment.js';
 import { CompleteState } from './CompleteState.js';
@@ -8,7 +9,7 @@ import { LineState } from './LineState.js';
 import { MoveState } from './MoveState.js';
 import { UnselectedState } from './UnselectedState.js';
 
-export class Line implements InteractiveShape {
+export class Line implements InteractiveShape, PaintableSegments {
 
     private _p1: Point = null;
     private _p2: Point = null;
@@ -23,12 +24,12 @@ export class Line implements InteractiveShape {
         } else if (!this.isNullOrUndefined(coordinate1) && !this.isNullOrUndefined(coordinate2)) {
             const point1: Point = new Point(coordinate1);
             const point2: Point = new Point(coordinate2);
-            if(point1.distanceToOtherPoint(point2) > Line.minimumDistanceBetweenPoints) {
+            if (point1.distanceToOtherPoint(point2) > Line.minimumDistanceBetweenPoints) {
                 this._p1 = point1;
                 this._p2 = point2;
                 this.currentState = new CompleteState(this);
             } else {
-                throw new Error('Invalid parameters - coordinates too close');    
+                throw new Error('Invalid parameters - coordinates too close');
             }
         } else {
             throw new Error('Invalid parameters');
@@ -45,7 +46,7 @@ export class Line implements InteractiveShape {
     }
 
     get length(): number {
-        if(this.currentState instanceof InitialState || this.currentState instanceof MoveState) {
+        if (this.currentState instanceof InitialState || this.currentState instanceof MoveState) {
             return 0;
         } else {
             return this.segment.length;
@@ -92,12 +93,22 @@ export class Line implements InteractiveShape {
         return this.currentState.calculateSegment();
     }
 
-    getStillSegment(): Segment {
-        return this.currentState.calculateStillSegment();
+    getStillSegments(): Segment[] {
+        const segment: Segment = this.currentState.calculateStillSegment();
+        if (segment === null || segment === undefined) {
+            return [];
+        } else {
+            return [segment];
+        }
     }
 
-    getMovingSegment(mousePosition: Coordinate): Segment {
-        return this.currentState.calculateMovingSegment(mousePosition);
+    getMovingSegments(mousePosition: Coordinate): Segment[] {
+        const segment: Segment = this.currentState.calculateMovingSegment(mousePosition);
+        if (segment === null || segment === undefined) {
+            return [];
+        } else {
+            return [segment];
+        }
     }
 
 

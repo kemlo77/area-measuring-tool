@@ -6,8 +6,9 @@ import { Coordinate } from '../Coordinate.js';
 import { UnselectedState } from './UnselectedState.js';
 import { MoveState } from './MoveState.js';
 import { InteractiveShape } from '../InteractiveShape.js';
+import { PaintableSegments } from '../PaintableSegments.js';
 
-export class Polygon implements InteractiveShape {
+export class Polygon implements InteractiveShape, PaintableSegments {
     private _vertices: Point[];
     private _movePoint: Point;
     private _mousePositionAtMoveStart: Point;
