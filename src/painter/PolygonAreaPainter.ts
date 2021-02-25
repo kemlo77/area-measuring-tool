@@ -8,9 +8,6 @@ export class PolygonAreaPainter extends AbstractSegmentPainter {
 
     private static instance: PolygonAreaPainter;
 
-    private constructor() {
-        super();
-    }
 
     public static getInstance(): PolygonAreaPainter {
         if (!PolygonAreaPainter.instance) {

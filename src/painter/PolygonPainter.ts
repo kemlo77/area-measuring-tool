@@ -6,13 +6,8 @@ import { AbstractSegmentPainter } from './AbstractSegmentPainter.js';
 export class PolygonPainter extends AbstractSegmentPainter {
 
     private _color: string = '0,0,0';
-
-
     private static instance: PolygonPainter;
-
-    private constructor() {
-        super();
-    }
+    
 
     public static getInstance(): PolygonPainter {
         if (!PolygonPainter.instance) {

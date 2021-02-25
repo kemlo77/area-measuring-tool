@@ -10,9 +10,6 @@ export class RulerPainter extends AbstractSegmentPainter {
     private static instance: RulerPainter;
     private lineWidth: number = 3;
 
-    private constructor() {
-        super();
-    }
 
     public static getInstance(): RulerPainter {
         if (!RulerPainter.instance) {

@@ -8,9 +8,6 @@ export class LinePainter extends AbstractSegmentPainter {
     private static instance: LinePainter;
     private _color: string = '0,0,0';
 
-    private constructor() {
-        super();
-    }
 
     public static getInstance(): LinePainter {
         if (!LinePainter.instance) {
