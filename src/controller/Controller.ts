@@ -1,8 +1,8 @@
 import { Model } from '../model/Model.js';
-import { CanvasStudio } from '../painter/CanvasStudio.js';
-import { DataPresenter } from '../presenter/DataPresenter.js';
-import { Coordinate } from '../shape/Coordinate.js';
-import { InteractiveShape } from '../shape/InteractiveShape.js';
+import { DataPresenter } from '../view/presenter/DataPresenter.js';
+import { Coordinate } from '../model/shape/Coordinate.js';
+import { InteractiveShape } from '../model/shape/InteractiveShape.js';
+import { CanvasStudio } from '../view/canvas/CanvasStudio.js';
 
 
 export class Controller {

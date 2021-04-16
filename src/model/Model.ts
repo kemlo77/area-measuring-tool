@@ -1,6 +1,6 @@
-import { Coordinate } from '../shape/Coordinate.js';
-import { InteractiveShape } from '../shape/InteractiveShape.js';
-import { ShapeFactory } from '../ShapeFactory.js';
+import { Coordinate } from './shape/Coordinate.js';
+import { InteractiveShape } from './shape/InteractiveShape.js';
+import { ShapeFactory } from './ShapeFactory.js';
 
 //TODO: Borde jag implementera nåt interfejs?
 export class Model {

@@ -1,4 +1,4 @@
-import { Coordinate } from './shape/Coordinate.js';
+import { Coordinate } from './model/shape/Coordinate.js';
 import { Controller } from './controller/Controller.js';
 
 

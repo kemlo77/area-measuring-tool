@@ -1,8 +1,8 @@
-import { Coordinate } from './shape/Coordinate.js';
-import { CanvasStudio } from './painter/CanvasStudio.js';
-import { Polygon } from './shape/polygon/Polygon.js';
-import { InteractiveShape } from './shape/InteractiveShape.js';
-import { Line } from './shape/line/Line.js';
+import { Coordinate } from './model/shape/Coordinate.js';
+import { CanvasStudio } from './view/canvas/CanvasStudio.js';
+import { Polygon } from './model/shape/polygon/Polygon.js';
+import { InteractiveShape } from './model/shape/InteractiveShape.js';
+import { Line } from './model/shape/line/Line.js';
 
 const listOfShapes: InteractiveShape[] = [];
 const canvasStudio: CanvasStudio = CanvasStudio.getInstance();
