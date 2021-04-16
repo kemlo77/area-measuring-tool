@@ -1,7 +1,7 @@
 import {
     addShape, removeSelectedShape, canvasMouseMovement, canvasLeftClicked,
     canvasRightClicked, canvasMouseDown, canvasMouseUp
-} from './built/main.js';
+} from './built/router.js';
 import {
     dropHandler, dragOverHandler, adjustCanvas, delayedAdjustCanvas, adjustOpacity
 } from './built/imageDrop.js';
