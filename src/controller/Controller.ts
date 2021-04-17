@@ -2,20 +2,22 @@ import { Model } from '../model/Model.js';
 import { DataView } from '../view/dataview/DataView.js';
 import { Coordinate } from '../model/shape/Coordinate.js';
 import { InteractiveShape } from '../model/shape/InteractiveShape.js';
-import { CanvasStudio } from '../view/canvas/CanvasStudio.js';
+import { CanvasView } from '../view/canvasview/CanvasView.js';
 
+type ModelHandleMouseEvent = (model: Model, coordinate: Coordinate) => InteractiveShape;
 
 export class Controller {
 
     private model: Model;
-    private canvasStudio: CanvasStudio;
-    private dataPresenter: DataView;
+    private canvasView: CanvasView;
+    private dataView: DataView;
 
     constructor() {
         this.model = new Model();
-        this.canvasStudio = CanvasStudio.getInstance();
-        this.dataPresenter = DataView.getInstance();
-        this.dataPresenter.setModel(this.model);
+        this.canvasView = CanvasView.getInstance();
+        this.canvasView.setModel(this.model);
+        this.dataView = DataView.getInstance();
+        this.dataView.setModel(this.model);
     }
 
     addShape(name: string): void {
@@ -24,7 +26,7 @@ export class Controller {
 
     removeSelectedShape(): void {
         this.model.removeSelectedShape();
-        this.canvasStudio.clearTheMovementCanvas(); // TODO: Feature envy?
+        this.canvasView.clearTheMovementCanvas(); // TODO: Feature envy?
         const dummyCoordinate: Coordinate = { x: 0, y: 0 };
         this.updateVisuals(dummyCoordinate);
     }
@@ -36,47 +38,38 @@ export class Controller {
     }
 
     canvasLeftMouseDown(coordinate: Coordinate): void {
-        const updatedShape: InteractiveShape = this.model.anySelectedShapeReactToLeftMouseDown(coordinate);
-        if (updatedShape !== null) {
-            this.updateVisuals(coordinate);
-        }
+        const action: ModelHandleMouseEvent =
+            (model, coordinate) => model.anySelectedShapeReactToLeftMouseDown(coordinate);
+        this.modelHandleMouseEventAndViewUpdated(coordinate, action);
     }
 
     canvasLeftMouseUp(coordinate: Coordinate): void {
-        const updatedShape: InteractiveShape = this.model.anySelectedShapeReactToLeftMouseUp(coordinate);
-        if (updatedShape !== null) {
-            this.updateVisuals(coordinate);
-        }
+        const action: ModelHandleMouseEvent =
+            (model, coordinate) => model.anySelectedShapeReactToLeftMouseUp(coordinate);
+        this.modelHandleMouseEventAndViewUpdated(coordinate, action);
     }
 
     canvasRightClicked(coordinate: Coordinate): void {
-        const updatedShape: InteractiveShape = this.model.anySelectedShapeReactToRightClick(coordinate);
+        const action: ModelHandleMouseEvent =
+            (model, coordinate) => model.anySelectedShapeReactToRightClick(coordinate);
+        this.modelHandleMouseEventAndViewUpdated(coordinate, action);
+    }
+
+    private modelHandleMouseEventAndViewUpdated(coordinate: Coordinate, action: ModelHandleMouseEvent): void {
+        const updatedShape: InteractiveShape = action(this.model, coordinate);
         if (updatedShape !== null) {
             this.updateVisuals(coordinate);
         }
     }
 
-    canvasMouseMovement(coordinate: Coordinate): void {
-        this.paintSelectedMovement(coordinate);
+    canvasMouseMovement(mousePosition: Coordinate): void {
+        this.canvasView.paintMovement(mousePosition);
     }
-
 
     private updateVisuals(mousePosition: Coordinate): void {
-        this.paintAllStill();
-        this.paintSelectedMovement(mousePosition);
-        this.dataPresenter.updatePresentation();
+        this.canvasView.paintStill();
+        this.canvasView.paintMovement(mousePosition);
+        this.dataView.updatePresentation();
     }
-
-    private paintAllStill(): void {
-        this.canvasStudio.paintStill(this.model.listOfShapes);
-    }
-
-    private paintSelectedMovement(mousePosition: Coordinate): void {
-        const selectedShape: InteractiveShape = this.model.getSelectedShape();
-        if (selectedShape !== null) {
-            this.canvasStudio.paintMovement(selectedShape, mousePosition);
-        }
-    }
-
 
 }

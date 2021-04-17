@@ -8,35 +8,45 @@ import { Ruler } from '../../model/Ruler.js';
 import { Coordinate } from '../../model/shape/Coordinate.js';
 import { Line } from '../../model/shape/line/Line.js';
 import { Polygon } from '../../model/shape/polygon/Polygon.js';
+import { Model } from '../../model/Model.js';
+import { InteractiveShape } from '../../model/shape/InteractiveShape.js';
 
-export class CanvasStudio {
+export class CanvasView {
 
-    private static instance: CanvasStudio;
+    private static instance: CanvasView;
     private strategy: PaintingStrategy = PolygonPainter.getInstance();
+    private model: Model;
 
     private constructor() {
         //
     }
 
-    public static getInstance(): CanvasStudio {
-        if (!CanvasStudio.instance) {
-            CanvasStudio.instance = new CanvasStudio();
-        }
-        return CanvasStudio.instance;
+    setModel(model: Model): void {
+        this.model = model;
     }
 
-    public paintStill(motifs: any[]): void {
+    public static getInstance(): CanvasView {
+        if (!CanvasView.instance) {
+            CanvasView.instance = new CanvasView();
+        }
+        return CanvasView.instance;
+    }
+
+    public paintStill(): void {
         this.strategy.clearTheStillCanvas();
         this.strategy.clearTheMovementCanvas();
-        for (const motif of motifs) {
-            this.setStrategyGivenThisObject(motif);
-            this.strategy.drawStill(motif);
+        for (const shape of this.model.listOfShapes) {
+            this.setStrategyGivenThisObject(shape);
+            this.strategy.drawStill(shape);
         }
     }
 
-    public paintMovement(motif: any, mousePosition: Coordinate): void {
-        this.setStrategyGivenThisObject(motif);
-        this.strategy.drawMovement(motif, mousePosition);
+    public paintMovement(mousePosition: Coordinate): void {
+        const selectedShape: InteractiveShape = this.model.getSelectedShape();
+        if (selectedShape !== null) {
+            this.setStrategyGivenThisObject(selectedShape);
+            this.strategy.drawMovement(selectedShape, mousePosition);
+        }
     }
 
     public clearTheMovementCanvas(): void {
