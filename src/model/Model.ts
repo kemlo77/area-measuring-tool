@@ -1,3 +1,5 @@
+import { AbstractPolygonArea } from './AbstractPolygonArea.js';
+import { Ruler } from './Ruler.js';
 import { Coordinate } from './shape/Coordinate.js';
 import { InteractiveShape } from './shape/InteractiveShape.js';
 import { ShapeFactory } from './ShapeFactory.js';
@@ -87,6 +89,18 @@ export class Model {
             }
         }
         return null;
+    }
+
+    onlyAreaShapes(): AbstractPolygonArea[] {
+        return this.shapes
+            .filter((shape) => shape instanceof AbstractPolygonArea)
+            .map((shape) => shape as AbstractPolygonArea);
+    }
+
+    onlyLengthShapes(): Ruler[] {
+        return this.shapes
+            .filter((it) => it instanceof Ruler)
+            .map((it) => it as Ruler);
     }
 
 }

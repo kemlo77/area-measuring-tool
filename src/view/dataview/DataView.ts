@@ -1,31 +1,36 @@
 import { AbstractPolygonArea } from '../../model/AbstractPolygonArea.js';
+import { Model } from '../../model/Model.js';
 import { Ruler } from '../../model/Ruler.js';
-import { InteractiveShape } from '../../model/shape/InteractiveShape.js';
 
-export class DataPresenter {
+export class DataView {
 
     private dataDiv: HTMLElement = document.getElementById('data') as HTMLElement;
-    private static instance: DataPresenter;
+    private static instance: DataView;
     private scaleFactor = 0.1;
     private areaInputs: HTMLInputElement[] = [];
     private lengthInputs: HTMLInputElement[] = [];
+    private model: Model;
 
     private constructor() {
         //
     }
 
-    public static getInstance(): DataPresenter {
-        if (!DataPresenter.instance) {
-            DataPresenter.instance = new DataPresenter();
+    public static getInstance(): DataView {
+        if (!DataView.instance) {
+            DataView.instance = new DataView();
         }
-        return DataPresenter.instance;
+        return DataView.instance;
     }
 
-    updatePresentation(shapes: InteractiveShape[]): void {
+    setModel(model: Model): void {
+        this.model = model;
+    }
+
+    updatePresentation(): void {
         this.removeAllChildNodes(this.dataDiv);
-        this.addAreaTotalParagraph(shapes);
-        this.addAreaDivs(shapes);
-        this.addRulerDivs(shapes);
+        this.addAreaTotalParagraph();
+        this.addAreaShapeDivs();
+        this.addLenghtShapeDivs();
     }
 
 
@@ -37,8 +42,8 @@ export class DataPresenter {
         this.lengthInputs = [];
     }
 
-    private addAreaTotalParagraph(shapes: InteractiveShape[]): void {
-        const areaTotal: number = this.onlyPolygonAreas(shapes)
+    private addAreaTotalParagraph(): void {
+        const areaTotal: number = this.model.onlyAreaShapes()
             .reduce((sum, it) => sum + it.area, 0);
         const scaledAndRoundedArea: string =
             this.convertToRoundedNumberString(areaTotal * this.scaleFactor * this.scaleFactor);
@@ -46,30 +51,18 @@ export class DataPresenter {
         this.dataDiv.appendChild(this.generateParagraph('Scale factor: ' + this.scaleFactor));
     }
 
-    private addAreaDivs(shapes: InteractiveShape[]): void {
-        this.onlyPolygonAreas(shapes)
-            .forEach((polygonArea) => {
-                this.dataDiv.appendChild(this.generateAreaDiv(polygonArea));
+    private addAreaShapeDivs(): void {
+        this.model.onlyAreaShapes()
+            .forEach((areaShape) => {
+                this.dataDiv.appendChild(this.generateAreaShapeDiv(areaShape));
             });
     }
 
-    private addRulerDivs(shapes: InteractiveShape[]): void {
-        this.onlyRulers(shapes)
-            .forEach((ruler) => {
-                this.dataDiv.appendChild(this.generateRulerDiv(ruler));
+    private addLenghtShapeDivs(): void {
+        this.model.onlyLengthShapes()
+            .forEach((lengthShape) => {
+                this.dataDiv.appendChild(this.generateLengthShapeDiv(lengthShape));
             });
-    }
-
-    private onlyPolygonAreas(shapes: InteractiveShape[]): AbstractPolygonArea[] {
-        return shapes
-            .filter((shape) => shape instanceof AbstractPolygonArea)
-            .map((shape) => shape as AbstractPolygonArea);
-    }
-
-    private onlyRulers(shapes: InteractiveShape[]): Ruler[] {
-        return shapes
-            .filter((it) => it instanceof Ruler)
-            .map((it) => it as Ruler);
     }
 
     private generateParagraph(paragraphtext: string): HTMLParagraphElement {
@@ -78,54 +71,54 @@ export class DataPresenter {
         return p;
     }
 
-    private generateRulerDiv(ruler: Ruler): HTMLDivElement {
+    private generateLengthShapeDiv(lengthShape: Ruler): HTMLDivElement {
         const div: HTMLDivElement = document.createElement('div');
-        if (ruler.isSelected) {
+        if (lengthShape.isSelected) {
             div.classList.add('selected');
         }
 
-        const nameInput: HTMLInputElement = this.generateTextInput(ruler.name);
-        nameInput.addEventListener('input', (event) => { ruler.name = (<HTMLInputElement>event.target).value; });
+        const nameInput: HTMLInputElement = this.generateTextInput(lengthShape.name);
+        nameInput.addEventListener('input', (event) => { lengthShape.name = (<HTMLInputElement>event.target).value; });
         div.appendChild(nameInput);
 
-        const rulerLength: string = this.convertToRoundedNumberString(ruler.length * this.scaleFactor);
-        const lengthInput: HTMLInputElement = this.generateNumberInput(rulerLength);
-        lengthInput.setAttribute('data-pixellength', ruler.length.toString());
+        const shapeLength: string = this.convertToRoundedNumberString(lengthShape.length * this.scaleFactor);
+        const lengthInput: HTMLInputElement = this.generateNumberInput(shapeLength);
+        lengthInput.setAttribute('data-pixellength', lengthShape.length.toString());
         lengthInput.addEventListener('input', (event) => {
-            this.lengthInputChanged((<HTMLInputElement>event.target), ruler.length);
+            this.lengthInputChanged((<HTMLInputElement>event.target), lengthShape.length);
         });
         div.appendChild(lengthInput);
         this.lengthInputs.push(lengthInput);
         return div;
     }
 
-    private generateAreaDiv(polygonArea: AbstractPolygonArea): HTMLDivElement {
+    private generateAreaShapeDiv(areaShape: AbstractPolygonArea): HTMLDivElement {
         const div: HTMLDivElement = document.createElement('div');
-        if (polygonArea.isSelected) {
+        if (areaShape.isSelected) {
             div.classList.add('selected');
         }
 
-        const nameInput: HTMLInputElement = this.generateTextInput(polygonArea.name);
-        nameInput.addEventListener('input', (event) => { polygonArea.name = (<HTMLInputElement>event.target).value; });
+        const nameInput: HTMLInputElement = this.generateTextInput(areaShape.name);
+        nameInput.addEventListener('input', (event) => { areaShape.name = (<HTMLInputElement>event.target).value; });
         div.appendChild(nameInput);
 
-        const area: string = this.convertToRoundedNumberString(polygonArea.area * this.scaleFactor * this.scaleFactor);
+        const area: string = this.convertToRoundedNumberString(areaShape.area * this.scaleFactor * this.scaleFactor);
         const areaInput: HTMLInputElement = this.generateNumberInput(area);
-        areaInput.setAttribute('data-pixelarea', polygonArea.area.toString());
+        areaInput.setAttribute('data-pixelarea', areaShape.area.toString());
         areaInput.classList.add('area');
         areaInput.addEventListener('input', (event) => {
-            this.areaInputChanged((<HTMLInputElement>event.target), polygonArea.area);
+            this.areaInputChanged((<HTMLInputElement>event.target), areaShape.area);
         });
         div.appendChild(areaInput);
         this.areaInputs.push(areaInput);
 
         const perimeterLength: string =
-            this.convertToRoundedNumberString(polygonArea.perimeterLength * this.scaleFactor);
+            this.convertToRoundedNumberString(areaShape.perimeterLength * this.scaleFactor);
         const perimeterInput: HTMLInputElement = this.generateNumberInput(perimeterLength);
-        perimeterInput.setAttribute('data-pixellength', polygonArea.perimeterLength.toString());
+        perimeterInput.setAttribute('data-pixellength', areaShape.perimeterLength.toString());
         perimeterInput.classList.add('length');
         perimeterInput.addEventListener('input', (event) => {
-            this.lengthInputChanged((<HTMLInputElement>event.target), polygonArea.perimeterLength);
+            this.lengthInputChanged((<HTMLInputElement>event.target), areaShape.perimeterLength);
         });
         div.appendChild(perimeterInput);
         this.lengthInputs.push(perimeterInput);

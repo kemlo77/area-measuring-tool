@@ -1,5 +1,5 @@
 import { Model } from '../model/Model.js';
-import { DataPresenter } from '../view/presenter/DataPresenter.js';
+import { DataView } from '../view/dataview/DataView.js';
 import { Coordinate } from '../model/shape/Coordinate.js';
 import { InteractiveShape } from '../model/shape/InteractiveShape.js';
 import { CanvasStudio } from '../view/canvas/CanvasStudio.js';
@@ -7,9 +7,16 @@ import { CanvasStudio } from '../view/canvas/CanvasStudio.js';
 
 export class Controller {
 
-    private model: Model = new Model();
-    private canvasStudio: CanvasStudio = CanvasStudio.getInstance();
-    private dataPresenter: DataPresenter = DataPresenter.getInstance();
+    private model: Model;
+    private canvasStudio: CanvasStudio;
+    private dataPresenter: DataView;
+
+    constructor() {
+        this.model = new Model();
+        this.canvasStudio = CanvasStudio.getInstance();
+        this.dataPresenter = DataView.getInstance();
+        this.dataPresenter.setModel(this.model);
+    }
 
     addShape(name: string): void {
         this.model.addShape(name);
@@ -24,10 +31,7 @@ export class Controller {
 
     canvasLeftClicked(coordinate: Coordinate): void {
         this.model.reactToLeftClick(coordinate);
-        //TODO: här borde jag kanske returnera en updatedShape?
-        // men om det var en shape redan selected, som blir unselected av att man klickar utanför
-        // Då vill man ju ändå att grafiken ska uppdateras.
-
+        // Always updating visuals since it is not known if a shape was selected/deselected
         this.updateVisuals(coordinate);
     }
 
@@ -60,7 +64,7 @@ export class Controller {
     private updateVisuals(mousePosition: Coordinate): void {
         this.paintAllStill();
         this.paintSelectedMovement(mousePosition);
-        this.dataPresenter.updatePresentation(this.model.listOfShapes);
+        this.dataPresenter.updatePresentation();
     }
 
     private paintAllStill(): void {
