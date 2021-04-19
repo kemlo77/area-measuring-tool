@@ -1,15 +1,19 @@
 
 import { Coordinate } from '../../model/shape/Coordinate.js';
 import { Segment } from '../../model/shape/Segment.js';
-import { AbstractPainter } from './AbstractPainter.js';
+import { CanvasPainter } from './CanvasPainter.js';
+import { PaintingStrategy } from './PaintingStrategy.js';
 
 
-export abstract class AbstractSegmentPainter extends AbstractPainter {
+export abstract class AbstractSegmentPainter extends CanvasPainter implements PaintingStrategy{
 
     private oldXMin: number = 0;
     private oldXMax: number = 1;
     private oldYMin: number = 0;
     private oldYMax: number = 1;
+
+    abstract drawStill(motif: any): void;
+    abstract drawMovement(modif: any, mousePosition: Coordinate): void;
 
     drawStillSegments(segments: Segment[], width: number, color: string): void {
         segments.forEach((it) => { this.drawOneSegment(it, width, color, this.stillCanvasCtx); });

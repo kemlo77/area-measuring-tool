@@ -1,10 +1,9 @@
 import { Model } from '../model/Model.js';
-import { DataView } from '../view/dataview/DataView.js';
 import { Coordinate } from '../model/shape/Coordinate.js';
-import { InteractiveShape } from '../model/shape/InteractiveShape.js';
+import { DataView } from '../view/dataview/DataView.js';
 import { CanvasView } from '../view/canvasview/CanvasView.js';
 
-type ModelHandleMouseEvent = (model: Model, coordinate: Coordinate) => InteractiveShape;
+type ModelHandleMouseEvent = (model: Model, coordinate: Coordinate) => boolean;
 
 export class Controller {
 
@@ -26,7 +25,6 @@ export class Controller {
 
     removeSelectedShape(): void {
         this.model.removeSelectedShape();
-        this.canvasView.clearTheMovementCanvas(); // TODO: Feature envy?
         const dummyCoordinate: Coordinate = { x: 0, y: 0 };
         this.updateVisuals(dummyCoordinate);
     }
@@ -56,8 +54,8 @@ export class Controller {
     }
 
     private modelHandleMouseEventAndViewUpdated(coordinate: Coordinate, action: ModelHandleMouseEvent): void {
-        const updatedShape: InteractiveShape = action(this.model, coordinate);
-        if (updatedShape !== null) {
+        const aShapeIsUpdated: boolean = action(this.model, coordinate);
+        if (aShapeIsUpdated) {
             this.updateVisuals(coordinate);
         }
     }

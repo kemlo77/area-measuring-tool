@@ -54,27 +54,28 @@ export class Model {
         }
     }
 
-    anySelectedShapeReactToRightClick(coordinate: Coordinate): InteractiveShape {
+    anySelectedShapeReactToRightClick(coordinate: Coordinate): boolean {
         const action: ShapeAction = (shape, coordinate) => shape.handleRightClick(coordinate);
         return this.anySelectedShapeReactsToMouseEvent(coordinate, action);
     }
 
-    anySelectedShapeReactToLeftMouseDown(coordinate: Coordinate): InteractiveShape {
+    anySelectedShapeReactToLeftMouseDown(coordinate: Coordinate): boolean {
         const action: ShapeAction = (shape, coordinate) => shape.handleLeftMouseDown(coordinate);
         return this.anySelectedShapeReactsToMouseEvent(coordinate, action);
     }
 
-    anySelectedShapeReactToLeftMouseUp(coordinate: Coordinate): InteractiveShape {
+    anySelectedShapeReactToLeftMouseUp(coordinate: Coordinate): boolean {
         const action: ShapeAction = (shape, coordinate) => shape.handleLeftMouseUp(coordinate);
         return this.anySelectedShapeReactsToMouseEvent(coordinate, action);
     }
 
-    private anySelectedShapeReactsToMouseEvent(coordinate: Coordinate, action: ShapeAction): InteractiveShape {
+    private anySelectedShapeReactsToMouseEvent(coordinate: Coordinate, action: ShapeAction): boolean {
         const selectedShape: InteractiveShape = this.getSelectedShape();
         if (selectedShape !== null) {
             action(selectedShape, coordinate);
+            return true;
         }
-        return selectedShape;
+        return false;
     }
 
 

@@ -10,19 +10,17 @@ import { Line } from '../../model/shape/line/Line.js';
 import { Polygon } from '../../model/shape/polygon/Polygon.js';
 import { Model } from '../../model/Model.js';
 import { InteractiveShape } from '../../model/shape/InteractiveShape.js';
+import { CanvasPainter } from './CanvasPainter.js';
 
 export class CanvasView {
 
     private static instance: CanvasView;
     private strategy: PaintingStrategy = PolygonPainter.getInstance();
+    private canvasPainter: CanvasPainter = new CanvasPainter();
     private model: Model;
 
     private constructor() {
         //
-    }
-
-    setModel(model: Model): void {
-        this.model = model;
     }
 
     public static getInstance(): CanvasView {
@@ -30,6 +28,10 @@ export class CanvasView {
             CanvasView.instance = new CanvasView();
         }
         return CanvasView.instance;
+    }
+
+    setModel(model: Model): void {
+        this.model = model;
     }
 
     public paintStill(): void {
@@ -46,6 +48,8 @@ export class CanvasView {
         if (selectedShape !== null) {
             this.setStrategyGivenThisObject(selectedShape);
             this.strategy.drawMovement(selectedShape, mousePosition);
+        } else {
+            this.canvasPainter.clearTheMovementCanvas();
         }
     }
 
