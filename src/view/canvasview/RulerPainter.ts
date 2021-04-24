@@ -55,6 +55,7 @@ export class RulerPainter extends AbstractSegmentPainter {
     }
 
     private jumpToNewPoint(point: Point, direction: Vector, distance: number): Point {
+        //TODO: städa bort den här if:en?
         if (Math.abs(direction.norm - 1) > 0.000001) {
             console.warn('direction given is not a unit vector. Has length: ' + direction.norm);
         }

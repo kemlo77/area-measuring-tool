@@ -1,6 +1,6 @@
 import { Coordinate } from '../../model/shape/Coordinate.js';
 
-export class CanvasPainter {
+export class CanvasAssistant {
     private canvasBackground: HTMLCanvasElement = document.getElementById('background') as HTMLCanvasElement;
     private _stillCanvasCtx: CanvasRenderingContext2D = this.canvasBackground.getContext('2d');
     private canvasForeground: HTMLCanvasElement = document.getElementById('foreground') as HTMLCanvasElement;

@@ -1,11 +1,11 @@
 
 import { Coordinate } from '../../model/shape/Coordinate.js';
 import { Segment } from '../../model/shape/Segment.js';
-import { CanvasPainter } from './CanvasPainter.js';
-import { PaintingStrategy } from './PaintingStrategy.js';
+import { CanvasAssistant } from './CanvasAssistant.js';
+import { Painter } from './Painter.js';
 
 
-export abstract class AbstractSegmentPainter extends CanvasPainter implements PaintingStrategy{
+export abstract class AbstractSegmentPainter extends CanvasAssistant implements Painter{
 
     private oldXMin: number = 0;
     private oldXMax: number = 1;

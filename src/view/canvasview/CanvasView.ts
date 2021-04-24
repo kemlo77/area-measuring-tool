@@ -1,4 +1,4 @@
-import { PaintingStrategy } from './PaintingStrategy.js';
+import { Painter } from './Painter.js';
 import { PolygonPainter } from './PolygonPainter.js';
 import { PolygonAreaPainter } from './PolygonAreaPainter.js';
 import { LinePainter } from './LinePainter.js';
@@ -10,13 +10,13 @@ import { Line } from '../../model/shape/line/Line.js';
 import { Polygon } from '../../model/shape/polygon/Polygon.js';
 import { Model } from '../../model/Model.js';
 import { InteractiveShape } from '../../model/shape/InteractiveShape.js';
-import { CanvasPainter } from './CanvasPainter.js';
+import { CanvasAssistant } from './CanvasAssistant.js';
 
 export class CanvasView {
 
     private static instance: CanvasView;
-    private strategy: PaintingStrategy = PolygonPainter.getInstance();
-    private canvasPainter: CanvasPainter = new CanvasPainter();
+    private painter: Painter = PolygonPainter.getInstance();
+    private canvasAssistant: CanvasAssistant = new CanvasAssistant();
     private model: Model;
 
     private constructor() {
@@ -35,11 +35,13 @@ export class CanvasView {
     }
 
     public paintStill(): void {
-        this.strategy.clearTheStillCanvas();
-        this.strategy.clearTheMovementCanvas();
+        //TODO: för dessa två rader borde man kunna byta painter mot
+        // canvasAssistant. Men då blir det lite grafiska buggar, varför?
+        this.painter.clearTheStillCanvas();
+        this.painter.clearTheMovementCanvas();
         for (const shape of this.model.listOfShapes) {
             this.setStrategyGivenThisObject(shape);
-            this.strategy.drawStill(shape);
+            this.painter.drawStill(shape);
         }
     }
 
@@ -47,14 +49,15 @@ export class CanvasView {
         const selectedShape: InteractiveShape = this.model.getSelectedShape();
         if (selectedShape !== null) {
             this.setStrategyGivenThisObject(selectedShape);
-            this.strategy.drawMovement(selectedShape, mousePosition);
+            this.painter.drawMovement(selectedShape, mousePosition);
         } else {
-            this.canvasPainter.clearTheMovementCanvas();
+            this.canvasAssistant.clearTheMovementCanvas();
         }
     }
 
     public clearTheMovementCanvas(): void {
-        this.strategy.clearTheMovementCanvas();
+        this.canvasAssistant.clearTheMovementCanvas();
+
     }
 
     private setStrategyGivenThisObject(object: any): void {
@@ -71,7 +74,7 @@ export class CanvasView {
         }
     }
 
-    private setStrategy(strategy: PaintingStrategy): void {
-        this.strategy = strategy;
+    private setStrategy(painter: Painter): void {
+        this.painter = painter;
     }
 }
