@@ -29,21 +29,6 @@ export class ClosedState implements PolygonState {
         }
     }
 
-    private candidatePointOnSegment(segment: Segment, pointClicked: Point): Point {
-        const projectionVector: Vector = MathUtil.projectPointOntoSegment(segment, pointClicked);
-        return new Point(pointClicked.x + projectionVector.x, pointClicked.y + projectionVector.y);
-    }
-
-    private notToCloseToNeighborsOnSegment(segment: Segment, candidateVertex: Point): boolean {
-        const distanceToP1: number = candidateVertex.distanceToOtherPoint(segment.p1);
-        const distanceToP2: number = candidateVertex.distanceToOtherPoint(segment.p2);
-        const farEnoughFromP1: boolean = distanceToP1 > Polygon.minimumDistanceBetweenPoints;
-        const farEnoughFromP2: boolean = distanceToP2 > Polygon.minimumDistanceBetweenPoints;
-        return farEnoughFromP1 && farEnoughFromP2;
-    }
-
-
-
     handleRightClick(pointClicked: Point): void {
         const removeCandidateVertex: Point =
             pointClicked.nearestPointWithinDistance(this.polygon.vertices, Polygon.interactDistance);
@@ -87,6 +72,19 @@ export class ClosedState implements PolygonState {
                 this.polygon.setCurrentState(new UnselectedState(this.polygon, this));
             }
         }
+    }
+
+    private candidatePointOnSegment(segment: Segment, pointClicked: Point): Point {
+        const projectionVector: Vector = MathUtil.projectPointOntoSegment(segment, pointClicked);
+        return new Point(pointClicked.x + projectionVector.x, pointClicked.y + projectionVector.y);
+    }
+
+    private notToCloseToNeighborsOnSegment(segment: Segment, candidateVertex: Point): boolean {
+        const distanceToP1: number = candidateVertex.distanceToOtherPoint(segment.p1);
+        const distanceToP2: number = candidateVertex.distanceToOtherPoint(segment.p2);
+        const farEnoughFromP1: boolean = distanceToP1 > Polygon.minimumDistanceBetweenPoints;
+        const farEnoughFromP2: boolean = distanceToP2 > Polygon.minimumDistanceBetweenPoints;
+        return farEnoughFromP1 && farEnoughFromP2;
     }
 
     private beginMovingThisVertex(vertex: Point, pointClicked: Point): void {
