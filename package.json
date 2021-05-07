@@ -8,7 +8,7 @@
         "build": "tsc",
         "test": "mocha --recursive",
         "coverage": "nyc npm run test",
-        "lineTest": "nyc mocha test/**/Line.spec.ts",
+        "SpecificTest": "nyc mocha test/**/MathUtil.spec.ts",
         "sonar": "node sonar-project.js"
     },
     "devDependencies": {

@@ -148,9 +148,8 @@ describe('MathUtil', () => {
         it('projectPointOntoSegment() - succesful projection ' + yValue, () => {
             const segment: Segment = new Segment(new Point(0, 1), new Point(0, 10));
             const point: Point = new Point(1, yValue);
-            expect(MathUtil.projectPointOntoSegment(segment, point).norm).to.equal(1);
-            expect(MathUtil.projectPointOntoSegment(segment, point).x).to.equal(-1);
-            expect(MathUtil.projectPointOntoSegment(segment, point).y).to.equal(0);
+            expect(MathUtil.projectPointOntoSegment(segment, point).x).to.equal(0);
+            expect(MathUtil.projectPointOntoSegment(segment, point).y).to.equal(yValue);
         });
     });
 
@@ -159,6 +158,22 @@ describe('MathUtil', () => {
             const segment: Segment = new Segment(new Point(0, 1), new Point(0, 10));
             const point: Point = new Point(1, yValue);
             expect(MathUtil.projectPointOntoSegment(segment, point)).to.equal(null);
+        });
+    });
+
+    [1, 5, 10].forEach((yValue) => {
+        it('distanceBetweenPointAndPointProjectedOnSegment() - succesful projection ' + yValue, () => {
+            const segment: Segment = new Segment(new Point(0, 1), new Point(0, 10));
+            const point: Point = new Point(1, yValue);
+            expect(MathUtil.distanceBetweenPointAndPointProjectedOnSegment(segment, point)).to.equal(1);
+        });
+    });
+
+    [0.99, 10.01].forEach((yValue) => {
+        it('distanceBetweenPointAndPointProjectedOnSegment() - unsuccesful projection ' + yValue, () => {
+            const segment: Segment = new Segment(new Point(0, 1), new Point(0, 10));
+            const point: Point = new Point(1, yValue);
+            expect(MathUtil.distanceBetweenPointAndPointProjectedOnSegment(segment, point)).to.equal(Infinity);
         });
     });
 

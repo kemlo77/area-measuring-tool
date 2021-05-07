@@ -7,7 +7,6 @@ import { Segment } from '../Segment.js';
 import { MathUtil } from '../MathUtil.js';
 import { Coordinate } from '../Coordinate.js';
 import { UnselectedState } from './UnselectedState.js';
-import { Vector } from '../Vector.js';
 
 export class ClosedState implements PolygonState {
 
@@ -61,7 +60,7 @@ export class ClosedState implements PolygonState {
         else {
             const segmentClicked: Segment = this.nearestSegmentWithinDistance(pointClicked, Polygon.interactDistance);
             if (segmentClicked !== null) {
-                const candidateVertex: Point = this.candidatePointOnSegment(segmentClicked, pointClicked);
+                const candidateVertex: Point = MathUtil.projectPointOntoSegment(segmentClicked, pointClicked);
                 if (this.notToCloseToNeighborsOnSegment(segmentClicked, candidateVertex)) {
                     this.polygon.insertVertex(candidateVertex, segmentClicked);
                     this.beginMovingThisVertex(candidateVertex, pointClicked);
@@ -72,11 +71,6 @@ export class ClosedState implements PolygonState {
                 this.polygon.setCurrentState(new UnselectedState(this.polygon, this));
             }
         }
-    }
-
-    private candidatePointOnSegment(segment: Segment, pointClicked: Point): Point {
-        const projectionVector: Vector = MathUtil.projectPointOntoSegment(segment, pointClicked);
-        return new Point(pointClicked.x + projectionVector.x, pointClicked.y + projectionVector.y);
     }
 
     private notToCloseToNeighborsOnSegment(segment: Segment, candidateVertex: Point): boolean {
@@ -135,11 +129,12 @@ export class ClosedState implements PolygonState {
         let segmentProjectedOn: Segment = null;
 
         for (const segment of this.polygon.segments) {
-            const projectionVector: Vector = MathUtil.projectPointOntoSegment(segment, candidatePoint);
+            const distance: number =
+                MathUtil.distanceBetweenPointAndPointProjectedOnSegment(segment, candidatePoint);
 
-            if (projectionVector !== null && projectionVector.norm < minDistanceIn) {
-                if (projectionVector.norm < smallestRecordedDistance) {
-                    smallestRecordedDistance = projectionVector.norm;
+            if (distance < minDistanceIn) {
+                if (distance < smallestRecordedDistance) {
+                    smallestRecordedDistance = distance;
                     segmentProjectedOn = segment;
                 }
             }
