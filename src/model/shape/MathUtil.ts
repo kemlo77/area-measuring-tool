@@ -7,65 +7,100 @@ export module MathUtil {
 	export function calculateIntersect(segmentAB: Segment, segmentCD: Segment): Point {
 		// inspiration på http://alienryderflex.com/intersect/
 		const pointA: Point = new Point(segmentAB.p1);
-		let pointB: Point = new Point(segmentAB.p2);
+		const pointB: Point = new Point(segmentAB.p2);
 		const pointC: Point = new Point(segmentCD.p1);
 		const pointD: Point = new Point(segmentCD.p2);
+		let translatedX: number = 0;
+		let translatedY: number = 0;
+		let rotatedByAngle: number = 0;
 
-		const ax: number = pointA.x;
-		const ay: number = pointA.y;
-		// Translation of the system so that A is in the Origin
-		pointB.translate(-ax, -ay);
-		pointC.translate(-ax, -ay);
-		pointD.translate(-ax, -ay);
-		// calculate the length of AB
-		const distAB: number = Math.sqrt(pointB.x * pointB.x + pointB.y * pointB.y);
-		// the angle between the x-axis and AB
-		const theta: number = pointB.getTheAngle();
-		// Rotate the system so that point B is on the positive x-axis
-		pointB = new Point(distAB, 0);
-		pointC.rotateClockwise(theta);
-		pointD.rotateClockwise(theta);
-		// The case if CD is parallell with the x-axis
-		// if C.y is equal to D.y (or very close to it)
-		if (Math.abs(pointC.y - pointD.y) < 0.000001) {
-			// if C and thus also D are on the x-axis (or very close to it)
-			if ((Math.abs(pointC.y) < 0.000001)) {
-				if ((0 <= pointC.x && pointC.x <= pointB.x)) {
-					// Rotate and translate point C to the original coordinate system
-					pointC.rotateClockwise(-theta)
-						.translate(ax, ay);
-					// return point of intersection
-					return pointC;
+		translatePointsSoThatPointAIsInTheOrigin();
+		rotateAroundOriginSoThatPointBIsOnPositiveXAxis();
+
+		if (segmentCDIsParallelToXAxis()) {
+			if (pointIsOnXAxis(pointC)) { // if C and thus also D are on the x-axis
+				if (pointIsBetweenAAndBOnXAxis(pointC)) {
+					return rotateAndTranslatePointBackToOriginalSystem(pointC);
 				}
-				if ((0 <= pointD.x && pointD.x <= pointB.x)) {
-					// Rotate and translate point D to the original coordinate system
-					pointD.rotateClockwise(-theta)
-						.translate(ax, ay);
-					// return point of intersection
-					return pointD;
+				if (pointIsBetweenAAndBOnXAxis(pointD)) {
+					return rotateAndTranslatePointBackToOriginalSystem(pointD);
 				}
 			}
 			return null;
 		}
-		// The case if CD does not intersect the x-asis (both C&D above x-axis) or (both C&D under x-axis)
-		// calculating with 10^-6 as zero since calculating with sin and cos can generate "close to zero" zeroes
-		if ((pointC.y < -0.000001 && pointD.y < -0.000001) || (pointC.y > 0.000001 && pointD.y > 0.000001)) {
-			return null;
+
+		if (segmentCDDoesNotIntersectXAxis()) { return null; }
+
+		const pointE: Point = pointWhereCDIntersectsXAxis();
+
+		if (pointIsBetweenAAndBOnXAxis(pointE)) {
+			return rotateAndTranslatePointBackToOriginalSystem(pointE);
 		}
-		// calculate where CD intersects x-axis
-		const ABpos: number = pointD.x + (pointC.x - pointD.x) * pointD.y / (pointD.y - pointC.y);
-		// create new point E where CD intersects x-axis
-		const pointE: Point = new Point(ABpos, 0);
-		// The case if the point E is not between A and B on the x-axis
-		// that is E.x less than zero or E.x larger than B.x
-		if (pointE.x < -0.000001 || (pointE.x - pointB.x) > 0.000001) {
-			return null;
+
+		return null;
+
+
+		function translatePointsSoThatPointAIsInTheOrigin(): void {
+			translatedX = -pointA.x;
+			translatedY = -pointA.y;
+			pointA.translate(translatedX, translatedY);
+			pointB.translate(translatedX, translatedY);
+			pointC.translate(translatedX, translatedY);
+			pointD.translate(translatedX, translatedY);
 		}
-		// Rotate and translate point E to the original coordinate system
-		pointE.rotateClockwise(-theta)
-			.translate(ax, ay);
-		// Arriving here if it is an intersect
-		return pointE;
+
+		function rotateAroundOriginSoThatPointBIsOnPositiveXAxis(): void {
+			rotatedByAngle = angleBetweenXAxisAndAB();
+			pointB.rotateClockwise(rotatedByAngle);
+			pointC.rotateClockwise(rotatedByAngle);
+			pointD.rotateClockwise(rotatedByAngle);
+		}
+
+		function angleBetweenXAxisAndAB(): number {
+			return pointB.getTheAngle();
+		}
+
+		function segmentCDIsParallelToXAxis(): boolean {
+			return Math.abs(pointC.y - pointD.y) < 0.000001;
+		}
+
+		function pointIsOnXAxis(point: Point): boolean {
+			return (Math.abs(point.y) < 0.000001);
+		}
+
+		function pointIsBetweenAAndBOnXAxis(point: Point): boolean {
+			return (pointA.x - 0.000001) <= point.x && point.x <= (pointB.x + 0.000001);
+		}
+
+		function rotateAndTranslatePointBackToOriginalSystem(point: Point): Point {
+			return point.rotateClockwise(-rotatedByAngle)
+				.translate(-translatedX, -translatedY);
+		}
+
+		function segmentCDDoesNotIntersectXAxis(): boolean {
+			return pointCAndDAreBelowXAxis() || pointCAndDAreAboveXAxis();
+		}
+
+		function pointCAndDAreAboveXAxis(): boolean {
+			return pointIsAboveXAxis(pointC) && pointIsAboveXAxis(pointD);
+		}
+
+		function pointIsAboveXAxis(point: Point): boolean {
+			return point.y > 0.000001;
+		}
+
+		function pointCAndDAreBelowXAxis(): boolean {
+			return pointIsBelowXAxis(pointC) && pointIsBelowXAxis(pointD);
+		}
+
+		function pointIsBelowXAxis(point: Point): boolean {
+			return point.y < -0.000001;
+		}
+
+		function pointWhereCDIntersectsXAxis(): Point {
+			const positionOnXAxis: number = pointD.x + (pointC.x - pointD.x) * pointD.y / (pointD.y - pointC.y);
+			return new Point(positionOnXAxis, 0);
+		}
 	}
 
 	// returns a vector from the point being projected to the projection point on the segment
