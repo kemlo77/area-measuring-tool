@@ -144,14 +144,15 @@ describe('MathUtil', () => {
         expect(MathUtil.calculateIntersect(segmentA, segmentB)).to.equal(null);
     });
 
-    [1, 5, 10].forEach((yValue) => {
-        it('projectPointOntoSegment() - succesful projection ' + yValue, () => {
-            const segment: Segment = new Segment(new Point(0, 1), new Point(0, 10));
-            const point: Point = new Point(1, yValue);
-            expect(MathUtil.projectPointOntoSegment(segment, point).x).to.equal(0);
-            expect(MathUtil.projectPointOntoSegment(segment, point).y).to.equal(yValue);
+    [new Point(1, 1), new Point(1, 5), new Point(1, 10), new Point(-1, 1), new Point(-1, 10)]
+        .forEach((pointToProject) => {
+            it('projectPointOntoSegment() - succesful projection ' + pointToProject, () => {
+                const segment: Segment = new Segment(new Point(0, 1), new Point(0, 10));
+                const point: Point = pointToProject;
+                expect(MathUtil.projectPointOntoSegment(segment, point).x).to.equal(0);
+                expect(MathUtil.projectPointOntoSegment(segment, point).y).to.equal(pointToProject.y);
+            });
         });
-    });
 
     [0.99, 10.01].forEach((yValue) => {
         it('projectPointOntoSegment() - unsuccesful projection ' + yValue, () => {
@@ -161,13 +162,14 @@ describe('MathUtil', () => {
         });
     });
 
-    [1, 5, 10].forEach((yValue) => {
-        it('distanceBetweenPointAndPointProjectedOnSegment() - succesful projection ' + yValue, () => {
-            const segment: Segment = new Segment(new Point(0, 1), new Point(0, 10));
-            const point: Point = new Point(1, yValue);
-            expect(MathUtil.distanceBetweenPointAndPointProjectedOnSegment(segment, point)).to.equal(1);
+    [new Point(1, 1), new Point(1, 5), new Point(1, 10), new Point(-1, 1), new Point(-1, 10)]
+        .forEach((pointToProject) => {
+            it('distanceBetweenPointAndPointProjectedOnSegment() - succesful projection ' + pointToProject, () => {
+                const segment: Segment = new Segment(new Point(0, 1), new Point(0, 10));
+                const point: Point = pointToProject;
+                expect(MathUtil.distanceBetweenPointAndPointProjectedOnSegment(segment, point)).to.equal(1);
+            });
         });
-    });
 
     [0.99, 10.01].forEach((yValue) => {
         it('distanceBetweenPointAndPointProjectedOnSegment() - unsuccesful projection ' + yValue, () => {

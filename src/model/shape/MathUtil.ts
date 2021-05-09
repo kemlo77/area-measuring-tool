@@ -111,48 +111,43 @@ export module MathUtil {
 		const vectorAB: Vector = new Vector(pointA, pointB);
 		const vectorAC: Vector = new Vector(pointA, pointC);
 
-		const dotproductABAC: number = Vector.dotProduct(vectorAB, vectorAC);
-		// if dotproduct_AB_AC is larger than zero the angle is acute and then C can be projected on segment
-		if (dotproductABAC >= 0) {
+		// if angle between AB and AC is acute, then point C can be projected on segment AB
+		if (angleIsObtuse()) { return null; }
 
-			// page 136 in "Elementary Linear Algebra" [Anton, Rorres], 7th edition
-			// projecting AC on AB. The new vector is AD
-			const vectorADcomponentX: number = dotproductABAC * vectorAB.x / Math.pow(vectorAB.norm, 2);
-			const vectorADcomponentY: number = dotproductABAC * vectorAB.y / Math.pow(vectorAB.norm, 2);
-			const vectorAD: Vector = new Vector(vectorADcomponentX, vectorADcomponentY);
-			const pointD: Point = new Point(pointA.x + vectorAD.x, pointA.y + vectorAD.y);
-			// checking so that A->D is shorter than A->B
-			if (vectorAD.norm <= vectorAB.norm) {
-				return pointD;
-			}
+		const vectorAD: Vector = projectVectorACOnVectorAB();
+
+		// checking so that A->D is shorter than A->B
+		if (vectorAD.norm > vectorAB.norm) { return null; }
+
+		return calculatePointD();
+
+
+		function angleIsObtuse(): boolean {
+			return dotProductABAC() < 0;
 		}
-		return null;
+
+		function dotProductABAC(): number {
+			return Vector.dotProduct(vectorAB, vectorAC);
+		}
+
+		function projectVectorACOnVectorAB(): Vector {
+			const dotProduct: number = dotProductABAC();
+			const vectorADcomponentX: number = dotProduct * vectorAB.x / Math.pow(vectorAB.norm, 2);
+			const vectorADcomponentY: number = dotProduct * vectorAB.y / Math.pow(vectorAB.norm, 2);
+			const vectorAD: Vector = new Vector(vectorADcomponentX, vectorADcomponentY);
+			return vectorAD;
+		}
+
+		function calculatePointD(): Point {
+			return new Point(pointA.x + vectorAD.x, pointA.y + vectorAD.y);
+		}
 	}
 
+
 	export function distanceBetweenPointAndPointProjectedOnSegment(segmentAB: Segment, pointC: Point): number {
-		const pointA: Point = new Point(segmentAB.p1);
-		const pointB: Point = new Point(segmentAB.p2);
-
-		const vectorAB: Vector = new Vector(pointA, pointB);
-		const vectorAC: Vector = new Vector(pointA, pointC);
-
-		const dotproductABAC: number = Vector.dotProduct(vectorAB, vectorAC);
-		// if dotproduct_AB_AC is larger than zero the angle is acute and then C can be projected on segment
-		if (dotproductABAC >= 0) {
-
-			// page 136 in "Elementary Linear Algebra" [Anton, Rorres], 7th edition
-			// projecting AC on AB. The new vector is AD
-			const vectorADcomponentX: number = dotproductABAC * vectorAB.x / Math.pow(vectorAB.norm, 2);
-			const vectorADcomponentY: number = dotproductABAC * vectorAB.y / Math.pow(vectorAB.norm, 2);
-			const vectorAD: Vector = new Vector(vectorADcomponentX, vectorADcomponentY);
-			const pointD: Point = new Point(pointA.x + vectorAD.x, pointA.y + vectorAD.y);
-			// checking so that A->D is shorter than A->B
-			if (vectorAD.norm <= vectorAB.norm) {
-				const vectorCD: Vector = new Vector(pointC, pointD);
-				return vectorCD.norm;
-			}
-		}
-		return Infinity;
+		const projectedPoint: Point = projectPointOntoSegment(segmentAB, pointC);
+		if (projectedPoint == null) { return Infinity; }
+		return projectedPoint.distanceToOtherPoint(pointC);
 	}
 
 }
