@@ -2,7 +2,6 @@ import { Coordinate } from '../Coordinate.js';
 import { MathUtil } from '../MathUtil.js';
 import { Point } from '../Point.js';
 import { Segment } from '../Segment.js';
-import { Vector } from '../Vector.js';
 import { CompleteState } from './CompleteState.js';
 import { Line } from './Line.js';
 import { LineState } from './LineState.js';
@@ -17,15 +16,15 @@ export class UnselectedState implements LineState {
 
 
     handleLeftClick(pointClicked: Point): void {
-        if (this.isTheLineClicked(pointClicked)) {
+        if (this.theSegmentIsClicked(pointClicked)) {
             this.line.setCurrentState(new CompleteState(this.line));
         }
     }
 
-    private isTheLineClicked(pointClicked: Point): boolean {
-        const vector: Vector = MathUtil.projectPointOntoSegment(this.calculateSegment(), pointClicked);
-        const segmentIsClicked: boolean = vector !== null && vector.norm < Line.interactDistance;
-        return segmentIsClicked;
+    private theSegmentIsClicked(pointClicked: Point): boolean {
+        const distance: number =
+            MathUtil.distanceBetweenPointAndPointProjectedOnSegment(this.calculateSegment(), pointClicked);
+        return distance < Line.interactDistance;
     }
 
 

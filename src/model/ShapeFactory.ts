@@ -16,7 +16,7 @@ export class ShapeFactory {
             return new PositivePolygonArea();
         } else if (name === 'Ruler') {
             return new Ruler();
-        } if (name === 'Line') {
+        } else if (name === 'Line') {
             return new Line();
         } else if (name === 'Polygon') {
             return new Polygon();

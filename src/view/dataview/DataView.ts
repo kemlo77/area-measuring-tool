@@ -4,7 +4,7 @@ import { Ruler } from '../../model/Ruler.js';
 
 export class DataView {
 
-    private dataDiv: HTMLElement = document.getElementById('data') as HTMLElement;
+    private dataDiv: HTMLElement = document.getElementById('data');
     private static instance: DataView;
     private scaleFactor = 0.1;
     private areaInputs: HTMLInputElement[] = [];

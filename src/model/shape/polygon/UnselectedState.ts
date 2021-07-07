@@ -5,7 +5,6 @@ import { Point } from '../Point.js';
 import { ClosedState } from './ClosedState.js';
 import { Coordinate } from '../Coordinate.js';
 import { MathUtil } from '../MathUtil.js';
-import { Vector } from '../Vector.js';
 
 export class UnselectedState implements PolygonState {
 
@@ -26,8 +25,9 @@ export class UnselectedState implements PolygonState {
 
     private anySegmentClicked(pointClicked: Point): boolean {
         for (const segment of this.polygon.segments) {
-            const vector: Vector = MathUtil.projectPointOntoSegment(segment, pointClicked);
-            if (vector !== null && vector.norm < Polygon.interactDistance) {
+            const distance: number =
+                MathUtil.distanceBetweenPointAndPointProjectedOnSegment(segment, pointClicked);
+            if (distance < Polygon.interactDistance) {
                 return true;
             }
         }

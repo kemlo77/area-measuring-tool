@@ -5,7 +5,6 @@ import { UnselectedState } from './UnselectedState.js';
 import { Line } from './Line.js';
 import { LineState } from './LineState.js';
 import { MoveState } from './MoveState.js';
-import { Vector } from '../Vector.js';
 import { MathUtil } from '../MathUtil.js';
 
 export class CompleteState implements LineState {
@@ -28,15 +27,15 @@ export class CompleteState implements LineState {
         } else if (pointClicked.closeEnoughToPoint(this.line.p2, Line.interactDistance)) {
             this.line.movePoint = this.line.p2;
             this.line.setCurrentState(new MoveState(this.line));
-        } else if (this.theSegmentIsNotClicked(pointClicked)) {
+        } else if (!this.theSegmentIsClicked(pointClicked)) {
             this.line.setCurrentState(new UnselectedState(this.line));
         }
     }
 
-    private theSegmentIsNotClicked(pointClicked: Point): boolean {
-        const vector: Vector = MathUtil.projectPointOntoSegment(this.calculateSegment(), pointClicked);
-        const segmentIsClicked: boolean = vector !== null && vector.norm < Line.interactDistance;
-        return !segmentIsClicked;
+    private theSegmentIsClicked(pointClicked: Point): boolean {
+        const distance: number =
+            MathUtil.distanceBetweenPointAndPointProjectedOnSegment(this.calculateSegment(), pointClicked);
+        return distance < Line.interactDistance;
     }
 
     /* istanbul ignore next */
