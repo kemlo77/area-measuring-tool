@@ -1,77 +1,84 @@
 import { Coordinate } from './Coordinate.js';
 
 export class Point implements Coordinate {
-    public x: number;
-    public y: number;
-
+    private _x: number;
+    private _y: number;
 
     constructor(point?: Coordinate)
     constructor(x: number, y: number)
     constructor(xOrCoordinate?: Coordinate | number, y?: number) {
         if (xOrCoordinate === undefined || xOrCoordinate === null) {
-            this.x = 0;
-            this.y = 0;
+            this._x = 0;
+            this._y = 0;
         } else if (typeof xOrCoordinate === 'number') {
             if (typeof y !== 'undefined') {
-                this.x = xOrCoordinate;
-                this.y = y;
+                this._x = xOrCoordinate;
+                this._y = y;
             } else {
                 throw new Error('Invalid parameters');
             }
-        } else if(typeof xOrCoordinate === 'string') {
+        } else if (typeof xOrCoordinate === 'string') {
             throw new Error('Invalid parameters');
         } else if (this.instanceOfCoordinate(xOrCoordinate)) {
-            this.x = xOrCoordinate.x;
-            this.y = xOrCoordinate.y;
+            this._x = xOrCoordinate.x;
+            this._y = xOrCoordinate.y;
         } else {
             throw new Error('Invalid parameters');
         }
     }
 
+    get x(): number {
+        return this._x;
+    }
+    get y(): number {
+        return this._y;
+    }
+
+
     private instanceOfCoordinate(object: any): object is Coordinate {
         const hasExpectedFields: boolean = 'x' in object && 'y' in object;
-        const xIsNumber: boolean =(typeof object.x === 'number');
-        const yIsNumber: boolean =(typeof object.y === 'number');
+        const xIsNumber: boolean = (typeof object.x === 'number');
+        const yIsNumber: boolean = (typeof object.y === 'number');
         return hasExpectedFields && xIsNumber && yIsNumber;
-        
+
     }
 
     hasSameCoordinateAs(otherPoint: Point): boolean {
-        return (this.x === otherPoint.x && this.y === otherPoint.y);
+        return (this._x === otherPoint._x && this._y === otherPoint._y);
     }
 
     copyValues(copyFromThisPoint: Point): void {
-        this.x = copyFromThisPoint.x;
-        this.y = copyFromThisPoint.y;
+        this._x = copyFromThisPoint._x;
+        this._y = copyFromThisPoint._y;
     }
 
     // rotate a point around the Origin
     rotateClockwise(angle: number): Point {
-        const tempX: number = this.x;
-        const tempY: number = this.y;
-        this.x = tempX * Math.cos(angle) + tempY * Math.sin(angle);
-        this.y = -tempX * Math.sin(angle) + tempY * Math.cos(angle);
-        return this;
+        const tempX: number = this._x;
+        const tempY: number = this._y;
+        const newX: number = tempX * Math.cos(angle) + tempY * Math.sin(angle);
+        const newY: number = -tempX * Math.sin(angle) + tempY * Math.cos(angle);
+        return new Point(newX, newY);
     }
 
     translate(distX: number, distY: number): Point {
-        this.x += distX;
-        this.y += distY;
-        return this;
+        const newX: number = this._x + distX;
+        const newY: number = this._y + distY;
+        return new Point(newX, newY);
     }
 
     // return the angle between the x-axis and a vector AB (where A is in the Origin and B is the point checked)
     getTheAngle(): number {
-        const arctanAngle: number = Math.atan(this.y / this.x);
-        if (this.y >= 0) {
+        const arctanAngle: number = Math.atan(this._y / this._x);
+        if (this._y >= 0) {
             // if the point is in q1
-            if (this.x >= 0) { return arctanAngle; }
+            if (this._x >= 0) { return arctanAngle; }
             // if the point is in q2
             else { return (Math.PI + arctanAngle); }
         }
         else {
             // if the point is in q3
-            if (this.x < 0) { return (Math.PI + arctanAngle); }
+            if (this._x < 0) { return (Math.PI + arctanAngle); }
             // if the point is in q4
             else { return (2 * Math.PI + arctanAngle); }
         }
@@ -93,7 +100,7 @@ export class Point implements Coordinate {
 
     // Check the distance between two points
     distanceToOtherPoint(otherPoint: Point): number {
-        return Math.sqrt(Math.pow(this.x - otherPoint.x, 2) + Math.pow(this.y - otherPoint.y, 2));
+        return Math.sqrt(Math.pow(this._x - otherPoint._x, 2) + Math.pow(this._y - otherPoint._y, 2));
     }
 
     noneOfThesePointsTooClose(otherPoints: Point[], closenessLimit: number): boolean {

@@ -24,17 +24,17 @@ describe('Point', () => {
     });
 
     it('constructor - with Coordinate', () => {
-        const pointA: Point = new Point({x:1, y:2});
+        const pointA: Point = new Point({ x: 1, y: 2 });
         expect(pointA.x).to.equal(1);
         expect(pointA.y).to.equal(2);
     });
 
     it('constructor - with faulty x-Coordinate', () => {
-        expect(() => new Point({x:'asdf', y:2})).to.throw(/Invalid parameters/);
+        expect(() => new Point({ x: 'asdf', y: 2 })).to.throw(/Invalid parameters/);
     });
 
     it('constructor - with faulty y-Coordinate', () => {
-        expect(() => new Point({x:1, y:'asdf'})).to.throw(/Invalid parameters/);
+        expect(() => new Point({ x: 1, y: 'asdf' })).to.throw(/Invalid parameters/);
     });
 
     it('constructor - with just one coordinate', () => {
@@ -68,9 +68,9 @@ describe('Point', () => {
     rotatingTest.forEach((testData) => {
         it('rotateClockwise(): ' + testData.description, () => {
             const pointA: Point = new Point(1, 0);
-            pointA.rotateClockwise(testData.angle);
-            expect(pointA.x).to.closeTo(testData.x, 0.000001, 'Wrong x-value');
-            expect(pointA.y).to.closeTo(testData.y, 0.000001, 'Wrong y-value');
+            const newPoint: Point = pointA.rotateClockwise(testData.angle);
+            expect(newPoint.x).to.closeTo(testData.x, 0.000001, 'Wrong x-value');
+            expect(newPoint.y).to.closeTo(testData.y, 0.000001, 'Wrong y-value');
         });
     });
 
@@ -144,9 +144,9 @@ describe('Point', () => {
     it('translate()', () => {
         const firstPoint: Point = new Point(1, 2);
         // const secondPoint: Point = new Point(1,2);
-        firstPoint.translate(10, 10);
-        expect(firstPoint.x).to.equal(11);
-        expect(firstPoint.y).to.equal(12);
+        const newPoint: Point = firstPoint.translate(10, 10);
+        expect(newPoint.x).to.equal(11);
+        expect(newPoint.y).to.equal(12);
     });
 
     it('noneOfThesePointsTooClose() - all outside limit', () => {

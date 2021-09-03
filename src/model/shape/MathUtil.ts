@@ -6,10 +6,10 @@ export module MathUtil {
 	// Checking if two segments AB and CD intersect
 	export function calculateIntersect(segmentAB: Segment, segmentCD: Segment): Point {
 		// inspiration på http://alienryderflex.com/intersect/
-		const pointA: Point = new Point(segmentAB.p1);
-		const pointB: Point = new Point(segmentAB.p2);
-		const pointC: Point = new Point(segmentCD.p1);
-		const pointD: Point = new Point(segmentCD.p2);
+		let pointA: Point = new Point(segmentAB.p1);
+		let pointB: Point = new Point(segmentAB.p2);
+		let pointC: Point = new Point(segmentCD.p1);
+		let pointD: Point = new Point(segmentCD.p2);
 		let translatedX: number = 0;
 		let translatedY: number = 0;
 		let rotatedByAngle: number = 0;
@@ -43,17 +43,18 @@ export module MathUtil {
 		function translatePointsSoThatPointAIsInTheOrigin(): void {
 			translatedX = -pointA.x;
 			translatedY = -pointA.y;
-			pointA.translate(translatedX, translatedY);
-			pointB.translate(translatedX, translatedY);
-			pointC.translate(translatedX, translatedY);
-			pointD.translate(translatedX, translatedY);
+			pointA = pointA.translate(translatedX, translatedY);
+			pointB = pointB.translate(translatedX, translatedY);
+			pointC = pointC.translate(translatedX, translatedY);
+			pointD = pointD.translate(translatedX, translatedY);
 		}
 
 		function rotateAroundOriginSoThatPointBIsOnPositiveXAxis(): void {
 			rotatedByAngle = angleBetweenXAxisAndAB();
-			pointB.rotateClockwise(rotatedByAngle);
-			pointC.rotateClockwise(rotatedByAngle);
-			pointD.rotateClockwise(rotatedByAngle);
+			//pointA is in the origin, so there is no meaning in rotating it
+			pointB = pointB.rotateClockwise(rotatedByAngle);
+			pointC = pointC.rotateClockwise(rotatedByAngle);
+			pointD = pointD.rotateClockwise(rotatedByAngle);
 		}
 
 		function angleBetweenXAxisAndAB(): number {

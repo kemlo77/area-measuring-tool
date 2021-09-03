@@ -22,9 +22,9 @@ describe('MathUtil', () => {
             const segmentA: Segment = new Segment(new Point(0, 0), new Point(10, 0));
             const pointA: Point = new Point(0.01, 0);
             const pointB: Point = new Point(10, 0);
-            pointA.rotateClockwise(testData.angle);
-            pointB.rotateClockwise(testData.angle);
-            const segmentB: Segment = new Segment(pointA, pointB);
+            const newPointA: Point = pointA.rotateClockwise(testData.angle);
+            const newPointB: Point = pointB.rotateClockwise(testData.angle);
+            const segmentB: Segment = new Segment(newPointA, newPointB);
             expect(MathUtil.calculateIntersect(segmentA, segmentB)).to.equal(null);
         });
     });
@@ -34,9 +34,9 @@ describe('MathUtil', () => {
             const segmentA: Segment = new Segment(new Point(-10, 0), new Point(0, 0));
             const pointA: Point = new Point(-0.01, 0);
             const pointB: Point = new Point(-10, 0);
-            pointA.rotateClockwise(-testData.angle);
-            pointB.rotateClockwise(-testData.angle);
-            const segmentB: Segment = new Segment(pointA, pointB);
+            const newPointA: Point = pointA.rotateClockwise(-testData.angle);
+            const newPointB: Point = pointB.rotateClockwise(-testData.angle);
+            const segmentB: Segment = new Segment(newPointA, newPointB);
             expect(MathUtil.calculateIntersect(segmentA, segmentB)).to.equal(null);
         });
     });
@@ -80,9 +80,9 @@ describe('MathUtil', () => {
             const segmentA: Segment = new Segment(new Point(0, 0), new Point(10, 0));
             const pointA: Point = new Point(0.01, 0);
             const pointB: Point = new Point(10, 0);
-            pointA.rotateClockwise(testData.angle).translate(5, 0);
-            pointB.rotateClockwise(testData.angle).translate(5, 0);
-            const segmentB: Segment = new Segment(pointA, pointB);
+            const newPointA: Point = pointA.rotateClockwise(testData.angle).translate(5, 0);
+            const newPointB: Point = pointB.rotateClockwise(testData.angle).translate(5, 0);
+            const segmentB: Segment = new Segment(newPointA, newPointB);
             expect(MathUtil.calculateIntersect(segmentA, segmentB)).to.equal(null);
         });
     });
@@ -146,7 +146,7 @@ describe('MathUtil', () => {
 
     [new Point(1, 1), new Point(1, 5), new Point(1, 10), new Point(-1, 1), new Point(-1, 10)]
         .forEach((pointToProject) => {
-            it('projectPointOntoSegment() - succesful projection ' + pointToProject, () => {
+            it('projectPointOntoSegment() - succesful projection ' + pointToProject.x + ',' + pointToProject.y, () => {
                 const segment: Segment = new Segment(new Point(0, 1), new Point(0, 10));
                 const point: Point = pointToProject;
                 expect(MathUtil.projectPointOntoSegment(segment, point).x).to.equal(0);
@@ -164,7 +164,8 @@ describe('MathUtil', () => {
 
     [new Point(1, 1), new Point(1, 5), new Point(1, 10), new Point(-1, 1), new Point(-1, 10)]
         .forEach((pointToProject) => {
-            it('distanceBetweenPointAndPointProjectedOnSegment() - succesful projection ' + pointToProject, () => {
+            const coord: string = pointToProject.x + ',' + pointToProject.y;
+            it('distanceBetweenPointAndPointProjectedOnSegment() - succesful projection ' + coord, () => {
                 const segment: Segment = new Segment(new Point(0, 1), new Point(0, 10));
                 const point: Point = pointToProject;
                 expect(MathUtil.distanceBetweenPointAndPointProjectedOnSegment(segment, point)).to.equal(1);
