@@ -7,7 +7,7 @@ export class PolygonPainter extends AbstractSegmentPainter {
 
     private _color: string = '0,0,0';
     private static instance: PolygonPainter;
-    
+
 
     public static getInstance(): PolygonPainter {
         if (!PolygonPainter.instance) {
@@ -21,8 +21,7 @@ export class PolygonPainter extends AbstractSegmentPainter {
         this.drawStillSegments(polygon.getStillSegments(), 3, this._color);
 
         if (polygon.isSelected) {
-            polygon.vertices
-                .filter((it) => it !== polygon.movePoint)
+            polygon.nonMovingVertices
                 .forEach((it) => { this.drawHollowDot(it, this._color, this.stillCanvasCtx); });
         }
     }
@@ -31,11 +30,12 @@ export class PolygonPainter extends AbstractSegmentPainter {
         const polygon: Polygon = motif as Polygon;
 
         this.clearUsedPartOfCanvas();
-        const segments: Segment[] = polygon.getMovingSegments(mousePosition);
-        this.drawMovingSegments(segments, 3, this._color);
+        const movingSegments: Segment[] = polygon.getMovingSegments(mousePosition);
+        this.drawMovingSegments(movingSegments, 3, this._color);
         if (polygon.isMoving) {
-            this.drawHollowDot(polygon.getPrecedingVertex(polygon.movePoint), this._color, this.movementCanvasCtx);
-            this.drawHollowDot(polygon.getFollowingVertex(polygon.movePoint), this._color, this.movementCanvasCtx);
+            polygon.verticesNextToTheVerticeMoving.forEach((it) => {
+                this.drawHollowDot(it, this._color, this.movementCanvasCtx);
+            });
         } else if (polygon.isOpen) {
             if (polygon.vertices.length > 0) {
                 this.drawHollowDot(polygon.lastVertex, this._color, this.movementCanvasCtx);

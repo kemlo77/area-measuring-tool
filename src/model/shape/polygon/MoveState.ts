@@ -47,7 +47,7 @@ export class MoveState implements PolygonState {
     }
 
     private abortTheMove(): void {
-        this.polygon.movePoint = null;
+        this.polygon.resetMovePoint();
         this.polygon.setCurrentState(new ClosedState(this.polygon));
     }
 
@@ -56,36 +56,36 @@ export class MoveState implements PolygonState {
     }
 
     private moveSelectedVertexTo(toPoint: Point): void {
-        this.polygon.movePoint.copyValues(toPoint); // copying values to point referenced by movePoint
-        this.polygon.movePoint = null; // removing the reference
+        this.polygon.replacePointSelectedForMoveWithNewPoint(toPoint);
         this.polygon.setCurrentState(new ClosedState(this.polygon));
     }
 
     private movedSegmentsDoNotIntersect(candidateLocation: Point): boolean {
         const segments: Segment[] = this.calculateSegments();
-        if (segments.length > 3) {
+        if (segments.length <= 3) {
+            return true;
+        }
 
-            const precedingVertex: Point = this.polygon.getPrecedingVertex(this.polygon.movePoint);
-            const followingVertex: Point = this.polygon.getFollowingVertex(this.polygon.movePoint);
+        const precedingVertex: Point = this.polygon.getPrecedingVertex(this.polygon.movePoint);
+        const followingVertex: Point = this.polygon.getFollowingVertex(this.polygon.movePoint);
 
-            const segmentBeforeMovePoint: Segment = new Segment(precedingVertex, candidateLocation);
-            const segmentAfterMovePoint: Segment = new Segment(candidateLocation, followingVertex);
+        const segmentBeforeMovePoint: Segment = new Segment(precedingVertex, candidateLocation);
+        const segmentAfterMovePoint: Segment = new Segment(candidateLocation, followingVertex);
+
+        for (const segment of segments) {
 
             // no need to check if neighbouring segments intersect with current segment
-            for (const segment of segments) {
+            if (segment.containsThisVertex(this.polygon.movePoint)) { continue; }
 
-                if (segment.containsThisVertex(this.polygon.movePoint)) { continue; }
-
-                if (segment.doesNotContainThisVertex(precedingVertex)) {
-                    if (segment.intersectsThisSegment(segmentBeforeMovePoint)) { return false; }
-                }
-
-                if (segment.doesNotContainThisVertex(followingVertex)) {
-                    if (segment.intersectsThisSegment(segmentAfterMovePoint)) { return false; }
-                }
+            if (segment.doesNotContainThisVertex(precedingVertex)) {
+                if (segment.intersectsThisSegment(segmentBeforeMovePoint)) { return false; }
             }
 
+            if (segment.doesNotContainThisVertex(followingVertex)) {
+                if (segment.intersectsThisSegment(segmentAfterMovePoint)) { return false; }
+            }
         }
+
         return true;
     }
 

@@ -48,7 +48,7 @@ function isLeftMouseButton(event: MouseEvent): boolean {
 }
 
 function getMouseCoordinate(event: MouseEvent, elementId: string): Coordinate {
-	const rect: ClientRect = document.getElementById(elementId).getBoundingClientRect();
+	const rect: DOMRect = document.getElementById(elementId).getBoundingClientRect();
 	const x: number = event.clientX - rect.left;
 	const y: number = event.clientY - rect.top;
 	return { x, y };

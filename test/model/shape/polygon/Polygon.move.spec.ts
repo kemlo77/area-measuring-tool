@@ -76,7 +76,7 @@ describe('Polygon - move', () => {
             it('vertices next to new vertex are possible to move ' + step, () => {
                 square.rotateVertices(-step);
 
-                const vertexBefore: Point = square.vertices[step];
+                //const vertexBefore: Point = square.vertices[step];
 
                 // adding vertex
                 square.handleLeftMouseDown({ x: 150, y: 100 });
@@ -84,22 +84,29 @@ describe('Polygon - move', () => {
                 square.handleLeftMouseUp({ x: 150, y: 100 });
                 expect(square.numberOfSegments).is.equal(5);
 
-                const addedVertex: Point = square.getFollowingVertex(vertexBefore);
-                const vertexAfter: Point = square.getFollowingVertex(addedVertex);
-
                 // moving vertex before added point
                 square.handleLeftMouseDown({ x: 100, y: 100 });
+                expect(square.isMoving).to.equal(true, 'square is not moving');
                 square.handleLeftMouseUp({ x: 90, y: 100 });
-                expect(vertexBefore.x).to.equal(90);
-                expect(vertexBefore.y).to.equal(100);
+                expect(vertexBefore().x).to.equal(90, 'vertexBefore.x not equal');
+                expect(vertexBefore().y).to.equal(100), 'vertexBefore.y not equal';
                 expect(square.isClosed).to.equal(true, 'Polygon not closed.');
 
                 // moving vertex before added point
                 square.handleLeftMouseDown({ x: 200, y: 100 });
                 square.handleLeftMouseUp({ x: 210, y: 100 });
-                expect(vertexAfter.x).to.equal(210);
-                expect(vertexAfter.y).to.equal(100);
+                expect(vertexAfter().x).to.equal(210, 'vertexAfter.x not equal');
+                expect(vertexAfter().y).to.equal(100, 'vertexAfter.y not equal');
                 expect(square.isClosed).to.equal(true, 'Polygon not closed.');
+
+                function vertexBefore(): Point {
+                    return square.vertices[step];
+                }
+
+                function vertexAfter(): Point {
+                    const addedVertex: Point = square.getFollowingVertex(vertexBefore());
+                    return square.getFollowingVertex(addedVertex);
+                }
 
 
             });

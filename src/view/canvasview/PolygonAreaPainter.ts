@@ -22,8 +22,7 @@ export class PolygonAreaPainter extends AbstractSegmentPainter {
         this.drawStillSegments(polygon.getStillSegments(), 3, polygon.color);
 
         if (polygon.isSelected) {
-            polygon.vertices
-                .filter((it) => it !== polygon.movePoint)
+            polygon.nonMovingVertices
                 .forEach((it) => { this.drawHollowDot(it, polygon.color, this.stillCanvasCtx); });
         }
 
@@ -32,13 +31,14 @@ export class PolygonAreaPainter extends AbstractSegmentPainter {
     drawMovement(motif: any, mousePosition: Coordinate): void {
         const polygon: AbstractPolygonArea = motif as AbstractPolygonArea;
         this.clearUsedPartOfCanvas();
-        const segments: Segment[] = polygon.getMovingSegments(mousePosition);
-        this.drawMovingSegments(segments, 3, polygon.color);
+        const movingSegments: Segment[] = polygon.getMovingSegments(mousePosition);
+        this.drawMovingSegments(movingSegments, 3, polygon.color);
         if (polygon.isMoving) {
-            this.drawHollowDot(polygon.getPrecedingVertex(polygon.movePoint), polygon.color, this.movementCanvasCtx);
-            this.drawHollowDot(polygon.getFollowingVertex(polygon.movePoint), polygon.color, this.movementCanvasCtx);
+            polygon.verticesNextToTheVerticeMoving.forEach((it) => {
+                this.drawHollowDot(it, polygon.color, this.movementCanvasCtx);
+            });
         } else if (polygon.isOpen) {
-            if(polygon.vertices.length>0){
+            if (polygon.vertices.length > 0) {
                 this.drawHollowDot(polygon.lastVertex, polygon.color, this.movementCanvasCtx);
             }
         }

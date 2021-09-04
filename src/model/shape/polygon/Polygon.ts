@@ -18,7 +18,7 @@ export class Polygon implements InteractiveShape, PaintableSegments {
 
     constructor(vertices?: Array<Coordinate>) {
         this._vertices = [];
-        this.movePoint = null;
+        this._movePoint = null;
         this.currentState = new OpenState(this);
 
         const verticesGiven: boolean = (vertices !== undefined && vertices !== null);
@@ -48,12 +48,30 @@ export class Polygon implements InteractiveShape, PaintableSegments {
         return this._vertices;
     }
 
+    get nonMovingVertices(): Point[] {
+        return this._vertices.filter((it) => it !== this._movePoint);
+    }
+
     get movePoint(): Point {
         return this._movePoint;
     }
 
     set movePoint(point: Point) {
         this._movePoint = point;
+    }
+
+    resetMovePoint(): void {
+        this._movePoint = null;
+    }
+
+    replacePointSelectedForMoveWithNewPoint(newPoint: Point): void {
+        for (let index: number = 0; index < this._vertices.length; index++) {
+            if (this._vertices[index] == this._movePoint) {
+                this._vertices[index] = newPoint;
+                this.resetMovePoint();
+                break;
+            }
+        }
     }
 
     get mousePositionAtMoveStart(): Point {
@@ -201,6 +219,15 @@ export class Polygon implements InteractiveShape, PaintableSegments {
     ejectVertex(vertexToRemove: Point): void {
         const index: number = this.vertices.indexOf(vertexToRemove);
         this.vertices.splice(index, 1);
+    }
+
+    get verticesNextToTheVerticeMoving(): Point[] {
+        const neighbouringPoints: Point[] = [];
+        if (this.isMoving) {
+            neighbouringPoints.push(this.getPrecedingVertex(this._movePoint));
+            neighbouringPoints.push(this.getFollowingVertex(this._movePoint));
+        }
+        return neighbouringPoints;
     }
 
     getPrecedingVertex(vertex: Point): Point {
