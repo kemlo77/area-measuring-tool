@@ -24,19 +24,11 @@ export class MoveState implements LineState {
     }
 
     handleLeftMouseUp(pointClicked: Point): void {
-        const otherPoint: Point = this.pointThatIsNotMoving();
+        const otherPoint: Point = this.line.nonMovingPoint;
         if (pointClicked.notTooCloseToPoint(otherPoint, Line.minimumDistanceBetweenPoints)) {
-            this.line.movePoint.copyValues(pointClicked);
-            this.line.movePoint = null;
+            this.line.replacePointSelectedForMoveWithNewPoint(pointClicked);
+            this.line.resetMovePoint();
             this.line.setCurrentState(new CompleteState(this.line));
-        }
-    }
-
-    private pointThatIsNotMoving(): Point {
-        if (this.line.p1 === this.line.movePoint) {
-            return this.line.p2;
-        } else {
-            return this.line.p1;
         }
     }
 
@@ -50,7 +42,7 @@ export class MoveState implements LineState {
 
     calculateMovingSegment(mousePosition: Coordinate): Segment {
         const mousePositionPoint: Point = new Point(mousePosition);
-        return new Segment(this.pointThatIsNotMoving(), mousePositionPoint);
+        return new Segment(this.line.nonMovingPoint, mousePositionPoint);
     }
 
 }

@@ -45,15 +45,6 @@ describe('Point', () => {
         expect(() => new Point('1')).to.throw(/Invalid parameters/);
     });
 
-    it('copyValues()', () => {
-        const pointA: Point = new Point(3, 3);
-        const pointB: Point = new Point(4, 4);
-        pointB.copyValues(pointA);
-        expect(pointB.x).to.equal(3);
-        expect(pointB.y).to.equal(3);
-    });
-
-
     const rotatingTest: { description: string, x: number, y: number, angle: number }[] = [
         { description: '0   degres', x: 1, y: 0, angle: 0 },
         { description: '45  degrees', x: Math.sqrt(2) / 2, y: -Math.sqrt(2) / 2, angle: Math.PI * 0.25 },

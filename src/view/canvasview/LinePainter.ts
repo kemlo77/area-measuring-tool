@@ -42,9 +42,7 @@ export class LinePainter extends AbstractSegmentPainter {
     }
 
     private drawThePointNotMoving(line: Line, ctx: CanvasRenderingContext2D): void {
-        [line.p1, line.p2]
-            .filter((it) => it !== line.movePoint)
-            .forEach((it) => { this.drawHollowDot(it, this._color, ctx); });
+        this.drawHollowDot(line.nonMovingPoint, this._color, ctx);
     }
 
 }

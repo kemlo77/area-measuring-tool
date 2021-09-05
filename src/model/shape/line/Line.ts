@@ -89,8 +89,27 @@ export class Line implements InteractiveShape, PaintableSegments {
         this._movePoint = point;
     }
 
+    resetMovePoint(): void {
+        this._movePoint = null;
+    }
+
+    replacePointSelectedForMoveWithNewPoint(newPoint: Point): void {
+        if (this._p1 == this._movePoint) {
+            this._p1 = newPoint;
+        } else {
+            this._p2 = newPoint;
+        }
+    }
+
     get segment(): Segment {
         return this.currentState.calculateSegment();
+    }
+
+    get nonMovingPoint(): Point {
+        if (this._p1 == this._movePoint) {
+            return this._p2;
+        }
+        return this._p1;
     }
 
     getStillSegments(): Segment[] {

@@ -21,7 +21,7 @@ export class RulerPainter extends AbstractSegmentPainter {
     drawStill(motif: any): void {
         const ruler: Ruler = motif as Ruler;
         const segment: Segment[] = ruler.getStillSegments();
-        if (segment.length>0) {
+        if (segment.length > 0) {
             this.drawStillSegments(segment, this.lineWidth, ruler.color);
             this.drawStillSegments(this.generateRulerLines(segment[0]), 1, '0,0,0');
             if (ruler.isComplete) {
@@ -79,9 +79,7 @@ export class RulerPainter extends AbstractSegmentPainter {
     }
 
     private drawThePointNotMoving(ruler: Ruler, ctx: CanvasRenderingContext2D): void {
-        [ruler.p1, ruler.p2]
-            .filter((it) => it !== ruler.movePoint)
-            .forEach((it) => { this.drawHollowDot(it, '0,0,0', ctx); });
+        this.drawHollowDot(ruler.nonMovingPoint, '0,0,0', ctx);
     }
 
 }

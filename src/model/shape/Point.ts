@@ -47,11 +47,6 @@ export class Point implements Coordinate {
         return (this._x === otherPoint._x && this._y === otherPoint._y);
     }
 
-    copyValues(copyFromThisPoint: Point): void {
-        this._x = copyFromThisPoint._x;
-        this._y = copyFromThisPoint._y;
-    }
-
     // rotate a point around the Origin
     rotateClockwise(angle: number): Point {
         const tempX: number = this._x;
