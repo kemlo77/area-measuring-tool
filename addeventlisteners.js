@@ -24,6 +24,10 @@ document.getElementById('addRuler')
     .addEventListener('click', () => addShape('Ruler'));
 document.getElementById('removeSelectedShape')
     .addEventListener('click', () => removeSelectedShape());
+document.getElementById('addPolygon')
+    .addEventListener('click', () => addShape('Polygon'));
+document.getElementById('addLine')
+    .addEventListener('click', () => addShape('Line'));
 
 
 addEventListener('load', () => adjustCanvas());

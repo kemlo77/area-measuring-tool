@@ -54,7 +54,11 @@ export class Line implements InteractiveShape, PaintableSegments {
     }
 
     get isSelected(): boolean {
-        return !(this.currentState instanceof UnselectedState);
+        return !this.isUnselected;
+    }
+
+    get isUnselected(): boolean {
+        return this.currentState instanceof UnselectedState;
     }
 
     get isMoving(): boolean {
@@ -81,6 +85,27 @@ export class Line implements InteractiveShape, PaintableSegments {
         this._p2 = point;
     }
 
+    get endpoints(): Point[] {
+        return [this._p1, this._p2];
+    }
+
+    get nonMovingEndpoints(): Point[] {
+        if (this.isMoving) {
+            return [this.nonMovingPoint];
+        }
+        if (this.isComplete || this.isUnselected) {
+            return this.endpoints;
+        }
+        return [];
+    }
+
+    get nonMovingPoint(): Point {
+        if (this._p1 == this._movePoint) {
+            return this._p2;
+        }
+        return this._p1;
+    }
+
     get movePoint(): Point {
         return this._movePoint;
     }
@@ -103,13 +128,6 @@ export class Line implements InteractiveShape, PaintableSegments {
 
     get segment(): Segment {
         return this.currentState.calculateSegment();
-    }
-
-    get nonMovingPoint(): Point {
-        if (this._p1 == this._movePoint) {
-            return this._p2;
-        }
-        return this._p1;
     }
 
     getStillSegments(): Segment[] {

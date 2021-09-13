@@ -45,7 +45,7 @@ export class Polygon implements InteractiveShape, PaintableSegments {
     }
 
     get vertices(): Point[] {
-        return this._vertices;
+        return this._vertices.slice();
     }
 
     get nonMovingVertices(): Point[] {

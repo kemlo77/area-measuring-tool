@@ -28,19 +28,10 @@ export class PolygonPainter extends AbstractSegmentPainter {
 
     drawMovement(motif: any, mousePosition: Coordinate): void {
         const polygon: Polygon = motif as Polygon;
-
-        this.clearUsedPartOfCanvas();
         const movingSegments: Segment[] = polygon.getMovingSegments(mousePosition);
+        this.clearUsedPartOfCanvas();
         this.drawMovingSegments(movingSegments, 3, this._color);
-        if (polygon.isMoving) {
-            polygon.verticesNextToTheVerticeMoving.forEach((it) => {
-                this.drawHollowDot(it, this._color, this.movementCanvasCtx);
-            });
-        } else if (polygon.isOpen) {
-            if (polygon.vertices.length > 0) {
-                this.drawHollowDot(polygon.lastVertex, this._color, this.movementCanvasCtx);
-            }
-        }
+        this.drawNonMovingPointsOnMovingSegments(movingSegments, polygon.movePoint, this._color);
     }
 
 }

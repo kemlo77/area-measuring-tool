@@ -3,9 +3,10 @@ import { Coordinate } from '../../model/shape/Coordinate.js';
 import { Segment } from '../../model/shape/Segment.js';
 import { CanvasAssistant } from './CanvasAssistant.js';
 import { Painter } from './Painter.js';
+import { Point } from '../../model/shape/Point.js';
 
 
-export abstract class AbstractSegmentPainter extends CanvasAssistant implements Painter{
+export abstract class AbstractSegmentPainter extends CanvasAssistant implements Painter {
 
     private oldXMin: number = 0;
     private oldXMax: number = 1;
@@ -25,6 +26,20 @@ export abstract class AbstractSegmentPainter extends CanvasAssistant implements 
             this.drawOneSegment(it, width, color, this.movementCanvasCtx);
         });
         this.saveExtremes(segments);
+    }
+
+    drawNonMovingPointsOnMovingSegments(movingSegments: Segment[], movePoint: Point, color: string): void {
+        movingSegments
+            .map((it) => { return this.nonMovingPointInMovingSegment(it, movePoint); })
+            .forEach((it) => { this.drawHollowDot(it, color, this.movementCanvasCtx); });
+    }
+
+    nonMovingPointInMovingSegment(movingSegment: Segment, movePoint: Point): Point {
+        if (movingSegment.p1 == movePoint) {
+            return movingSegment.p2;
+        } else {
+            return movingSegment.p1;
+        }
     }
 
     drawOneSegment(segment: Segment, width: number, lineColor: string, ctx: CanvasRenderingContext2D): void {

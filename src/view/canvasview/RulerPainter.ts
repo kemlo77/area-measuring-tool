@@ -20,15 +20,30 @@ export class RulerPainter extends AbstractSegmentPainter {
 
     drawStill(motif: any): void {
         const ruler: Ruler = motif as Ruler;
-        const segment: Segment[] = ruler.getStillSegments();
-        if (segment.length > 0) {
-            this.drawStillSegments(segment, this.lineWidth, ruler.color);
-            this.drawStillSegments(this.generateRulerLines(segment[0]), 1, '0,0,0');
-            if (ruler.isComplete) {
-                this.drawHollowDot(segment[0].p1, '0,0,0', this.stillCanvasCtx);
-                this.drawHollowDot(segment[0].p2, '0,0,0', this.stillCanvasCtx);
-            }
+        const segments: Segment[] = ruler.getStillSegments();
+        this.drawStillSegments(segments, this.lineWidth, ruler.color);
+        segments.forEach((it) => {
+            this.drawStillSegments(this.generateRulerLines(it), 1, '0,0,0');
+        });
+        if (ruler.isSelected) {
+            ruler.nonMovingEndpoints.forEach((it) => {
+                this.drawHollowDot(it, '0,0,0', this.stillCanvasCtx);
+            });
         }
+
+    }
+
+
+    drawMovement(motif: any, mousePosition: Coordinate): void {
+        const ruler: Ruler = motif as Ruler;
+        const segments: Segment[] = ruler.getMovingSegments(mousePosition);
+        this.clearUsedPartOfCanvas();
+        this.drawMovingSegments(segments, this.lineWidth, ruler.color);
+        segments.forEach((it) => {
+            this.drawMovingSegments(this.generateRulerLines(it), 1, '0,0,0');
+        });
+
+        this.drawNonMovingPointsOnMovingSegments(segments, ruler.movePoint, '0,0,0');
     }
 
     private generateRulerLines(segment: Segment): Segment[] {
@@ -62,24 +77,6 @@ export class RulerPainter extends AbstractSegmentPainter {
         const newPointX: number = point.x + direction.x * distance;
         const newPointY: number = point.y + direction.y * distance;
         return new Point(newPointX, newPointY);
-    }
-
-    drawMovement(motif: any, mousePosition: Coordinate): void {
-        const ruler: Ruler = motif as Ruler;
-        const segment: Segment[] = ruler.getMovingSegments(mousePosition);
-        if (segment.length > 0) {
-            if (ruler.isMoving) {
-                this.clearUsedPartOfCanvas();
-                this.drawMovingSegments(segment, this.lineWidth, ruler.color);
-                this.drawMovingSegments(this.generateRulerLines(segment[0]), 1, '0,0,0');
-                this.drawThePointNotMoving(ruler, this.movementCanvasCtx);
-            }
-
-        }
-    }
-
-    private drawThePointNotMoving(ruler: Ruler, ctx: CanvasRenderingContext2D): void {
-        this.drawHollowDot(ruler.nonMovingPoint, '0,0,0', ctx);
     }
 
 }

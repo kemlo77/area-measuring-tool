@@ -5,6 +5,7 @@ import { Segment } from '../../model/shape/Segment.js';
 import { AbstractSegmentPainter } from './AbstractSegmentPainter.js';
 
 
+
 export class PolygonAreaPainter extends AbstractSegmentPainter {
 
     private static instance: PolygonAreaPainter;
@@ -25,23 +26,16 @@ export class PolygonAreaPainter extends AbstractSegmentPainter {
             polygon.nonMovingVertices
                 .forEach((it) => { this.drawHollowDot(it, polygon.color, this.stillCanvasCtx); });
         }
-
     }
 
     drawMovement(motif: any, mousePosition: Coordinate): void {
         const polygon: AbstractPolygonArea = motif as AbstractPolygonArea;
-        this.clearUsedPartOfCanvas();
         const movingSegments: Segment[] = polygon.getMovingSegments(mousePosition);
+        this.clearUsedPartOfCanvas();
         this.drawMovingSegments(movingSegments, 3, polygon.color);
-        if (polygon.isMoving) {
-            polygon.verticesNextToTheVerticeMoving.forEach((it) => {
-                this.drawHollowDot(it, polygon.color, this.movementCanvasCtx);
-            });
-        } else if (polygon.isOpen) {
-            if (polygon.vertices.length > 0) {
-                this.drawHollowDot(polygon.lastVertex, polygon.color, this.movementCanvasCtx);
-            }
-        }
+        this.drawNonMovingPointsOnMovingSegments(movingSegments, polygon.movePoint, polygon.color);
     }
+
+
 
 }
