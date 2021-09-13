@@ -127,28 +127,28 @@ export class Polygon implements InteractiveShape, PaintableSegments {
     }
 
     reversePolygonDirection(): void {
-        this.vertices.reverse();
+        this._vertices.reverse();
     }
 
     get firstVertex(): Point {
-        return this.vertices[0];
+        return this._vertices[0];
     }
 
     get lastVertex(): Point {
-        return this.vertices[this.vertices.length - 1];
+        return this._vertices[this._vertices.length - 1];
     }
 
     get verticesExceptMovePoint(): Point[] {
         if (this.movePoint === null) {
-            return this.vertices;
+            return this._vertices;
         } else {
-            return this.vertices
+            return this._vertices
                 .filter((vertex) => vertex !== this.movePoint);
         }
     }
 
     get numberOfVertices(): number {
-        return this.vertices.length;
+        return this._vertices.length;
     }
 
     get perimeterLength(): number {
@@ -181,13 +181,13 @@ export class Polygon implements InteractiveShape, PaintableSegments {
     }
 
     makeThisVertexFirst(vertex: Point): void {
-        while (this.vertices[0] !== vertex) {
+        while (this._vertices[0] !== vertex) {
             this.rotateVertices(1);
         }
     }
 
     rotateVertices(steps: number): void {
-        this._vertices = Polygon.arrayRotate(this.vertices, steps);
+        this._vertices = Polygon.arrayRotate(this._vertices, steps);
     }
 
     static arrayRotate(arr: any[], steps: number): any[] {
@@ -204,21 +204,21 @@ export class Polygon implements InteractiveShape, PaintableSegments {
     }
 
     addVertex(newVertex: Point): void {
-        this.vertices.push(newVertex);
+        this._vertices.push(newVertex);
     }
 
     removeLastVertex(): void {
-        this.vertices.pop();
+        this._vertices.pop();
     }
 
     insertVertex(newVertex: Point, segment: Segment): void {
-        const pointBeforeIndex: number = this.vertices.indexOf(segment.p1);
-        this.vertices.splice(pointBeforeIndex + 1, 0, newVertex);
+        const pointBeforeIndex: number = this._vertices.indexOf(segment.p1);
+        this._vertices.splice(pointBeforeIndex + 1, 0, newVertex);
     }
 
     ejectVertex(vertexToRemove: Point): void {
-        const index: number = this.vertices.indexOf(vertexToRemove);
-        this.vertices.splice(index, 1);
+        const index: number = this._vertices.indexOf(vertexToRemove);
+        this._vertices.splice(index, 1);
     }
 
     get verticesNextToTheVerticeMoving(): Point[] {
@@ -231,15 +231,15 @@ export class Polygon implements InteractiveShape, PaintableSegments {
     }
 
     getPrecedingVertex(vertex: Point): Point {
-        const index: number = this.vertices.indexOf(vertex);
-        const indexOfPreceding: number = Polygon.moduloInPolygon(index - 1, this.vertices.length);
-        return this.vertices[indexOfPreceding];
+        const index: number = this._vertices.indexOf(vertex);
+        const indexOfPreceding: number = Polygon.moduloInPolygon(index - 1, this._vertices.length);
+        return this._vertices[indexOfPreceding];
     }
 
     getFollowingVertex(vertex: Point): Point {
-        const index: number = this.vertices.indexOf(vertex);
-        const indexOfFollowing: number = Polygon.moduloInPolygon(index + 1, this.vertices.length);
-        return this.vertices[indexOfFollowing];
+        const index: number = this._vertices.indexOf(vertex);
+        const indexOfFollowing: number = Polygon.moduloInPolygon(index + 1, this._vertices.length);
+        return this._vertices[indexOfFollowing];
     }
 
     // function to translate negative indexes in a polygon.
