@@ -1,6 +1,6 @@
-import { Point } from './Point.js';
-import { Segment } from './Segment.js';
-import { Vector } from './Vector.js';
+import { Point } from './Point';
+import { Segment } from './Segment';
+import { Vector } from './Vector';
 
 export module MathUtil {
 	// Checking if two segments AB and CD intersect

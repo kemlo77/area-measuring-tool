@@ -1,7 +1,7 @@
-import { Coordinate } from '../../model/shape/Coordinate.js';
-import { Line } from '../../model/shape/line/Line.js';
-import { Segment } from '../../model/shape/Segment.js';
-import { AbstractSegmentPainter } from './AbstractSegmentPainter.js';
+import { Coordinate } from '../../model/shape/Coordinate';
+import { Line } from '../../model/shape/line/Line';
+import { Segment } from '../../model/shape/Segment';
+import { AbstractSegmentPainter } from './AbstractSegmentPainter';
 
 export class LinePainter extends AbstractSegmentPainter {
 

@@ -1,5 +1,5 @@
-import { AbstractPolygonArea } from './AbstractPolygonArea.js';
-import { Coordinate } from './shape/Coordinate.js';
+import { AbstractPolygonArea } from './AbstractPolygonArea';
+import { Coordinate } from './shape/Coordinate';
 
 export class NegativePolygonArea extends AbstractPolygonArea {
 

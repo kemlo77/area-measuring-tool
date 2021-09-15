@@ -1,6 +1,6 @@
-import { AbstractPolygonArea } from '../../model/AbstractPolygonArea.js';
-import { Model } from '../../model/Model.js';
-import { Ruler } from '../../model/Ruler.js';
+import { AbstractPolygonArea } from '../../model/AbstractPolygonArea';
+import { Model } from '../../model/Model';
+import { Ruler } from '../../model/Ruler';
 
 export class DataView {
 

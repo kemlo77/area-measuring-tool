@@ -1,5 +1,5 @@
-import { Point } from './Point.js';
-import { MathUtil } from './MathUtil.js';
+import { Point } from './Point';
+import { MathUtil } from './MathUtil';
 
 export class Segment {
     private _p1: Point;

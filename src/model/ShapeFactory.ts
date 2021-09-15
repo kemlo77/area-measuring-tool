@@ -1,9 +1,9 @@
-import { NegativePolygonArea } from './NegativePolygonArea.js';
-import { PositivePolygonArea } from './PositivePolygonArea.js';
-import { Ruler } from './Ruler.js';
-import { InteractiveShape } from './shape/InteractiveShape.js';
-import { Line } from './shape/line/Line.js';
-import { Polygon } from './shape/polygon/Polygon.js';
+import { NegativePolygonArea } from './NegativePolygonArea';
+import { PositivePolygonArea } from './PositivePolygonArea';
+import { Ruler } from './Ruler';
+import { InteractiveShape } from './shape/InteractiveShape';
+import { Line } from './shape/line/Line';
+import { Polygon } from './shape/polygon/Polygon';
 
 
 export class ShapeFactory {

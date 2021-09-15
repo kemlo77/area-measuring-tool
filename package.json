@@ -9,7 +9,8 @@
         "test": "mocha --recursive",
         "coverage": "nyc npm run test",
         "SpecificTest": "nyc mocha test/**/MathUtil.spec.ts",
-        "sonar": "node sonar-project.js"
+        "sonar": "node sonar-project.js",
+        "webpack": "webpack"
     },
     "devDependencies": {
         "@types/chai": "^4.2.11",
@@ -22,8 +23,10 @@
         "nyc": "^15.0.1",
         "sonarqube-scanner": "^2.6.0",
         "source-map-support": "^0.5.18",
+        "ts-loader": "^9.2.5",
         "ts-node": "^8.8.2",
-        "typescript": "^3.8.3"
-    },
-    "dependencies": {}
+        "typescript": "^3.8.3",
+        "webpack": "^5.52.1",
+        "webpack-cli": "^4.8.0"
+    }
 }

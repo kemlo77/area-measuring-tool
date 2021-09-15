@@ -1,5 +1,5 @@
-import { Coordinate } from './model/shape/Coordinate.js';
-import { Controller } from './controller/Controller.js';
+import { Coordinate } from './model/shape/Coordinate';
+import { Controller } from './controller/Controller';
 
 
 const controller: Controller = new Controller();

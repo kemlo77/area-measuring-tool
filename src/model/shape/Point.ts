@@ -1,4 +1,4 @@
-import { Coordinate } from './Coordinate.js';
+import { Coordinate } from './Coordinate';
 
 export class Point implements Coordinate {
     private _x: number;

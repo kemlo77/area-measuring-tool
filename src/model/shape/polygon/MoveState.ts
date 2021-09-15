@@ -1,9 +1,9 @@
-import { Polygon } from './Polygon.js';
-import { PolygonState } from './PolygonState.js';
-import { Point } from '../Point.js';
-import { ClosedState } from './ClosedState.js';
-import { Segment } from '../Segment.js';
-import { Coordinate } from '../Coordinate.js';
+import { Polygon } from './Polygon';
+import { PolygonState } from './PolygonState';
+import { Point } from '../Point';
+import { ClosedState } from './ClosedState';
+import { Segment } from '../Segment';
+import { Coordinate } from '../Coordinate';
 
 export class MoveState implements PolygonState {
 

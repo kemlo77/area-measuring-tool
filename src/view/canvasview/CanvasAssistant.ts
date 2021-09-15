@@ -1,4 +1,4 @@
-import { Coordinate } from '../../model/shape/Coordinate.js';
+import { Coordinate } from '../../model/shape/Coordinate';
 
 export class CanvasAssistant {
     private canvasBackground: HTMLCanvasElement = document.getElementById('background') as HTMLCanvasElement;

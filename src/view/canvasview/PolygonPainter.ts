@@ -1,7 +1,7 @@
-import { Coordinate } from '../../model/shape/Coordinate.js';
-import { Polygon } from '../../model/shape/polygon/Polygon.js';
-import { Segment } from '../../model/shape/Segment.js';
-import { AbstractSegmentPainter } from './AbstractSegmentPainter.js';
+import { Coordinate } from '../../model/shape/Coordinate';
+import { Polygon } from '../../model/shape/polygon/Polygon';
+import { Segment } from '../../model/shape/Segment';
+import { AbstractSegmentPainter } from './AbstractSegmentPainter';
 
 export class PolygonPainter extends AbstractSegmentPainter {
 

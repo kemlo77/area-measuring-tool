@@ -1,5 +1,5 @@
-import { Coordinate } from './shape/Coordinate.js';
-import { Line } from './shape/line/Line.js';
+import { Coordinate } from './shape/Coordinate';
+import { Line } from './shape/line/Line';
 
 
 export class Ruler extends Line {

@@ -1,21 +1,21 @@
 import {
     addShape, removeSelectedShape, canvasMouseMovement, canvasLeftClicked,
     canvasRightClicked, canvasMouseDown, canvasMouseUp
-} from './built/router.js';
+} from './router';
 import {
     dropHandler, dragOverHandler, adjustCanvas, delayedAdjustCanvas, adjustOpacity
-} from './built/imageDrop.js';
+} from './imageDrop';
 
 document.getElementById('foreground')
-    .addEventListener('click', (event) => canvasLeftClicked(event, event.target.id));
+    .addEventListener('click', (event) => canvasLeftClicked(event, (event.target as Element).id));
 document.getElementById('foreground')
-    .addEventListener('mousemove', (event) => canvasMouseMovement(event, event.target.id));
+    .addEventListener('mousemove', (event) => canvasMouseMovement(event, (event.target as Element).id));
 document.getElementById('foreground')
-    .addEventListener('mousedown', (event) => canvasMouseDown(event, event.target.id));
+    .addEventListener('mousedown', (event) => canvasMouseDown(event, (event.target as Element).id));
 document.getElementById('foreground')
-    .addEventListener('mouseup', (event) => canvasMouseUp(event, event.target.id));
+    .addEventListener('mouseup', (event) => canvasMouseUp(event, (event.target as Element).id));
 document.getElementById('foreground')
-    .addEventListener('contextmenu', (event) => canvasRightClicked(event, event.target.id));
+    .addEventListener('contextmenu', (event) => canvasRightClicked(event, (event.target as Element).id));
 document.getElementById('addPositivePolygon')
     .addEventListener('click', () => addShape('PositivePolygonArea'));
 document.getElementById('addNegativePolygon')
@@ -37,4 +37,4 @@ document.getElementById('viewport')
 document.getElementById('viewport')
     .addEventListener('dragover', (event) => dragOverHandler(event));
 document.getElementById('opacitySlider')
-    .addEventListener('change', (event) => adjustOpacity(event.target.value));
+    .addEventListener('change', (event) => adjustOpacity(Number((event.target as HTMLInputElement).value)));

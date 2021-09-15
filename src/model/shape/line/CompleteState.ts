@@ -1,11 +1,11 @@
-import { Coordinate } from '../Coordinate.js';
-import { Point } from '../Point.js';
-import { Segment } from '../Segment.js';
-import { UnselectedState } from './UnselectedState.js';
-import { Line } from './Line.js';
-import { LineState } from './LineState.js';
-import { MoveState } from './MoveState.js';
-import { MathUtil } from '../MathUtil.js';
+import { Coordinate } from '../Coordinate';
+import { Point } from '../Point';
+import { Segment } from '../Segment';
+import { UnselectedState } from './UnselectedState';
+import { Line } from './Line';
+import { LineState } from './LineState';
+import { MoveState } from './MoveState';
+import { MathUtil } from '../MathUtil';
 
 export class CompleteState implements LineState {
 

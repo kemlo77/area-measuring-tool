@@ -1,12 +1,12 @@
-import { Polygon } from './Polygon.js';
-import { MoveState } from './MoveState.js';
-import { PolygonState } from './PolygonState.js';
-import { Point } from '../Point.js';
-import { OpenState } from './OpenState.js';
-import { Segment } from '../Segment.js';
-import { MathUtil } from '../MathUtil.js';
-import { Coordinate } from '../Coordinate.js';
-import { UnselectedState } from './UnselectedState.js';
+import { Polygon } from './Polygon';
+import { MoveState } from './MoveState';
+import { PolygonState } from './PolygonState';
+import { Point } from '../Point';
+import { OpenState } from './OpenState';
+import { Segment } from '../Segment';
+import { MathUtil } from '../MathUtil';
+import { Coordinate } from '../Coordinate';
+import { UnselectedState } from './UnselectedState';
 
 export class ClosedState implements PolygonState {
 

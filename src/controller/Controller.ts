@@ -1,7 +1,7 @@
-import { Model } from '../model/Model.js';
-import { Coordinate } from '../model/shape/Coordinate.js';
-import { DataView } from '../view/dataview/DataView.js';
-import { CanvasView } from '../view/canvasview/CanvasView.js';
+import { Model } from '../model/Model';
+import { Coordinate } from '../model/shape/Coordinate';
+import { DataView } from '../view/dataview/DataView';
+import { CanvasView } from '../view/canvasview/CanvasView';
 
 type ModelHandleMouseEvent = (model: Model, coordinate: Coordinate) => boolean;
 

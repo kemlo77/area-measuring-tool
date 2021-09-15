@@ -1,4 +1,4 @@
-import { Coordinate } from './Coordinate.js';
+import { Coordinate } from './Coordinate';
 
 export interface InteractiveShape{
     readonly isSelected: boolean;

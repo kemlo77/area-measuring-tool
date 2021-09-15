@@ -1,16 +1,16 @@
-import { Painter } from './Painter.js';
-import { PolygonPainter } from './PolygonPainter.js';
-import { PolygonAreaPainter } from './PolygonAreaPainter.js';
-import { LinePainter } from './LinePainter.js';
-import { RulerPainter } from './RulerPainter.js';
-import { AbstractPolygonArea } from '../../model/AbstractPolygonArea.js';
-import { Ruler } from '../../model/Ruler.js';
-import { Coordinate } from '../../model/shape/Coordinate.js';
-import { Line } from '../../model/shape/line/Line.js';
-import { Polygon } from '../../model/shape/polygon/Polygon.js';
-import { Model } from '../../model/Model.js';
-import { InteractiveShape } from '../../model/shape/InteractiveShape.js';
-import { CanvasAssistant } from './CanvasAssistant.js';
+import { Painter } from './Painter';
+import { PolygonPainter } from './PolygonPainter';
+import { PolygonAreaPainter } from './PolygonAreaPainter';
+import { LinePainter } from './LinePainter';
+import { RulerPainter } from './RulerPainter';
+import { AbstractPolygonArea } from '../../model/AbstractPolygonArea';
+import { Ruler } from '../../model/Ruler';
+import { Coordinate } from '../../model/shape/Coordinate';
+import { Line } from '../../model/shape/line/Line';
+import { Polygon } from '../../model/shape/polygon/Polygon';
+import { Model } from '../../model/Model';
+import { InteractiveShape } from '../../model/shape/InteractiveShape';
+import { CanvasAssistant } from './CanvasAssistant';
 
 export class CanvasView {
 

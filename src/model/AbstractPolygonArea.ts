@@ -1,5 +1,5 @@
-import { Polygon } from './shape/polygon/Polygon.js';
-import { Coordinate } from './shape/Coordinate.js';
+import { Polygon } from './shape/polygon/Polygon';
+import { Coordinate } from './shape/Coordinate';
 
 export abstract class AbstractPolygonArea extends Polygon {
 

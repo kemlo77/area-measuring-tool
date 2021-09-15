@@ -1,8 +1,8 @@
-import { AbstractPolygonArea } from './AbstractPolygonArea.js';
-import { Ruler } from './Ruler.js';
-import { Coordinate } from './shape/Coordinate.js';
-import { InteractiveShape } from './shape/InteractiveShape.js';
-import { ShapeFactory } from './ShapeFactory.js';
+import { AbstractPolygonArea } from './AbstractPolygonArea';
+import { Ruler } from './Ruler';
+import { Coordinate } from './shape/Coordinate';
+import { InteractiveShape } from './shape/InteractiveShape';
+import { ShapeFactory } from './ShapeFactory';
 
 type ShapeAction = (shape: InteractiveShape, coordinate: Coordinate) => void;
 

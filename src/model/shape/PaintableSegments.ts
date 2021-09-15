@@ -1,5 +1,5 @@
-import { Coordinate } from './Coordinate.js';
-import { Segment } from './Segment.js';
+import { Coordinate } from './Coordinate';
+import { Segment } from './Segment';
 
 export interface PaintableSegments{
 

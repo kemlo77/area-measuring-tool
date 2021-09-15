@@ -1,9 +1,9 @@
 
-import { Coordinate } from '../../model/shape/Coordinate.js';
-import { Segment } from '../../model/shape/Segment.js';
-import { CanvasAssistant } from './CanvasAssistant.js';
-import { Painter } from './Painter.js';
-import { Point } from '../../model/shape/Point.js';
+import { Coordinate } from '../../model/shape/Coordinate';
+import { Segment } from '../../model/shape/Segment';
+import { CanvasAssistant } from './CanvasAssistant';
+import { Painter } from './Painter';
+import { Point } from '../../model/shape/Point';
 
 
 export abstract class AbstractSegmentPainter extends CanvasAssistant implements Painter {

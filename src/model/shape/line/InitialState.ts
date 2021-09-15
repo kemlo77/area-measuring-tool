@@ -1,9 +1,9 @@
 import { Coordinate } from '../Coordinate';
-import { MoveState } from './MoveState.js';
-import { Point } from '../Point.js';
-import { Segment } from '../Segment.js';
-import { Line } from './Line.js';
-import { LineState } from './LineState.js';
+import { MoveState } from './MoveState';
+import { Point } from '../Point';
+import { Segment } from '../Segment';
+import { Line } from './Line';
+import { LineState } from './LineState';
 
 export class InitialState implements LineState {
 

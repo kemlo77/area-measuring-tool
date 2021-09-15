@@ -1,9 +1,9 @@
-import { Ruler } from '../../model/Ruler.js';
-import { Coordinate } from '../../model/shape/Coordinate.js';
-import { Point } from '../../model/shape/Point.js';
-import { Segment } from '../../model/shape/Segment.js';
-import { Vector } from '../../model/shape/Vector.js';
-import { AbstractSegmentPainter } from './AbstractSegmentPainter.js';
+import { Ruler } from '../../model/Ruler';
+import { Coordinate } from '../../model/shape/Coordinate';
+import { Point } from '../../model/shape/Point';
+import { Segment } from '../../model/shape/Segment';
+import { Vector } from '../../model/shape/Vector';
+import { AbstractSegmentPainter } from './AbstractSegmentPainter';
 
 export class RulerPainter extends AbstractSegmentPainter {
 

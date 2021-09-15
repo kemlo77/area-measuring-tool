@@ -1,13 +1,13 @@
-import { Coordinate } from '../Coordinate.js';
-import { InteractiveShape } from '../InteractiveShape.js';
-import { PaintableSegments } from '../PaintableSegments.js';
-import { Point } from '../Point.js';
-import { Segment } from '../Segment.js';
-import { CompleteState } from './CompleteState.js';
-import { InitialState } from './InitialState.js';
-import { LineState } from './LineState.js';
-import { MoveState } from './MoveState.js';
-import { UnselectedState } from './UnselectedState.js';
+import { Coordinate } from '../Coordinate';
+import { InteractiveShape } from '../InteractiveShape';
+import { PaintableSegments } from '../PaintableSegments';
+import { Point } from '../Point';
+import { Segment } from '../Segment';
+import { CompleteState } from './CompleteState';
+import { InitialState } from './InitialState';
+import { LineState } from './LineState';
+import { MoveState } from './MoveState';
+import { UnselectedState } from './UnselectedState';
 
 export class Line implements InteractiveShape, PaintableSegments {
 

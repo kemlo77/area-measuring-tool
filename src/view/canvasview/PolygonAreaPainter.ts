@@ -1,8 +1,8 @@
 
-import { AbstractPolygonArea } from '../../model/AbstractPolygonArea.js';
-import { Coordinate } from '../../model/shape/Coordinate.js';
-import { Segment } from '../../model/shape/Segment.js';
-import { AbstractSegmentPainter } from './AbstractSegmentPainter.js';
+import { AbstractPolygonArea } from '../../model/AbstractPolygonArea';
+import { Coordinate } from '../../model/shape/Coordinate';
+import { Segment } from '../../model/shape/Segment';
+import { AbstractSegmentPainter } from './AbstractSegmentPainter';
 
 
 

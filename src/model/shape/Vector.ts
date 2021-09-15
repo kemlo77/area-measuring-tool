@@ -1,4 +1,4 @@
-import { Point } from './Point.js';
+import { Point } from './Point';
 
 export class Vector {
     private _x: number;
