@@ -1,3 +1,4 @@
+import './style.css';
 import {
     addShape, removeSelectedShape, canvasMouseMovement, canvasLeftClicked,
     canvasRightClicked, canvasMouseDown, canvasMouseUp
