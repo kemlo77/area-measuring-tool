@@ -5,12 +5,13 @@
     "author": "Fredrik Kemling",
     "scripts": {
         "eslint": "eslint -c .eslintrc --ext .ts src/*",
-        "build": "tsc",
+        "build:beforeTest": "tsc",
+        "build:forDevServer": "webpack-dev-server --config webpack.dev.js",
+        "build:forProd": "webpack --config webpack.prod.js",
         "test": "mocha --recursive",
         "coverage": "nyc npm run test",
         "SpecificTest": "nyc mocha test/**/MathUtil.spec.ts",
-        "sonar": "node sonar-project.js",
-        "webpack": "webpack"
+        "sonar": "node sonar-project.js"
     },
     "devDependencies": {
         "@types/chai": "^4.2.11",
@@ -30,6 +31,8 @@
         "ts-node": "^8.8.2",
         "typescript": "^3.8.3",
         "webpack": "^5.52.1",
-        "webpack-cli": "^4.8.0"
+        "webpack-cli": "^4.8.0",
+        "webpack-dev-server": "^4.2.1",
+        "webpack-merge": "^5.8.0"
     }
 }
