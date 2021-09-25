@@ -6,9 +6,9 @@ import { Coordinate } from '../Coordinate';
 import { UnselectedState } from './UnselectedState';
 import { MoveState } from './MoveState';
 import { InteractiveShape } from '../InteractiveShape';
-import { PaintableSegments } from '../PaintableSegments';
+import { SegmentShape } from '../SegmentShape';
 
-export class Polygon implements InteractiveShape, PaintableSegments {
+export class Polygon implements InteractiveShape, SegmentShape {
     private _vertices: Point[];
     private _movePoint: Point;
     private _mousePositionAtMoveStart: Point;

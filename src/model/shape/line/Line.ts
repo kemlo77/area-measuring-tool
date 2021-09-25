@@ -1,6 +1,6 @@
 import { Coordinate } from '../Coordinate';
 import { InteractiveShape } from '../InteractiveShape';
-import { PaintableSegments } from '../PaintableSegments';
+import { SegmentShape } from '../SegmentShape';
 import { Point } from '../Point';
 import { Segment } from '../Segment';
 import { CompleteState } from './CompleteState';
@@ -9,7 +9,7 @@ import { LineState } from './LineState';
 import { MoveState } from './MoveState';
 import { UnselectedState } from './UnselectedState';
 
-export class Line implements InteractiveShape, PaintableSegments {
+export class Line implements InteractiveShape, SegmentShape {
 
     private _p1: Point = null;
     private _p2: Point = null;

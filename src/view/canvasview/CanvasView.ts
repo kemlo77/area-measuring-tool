@@ -1,8 +1,6 @@
 import { Painter } from './Painter';
-import { PolygonPainter } from './PolygonPainter';
-import { PolygonAreaPainter } from './PolygonAreaPainter';
-import { LinePainter } from './LinePainter';
-import { RulerPainter } from './RulerPainter';
+import { SegmentsPainter } from './SegmentsPainter';
+import { StripedSegmentsPainter } from './StripedSegmentsPainter';
 import { AbstractPolygonArea } from '../../model/AbstractPolygonArea';
 import { Ruler } from '../../model/Ruler';
 import { Coordinate } from '../../model/shape/Coordinate';
@@ -15,7 +13,7 @@ import { CanvasAssistant } from './CanvasAssistant';
 export class CanvasView {
 
     private static instance: CanvasView;
-    private painter: Painter = PolygonPainter.getInstance();
+    private painter: Painter = SegmentsPainter.getInstance();
     private canvasAssistant: CanvasAssistant = new CanvasAssistant();
     private model: Model;
 
@@ -62,13 +60,13 @@ export class CanvasView {
 
     private setStrategyGivenThisObject(object: any): void {
         if (object instanceof AbstractPolygonArea) {
-            this.setStrategy(PolygonAreaPainter.getInstance());
+            this.setStrategy(SegmentsPainter.getInstance());
         } else if (object instanceof Polygon) {
-            this.setStrategy(PolygonPainter.getInstance());
+            this.setStrategy(SegmentsPainter.getInstance());
         } else if (object instanceof Ruler) {
-            this.setStrategy(RulerPainter.getInstance());
+            this.setStrategy(StripedSegmentsPainter.getInstance());
         } else if (object instanceof Line) {
-            this.setStrategy(LinePainter.getInstance());
+            this.setStrategy(SegmentsPainter.getInstance());
         } else {
             throw new Error('Unknown object to paint');
         }

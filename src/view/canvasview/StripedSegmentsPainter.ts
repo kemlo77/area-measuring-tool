@@ -1,44 +1,42 @@
-import { Ruler } from '../../model/Ruler';
 import { Coordinate } from '../../model/shape/Coordinate';
 import { Point } from '../../model/shape/Point';
 import { Segment } from '../../model/shape/Segment';
+import { SegmentShape } from '../../model/shape/SegmentShape';
 import { Vector } from '../../model/shape/Vector';
 import { AbstractSegmentPainter } from './AbstractSegmentPainter';
 
-export class RulerPainter extends AbstractSegmentPainter {
+export class StripedSegmentsPainter extends AbstractSegmentPainter {
 
-    private static instance: RulerPainter;
+    private static instance: StripedSegmentsPainter;
     private lineWidth: number = 3;
 
 
-    public static getInstance(): RulerPainter {
-        if (!RulerPainter.instance) {
-            RulerPainter.instance = new RulerPainter();
+    public static getInstance(): StripedSegmentsPainter {
+        if (!StripedSegmentsPainter.instance) {
+            StripedSegmentsPainter.instance = new StripedSegmentsPainter();
         }
-        return RulerPainter.instance;
+        return StripedSegmentsPainter.instance;
     }
 
-    drawStill(motif: any): void {
-        const ruler: Ruler = motif as Ruler;
-        const stillSegments: Segment[] = ruler.getStillSegments();
+    drawStill(segmentShape: SegmentShape): void {
+        const stillSegments: Segment[] = segmentShape.getStillSegments();
 
-        this.drawStillSegments(stillSegments, this.lineWidth, ruler.color);
+        this.drawStillSegments(stillSegments, this.lineWidth, '255,255,0');
         stillSegments.forEach((it) => {
             this.drawStillSegments(this.generateRulerLines(it), 1, '0,0,0');
         });
-        if (ruler.isSelected) {
+        if (segmentShape.isSelected) {
             this.drawEndPointsOnSegments(stillSegments, '0,0,0', this.stillCanvasCtx);
         }
 
     }
 
 
-    drawMovement(motif: any, mousePosition: Coordinate): void {
-        const ruler: Ruler = motif as Ruler;
-        const movingSegments: Segment[] = ruler.getMovingSegments(mousePosition);
+    drawMovement(segmentShape: SegmentShape, mousePosition: Coordinate): void {
+        const movingSegments: Segment[] = segmentShape.getMovingSegments(mousePosition);
 
         this.clearUsedPartOfCanvas();
-        this.drawMovingSegments(movingSegments, this.lineWidth, ruler.color);
+        this.drawMovingSegments(movingSegments, this.lineWidth, '255,255,0');
         movingSegments.forEach((it) => {
             this.drawMovingSegments(this.generateRulerLines(it), 1, '0,0,0');
         });
