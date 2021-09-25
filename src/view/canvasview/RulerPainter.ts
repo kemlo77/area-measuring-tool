@@ -20,15 +20,14 @@ export class RulerPainter extends AbstractSegmentPainter {
 
     drawStill(motif: any): void {
         const ruler: Ruler = motif as Ruler;
-        const segments: Segment[] = ruler.getStillSegments();
-        this.drawStillSegments(segments, this.lineWidth, ruler.color);
-        segments.forEach((it) => {
+        const stillSegments: Segment[] = ruler.getStillSegments();
+
+        this.drawStillSegments(stillSegments, this.lineWidth, ruler.color);
+        stillSegments.forEach((it) => {
             this.drawStillSegments(this.generateRulerLines(it), 1, '0,0,0');
         });
         if (ruler.isSelected) {
-            ruler.nonMovingEndpoints.forEach((it) => {
-                this.drawHollowDot(it, '0,0,0', this.stillCanvasCtx);
-            });
+            this.drawEndPointsOnSegments(stillSegments, '0,0,0', this.stillCanvasCtx);
         }
 
     }
@@ -36,14 +35,14 @@ export class RulerPainter extends AbstractSegmentPainter {
 
     drawMovement(motif: any, mousePosition: Coordinate): void {
         const ruler: Ruler = motif as Ruler;
-        const segments: Segment[] = ruler.getMovingSegments(mousePosition);
+        const movingSegments: Segment[] = ruler.getMovingSegments(mousePosition);
+
         this.clearUsedPartOfCanvas();
-        this.drawMovingSegments(segments, this.lineWidth, ruler.color);
-        segments.forEach((it) => {
+        this.drawMovingSegments(movingSegments, this.lineWidth, ruler.color);
+        movingSegments.forEach((it) => {
             this.drawMovingSegments(this.generateRulerLines(it), 1, '0,0,0');
         });
-
-        this.drawNonMovingPointsOnMovingSegments(segments, ruler.movePoint, '0,0,0');
+        this.drawEndPointsOnSegments(movingSegments, '0,0,0', this.movementCanvasCtx);
     }
 
     private generateRulerLines(segment: Segment): Segment[] {

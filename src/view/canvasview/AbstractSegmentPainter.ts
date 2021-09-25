@@ -17,35 +17,36 @@ export abstract class AbstractSegmentPainter extends CanvasAssistant implements 
     abstract drawMovement(modif: any, mousePosition: Coordinate): void;
 
     drawStillSegments(segments: Segment[], width: number, color: string): void {
-        segments.forEach((it) => { this.drawOneSegment(it, width, color, this.stillCanvasCtx); });
+        segments.forEach((it) => {
+            this.drawLine(it.p1, it.p2, width, color, this.stillCanvasCtx);
+        });
 
     }
 
     drawMovingSegments(segments: Segment[], width: number, color: string): void {
         segments.forEach((it) => {
-            this.drawOneSegment(it, width, color, this.movementCanvasCtx);
+            this.drawLine(it.p1, it.p2, width, color, this.movementCanvasCtx);
         });
         this.saveExtremes(segments);
     }
 
-    drawNonMovingPointsOnMovingSegments(movingSegments: Segment[], movePoint: Point, color: string): void {
-        movingSegments
-            .map((it) => { return this.nonMovingPointInMovingSegment(it, movePoint); })
-            .forEach((it) => { this.drawHollowDot(it, color, this.movementCanvasCtx); });
-    }
-
-    nonMovingPointInMovingSegment(movingSegment: Segment, movePoint: Point): Point {
-        if (movingSegment.p1 == movePoint) {
-            return movingSegment.p2;
-        } else {
-            return movingSegment.p1;
+    extractUniqueEndpoints(segments: Segment[]): Point[] {
+        const uniquePoints: Set<Point> = new Set<Point>();
+        for (let i: number = 0; i < segments.length; i++) {
+            if (!uniquePoints.has(segments[i].p1)) {
+                uniquePoints.add(segments[i].p1);
+            }
+            if (!uniquePoints.has(segments[i].p2)) {
+                uniquePoints.add(segments[i].p2);
+            }
         }
+        return Array.from(uniquePoints);
     }
 
-    drawOneSegment(segment: Segment, width: number, lineColor: string, ctx: CanvasRenderingContext2D): void {
-        this.drawLine(segment.p1, segment.p2, width, lineColor, ctx);
+    drawEndPointsOnSegments(segments: Segment[], color: string, ctx: CanvasRenderingContext2D): void {
+        const uniqueEndpoints: Point[] = this.extractUniqueEndpoints(segments);
+        uniqueEndpoints.forEach((it) => { this.drawHollowDot(it, color, ctx); });
     }
-
 
     saveExtremes(arrayWithSegments: Segment[]): void {
         if (arrayWithSegments.length > 0) {

@@ -20,20 +20,21 @@ export class PolygonAreaPainter extends AbstractSegmentPainter {
 
     drawStill(motif: any): void {
         const polygon: AbstractPolygonArea = motif as AbstractPolygonArea;
-        this.drawStillSegments(polygon.getStillSegments(), 3, polygon.color);
+        const stillSegments: Segment[] = polygon.getStillSegments();
 
+        this.drawStillSegments(stillSegments, 3, polygon.color);
         if (polygon.isSelected) {
-            polygon.nonMovingVertices
-                .forEach((it) => { this.drawHollowDot(it, polygon.color, this.stillCanvasCtx); });
+            this.drawEndPointsOnSegments(stillSegments, polygon.color, this.stillCanvasCtx);
         }
     }
 
     drawMovement(motif: any, mousePosition: Coordinate): void {
         const polygon: AbstractPolygonArea = motif as AbstractPolygonArea;
         const movingSegments: Segment[] = polygon.getMovingSegments(mousePosition);
+
         this.clearUsedPartOfCanvas();
         this.drawMovingSegments(movingSegments, 3, polygon.color);
-        this.drawNonMovingPointsOnMovingSegments(movingSegments, polygon.movePoint, polygon.color);
+        this.drawEndPointsOnSegments(movingSegments, polygon.color, this.movementCanvasCtx);
     }
 
 

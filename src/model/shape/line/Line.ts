@@ -89,16 +89,6 @@ export class Line implements InteractiveShape, PaintableSegments {
         return [this._p1, this._p2];
     }
 
-    get nonMovingEndpoints(): Point[] {
-        if (this.isMoving) {
-            return [this.nonMovingPoint];
-        }
-        if (this.isComplete || this.isUnselected) {
-            return this.endpoints;
-        }
-        return [];
-    }
-
     get nonMovingPoint(): Point {
         if (this._p1 == this._movePoint) {
             return this._p2;

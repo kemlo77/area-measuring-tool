@@ -48,10 +48,6 @@ export class Polygon implements InteractiveShape, PaintableSegments {
         return this._vertices.slice();
     }
 
-    get nonMovingVertices(): Point[] {
-        return this._vertices.filter((it) => it !== this._movePoint);
-    }
-
     get movePoint(): Point {
         return this._movePoint;
     }
