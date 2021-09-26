@@ -7,10 +7,7 @@ import { Segment } from '../../../model/shape/segmentShapes/Segment';
 
 export abstract class AbstractSegmentsPainter extends CanvasAssistant implements SegmentsPainter {
 
-    private oldXMin: number = 0;
-    private oldXMax: number = 1;
-    private oldYMin: number = 0;
-    private oldYMax: number = 1;
+    private recentlyPaintedMovingSegments: Segment[] = [];
 
     abstract drawStill(segmentShape: SegmentShape): void;
     abstract drawMovement(segmentShape: SegmentShape, mousePosition: Coordinate): void;
@@ -26,7 +23,11 @@ export abstract class AbstractSegmentsPainter extends CanvasAssistant implements
         segments.forEach((it) => {
             this.drawLine(it.p1, it.p2, width, color, this.movementCanvasCtx);
         });
-        this.saveExtremes(segments);
+        this.addSegmentsToRecentlyPaintedSegments(segments);
+    }
+
+    addSegmentsToRecentlyPaintedSegments(segments: Segment[]): void {
+        this.recentlyPaintedMovingSegments = this.recentlyPaintedMovingSegments.concat(segments);
     }
 
     extractUniqueEndpoints(segments: Segment[]): Point[] {
@@ -47,22 +48,6 @@ export abstract class AbstractSegmentsPainter extends CanvasAssistant implements
         uniqueEndpoints.forEach((it) => { this.drawHollowDot(it, color, ctx); });
     }
 
-    saveExtremes(arrayWithSegments: Segment[]): void {
-        if (arrayWithSegments.length > 0) {
-            const coordinates: Coordinate[] = [];
-            arrayWithSegments.forEach((segment) => {
-                coordinates.push(segment.p1);
-                coordinates.push(segment.p2);
-            });
-            const xCoordinates: number[] = coordinates.map((coordinate) => coordinate.x);
-            const yCoordinates: number[] = coordinates.map((coordinate) => coordinate.y);
-            this.oldXMax = this.maxValue(xCoordinates);
-            this.oldXMin = this.minValue(xCoordinates);
-            this.oldYMax = this.maxValue(yCoordinates);
-            this.oldYMin = this.minValue(yCoordinates);
-        }
-    }
-
     private maxValue(numbers: number[]): number {
         return numbers.reduce((previous, current) => Math.max(previous, current));
     }
@@ -72,16 +57,37 @@ export abstract class AbstractSegmentsPainter extends CanvasAssistant implements
     }
 
     clearUsedPartOfCanvas(): void {
-        const xOffset: number = this.oldXMin - 4;
-        const yOffset: number = this.oldYMin - 4;
-        const width: number = this.oldXMax - this.oldXMin + 8;
-        const height: number = this.oldYMax - this.oldYMin + 8;
-        this.movementCanvasCtx.clearRect(xOffset, yOffset, width, height);
+        if (this.recentlyPaintedMovingSegments.length > 0) {
+            let oldXMin: number = 0;
+            let oldXMax: number = 1;
+            let oldYMin: number = 0;
+            let oldYMax: number = 1;
 
-        this.oldXMin = 0;
-        this.oldXMax = 1;
-        this.oldYMin = 0;
-        this.oldYMax = 1;
+            const coordinates: Coordinate[] = [];
+            this.recentlyPaintedMovingSegments.forEach((segment) => {
+                coordinates.push(segment.p1);
+                coordinates.push(segment.p2);
+            });
+            const xCoordinates: number[] = coordinates.map((coordinate) => coordinate.x);
+            const yCoordinates: number[] = coordinates.map((coordinate) => coordinate.y);
+            oldXMax = this.maxValue(xCoordinates);
+            oldXMin = this.minValue(xCoordinates);
+            oldYMax = this.maxValue(yCoordinates);
+            oldYMin = this.minValue(yCoordinates);
+
+            const xOffset: number = oldXMin - 4;
+            const yOffset: number = oldYMin - 4;
+            const width: number = oldXMax - oldXMin + 8;
+            const height: number = oldYMax - oldYMin + 8;
+            this.movementCanvasCtx.clearRect(xOffset, yOffset, width, height);
+
+            //TODO: tre rader för att se "used part of canvas"
+            //this.movementCanvasCtx.beginPath();
+            //this.movementCanvasCtx.rect(xOffset, yOffset, width, height);
+            //this.movementCanvasCtx.stroke();
+
+            this.recentlyPaintedMovingSegments = [];
+        }
     }
 
 }

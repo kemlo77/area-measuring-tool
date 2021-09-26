@@ -1,6 +1,5 @@
-import { AbstractPolygonArea } from '../../model/AbstractPolygonArea';
+import { BubbelGum } from '../../model/BubbelGum';
 import { Model } from '../../model/Model';
-import { Ruler } from '../../model/Ruler';
 
 export class DataView {
 
@@ -71,7 +70,7 @@ export class DataView {
         return p;
     }
 
-    private generateLengthShapeDiv(lengthShape: Ruler): HTMLDivElement {
+    private generateLengthShapeDiv(lengthShape: BubbelGum): HTMLDivElement {
         const div: HTMLDivElement = document.createElement('div');
         if (lengthShape.isSelected) {
             div.classList.add('selected');
@@ -92,7 +91,7 @@ export class DataView {
         return div;
     }
 
-    private generateAreaShapeDiv(areaShape: AbstractPolygonArea): HTMLDivElement {
+    private generateAreaShapeDiv(areaShape: BubbelGum): HTMLDivElement {
         const div: HTMLDivElement = document.createElement('div');
         if (areaShape.isSelected) {
             div.classList.add('selected');

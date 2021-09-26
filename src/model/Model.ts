@@ -1,23 +1,21 @@
-import { AbstractPolygonArea } from './AbstractPolygonArea';
-import { Ruler } from './Ruler';
+import { BubbelGum } from './BubbelGum';
 import { Coordinate } from './shape/Coordinate';
-import { InteractiveSegmentShape } from './shape/segmentShapes/InteractiveSegmentShape';
 import { ShapeFactory } from './ShapeFactory';
 
-type ShapeAction = (shape: InteractiveSegmentShape, coordinate: Coordinate) => void;
+type ShapeAction = (shape: BubbelGum, coordinate: Coordinate) => void;
 
 export class Model {
 
-    private shapes: InteractiveSegmentShape[] = [];
+    private shapes: BubbelGum[] = [];
     private shapeFactory: ShapeFactory = new ShapeFactory();
 
-    get listOfShapes(): InteractiveSegmentShape[] {
+    get listOfShapes(): BubbelGum[] {
         return this.shapes;
     }
 
     addShape(name: string): void {
         if (this.noShapeIsSelected()) {
-            const newShape: InteractiveSegmentShape = this.shapeFactory.getShape(name);
+            const newShape: BubbelGum = this.shapeFactory.getShape(name);
             if (newShape !== null) {
                 this.shapes.push(newShape);
             }
@@ -25,13 +23,13 @@ export class Model {
     }
 
     removeSelectedShape(): void {
-        const selectedShape: InteractiveSegmentShape = this.getSelectedShape();
+        const selectedShape: BubbelGum = this.getSelectedShape();
         if (selectedShape !== null) {
             this.removeShapeFromList(selectedShape);
         }
     }
 
-    private removeShapeFromList(shape: InteractiveSegmentShape): void {
+    private removeShapeFromList(shape: BubbelGum): void {
         const index: number = this.shapes.indexOf(shape);
         this.shapes.splice(index, 1);
     }
@@ -69,7 +67,7 @@ export class Model {
     }
 
     private anySelectedShapeReactsToMouseEvent(coordinate: Coordinate, action: ShapeAction): boolean {
-        const selectedShape: InteractiveSegmentShape = this.getSelectedShape();
+        const selectedShape: BubbelGum = this.getSelectedShape();
         if (selectedShape !== null) {
             action(selectedShape, coordinate);
             return true;
@@ -82,7 +80,7 @@ export class Model {
         return this.shapes.every((it) => { return !it.isSelected; });
     }
 
-    getSelectedShape(): InteractiveSegmentShape {
+    getSelectedShape(): BubbelGum {
         for (const shape of this.shapes) {
             if (shape.isSelected) {
                 return shape;
@@ -91,16 +89,12 @@ export class Model {
         return null;
     }
 
-    onlyAreaShapes(): AbstractPolygonArea[] {
-        return this.shapes
-            .filter((shape) => shape instanceof AbstractPolygonArea)
-            .map((shape) => shape as AbstractPolygonArea);
+    onlyAreaShapes(): BubbelGum[] {
+        return this.shapes; //TODO: fixa filtret igen
     }
 
-    onlyLengthShapes(): Ruler[] {
-        return this.shapes
-            .filter((it) => it instanceof Ruler)
-            .map((it) => it as Ruler);
+    onlyLengthShapes(): BubbelGum[] {
+        return this.shapes; //TODO: fixa filtret igen
     }
 
 }

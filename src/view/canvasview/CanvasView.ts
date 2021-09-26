@@ -1,14 +1,9 @@
 import { SegmentsPainter } from './segmentPainters/SegmentsPainter';
 import { RegularSegmentsPainter } from './segmentPainters/RegularSegmentsPainter';
-import { StripedSegmentsPainter } from './segmentPainters/StripedSegmentsPainter';
-import { AbstractPolygonArea } from '../../model/AbstractPolygonArea';
-import { Ruler } from '../../model/Ruler';
 import { Coordinate } from '../../model/shape/Coordinate';
 import { Model } from '../../model/Model';
 import { CanvasAssistant } from './CanvasAssistant';
-import { InteractiveSegmentShape } from '../../model/shape/segmentShapes/InteractiveSegmentShape';
-import { Line } from '../../model/shape/segmentShapes/line/Line';
-import { Polygon } from '../../model/shape/segmentShapes/polygon/Polygon';
+import { BubbelGum } from '../../model/BubbelGum';
 
 export class CanvasView {
 
@@ -36,15 +31,15 @@ export class CanvasView {
         this.canvasAssistant.clearTheStillCanvas();
         this.canvasAssistant.clearTheMovementCanvas();
         for (const shape of this.model.listOfShapes) {
-            this.setStrategyGivenThisObject(shape);
+            this.setStrategy(shape.paintingStrategy);
             this.painter.drawStill(shape);
         }
     }
 
     public paintMovement(mousePosition: Coordinate): void {
-        const selectedShape: InteractiveSegmentShape = this.model.getSelectedShape();
+        const selectedShape: BubbelGum = this.model.getSelectedShape();
         if (selectedShape !== null) {
-            this.setStrategyGivenThisObject(selectedShape);
+            this.setStrategy(selectedShape.paintingStrategy);
             this.painter.drawMovement(selectedShape, mousePosition);
         } else {
             this.canvasAssistant.clearTheMovementCanvas();
@@ -54,20 +49,6 @@ export class CanvasView {
     public clearTheMovementCanvas(): void {
         this.canvasAssistant.clearTheMovementCanvas();
 
-    }
-
-    private setStrategyGivenThisObject(object: any): void {
-        if (object instanceof AbstractPolygonArea) {
-            this.setStrategy(RegularSegmentsPainter.getInstance());
-        } else if (object instanceof Polygon) {
-            this.setStrategy(RegularSegmentsPainter.getInstance());
-        } else if (object instanceof Ruler) {
-            this.setStrategy(StripedSegmentsPainter.getInstance());
-        } else if (object instanceof Line) {
-            this.setStrategy(RegularSegmentsPainter.getInstance());
-        } else {
-            throw new Error('Unknown object to paint');
-        }
     }
 
     private setStrategy(painter: SegmentsPainter): void {
