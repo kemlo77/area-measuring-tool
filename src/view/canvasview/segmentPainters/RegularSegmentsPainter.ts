@@ -1,11 +1,11 @@
 import { Coordinate } from '../../../model/shape/Coordinate';
 import { Segment } from '../../../model/shape/segmentShapes/Segment';
 import { SegmentShape } from '../../../model/shape/segmentShapes/SegmentShape';
-import { AbstractSegmentPainter } from './AbstractSegmentPainter';
+import { AbstractSegmentsPainter } from './AbstractSegmentsPainter';
 
 
 
-export class RegularSegmentsPainter extends AbstractSegmentPainter {
+export class RegularSegmentsPainter extends AbstractSegmentsPainter {
 
     private static instance: RegularSegmentsPainter;
     private lineWidth: number = 3;

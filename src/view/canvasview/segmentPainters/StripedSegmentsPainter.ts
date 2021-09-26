@@ -3,9 +3,9 @@ import { Point } from '../../../model/shape/Point';
 import { Segment } from '../../../model/shape/segmentShapes/Segment';
 import { SegmentShape } from '../../../model/shape/segmentShapes/SegmentShape';
 import { Vector } from '../../../model/shape/Vector';
-import { AbstractSegmentPainter } from './../segmentPainters/AbstractSegmentPainter';
+import { AbstractSegmentsPainter } from './AbstractSegmentsPainter';
 
-export class StripedSegmentsPainter extends AbstractSegmentPainter {
+export class StripedSegmentsPainter extends AbstractSegmentsPainter {
 
     private static instance: StripedSegmentsPainter;
     private lineWidth: number = 3;

@@ -1,4 +1,4 @@
-import { SegmentPainter } from './segmentPainters/SegmentPainter';
+import { SegmentsPainter } from './segmentPainters/SegmentsPainter';
 import { RegularSegmentsPainter } from './segmentPainters/RegularSegmentsPainter';
 import { StripedSegmentsPainter } from './segmentPainters/StripedSegmentsPainter';
 import { AbstractPolygonArea } from '../../model/AbstractPolygonArea';
@@ -13,7 +13,7 @@ import { Polygon } from '../../model/shape/segmentShapes/polygon/Polygon';
 export class CanvasView {
 
     private static instance: CanvasView;
-    private painter: SegmentPainter = RegularSegmentsPainter.getInstance();
+    private painter: SegmentsPainter = RegularSegmentsPainter.getInstance();
     private canvasAssistant: CanvasAssistant = new CanvasAssistant();
     private model: Model;
 
@@ -70,7 +70,7 @@ export class CanvasView {
         }
     }
 
-    private setStrategy(painter: SegmentPainter): void {
+    private setStrategy(painter: SegmentsPainter): void {
         this.painter = painter;
     }
 }

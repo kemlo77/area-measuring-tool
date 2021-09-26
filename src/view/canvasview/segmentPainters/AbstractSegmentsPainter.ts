@@ -1,11 +1,11 @@
 import { Coordinate } from '../../../model/shape/Coordinate';
 import { CanvasAssistant } from '../CanvasAssistant';
-import { SegmentPainter } from './SegmentPainter';
+import { SegmentsPainter } from './SegmentsPainter';
 import { Point } from '../../../model/shape/Point';
 import { SegmentShape } from '../../../model/shape/segmentShapes/SegmentShape';
 import { Segment } from '../../../model/shape/segmentShapes/Segment';
 
-export abstract class AbstractSegmentPainter extends CanvasAssistant implements SegmentPainter {
+export abstract class AbstractSegmentsPainter extends CanvasAssistant implements SegmentsPainter {
 
     private oldXMin: number = 0;
     private oldXMax: number = 1;
