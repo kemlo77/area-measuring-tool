@@ -1,19 +1,19 @@
-import { Painter } from './Painter';
-import { SegmentsPainter } from './SegmentsPainter';
-import { StripedSegmentsPainter } from './StripedSegmentsPainter';
+import { SegmentPainter } from './segmentPainters/SegmentPainter';
+import { RegularSegmentsPainter } from './segmentPainters/RegularSegmentsPainter';
+import { StripedSegmentsPainter } from './segmentPainters/StripedSegmentsPainter';
 import { AbstractPolygonArea } from '../../model/AbstractPolygonArea';
 import { Ruler } from '../../model/Ruler';
 import { Coordinate } from '../../model/shape/Coordinate';
 import { Line } from '../../model/shape/line/Line';
 import { Polygon } from '../../model/shape/polygon/Polygon';
 import { Model } from '../../model/Model';
-import { InteractiveShape } from '../../model/shape/InteractiveShape';
 import { CanvasAssistant } from './CanvasAssistant';
+import { InteractiveSegmentShape } from '../../model/shape/InteractiveSegmentShape';
 
 export class CanvasView {
 
     private static instance: CanvasView;
-    private painter: Painter = SegmentsPainter.getInstance();
+    private painter: SegmentPainter = RegularSegmentsPainter.getInstance();
     private canvasAssistant: CanvasAssistant = new CanvasAssistant();
     private model: Model;
 
@@ -33,10 +33,8 @@ export class CanvasView {
     }
 
     public paintStill(): void {
-        //TODO: för dessa två rader borde man kunna byta painter mot
-        // canvasAssistant. Men då blir det lite grafiska buggar, varför?
-        this.painter.clearTheStillCanvas();
-        this.painter.clearTheMovementCanvas();
+        this.canvasAssistant.clearTheStillCanvas();
+        this.canvasAssistant.clearTheMovementCanvas();
         for (const shape of this.model.listOfShapes) {
             this.setStrategyGivenThisObject(shape);
             this.painter.drawStill(shape);
@@ -44,7 +42,7 @@ export class CanvasView {
     }
 
     public paintMovement(mousePosition: Coordinate): void {
-        const selectedShape: InteractiveShape = this.model.getSelectedShape();
+        const selectedShape: InteractiveSegmentShape = this.model.getSelectedShape();
         if (selectedShape !== null) {
             this.setStrategyGivenThisObject(selectedShape);
             this.painter.drawMovement(selectedShape, mousePosition);
@@ -60,19 +58,19 @@ export class CanvasView {
 
     private setStrategyGivenThisObject(object: any): void {
         if (object instanceof AbstractPolygonArea) {
-            this.setStrategy(SegmentsPainter.getInstance());
+            this.setStrategy(RegularSegmentsPainter.getInstance());
         } else if (object instanceof Polygon) {
-            this.setStrategy(SegmentsPainter.getInstance());
+            this.setStrategy(RegularSegmentsPainter.getInstance());
         } else if (object instanceof Ruler) {
             this.setStrategy(StripedSegmentsPainter.getInstance());
         } else if (object instanceof Line) {
-            this.setStrategy(SegmentsPainter.getInstance());
+            this.setStrategy(RegularSegmentsPainter.getInstance());
         } else {
             throw new Error('Unknown object to paint');
         }
     }
 
-    private setStrategy(painter: Painter): void {
+    private setStrategy(painter: SegmentPainter): void {
         this.painter = painter;
     }
 }

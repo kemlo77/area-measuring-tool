@@ -1,9 +1,9 @@
-import { Coordinate } from '../../model/shape/Coordinate';
-import { Point } from '../../model/shape/Point';
-import { Segment } from '../../model/shape/Segment';
-import { SegmentShape } from '../../model/shape/SegmentShape';
-import { Vector } from '../../model/shape/Vector';
-import { AbstractSegmentPainter } from './AbstractSegmentPainter';
+import { Coordinate } from '../../../model/shape/Coordinate';
+import { Point } from '../../../model/shape/Point';
+import { Segment } from '../../../model/shape/Segment';
+import { SegmentShape } from '../../../model/shape/SegmentShape';
+import { Vector } from '../../../model/shape/Vector';
+import { AbstractSegmentPainter } from './../segmentPainters/AbstractSegmentPainter';
 
 export class StripedSegmentsPainter extends AbstractSegmentPainter {
 

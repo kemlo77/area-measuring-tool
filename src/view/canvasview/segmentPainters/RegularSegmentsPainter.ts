@@ -1,21 +1,21 @@
-import { Coordinate } from '../../model/shape/Coordinate';
-import { SegmentShape } from '../../model/shape/SegmentShape';
-import { Segment } from '../../model/shape/Segment';
+import { Coordinate } from '../../../model/shape/Coordinate';
+import { SegmentShape } from '../../../model/shape/SegmentShape';
+import { Segment } from '../../../model/shape/Segment';
 import { AbstractSegmentPainter } from './AbstractSegmentPainter';
 
 
 
-export class SegmentsPainter extends AbstractSegmentPainter {
+export class RegularSegmentsPainter extends AbstractSegmentPainter {
 
-    private static instance: SegmentsPainter;
+    private static instance: RegularSegmentsPainter;
     private lineWidth: number = 3;
 
 
-    public static getInstance(): SegmentsPainter {
-        if (!SegmentsPainter.instance) {
-            SegmentsPainter.instance = new SegmentsPainter();
+    public static getInstance(): RegularSegmentsPainter {
+        if (!RegularSegmentsPainter.instance) {
+            RegularSegmentsPainter.instance = new RegularSegmentsPainter();
         }
-        return SegmentsPainter.instance;
+        return RegularSegmentsPainter.instance;
     }
 
     drawStill(segmentShape: SegmentShape): void {

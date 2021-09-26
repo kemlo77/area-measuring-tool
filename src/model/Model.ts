@@ -1,24 +1,23 @@
 import { AbstractPolygonArea } from './AbstractPolygonArea';
 import { Ruler } from './Ruler';
 import { Coordinate } from './shape/Coordinate';
-import { InteractiveShape } from './shape/InteractiveShape';
+import { InteractiveSegmentShape } from './shape/InteractiveSegmentShape';
 import { ShapeFactory } from './ShapeFactory';
 
-type ShapeAction = (shape: InteractiveShape, coordinate: Coordinate) => void;
+type ShapeAction = (shape: InteractiveSegmentShape, coordinate: Coordinate) => void;
 
-//TODO: Borde jag implementera nåt interfejs?
 export class Model {
 
-    private shapes: InteractiveShape[] = [];
+    private shapes: InteractiveSegmentShape[] = [];
     private shapeFactory: ShapeFactory = new ShapeFactory();
 
-    get listOfShapes(): InteractiveShape[] {
+    get listOfShapes(): InteractiveSegmentShape[] {
         return this.shapes;
     }
 
     addShape(name: string): void {
         if (this.noShapeIsSelected()) {
-            const newShape: InteractiveShape = this.shapeFactory.getShape(name);
+            const newShape: InteractiveSegmentShape = this.shapeFactory.getShape(name);
             if (newShape !== null) {
                 this.shapes.push(newShape);
             }
@@ -26,13 +25,13 @@ export class Model {
     }
 
     removeSelectedShape(): void {
-        const selectedShape: InteractiveShape = this.getSelectedShape();
+        const selectedShape: InteractiveSegmentShape = this.getSelectedShape();
         if (selectedShape !== null) {
             this.removeShapeFromList(selectedShape);
         }
     }
 
-    private removeShapeFromList(shape: InteractiveShape): void {
+    private removeShapeFromList(shape: InteractiveSegmentShape): void {
         const index: number = this.shapes.indexOf(shape);
         this.shapes.splice(index, 1);
     }
@@ -70,7 +69,7 @@ export class Model {
     }
 
     private anySelectedShapeReactsToMouseEvent(coordinate: Coordinate, action: ShapeAction): boolean {
-        const selectedShape: InteractiveShape = this.getSelectedShape();
+        const selectedShape: InteractiveSegmentShape = this.getSelectedShape();
         if (selectedShape !== null) {
             action(selectedShape, coordinate);
             return true;
@@ -83,7 +82,7 @@ export class Model {
         return this.shapes.every((it) => { return !it.isSelected; });
     }
 
-    getSelectedShape(): InteractiveShape {
+    getSelectedShape(): InteractiveSegmentShape {
         for (const shape of this.shapes) {
             if (shape.isSelected) {
                 return shape;

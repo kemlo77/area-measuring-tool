@@ -1,14 +1,14 @@
 import { NegativePolygonArea } from './NegativePolygonArea';
 import { PositivePolygonArea } from './PositivePolygonArea';
 import { Ruler } from './Ruler';
-import { InteractiveShape } from './shape/InteractiveShape';
+import { InteractiveSegmentShape } from './shape/InteractiveSegmentShape';
 import { Line } from './shape/line/Line';
 import { Polygon } from './shape/polygon/Polygon';
 
 
 export class ShapeFactory {
 
-    getShape(name: string): InteractiveShape {
+    getShape(name: string): InteractiveSegmentShape {
 
         if (name === 'NegativePolygonArea') {
             return new NegativePolygonArea();

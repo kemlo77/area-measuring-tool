@@ -1,20 +1,20 @@
+import { Coordinate } from '../../../model/shape/Coordinate';
+import { Segment } from '../../../model/shape/Segment';
+import { CanvasAssistant } from '../CanvasAssistant';
+import { SegmentPainter } from './SegmentPainter';
+import { Point } from '../../../model/shape/Point';
+import { SegmentShape } from '../../../model/shape/SegmentShape';
 
-import { Coordinate } from '../../model/shape/Coordinate';
-import { Segment } from '../../model/shape/Segment';
-import { CanvasAssistant } from './CanvasAssistant';
-import { Painter } from './Painter';
-import { Point } from '../../model/shape/Point';
 
-
-export abstract class AbstractSegmentPainter extends CanvasAssistant implements Painter {
+export abstract class AbstractSegmentPainter extends CanvasAssistant implements SegmentPainter {
 
     private oldXMin: number = 0;
     private oldXMax: number = 1;
     private oldYMin: number = 0;
     private oldYMax: number = 1;
 
-    abstract drawStill(motif: any): void;
-    abstract drawMovement(modif: any, mousePosition: Coordinate): void;
+    abstract drawStill(segmentShape: SegmentShape): void;
+    abstract drawMovement(segmentShape: SegmentShape, mousePosition: Coordinate): void;
 
     drawStillSegments(segments: Segment[], width: number, color: string): void {
         segments.forEach((it) => {
