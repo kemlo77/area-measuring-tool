@@ -1,9 +1,9 @@
 import { NegativePolygonArea } from './NegativePolygonArea';
 import { PositivePolygonArea } from './PositivePolygonArea';
 import { Ruler } from './Ruler';
-import { InteractiveSegmentShape } from './shape/InteractiveSegmentShape';
-import { Line } from './shape/line/Line';
-import { Polygon } from './shape/polygon/Polygon';
+import { InteractiveSegmentShape } from './shape/segmentShapes/InteractiveSegmentShape';
+import { Line } from './shape/segmentShapes/line/Line';
+import { Polygon } from './shape/segmentShapes/polygon/Polygon';
 
 
 export class ShapeFactory {

@@ -1,6 +1,6 @@
 import { Coordinate } from '../../../model/shape/Coordinate';
-import { SegmentShape } from '../../../model/shape/SegmentShape';
-import { Segment } from '../../../model/shape/Segment';
+import { Segment } from '../../../model/shape/segmentShapes/Segment';
+import { SegmentShape } from '../../../model/shape/segmentShapes/SegmentShape';
 import { AbstractSegmentPainter } from './AbstractSegmentPainter';
 
 

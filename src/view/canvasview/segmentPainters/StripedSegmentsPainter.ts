@@ -1,7 +1,7 @@
 import { Coordinate } from '../../../model/shape/Coordinate';
 import { Point } from '../../../model/shape/Point';
-import { Segment } from '../../../model/shape/Segment';
-import { SegmentShape } from '../../../model/shape/SegmentShape';
+import { Segment } from '../../../model/shape/segmentShapes/Segment';
+import { SegmentShape } from '../../../model/shape/segmentShapes/SegmentShape';
 import { Vector } from '../../../model/shape/Vector';
 import { AbstractSegmentPainter } from './../segmentPainters/AbstractSegmentPainter';
 

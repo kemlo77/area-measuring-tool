@@ -1,4 +1,4 @@
-import { Polygon } from './shape/polygon/Polygon';
+import { Polygon } from './shape/segmentShapes/polygon/Polygon';
 import { Coordinate } from './shape/Coordinate';
 
 export abstract class AbstractPolygonArea extends Polygon {

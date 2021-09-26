@@ -1,7 +1,7 @@
 import { AbstractPolygonArea } from './AbstractPolygonArea';
 import { Ruler } from './Ruler';
 import { Coordinate } from './shape/Coordinate';
-import { InteractiveSegmentShape } from './shape/InteractiveSegmentShape';
+import { InteractiveSegmentShape } from './shape/segmentShapes/InteractiveSegmentShape';
 import { ShapeFactory } from './ShapeFactory';
 
 type ShapeAction = (shape: InteractiveSegmentShape, coordinate: Coordinate) => void;

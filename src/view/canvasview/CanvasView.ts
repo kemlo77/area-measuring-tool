@@ -4,11 +4,11 @@ import { StripedSegmentsPainter } from './segmentPainters/StripedSegmentsPainter
 import { AbstractPolygonArea } from '../../model/AbstractPolygonArea';
 import { Ruler } from '../../model/Ruler';
 import { Coordinate } from '../../model/shape/Coordinate';
-import { Line } from '../../model/shape/line/Line';
-import { Polygon } from '../../model/shape/polygon/Polygon';
 import { Model } from '../../model/Model';
 import { CanvasAssistant } from './CanvasAssistant';
-import { InteractiveSegmentShape } from '../../model/shape/InteractiveSegmentShape';
+import { InteractiveSegmentShape } from '../../model/shape/segmentShapes/InteractiveSegmentShape';
+import { Line } from '../../model/shape/segmentShapes/line/Line';
+import { Polygon } from '../../model/shape/segmentShapes/polygon/Polygon';
 
 export class CanvasView {
 

@@ -1,5 +1,6 @@
 import { Coordinate } from '../../../model/shape/Coordinate';
-import { SegmentShape } from '../../../model/shape/SegmentShape';
+import { SegmentShape } from '../../../model/shape/segmentShapes/SegmentShape';
+
 
 
 export interface SegmentPainter {

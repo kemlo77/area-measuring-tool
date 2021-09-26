@@ -1,10 +1,9 @@
 import { Coordinate } from '../../../model/shape/Coordinate';
-import { Segment } from '../../../model/shape/Segment';
 import { CanvasAssistant } from '../CanvasAssistant';
 import { SegmentPainter } from './SegmentPainter';
 import { Point } from '../../../model/shape/Point';
-import { SegmentShape } from '../../../model/shape/SegmentShape';
-
+import { SegmentShape } from '../../../model/shape/segmentShapes/SegmentShape';
+import { Segment } from '../../../model/shape/segmentShapes/Segment';
 
 export abstract class AbstractSegmentPainter extends CanvasAssistant implements SegmentPainter {
 

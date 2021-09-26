@@ -1,5 +1,5 @@
 import { Coordinate } from './shape/Coordinate';
-import { Line } from './shape/line/Line';
+import { Line } from './shape/segmentShapes/line/Line';
 
 
 export class Ruler extends Line {
