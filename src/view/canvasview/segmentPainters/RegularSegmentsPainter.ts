@@ -7,32 +7,23 @@ import { AbstractSegmentsPainter } from './AbstractSegmentsPainter';
 
 export class RegularSegmentsPainter extends AbstractSegmentsPainter {
 
-    private static instance: RegularSegmentsPainter;
     private lineWidth: number = 3;
 
-
-    public static getInstance(): RegularSegmentsPainter {
-        if (!RegularSegmentsPainter.instance) {
-            RegularSegmentsPainter.instance = new RegularSegmentsPainter();
-        }
-        return RegularSegmentsPainter.instance;
-    }
-
-    drawStill(segmentShape: SegmentShape): void {
+    drawStill(segmentShape: SegmentShape, color: string): void {
         const stillSegments: Segment[] = segmentShape.getStillSegments();
 
-        this.drawStillSegments(stillSegments, this.lineWidth, '0,0,255');
+        this.drawStillSegments(stillSegments, this.lineWidth, color);
         if (segmentShape.isSelected) {
-            this.drawEndPointsOnSegments(stillSegments, '0,0,255', this.stillCanvasCtx);
+            this.drawEndPointsOnSegments(stillSegments, color, this.stillCanvasCtx);
         }
     }
 
-    drawMovement(segmentShape: SegmentShape, mousePosition: Coordinate): void {
+    drawMovement(segmentShape: SegmentShape, color: string, mousePosition: Coordinate): void {
         const movingSegments: Segment[] = segmentShape.getMovingSegments(mousePosition);
 
         this.clearUsedPartOfCanvas();
-        this.drawMovingSegments(movingSegments, this.lineWidth, '0,0,255');
-        this.drawEndPointsOnSegments(movingSegments, '0,0,255', this.movementCanvasCtx);
+        this.drawMovingSegments(movingSegments, this.lineWidth, color);
+        this.drawEndPointsOnSegments(movingSegments, color, this.movementCanvasCtx);
     }
 
 

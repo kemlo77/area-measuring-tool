@@ -7,36 +7,26 @@ import { AbstractSegmentsPainter } from './AbstractSegmentsPainter';
 
 export class StripedSegmentsPainter extends AbstractSegmentsPainter {
 
-    private static instance: StripedSegmentsPainter;
     private lineWidth: number = 3;
 
-
-    public static getInstance(): StripedSegmentsPainter {
-        if (!StripedSegmentsPainter.instance) {
-            StripedSegmentsPainter.instance = new StripedSegmentsPainter();
-        }
-        return StripedSegmentsPainter.instance;
-    }
-
-    drawStill(segmentShape: SegmentShape): void {
+    drawStill(segmentShape: SegmentShape, color: string): void {
         const stillSegments: Segment[] = segmentShape.getStillSegments();
 
-        this.drawStillSegments(stillSegments, this.lineWidth, '255,255,0');
+        this.drawStillSegments(stillSegments, this.lineWidth, color);
         stillSegments.forEach((it) => {
             this.drawStillSegments(this.generateRulerLines(it), 1, '0,0,0');
         });
         if (segmentShape.isSelected) {
             this.drawEndPointsOnSegments(stillSegments, '0,0,0', this.stillCanvasCtx);
         }
-
     }
 
 
-    drawMovement(segmentShape: SegmentShape, mousePosition: Coordinate): void {
+    drawMovement(segmentShape: SegmentShape, color: string, mousePosition: Coordinate): void {
         const movingSegments: Segment[] = segmentShape.getMovingSegments(mousePosition);
 
         this.clearUsedPartOfCanvas();
-        this.drawMovingSegments(movingSegments, this.lineWidth, '255,255,0');
+        this.drawMovingSegments(movingSegments, this.lineWidth, color);
         movingSegments.forEach((it) => {
             this.drawMovingSegments(this.generateRulerLines(it), 1, '0,0,0');
         });

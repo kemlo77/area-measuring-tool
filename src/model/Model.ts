@@ -90,11 +90,11 @@ export class Model {
     }
 
     onlyAreaShapes(): BubbelGum[] {
-        return this.shapes; //TODO: fixa filtret igen
+        return this.shapes.filter((it) => it.hasArea);
     }
 
     onlyLengthShapes(): BubbelGum[] {
-        return this.shapes; //TODO: fixa filtret igen
+        return this.shapes.filter((it) => !it.hasArea);
     }
 
 }

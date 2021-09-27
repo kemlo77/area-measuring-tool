@@ -13,12 +13,15 @@ export class BubbelGum implements InteractiveSegmentShape {
     private _name: string;
     private _shape: InteractiveSegmentShape;
     private _segmentPainter: SegmentsPainter;
+    private _hasArea: boolean;
 
-    constructor(shape: InteractiveSegmentShape, segmentPainter: SegmentsPainter) {
+    constructor(shape: InteractiveSegmentShape, segmentPainter: SegmentsPainter, color: string, hasArea: boolean) {
         this._name = 'Shape_' + BubbelGum.initializedObjects++;
         this._shape = shape;
         this._segmentPainter = new RegularSegmentsPainter();
         this._segmentPainter = segmentPainter;
+        this._color = color;
+        this._hasArea = hasArea;
     }
 
     get color(): string {
@@ -38,20 +41,24 @@ export class BubbelGum implements InteractiveSegmentShape {
         this._name = newName;
     }
 
+    get hasArea(): boolean {
+        return this._hasArea;
+    }
+
     get area(): number {
-        return 9999;
+        return this._shape.area;
     }
 
     get length(): number {
-        return 8888;
+        return this._shape.length;
     }
 
-    get perimeterLength(): number {
-        return 7777;
+    designatedPainterDrawStill(): void {
+        this._segmentPainter.drawStill(this._shape, this._color);
     }
 
-    get paintingStrategy(): SegmentsPainter {
-        return this._segmentPainter;
+    designatedPainterDrawMovement(mousePosition: Coordinate): void {
+        this._segmentPainter.drawMovement(this._shape, this._color, mousePosition);
     }
 
 

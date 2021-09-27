@@ -13,10 +13,8 @@ export class Controller {
 
     constructor() {
         this.model = new Model();
-        this.canvasView = CanvasView.getInstance();
-        this.canvasView.setModel(this.model);
-        this.dataView = DataView.getInstance();
-        this.dataView.setModel(this.model);
+        this.canvasView = new CanvasView(this.model);
+        this.dataView = new DataView(this.model);
     }
 
     addShape(name: string): void {

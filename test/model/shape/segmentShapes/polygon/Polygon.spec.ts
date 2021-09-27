@@ -205,8 +205,8 @@ describe('Polygon', () => {
         expect(shape.area).to.equal(0);
     });
 
-    it('perimeterLength', () => {
-        expect(rectangle.perimeterLength).to.equal(400);
+    it('length', () => {
+        expect(rectangle.length).to.equal(400);
     });
 
 });

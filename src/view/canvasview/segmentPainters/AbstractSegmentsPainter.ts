@@ -9,8 +9,8 @@ export abstract class AbstractSegmentsPainter extends CanvasAssistant implements
 
     private recentlyPaintedMovingSegments: Segment[] = [];
 
-    abstract drawStill(segmentShape: SegmentShape): void;
-    abstract drawMovement(segmentShape: SegmentShape, mousePosition: Coordinate): void;
+    abstract drawStill(segmentShape: SegmentShape, color: string): void;
+    abstract drawMovement(segmentShape: SegmentShape, color: string, mousePosition: Coordinate): void;
 
     drawStillSegments(segments: Segment[], width: number, color: string): void {
         segments.forEach((it) => {
@@ -32,12 +32,12 @@ export abstract class AbstractSegmentsPainter extends CanvasAssistant implements
 
     extractUniqueEndpoints(segments: Segment[]): Point[] {
         const uniquePoints: Set<Point> = new Set<Point>();
-        for (let i: number = 0; i < segments.length; i++) {
-            if (!uniquePoints.has(segments[i].p1)) {
-                uniquePoints.add(segments[i].p1);
+        for (const segment of segments) {
+            if (!uniquePoints.has(segment.p1)) {
+                uniquePoints.add(segment.p1);
             }
-            if (!uniquePoints.has(segments[i].p2)) {
-                uniquePoints.add(segments[i].p2);
+            if (!uniquePoints.has(segment.p2)) {
+                uniquePoints.add(segment.p2);
             }
         }
         return Array.from(uniquePoints);

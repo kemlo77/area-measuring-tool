@@ -4,24 +4,12 @@ import { Model } from '../../model/Model';
 export class DataView {
 
     private dataDiv: HTMLElement = document.getElementById('data');
-    private static instance: DataView;
     private scaleFactor = 0.1;
     private areaInputs: HTMLInputElement[] = [];
     private lengthInputs: HTMLInputElement[] = [];
     private model: Model;
 
-    private constructor() {
-        //
-    }
-
-    public static getInstance(): DataView {
-        if (!DataView.instance) {
-            DataView.instance = new DataView();
-        }
-        return DataView.instance;
-    }
-
-    setModel(model: Model): void {
+    constructor(model: Model) {
         this.model = model;
     }
 
@@ -111,13 +99,13 @@ export class DataView {
         div.appendChild(areaInput);
         this.areaInputs.push(areaInput);
 
-        const perimeterLength: string =
-            this.convertToRoundedNumberString(areaShape.perimeterLength * this.scaleFactor);
-        const perimeterInput: HTMLInputElement = this.generateNumberInput(perimeterLength);
-        perimeterInput.setAttribute('data-pixellength', areaShape.perimeterLength.toString());
+        const length: string =
+            this.convertToRoundedNumberString(areaShape.length * this.scaleFactor);
+        const perimeterInput: HTMLInputElement = this.generateNumberInput(length);
+        perimeterInput.setAttribute('data-pixellength', areaShape.length.toString());
         perimeterInput.classList.add('length');
         perimeterInput.addEventListener('input', (event) => {
-            this.lengthInputChanged((<HTMLInputElement>event.target), areaShape.perimeterLength);
+            this.lengthInputChanged((<HTMLInputElement>event.target), areaShape.length);
         });
         div.appendChild(perimeterInput);
         this.lengthInputs.push(perimeterInput);

@@ -5,7 +5,9 @@ import { Segment } from './Segment';
 export interface SegmentShape {
 
     getStillSegments(): Segment[];
-    getMovingSegments(mousePosition: Coordinate): Segment[]
+    getMovingSegments(mousePosition: Coordinate): Segment[];
+    readonly length: number;
+    readonly area: number;
     readonly isSelected: boolean;
 
 }

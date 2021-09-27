@@ -147,7 +147,7 @@ export class Polygon implements InteractiveShape, SegmentShape {
         return this._vertices.length;
     }
 
-    get perimeterLength(): number {
+    get length(): number {
         return this.segments.reduce((sum, it) => sum + it.length, 0);
     }
 
