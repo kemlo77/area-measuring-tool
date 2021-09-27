@@ -1,7 +1,7 @@
 import { Coordinate } from '../../model/shape/Coordinate';
 import { Model } from '../../model/Model';
 import { CanvasAssistant } from './CanvasAssistant';
-import { BubbelGum } from '../../model/BubbelGum';
+import { MeassuringShape } from '../../model/MeassuringShape';
 
 export class CanvasView {
 
@@ -21,7 +21,7 @@ export class CanvasView {
     }
 
     public paintMovement(mousePosition: Coordinate): void {
-        const selectedShape: BubbelGum = this.model.getSelectedShape();
+        const selectedShape: MeassuringShape = this.model.getSelectedShape();
         if (selectedShape !== null) {
             selectedShape.designatedPainterDrawMovement(mousePosition);
         } else {

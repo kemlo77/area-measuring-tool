@@ -1,4 +1,4 @@
-import { BubbelGum } from '../../model/BubbelGum';
+import { MeassuringShape } from '../../model/MeassuringShape';
 import { Model } from '../../model/Model';
 
 export class DataView {
@@ -58,7 +58,7 @@ export class DataView {
         return p;
     }
 
-    private generateLengthShapeDiv(lengthShape: BubbelGum): HTMLDivElement {
+    private generateLengthShapeDiv(lengthShape: MeassuringShape): HTMLDivElement {
         const div: HTMLDivElement = document.createElement('div');
         if (lengthShape.isSelected) {
             div.classList.add('selected');
@@ -79,7 +79,7 @@ export class DataView {
         return div;
     }
 
-    private generateAreaShapeDiv(areaShape: BubbelGum): HTMLDivElement {
+    private generateAreaShapeDiv(areaShape: MeassuringShape): HTMLDivElement {
         const div: HTMLDivElement = document.createElement('div');
         if (areaShape.isSelected) {
             div.classList.add('selected');

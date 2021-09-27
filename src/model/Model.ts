@@ -1,21 +1,21 @@
-import { BubbelGum } from './BubbelGum';
+import { MeassuringShape } from './MeassuringShape';
 import { Coordinate } from './shape/Coordinate';
 import { ShapeFactory } from './ShapeFactory';
 
-type ShapeAction = (shape: BubbelGum, coordinate: Coordinate) => void;
+type ShapeAction = (shape: MeassuringShape, coordinate: Coordinate) => void;
 
 export class Model {
 
-    private shapes: BubbelGum[] = [];
+    private shapes: MeassuringShape[] = [];
     private shapeFactory: ShapeFactory = new ShapeFactory();
 
-    get listOfShapes(): BubbelGum[] {
+    get listOfShapes(): MeassuringShape[] {
         return this.shapes;
     }
 
     addShape(name: string): void {
         if (this.noShapeIsSelected()) {
-            const newShape: BubbelGum = this.shapeFactory.getShape(name);
+            const newShape: MeassuringShape = this.shapeFactory.getShape(name);
             if (newShape !== null) {
                 this.shapes.push(newShape);
             }
@@ -23,13 +23,13 @@ export class Model {
     }
 
     removeSelectedShape(): void {
-        const selectedShape: BubbelGum = this.getSelectedShape();
+        const selectedShape: MeassuringShape = this.getSelectedShape();
         if (selectedShape !== null) {
             this.removeShapeFromList(selectedShape);
         }
     }
 
-    private removeShapeFromList(shape: BubbelGum): void {
+    private removeShapeFromList(shape: MeassuringShape): void {
         const index: number = this.shapes.indexOf(shape);
         this.shapes.splice(index, 1);
     }
@@ -67,7 +67,7 @@ export class Model {
     }
 
     private anySelectedShapeReactsToMouseEvent(coordinate: Coordinate, action: ShapeAction): boolean {
-        const selectedShape: BubbelGum = this.getSelectedShape();
+        const selectedShape: MeassuringShape = this.getSelectedShape();
         if (selectedShape !== null) {
             action(selectedShape, coordinate);
             return true;
@@ -80,7 +80,7 @@ export class Model {
         return this.shapes.every((it) => { return !it.isSelected; });
     }
 
-    getSelectedShape(): BubbelGum {
+    getSelectedShape(): MeassuringShape {
         for (const shape of this.shapes) {
             if (shape.isSelected) {
                 return shape;
@@ -89,11 +89,11 @@ export class Model {
         return null;
     }
 
-    onlyAreaShapes(): BubbelGum[] {
+    onlyAreaShapes(): MeassuringShape[] {
         return this.shapes.filter((it) => it.hasArea);
     }
 
-    onlyLengthShapes(): BubbelGum[] {
+    onlyLengthShapes(): MeassuringShape[] {
         return this.shapes.filter((it) => !it.hasArea);
     }
 
