@@ -1,14 +1,15 @@
+import { AreaValueSign } from './AreaValueSign';
 import { Coordinate } from './shape/Coordinate';
 
 export abstract class MeassuringShape {
 
     private static initializedObjects: number = 0;
     private _name: string;
-    private _color: string = '128,0,0';
+    private _color: string = '0,0,0';
+    private _areaValueSign: AreaValueSign = AreaValueSign.POSITIVE;
 
-    constructor (color: string) {
+    constructor() {
         this._name = 'Shape_' + MeassuringShape.initializedObjects++;
-        this._color = color;
     }
 
     get name(): string {
@@ -28,6 +29,14 @@ export abstract class MeassuringShape {
         this._color = color;
     }
 
+    get areaValueSign(): AreaValueSign {
+        return this._areaValueSign;
+    }
+
+    set areaValueSign(areaValueSign: AreaValueSign) {
+        this._areaValueSign = areaValueSign;
+    }
+
     abstract isSelected: boolean;
     abstract hasArea: boolean;
     abstract length: number;
@@ -40,7 +49,7 @@ export abstract class MeassuringShape {
     abstract handleLeftClick(coordinate: Coordinate): void;
 
     abstract handleRightClick(coordinate: Coordinate): void;
-    
+
     abstract handleLeftMouseDown(coordinate: Coordinate): void;
 
     abstract handleLeftMouseUp(coordinate: Coordinate): void;

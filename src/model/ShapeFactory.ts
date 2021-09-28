@@ -4,21 +4,25 @@ import { Line } from './shape/segmentShapes/line/Line';
 import { Polygon } from './shape/segmentShapes/polygon/Polygon';
 import { RegularSegmentsPainter } from '../view/canvasview/segmentPainters/RegularSegmentsPainter';
 import { StripedSegmentsPainter } from '../view/canvasview/segmentPainters/StripedSegmentsPainter';
+import { AreaValueSign } from './AreaValueSign';
+import { SegmentedMeassuringShapeBuilder } from './SegmentedMeassuringShapeBuilder';
 
 export class ShapeFactory {
 
     getShape(name: string): MeassuringShape {
 
-        if (name === 'NegativePolygonArea') {
-            return new SegmentedMeassuringShape(new Polygon(), new RegularSegmentsPainter(), '128,0,0', true);
-        } else if (name === 'PositivePolygonArea') {
-            return new SegmentedMeassuringShape(new Polygon(), new StripedSegmentsPainter(), '0,80,120', true);
+        if (name === 'PositivePolygonArea') {
+            return new SegmentedMeassuringShapeBuilder(new Polygon(), true).color('0,80,120').build();
+        } else if (name === 'NegativePolygonArea') {
+            return new SegmentedMeassuringShapeBuilder(new Polygon, true).color('128,0,0')
+                .areaValueSign(AreaValueSign.NEGATIVE).build();
         } else if (name === 'Ruler') {
-            return new SegmentedMeassuringShape(new Line(), new StripedSegmentsPainter(), '255,255,0', false);
+            return new SegmentedMeassuringShapeBuilder(new Line(), false).color('255,255,0')
+                .designatedPainter(new StripedSegmentsPainter()).build();
         } else if (name === 'Line') {
-            return new SegmentedMeassuringShape(new Line(), new RegularSegmentsPainter(), '0,0,0', false);
+            return new SegmentedMeassuringShapeBuilder(new Line(), false).build();
         } else if (name === 'Polygon') {
-            return new SegmentedMeassuringShape(new Polygon(), new RegularSegmentsPainter(), '0,0,0', true);
+            return new SegmentedMeassuringShapeBuilder(new Polygon, true).build();
         }
 
         return null;
