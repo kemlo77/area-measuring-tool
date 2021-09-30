@@ -27,8 +27,8 @@ document.getElementById('removeSelectedShape')
     .addEventListener('click', () => removeSelectedShape());
 document.getElementById('addPolygon')
     .addEventListener('click', () => addShape('Polygon'));
-document.getElementById('addLine')
-    .addEventListener('click', () => addShape('Line'));
+document.getElementById('addSymmetryLine')
+    .addEventListener('click', () => addShape('SymmetryLine'));
 
 
 addEventListener('load', () => adjustCanvas());

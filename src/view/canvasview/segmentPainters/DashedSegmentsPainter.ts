@@ -5,16 +5,15 @@ import { SegmentShape } from '../../../model/shape/segmentShapes/SegmentShape';
 import { Vector } from '../../../model/shape/Vector';
 import { AbstractSegmentsPainter } from './AbstractSegmentsPainter';
 
-export class StripedSegmentsPainter extends AbstractSegmentsPainter {
+export class DashedSegmentsPainter extends AbstractSegmentsPainter {
 
     private lineWidth: number = 3;
 
     drawStill(segmentShape: SegmentShape, color: string): void {
         const stillSegments: Segment[] = segmentShape.getStillSegments();
 
-        this.drawStillSegments(stillSegments, this.lineWidth, color);
         stillSegments.forEach((it) => {
-            this.drawStillSegments(this.generateRulerLines(it), 1, '0,0,0');
+            this.drawStillSegments(this.generateDashes(it), 1, color);
         });
         if (segmentShape.isSelected) {
             this.drawEndPointsOnSegments(stillSegments, '0,0,0', this.stillCanvasCtx);
@@ -26,34 +25,36 @@ export class StripedSegmentsPainter extends AbstractSegmentsPainter {
         const movingSegments: Segment[] = segmentShape.getMovingSegments(mousePosition);
 
         this.clearUsedPartOfCanvas();
-        this.drawMovingSegments(movingSegments, this.lineWidth, color);
         movingSegments.forEach((it) => {
-            this.drawMovingSegments(this.generateRulerLines(it), 1, '0,0,0');
+            this.drawMovingSegments(this.generateDashes(it), 1, color);
         });
         this.drawEndPointsOnSegments(movingSegments, '0,0,0', this.movementCanvasCtx);
     }
 
-    private generateRulerLines(segment: Segment): Segment[] {
+    private generateDashes(segment: Segment): Segment[] {
         const segments: Segment[] = [];
         const vector: Vector = new Vector(segment.p1, segment.p2);
         const direction: Vector = vector.generateUnitVector();
-        const perpendicular: Vector = vector.generatePerpendicularUnitVector();
-        const distanceBetweenLines: number = 15;
+
+        const lengthOfDashes: number = 10;
+        const distanceBetweenDashes: number = 10;
+        const period: number = lengthOfDashes + distanceBetweenDashes;
         let distanceTravelled: number = 0;
-        while (distanceTravelled + distanceBetweenLines < segment.length) {
-            distanceTravelled += distanceBetweenLines;
-            const newPoint: Point = this.jumpToNewPoint(segment.p1, direction, distanceTravelled);
-            segments.push(this.generateRulerLine(newPoint, perpendicular));
+        while (distanceTravelled + period < segment.length) {
+            distanceTravelled += period;
+            if((segment.length - distanceTravelled) > lengthOfDashes) {
+                const newPoint: Point = this.jumpToNewPoint(segment.p1, direction, distanceTravelled);
+                segments.push(this.generateDash(newPoint, direction, lengthOfDashes));
+            }
         }
-        segments.push(this.generateRulerLine(segment.p1, perpendicular));
-        segments.push(this.generateRulerLine(segment.p2, perpendicular));
+        segments.push(this.generateDash(segment.p1, direction, lengthOfDashes));
+        segments.push(this.generateDash(segment.p2, direction.generateNegativeVector(), lengthOfDashes));
         return segments;
     }
 
-    private generateRulerLine(point: Point, direction: Vector): Segment {
-        const point1: Point = this.jumpToNewPoint(point, direction, this.lineWidth / 2);
-        const point2: Point = this.jumpToNewPoint(point, direction, -this.lineWidth / 2);
-        return new Segment(point1, point2);
+    private generateDash(startPoint: Point, direction: Vector, dashLength: number): Segment {
+        const endPoint: Point = this.jumpToNewPoint(startPoint, direction, dashLength);
+        return new Segment(startPoint, endPoint);
     }
 
 }

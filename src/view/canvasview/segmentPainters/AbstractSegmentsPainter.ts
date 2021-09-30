@@ -4,6 +4,7 @@ import { SegmentsPainter } from './SegmentsPainter';
 import { Point } from '../../../model/shape/Point';
 import { SegmentShape } from '../../../model/shape/segmentShapes/SegmentShape';
 import { Segment } from '../../../model/shape/segmentShapes/Segment';
+import { Vector } from '../../../model/shape/Vector';
 
 export abstract class AbstractSegmentsPainter extends CanvasAssistant implements SegmentsPainter {
 
@@ -88,6 +89,12 @@ export abstract class AbstractSegmentsPainter extends CanvasAssistant implements
 
             this.recentlyPaintedMovingSegments = [];
         }
+    }
+
+    protected jumpToNewPoint(fromPoint: Point, direction: Vector, distance: number): Point {
+        const newPointX: number = fromPoint.x + direction.x * distance;
+        const newPointY: number = fromPoint.y + direction.y * distance;
+        return new Point(newPointX, newPointY);
     }
 
 }

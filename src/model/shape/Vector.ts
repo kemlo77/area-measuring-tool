@@ -39,6 +39,10 @@ export class Vector {
         return new Vector(this.y / this.norm, -this.x / this.norm);
     }
 
+    generateNegativeVector(): Vector {
+        return new Vector(-this.x, -this.y);
+    }
+
     static dotProduct(vector1: Vector, vector2: Vector): number {
         return (vector1.x * vector2.x + vector1.y * vector2.y);
     }
