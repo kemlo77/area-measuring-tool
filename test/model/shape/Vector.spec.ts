@@ -50,6 +50,13 @@ describe('Vector', () => {
         expect(unitVector.y).to.be.closeTo(-0.707106, 0.000001);
     });
 
+    it('generateNegativeVector', () => {
+        const vector1: Vector = new Vector(3, 2);
+        const negativeVector: Vector = vector1.generateNegativeVector();
+        expect(negativeVector.x).to.equal(-3);
+        expect(negativeVector.y).to.equal(-2);
+    });
+
 
 
 });

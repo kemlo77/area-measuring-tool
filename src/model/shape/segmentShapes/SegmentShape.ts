@@ -9,5 +9,7 @@ export interface SegmentShape {
     readonly length: number;
     readonly area: number;
     readonly isSelected: boolean;
+    readonly isMoving: boolean;
+    readonly isClosed: boolean;
 
 }

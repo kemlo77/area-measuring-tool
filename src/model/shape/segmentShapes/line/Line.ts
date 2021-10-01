@@ -59,6 +59,10 @@ export class Line implements InteractiveShape, SegmentShape {
         return 0;
     }
 
+    get isClosed(): boolean {
+        return false;
+    }
+
     get isSelected(): boolean {
         return !this.isUnselected;
     }

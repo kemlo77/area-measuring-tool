@@ -7,7 +7,7 @@ type ShapeAction = (shape: MeassuringShape, coordinate: Coordinate) => void;
 export class Model {
 
     private shapes: MeassuringShape[] = [];
-    private shapeFactory: ShapeFactory = new ShapeFactory();
+    private _shapeFactory: ShapeFactory = new ShapeFactory();
 
     get listOfShapes(): MeassuringShape[] {
         return this.shapes;
@@ -15,7 +15,7 @@ export class Model {
 
     addShape(name: string): void {
         if (this.noShapeIsSelected()) {
-            const newShape: MeassuringShape = this.shapeFactory.getShape(name);
+            const newShape: MeassuringShape = this._shapeFactory.getShape(name);
             if (newShape !== null) {
                 this.shapes.push(newShape);
             }

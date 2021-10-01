@@ -66,5 +66,23 @@ describe('Line', () => {
         expect(line.length).to.equal(50);
     });
 
+    it('line - isClosed', () => {
+        const line: Line = new Line();
+        expect(line.isClosed).to.equal(false);
+    });
+
+    it('line - area', () => {
+        const line: Line = new Line();
+        expect(line.area).to.equal(0);
+    });
+
+    it('line - endpoints', () => {
+        const line: Line = new Line({ x: 10, y: 20 }, { x: 30, y: 40 });
+        expect(line.endpoints[0].x).to.equal(10);
+        expect(line.endpoints[0].y).to.equal(20);
+        expect(line.endpoints[1].x).to.equal(30);
+        expect(line.endpoints[1].y).to.equal(40);
+    });
+
 
 });

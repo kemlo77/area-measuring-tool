@@ -1,4 +1,3 @@
-import { RegularSegmentsPainter } from '../view/canvasview/segmentPainters/RegularSegmentsPainter';
 import { SegmentsPainter } from '../view/canvasview/segmentPainters/SegmentsPainter';
 import { AreaValueSign } from './AreaValueSign';
 import { SegmentedMeassuringShape } from './SegmentedMeassuringShape';

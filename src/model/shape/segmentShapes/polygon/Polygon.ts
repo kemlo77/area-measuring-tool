@@ -217,15 +217,6 @@ export class Polygon implements InteractiveShape, SegmentShape {
         this._vertices.splice(index, 1);
     }
 
-    get verticesNextToTheVerticeMoving(): Point[] {
-        const neighbouringPoints: Point[] = [];
-        if (this.isMoving) {
-            neighbouringPoints.push(this.getPrecedingVertex(this._movePoint));
-            neighbouringPoints.push(this.getFollowingVertex(this._movePoint));
-        }
-        return neighbouringPoints;
-    }
-
     getPrecedingVertex(vertex: Point): Point {
         const index: number = this._vertices.indexOf(vertex);
         const indexOfPreceding: number = Polygon.moduloInPolygon(index - 1, this._vertices.length);
