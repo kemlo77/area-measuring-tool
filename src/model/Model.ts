@@ -1,3 +1,4 @@
+import { ConcreteShapeFactory } from './ConcreteShapeFactory';
 import { MeassuringShape } from './MeassuringShape';
 import { Coordinate } from './shape/Coordinate';
 import { ShapeFactory } from './ShapeFactory';
@@ -7,10 +8,14 @@ type ShapeAction = (shape: MeassuringShape, coordinate: Coordinate) => void;
 export class Model {
 
     private shapes: MeassuringShape[] = [];
-    private _shapeFactory: ShapeFactory = new ShapeFactory();
+    private _shapeFactory: ShapeFactory = new ConcreteShapeFactory();
 
     get listOfShapes(): MeassuringShape[] {
         return this.shapes;
+    }
+
+    set shapeFactory(shapeFactory: ShapeFactory) {
+        this._shapeFactory = shapeFactory;
     }
 
     addShape(name: string): void {
@@ -51,6 +56,7 @@ export class Model {
         }
     }
 
+    //TODO: skriva om dom här fyra följande eftersom det är svårläst?
     anySelectedShapeReactToRightClick(coordinate: Coordinate): boolean {
         const action: ShapeAction = (shape, coordinate) => shape.handleRightClick(coordinate);
         return this.anySelectedShapeReactsToMouseEvent(coordinate, action);

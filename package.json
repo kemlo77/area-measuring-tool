@@ -12,7 +12,7 @@
         "e2e": "npx cypress run",
         "test": "mocha --recursive",
         "coverage": "nyc npm run test",
-        "SpecificTest": "nyc mocha test/**/MathUtil.spec.ts",
+        "specificTest": "nyc mocha test/**/Model.spec.ts",
         "sonar": "node sonar-project.js"
     },
     "devDependencies": {

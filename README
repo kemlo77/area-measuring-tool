@@ -2,3 +2,29 @@ A small project on how to add and modify a non complex polygon using the canvas 
 
 Check it out at:
 https://kemlo77.github.io/createPolygon/index.html
+
+
+
+# Patterns used or explored in this project so far
+
+* Builder Pattern (SegmentedMeassuringShapeBuilder)
+
+* Factory Method Pattern (ShapeFactory and ConcreteShapeFactory)
+
+* Model View Controller Pattern
+
+* Observer Pattern (TODO in conjuction with MVC)
+
+* State pattern (used inLine and Polygon)
+
+* Strategy Pattern (SegmentedMeassuringShape has a designated painter)
+
+* Singleton Pattern, no longer used
+
+# Interesting techniques
+
+Using 4 canvas layers:
+* Image layer for displaying background image
+* Filter layer for toning down the image
+* Background layer for non moving shapes. May contain a lot of elements that are not redrawn so much.
+* Foreground layer for moving shapes. Few elements that are redrawn the most.

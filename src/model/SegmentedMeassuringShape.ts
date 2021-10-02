@@ -1,4 +1,3 @@
-import { RegularSegmentsPainter } from '../view/canvasview/segmentPainters/RegularSegmentsPainter';
 import { SegmentsPainter } from '../view/canvasview/segmentPainters/SegmentsPainter';
 import { MeassuringShape } from './MeassuringShape';
 import { Coordinate } from './shape/Coordinate';
@@ -8,7 +7,7 @@ import { InteractiveSegmentShape } from './shape/segmentShapes/InteractiveSegmen
 export class SegmentedMeassuringShape extends MeassuringShape {
 
     private _interactiveSegmentShape: InteractiveSegmentShape;
-    private _designatedPainter: SegmentsPainter = new RegularSegmentsPainter();
+    private _designatedPainter: SegmentsPainter;
     private _hasArea: boolean;
 
     constructor(shape: InteractiveSegmentShape, hasArea: boolean) {
