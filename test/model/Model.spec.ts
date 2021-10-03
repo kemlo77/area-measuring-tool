@@ -142,7 +142,17 @@ describe('Model', () => {
         expect(model.onlyLengthShapes().length).to.equal(0);
     });
 
-
-
+    it('draw a line, then deselect it', () => {
+        model.addShape('Line');
+        const shapeReacted1: boolean = model.anySelectedShapeReactToLeftMouseDown({ x: 100, y: 100 });
+        expect(shapeReacted1).to.equal(true);
+        const shapeReacted2: boolean = model.anySelectedShapeReactToLeftMouseUp({ x: 200, y: 200 });
+        expect(shapeReacted2).to.equal(true);
+        expect(model.noShapeIsSelected()).to.equal(false);
+        const shapeReacted3: boolean = model.anySelectedShapeReactToLeftMouseDown({ x: 300, y: 300 });
+        expect(shapeReacted3).to.equal(true);
+        expect(model.noShapeIsSelected()).to.equal(true);
+        expect(model.listOfShapes.length).to.equal(1);
+    });
 
 });
