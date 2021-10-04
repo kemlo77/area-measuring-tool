@@ -2,26 +2,22 @@ import { Coordinate } from '../../model/shape/Coordinate';
 import { Model } from '../../model/Model';
 import { CanvasAssistant } from './CanvasAssistant';
 import { MeassuringShape } from '../../model/MeassuringShape';
+import { Observer } from './Observer';
 
-export class CanvasView {
+export class CanvasView implements Observer {
 
     private canvasAssistant: CanvasAssistant = new CanvasAssistant();
-    private model: Model;
 
-    constructor(model: Model) {
-        this.model = model;
-    }
-
-    public paintStill(): void {
+    public updateBecauseModelHasChanged(model: Model): void {
         this.canvasAssistant.clearTheStillCanvas();
         this.canvasAssistant.clearTheMovementCanvas();
-        for (const shape of this.model.listOfShapes) {
+        for (const shape of model.listOfShapes) {
             shape.designatedPainterDrawStill();
         }
     }
 
-    public paintMovement(mousePosition: Coordinate): void {
-        const selectedShape: MeassuringShape = this.model.getSelectedShape();
+    public updateBecauseOfMovementInModel(model: Model, mousePosition: Coordinate): void {
+        const selectedShape: MeassuringShape = model.getSelectedShape();
         if (selectedShape !== null) {
             selectedShape.designatedPainterDrawMovement(mousePosition);
         } else {

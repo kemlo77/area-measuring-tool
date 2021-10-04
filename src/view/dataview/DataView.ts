@@ -1,23 +1,24 @@
 import { MeassuringShape } from '../../model/MeassuringShape';
 import { Model } from '../../model/Model';
+import { Coordinate } from '../../model/shape/Coordinate';
+import { Observer } from '../canvasview/Observer';
 
-export class DataView {
+export class DataView implements Observer {
 
     private dataDiv: HTMLElement = document.getElementById('data');
     private scaleFactor = 0.1;
     private areaInputs: HTMLInputElement[] = [];
     private lengthInputs: HTMLInputElement[] = [];
-    private model: Model;
 
-    constructor(model: Model) {
-        this.model = model;
+    updateBecauseModelHasChanged(model: Model): void {
+        this.removeAllChildNodes(this.dataDiv);
+        this.addAreaTotalParagraph(model);
+        this.addAreaShapeDivs(model);
+        this.addLenghtShapeDivs(model);
     }
 
-    updatePresentation(): void {
-        this.removeAllChildNodes(this.dataDiv);
-        this.addAreaTotalParagraph();
-        this.addAreaShapeDivs();
-        this.addLenghtShapeDivs();
+    updateBecauseOfMovementInModel(model: Model, mousePosition: Coordinate): void {
+        //
     }
 
 
@@ -29,8 +30,8 @@ export class DataView {
         this.lengthInputs = [];
     }
 
-    private addAreaTotalParagraph(): void {
-        const areaTotal: number = this.model.onlyAreaShapes()
+    private addAreaTotalParagraph(model: Model): void {
+        const areaTotal: number = model.onlyAreaShapes()
             .reduce((sum, it) => sum + it.area, 0);
         const scaledAndRoundedArea: string =
             this.convertToRoundedNumberString(areaTotal * this.scaleFactor * this.scaleFactor);
@@ -38,15 +39,15 @@ export class DataView {
         this.dataDiv.appendChild(this.generateParagraph('Scale factor: ' + this.scaleFactor));
     }
 
-    private addAreaShapeDivs(): void {
-        this.model.onlyAreaShapes()
+    private addAreaShapeDivs(model: Model): void {
+        model.onlyAreaShapes()
             .forEach((areaShape) => {
                 this.dataDiv.appendChild(this.generateAreaShapeDiv(areaShape));
             });
     }
 
-    private addLenghtShapeDivs(): void {
-        this.model.onlyLengthShapes()
+    private addLenghtShapeDivs(model: Model): void {
+        model.onlyLengthShapes()
             .forEach((lengthShape) => {
                 this.dataDiv.appendChild(this.generateLengthShapeDiv(lengthShape));
             });

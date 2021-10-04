@@ -1,8 +1,17 @@
 import { Coordinate } from './model/shape/Coordinate';
 import { Controller } from './controller/Controller';
+import { Model } from './model/Model';
+import { CanvasView } from './view/canvasview/CanvasView';
+import { DataView } from './view/dataview/DataView';
+
+const model: Model = new Model();
+const controller: Controller = new Controller(model);
+controller.attach(new CanvasView());
+controller.attach(new DataView());
+//TODO: skriv om router som en klass, som får controller via constructor
+//ovan fyra rader ligger i index.ts istället.
 
 
-const controller: Controller = new Controller();
 
 export function addShape(name: string): void {
 	controller.addShape(name);
@@ -39,7 +48,7 @@ export function canvasRightClicked(event: MouseEvent, canvasId: string): void {
 
 export function canvasMouseMovement(event: MouseEvent, canvasId: string): void {
 	const mousePosition: Coordinate = getMouseCoordinate(event, canvasId);
-	controller.canvasMouseMovement(mousePosition);
+	controller.notifyOfMouseMovement(mousePosition);
 }
 
 
