@@ -1,80 +1,107 @@
-let imageFile: File = null;
-const imageCanvas: HTMLCanvasElement = document.querySelector('canvas#imageLayer');
-const filterCanvas: HTMLCanvasElement = document.querySelector('canvas#filterLayer');
-const imageContext: CanvasRenderingContext2D = imageCanvas.getContext('2d');
+export class ImageDrop {
 
-export function dropHandler(ev: DragEvent): void {
-    ev.preventDefault();
-    const file: File = ev.dataTransfer.files[0];
-    if (fileIsImageType(file)) {
-        imageFile = file;
-        readImageFileAndDrawToCanvas(file);
-    } else {
-        alert(file.type + ' is not supported');
-        imageFile = null;   // TODO: Ok att rensa tidigare bild?
-        clearImageCanvas(); // -- // --
+    private imageFile: File = null;
+    private imageCanvas: HTMLCanvasElement = document.querySelector('canvas#imageLayer');
+    private filterCanvas: HTMLCanvasElement = document.querySelector('canvas#filterLayer');
+    private imageContext: CanvasRenderingContext2D = this.imageCanvas.getContext('2d');
+
+    public dropHandler(ev: DragEvent): void {
+        ev.preventDefault();
+        const file: File = ev.dataTransfer.files[0];
+        if (this.fileIsImageType(file)) {
+            this.imageFile = file;
+            this.readImageFileAndDrawToCanvas(file);
+        } else {
+            alert(file.type + ' is not supported');
+            this.imageFile = null;   // TODO: Ok att rensa tidigare bild?
+            this.clearImageCanvas(); // -- // --
+        }
     }
-}
 
-function fileIsImageType(file: File): boolean {
-    const fileType: string = file.type;
-    const imageTypes: Array<string> = ['image/png', 'image/gif', 'image/bmp', 'image/jpeg'];
-    return imageTypes.includes(fileType);
-}
+    private fileIsImageType(file: File): boolean {
+        const fileType: string = file.type;
+        const imageTypes: Array<string> = ['image/png', 'image/gif', 'image/bmp', 'image/jpeg'];
+        return imageTypes.includes(fileType);
+    }
 
-function readImageFileAndDrawToCanvas(file: File): void {
-    const reader: FileReader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = (): void => {
-        const image: HTMLImageElement = new Image();
-        console.log('image.width:    ' + image.width);
-        console.log('image.height:   ' + image.height);
-        image.src = reader.result.toString();
-        image.onload = (): void => {
-            drawImageToCanvas(image);
+    private readImageFileAndDrawToCanvas(file: File): void {
+        const reader: FileReader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (): void => {
+            const image: HTMLImageElement = new Image();
+            console.log('image.width:    ' + image.width);
+            console.log('image.height:   ' + image.height);
+            image.src = reader.result.toString();
+            image.onload = (): void => {
+                this.drawImageToCanvas(image);
+            };
         };
-    };
-}
+    }
 
-function clearImageCanvas(): void {
-    imageContext.clearRect(0, 0, imageCanvas.width, imageCanvas.height);
-}
+    private clearImageCanvas(): void {
+        this.imageContext.clearRect(0, 0, this.imageCanvas.width, this.imageCanvas.height);
+    }
 
-function drawImageToCanvas(image: HTMLImageElement): void {
-    imageContext.drawImage(image, 0, 0, image.width, image.height,
-        0, 0, imageCanvas.clientWidth, imageCanvas.clientHeight);
-}
+    private drawImageToCanvas(image: HTMLImageElement): void {
+        this.imageContext.drawImage(image, 0, 0, image.width, image.height,
+            0, 0, this.imageCanvas.clientWidth, this.imageCanvas.clientHeight);
+    }
 
-export function dragOverHandler(ev: DragEvent): void { ev.preventDefault(); }
+    public dragOverHandler(ev: DragEvent): void {
+        ev.preventDefault();
+    }
 
-export function adjustCanvas(): void {
-    console.log('Resizing canvases');
+    public adjustCanvas(): void {
+        console.log('Resizing canvases');
+    
+        const canvases: NodeListOf<HTMLCanvasElement> = document.querySelectorAll('div#viewport canvas');
+        canvases.forEach( (canvas) => {
+            canvas.width = window.innerWidth*0.9;
+            canvas.height = window.innerHeight*0.8;
+        });
+    
+        if (this.imageFile !== null) {
+            this.readImageFileAndDrawToCanvas(this.imageFile);
+        }
+    }
 
-    const canvases: NodeListOf<HTMLCanvasElement> = document.querySelectorAll('div#viewport canvas');
-    canvases.forEach( (canvas) => {
-        canvas.width = window.innerWidth*0.9;
-        canvas.height = window.innerHeight*0.8;
-    });
+    public  delayedAdjustCanvas: any = this.debounce((): void => this.adjustCanvas(), 500);
 
-    if (imageFile !== null) {
-        readImageFileAndDrawToCanvas(imageFile);
+    private debounce<F extends Function>(func: F, wait: number): F {
+        let timeoutID: number;
+        return <any>function (this: any, ...args: any[]) {
+            clearTimeout(timeoutID);
+            const context: any = this;
+            timeoutID = window.setTimeout(() => {
+                func.apply(context, args);
+            }, wait);
+        };
+    }
+
+    public adjustOpacity(value: number): void {
+        const percentage: number = 1- value/100;
+        this.filterCanvas.style.opacity =  percentage.toString();
     }
 }
 
-export const delayedAdjustCanvas: any = debounce((): void => adjustCanvas(), 250);
 
-function debounce<F extends Function>(func: F, wait: number): F {
-    let timeoutID: number;
-    return <any>function (this: any, ...args: any[]) {
-        clearTimeout(timeoutID);
-        const context: any = this;
-        timeoutID = window.setTimeout(() => {
-            func.apply(context, args);
-        }, wait);
-    };
-}
 
-export function adjustOpacity(value: number): void {
-    const percentage: number = 1- value/100;
-    filterCanvas.style.opacity =  percentage.toString();
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

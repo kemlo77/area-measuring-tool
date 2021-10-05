@@ -13,7 +13,7 @@ https://kemlo77.github.io/createPolygon/index.html
 
 * Model View Controller Pattern
 
-* Observer Pattern (TODO in conjuction with MVC)
+* Observer Pattern (Controller is Subject, CanvasView and DataView are Observers)
 
 * State pattern (used inLine and Polygon)
 
