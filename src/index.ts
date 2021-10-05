@@ -1,32 +1,39 @@
 import './style.css';
 import {
-    addShape, removeSelectedShape, canvasMouseMovement, canvasLeftClicked,
-    canvasRightClicked, canvasMouseDown, canvasMouseUp
-} from './router';
-import {
     dropHandler, dragOverHandler, adjustCanvas, delayedAdjustCanvas, adjustOpacity
 } from './imageDrop';
+import { Model } from './model/Model';
+import { Controller } from './controller/Controller';
+import { CanvasView } from './view/canvasview/CanvasView';
+import { DataView } from './view/dataview/DataView';
+import { Router } from './Router';
+
+const model: Model = new Model();
+const controller: Controller = new Controller(model);
+controller.attach(new CanvasView());
+controller.attach(new DataView());
+const router: Router = new Router(controller);
 
 document.getElementById('foreground')
-    .addEventListener('click', (event) => canvasLeftClicked(event, (event.target as Element).id));
+    .addEventListener('click', (event) => router.canvasLeftClicked(event, (event.target as Element).id));
 document.getElementById('foreground')
-    .addEventListener('mousemove', (event) => canvasMouseMovement(event, (event.target as Element).id));
+    .addEventListener('mousemove', (event) => router.canvasMouseMovement(event, (event.target as Element).id));
 document.getElementById('foreground')
-    .addEventListener('mousedown', (event) => canvasMouseDown(event, (event.target as Element).id));
+    .addEventListener('mousedown', (event) => router.canvasMouseDown(event, (event.target as Element).id));
 document.getElementById('foreground')
-    .addEventListener('mouseup', (event) => canvasMouseUp(event, (event.target as Element).id));
+    .addEventListener('mouseup', (event) => router.canvasMouseUp(event, (event.target as Element).id));
 document.getElementById('foreground')
-    .addEventListener('contextmenu', (event) => canvasRightClicked(event, (event.target as Element).id));
+    .addEventListener('contextmenu', (event) => router.canvasRightClicked(event, (event.target as Element).id));
 document.getElementById('addPositivePolygon')
-    .addEventListener('click', () => addShape('PositivePolygonArea'));
+    .addEventListener('click', () => router.addShape('PositivePolygonArea'));
 document.getElementById('addNegativePolygon')
-    .addEventListener('click', () => addShape('NegativePolygonArea'));
+    .addEventListener('click', () => router.addShape('NegativePolygonArea'));
 document.getElementById('addRuler')
-    .addEventListener('click', () => addShape('Ruler'));
+    .addEventListener('click', () => router.addShape('Ruler'));
 document.getElementById('removeSelectedShape')
-    .addEventListener('click', () => removeSelectedShape());
+    .addEventListener('click', () => router.removeSelectedShape());
 document.getElementById('addSymmetryLine')
-    .addEventListener('click', () => addShape('SymmetryLine'));
+    .addEventListener('click', () => router.addShape('SymmetryLine'));
 
 
 addEventListener('load', () => adjustCanvas());

@@ -16,9 +16,6 @@ export class Controller implements Subject {
     }
 
     attach(observer: Observer): void {
-        if (this._observers.has(observer)) {
-            return;
-        }
         this._observers.add(observer);
     }
 
