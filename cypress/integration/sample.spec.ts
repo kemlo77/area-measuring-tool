@@ -24,13 +24,14 @@ describe('Drawing polygons', () => {
         cy.get('div[id="data"]').find('div').should('have.length', 1);
     });
 
-    it('Three differend shapes - ', () => {
+    it('Four different shapes - ', () => {
         drawPositiveSquare();
         drawNegativeSquare();
         drawRuler();
+        drawSymmetryLine();
 
         cy.get('div[id="data"]').should('contain.text', 'Area total: 36');
-        cy.get('div[id="data"]').find('div').should('have.length', 3);
+        cy.get('div[id="data"]').find('div').should('have.length', 4);
     });
 
     it('draw a shape and remove it', () => {
@@ -65,6 +66,13 @@ describe('Drawing polygons', () => {
         cy.get('button').contains('Add ruler').click();
         cy.get('#foreground').click(100, 90);
         cy.get('#foreground').click(200, 90);
+        cy.get('#foreground').click(1, 1);
+    }
+
+    function drawSymmetryLine(): void {
+        cy.get('button').contains('Add symmetry line').click();
+        cy.get('#foreground').click(100, 80);
+        cy.get('#foreground').click(200, 80);
         cy.get('#foreground').click(1, 1);
     }
 
