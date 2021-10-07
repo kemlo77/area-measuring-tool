@@ -2,7 +2,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry: './src/index.ts',
+    entry: './src/main.ts',
     plugins: [
         new HtmlWebpackPlugin({ template: './src/template.html' })
     ],
