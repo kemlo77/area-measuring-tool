@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { Model } from '../../built/model/Model';
-import { MockShapeFactory } from '../../built/model/MockShapeFactory';
+import { Model } from '../../src/model/Model';
+import { MockShapeFactory } from '../../src/model/MockShapeFactory';
 
 
 describe('Model', () => {

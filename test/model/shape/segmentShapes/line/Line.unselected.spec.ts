@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { Line } from '../../../../../built/model/shape/segmentShapes/line/Line.js';
-import { Segment } from '../../../../../built/model/shape/segmentShapes/Segment.js';
+import { Line } from '../../../../../src/model/shape/segmentShapes/line/Line';
+import { Segment } from '../../../../../src/model/shape/segmentShapes/Segment';
 
 
 

@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { Polygon } from '../../../../../built/model/shape/segmentShapes/polygon/Polygon';
+import { Polygon } from '../../../../../src/model/shape/segmentShapes/polygon/Polygon';
 
 let rectangle: Polygon;
 
@@ -123,7 +123,7 @@ describe('Polygon', () => {
     });
 
     it('getMovingSegments', () => {
-        expect(rectangle.getMovingSegments().length).to.equal(0);
+        expect(rectangle.getMovingSegments({ x: 0, y: 0 }).length).to.equal(0);
     });
 
 

@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { Polygon } from '../../../../../built/model/shape/segmentShapes/polygon/Polygon';
-import { Segment } from '../../../../../built/model/shape/segmentShapes/Segment';
+import { Polygon } from '../../../../../src/model/shape/segmentShapes/polygon/Polygon';
+import { Segment } from '../../../../../src/model/shape/segmentShapes/Segment';
 
 
 describe('Polygon - closed', () => {

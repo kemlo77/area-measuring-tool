@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { Point } from '../../../../built/model/shape/Point.js';
-import { MathUtil } from '../../../../built/model/shape/segmentShapes/MathUtil.js';
-import { Segment } from '../../../../built/model/shape/segmentShapes/Segment.js';
+import { Point } from '../../../../src/model/shape/Point';
+import { MathUtil } from '../../../../src/model/shape/segmentShapes/MathUtil';
+import { Segment } from '../../../../src/model/shape/segmentShapes/Segment';
 
 
 describe('MathUtil', () => {
