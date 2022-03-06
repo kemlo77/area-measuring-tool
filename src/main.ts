@@ -8,8 +8,8 @@ import { Router } from './Router';
 
 const model: Model = new Model();
 const controller: Controller = new Controller(model);
-controller.attach(new CanvasView());
-controller.attach(new DataView());
+controller.subscribe(new CanvasView());
+controller.subscribe(new DataView());
 const router: Router = new Router(controller);
 const imageDrop: ImageDrop = new ImageDrop();
 

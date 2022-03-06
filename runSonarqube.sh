@@ -9,6 +9,7 @@ sudo docker run\
 # this will start a docker container with SonarQube locally
 # anv: admin
 # pwd: admin
-# acces it on localhost:9000
+# access it on localhost:9000
 
 # https://blog.setapp.pl/sonarqube_introduction
+echo "access it on localhost:9000 (user: admin, pwd: admin)"

@@ -1,6 +1,6 @@
 import { Model } from '../model/Model';
 import { Coordinate } from '../model/shape/Coordinate';
-import { Observer } from '../view/canvasview/Observer';
+import { Observer } from '../view/Observer';
 import { Subject } from './Subject';
 
 type ModelHandleMouseEvent = (model: Model, coordinate: Coordinate) => boolean;
@@ -8,19 +8,19 @@ type ModelHandleMouseEvent = (model: Model, coordinate: Coordinate) => boolean;
 export class Controller implements Subject {
 
     private model: Model;
-    private _observers: Set<Observer> = new Set();
+    private _listeners: Set<Observer> = new Set();
 
 
     constructor(model: Model) {
         this.model = model;
     }
 
-    attach(observer: Observer): void {
-        this._observers.add(observer);
+    subscribe(observer: Observer): void {
+        this._listeners.add(observer);
     }
 
-    detach(observer: Observer): void {
-        this._observers.delete(observer);
+    unsubscribe(observer: Observer): void {
+        this._listeners.delete(observer);
     }
 
     addShape(name: string): void {
@@ -65,11 +65,11 @@ export class Controller implements Subject {
     }
 
     notifyOfMouseMovement(mousePosition: Coordinate): void {
-        this._observers.forEach((observer) => { observer.updateBecauseOfMovementInModel(this.model, mousePosition); });
+        this._listeners.forEach((observer) => { observer.updateBecauseOfMovementInModel(this.model, mousePosition); });
     }
 
     notifyOfModelChange(mousePosition: Coordinate): void {
-        this._observers.forEach((observer) => {
+        this._listeners.forEach((observer) => {
             observer.updateBecauseModelHasChanged(this.model);
             observer.updateBecauseOfMovementInModel(this.model, mousePosition);
         });

@@ -2,7 +2,7 @@ import { Coordinate } from '../../model/shape/Coordinate';
 import { Model } from '../../model/Model';
 import { CanvasAssistant } from './CanvasAssistant';
 import { MeassuringShape } from '../../model/MeassuringShape';
-import { Observer } from './Observer';
+import { Observer } from '../Observer';
 
 export class CanvasView implements Observer {
 

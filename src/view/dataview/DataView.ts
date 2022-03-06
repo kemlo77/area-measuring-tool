@@ -1,7 +1,7 @@
 import { MeassuringShape } from '../../model/MeassuringShape';
 import { Model } from '../../model/Model';
 import { Coordinate } from '../../model/shape/Coordinate';
-import { Observer } from '../canvasview/Observer';
+import { Observer } from '../Observer';
 
 export class DataView implements Observer {
 

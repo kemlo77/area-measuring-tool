@@ -1,9 +1,9 @@
 import { Coordinate } from '../model/shape/Coordinate';
-import { Observer } from '../view/canvasview/Observer';
+import { Observer } from '../view/Observer';
 
 export interface Subject {
-    attach(observer: Observer): void;
-    detach(observer: Observer): void;
+    subscribe(observer: Observer): void;
+    unsubscribe(observer: Observer): void;
     notifyOfMouseMovement(mousePosition: Coordinate): void;
     notifyOfModelChange(mousePosition: Coordinate): void;
 }
