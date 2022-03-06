@@ -7,9 +7,9 @@ import { DataView } from './view/dataview/DataView';
 import { Router } from './Router';
 
 const model: Model = new Model();
+model.subscribe(new CanvasView());
+model.subscribe(new DataView());
 const controller: Controller = new Controller(model);
-controller.subscribe(new CanvasView());
-controller.subscribe(new DataView());
 const router: Router = new Router(controller);
 const imageDrop: ImageDrop = new ImageDrop();
 

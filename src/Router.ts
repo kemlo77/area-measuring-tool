@@ -44,7 +44,7 @@ export class Router {
 
 	canvasMouseMovement(event: MouseEvent, canvasId: string): void {
 		const mousePosition: Coordinate = this.getMouseCoordinate(event, canvasId);
-		this._controller.notifyOfMouseMovement(mousePosition);
+		this._controller.canvasMouseMovement(mousePosition);
 	}
 
 

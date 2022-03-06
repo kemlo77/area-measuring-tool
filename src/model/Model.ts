@@ -1,3 +1,5 @@
+import { Subject } from '../controller/Subject';
+import { Observer } from '../view/Observer';
 import { ConcreteShapeFactory } from './ConcreteShapeFactory';
 import { MeassuringShape } from './MeassuringShape';
 import { Coordinate } from './shape/Coordinate';
@@ -5,13 +7,16 @@ import { ShapeFactory } from './ShapeFactory';
 
 type ShapeAction = (shape: MeassuringShape, coordinate: Coordinate) => void;
 
-export class Model {
+export class Model implements Subject {
 
+    private _listeners: Set<Observer> = new Set();
     private shapes: MeassuringShape[] = [];
     private _shapeFactory: ShapeFactory = new ConcreteShapeFactory();
 
+
+
     get listOfShapes(): MeassuringShape[] {
-        return this.shapes;
+        return this.shapes.slice();
     }
 
     set shapeFactory(shapeFactory: ShapeFactory) {
@@ -31,6 +36,8 @@ export class Model {
         const selectedShape: MeassuringShape = this.getSelectedShape();
         if (selectedShape !== null) {
             this.removeShapeFromList(selectedShape);
+            const dummyCoordinate: Coordinate = { x: 0, y: 0 };
+            this.notifyOfModelChange(dummyCoordinate);
         }
     }
 
@@ -45,6 +52,8 @@ export class Model {
         } else {
             this.getSelectedShape().handleLeftClick(coordinate);
         }
+        // Always updating visuals since it is not known if a shape was selected/deselected
+        this.notifyOfModelChange(coordinate);
     }
 
     private trySelectingAnyShapeByLeftClick(coordinate: Coordinate): void {
@@ -56,29 +65,32 @@ export class Model {
         }
     }
 
+    reactToMouseMovement(mousePosition: Coordinate): void {
+        this.notifyOfMouseMovement(mousePosition);
+    }
+
     //TODO: skriva om dom här fyra följande eftersom det är svårläst?
-    anySelectedShapeReactToRightClick(coordinate: Coordinate): boolean {
+    reactToRightClick(coordinate: Coordinate): void {
         const action: ShapeAction = (shape, coordinate) => shape.handleRightClick(coordinate);
-        return this.anySelectedShapeReactsToMouseEvent(coordinate, action);
+        this.anySelectedShapeReactsToMouseEvent(coordinate, action);
     }
 
-    anySelectedShapeReactToLeftMouseDown(coordinate: Coordinate): boolean {
+    reactToLeftMouseDown(coordinate: Coordinate): void {
         const action: ShapeAction = (shape, coordinate) => shape.handleLeftMouseDown(coordinate);
-        return this.anySelectedShapeReactsToMouseEvent(coordinate, action);
+        this.anySelectedShapeReactsToMouseEvent(coordinate, action);
     }
 
-    anySelectedShapeReactToLeftMouseUp(coordinate: Coordinate): boolean {
+    reactToLeftMouseUp(coordinate: Coordinate): void {
         const action: ShapeAction = (shape, coordinate) => shape.handleLeftMouseUp(coordinate);
-        return this.anySelectedShapeReactsToMouseEvent(coordinate, action);
+        this.anySelectedShapeReactsToMouseEvent(coordinate, action);
     }
 
-    private anySelectedShapeReactsToMouseEvent(coordinate: Coordinate, action: ShapeAction): boolean {
+    private anySelectedShapeReactsToMouseEvent(coordinate: Coordinate, action: ShapeAction): void {
         const selectedShape: MeassuringShape = this.getSelectedShape();
         if (selectedShape !== null) {
             action(selectedShape, coordinate);
-            return true;
+            this.notifyOfModelChange(coordinate);
         }
-        return false;
     }
 
 
@@ -103,4 +115,23 @@ export class Model {
         return this.shapes.filter((it) => !it.hasArea);
     }
 
+
+    subscribe(observer: Observer): void {
+        this._listeners.add(observer);
+    }
+
+    unsubscribe(observer: Observer): void {
+        this._listeners.delete(observer);
+    }
+
+    notifyOfMouseMovement(mousePosition: Coordinate): void {
+        this._listeners.forEach((observer) => { observer.updateBecauseOfMovementInModel(this, mousePosition); });
+    }
+
+    notifyOfModelChange(mousePosition: Coordinate): void {
+        this._listeners.forEach((observer) => {
+            observer.updateBecauseModelHasChanged(this);
+            observer.updateBecauseOfMovementInModel(this, mousePosition);
+        });
+    }
 }
