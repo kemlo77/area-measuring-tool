@@ -40,7 +40,7 @@ export class Line implements InteractiveShape, SegmentShape {
     }
 
     private isNullOrUndefined(object: any): boolean {
-        return object === null || object === undefined;
+        return (object === null || object === undefined);
     }
 
     setCurrentState(state: LineState): void {
@@ -131,20 +131,20 @@ export class Line implements InteractiveShape, SegmentShape {
     }
 
     getStillSegments(): Segment[] {
-        const segment: Segment = this.currentState.calculateStillSegment();
-        if (segment === null || segment === undefined) {
-            return [];
+        const stillSegment: Segment = this.currentState.calculateStillSegment();
+        if (stillSegment) {
+            return [stillSegment];
         } else {
-            return [segment];
+            return [];
         }
     }
 
     getMovingSegments(mousePosition: Coordinate): Segment[] {
-        const segment: Segment = this.currentState.calculateMovingSegment(mousePosition);
-        if (segment === null || segment === undefined) {
-            return [];
+        const movingSegment: Segment = this.currentState.calculateMovingSegment(mousePosition);
+        if (movingSegment) {
+            return [movingSegment];
         } else {
-            return [segment];
+            return [];
         }
     }
 

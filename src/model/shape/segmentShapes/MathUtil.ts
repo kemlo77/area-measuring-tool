@@ -147,7 +147,7 @@ export module MathUtil {
 
 	export function distanceBetweenPointAndPointProjectedOnSegment(segmentAB: Segment, pointC: Point): number {
 		const projectedPoint: Point = projectPointOntoSegment(segmentAB, pointC);
-		if (projectedPoint == null) { return Infinity; }
+		if (!projectedPoint) { return Infinity; }
 		return projectedPoint.distanceToOtherPoint(pointC);
 	}
 

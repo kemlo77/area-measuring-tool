@@ -53,19 +53,19 @@ export class ImageDrop {
 
     public adjustCanvas(): void {
         console.log('Resizing canvases');
-    
+
         const canvases: NodeListOf<HTMLCanvasElement> = document.querySelectorAll('div#viewport canvas');
-        canvases.forEach( (canvas) => {
-            canvas.width = window.innerWidth*0.9;
-            canvas.height = window.innerHeight*0.8;
+        canvases.forEach((canvas) => {
+            canvas.width = window.innerWidth * 0.9;
+            canvas.height = window.innerHeight * 0.8;
         });
-    
-        if (this.imageFile !== null) {
+
+        if (this.imageFile) {
             this.readImageFileAndDrawToCanvas(this.imageFile);
         }
     }
 
-    public  delayedAdjustCanvas: any = this.debounce((): void => this.adjustCanvas(), 500);
+    public delayedAdjustCanvas: any = this.debounce((): void => this.adjustCanvas(), 500);
 
     private debounce<F extends Function>(func: F, wait: number): F {
         let timeoutID: number;
@@ -79,8 +79,8 @@ export class ImageDrop {
     }
 
     public adjustOpacity(value: number): void {
-        const percentage: number = 1- value/100;
-        this.filterCanvas.style.opacity =  percentage.toString();
+        const percentage: number = 1 - value / 100;
+        this.filterCanvas.style.opacity = percentage.toString();
     }
 }
 

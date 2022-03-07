@@ -18,7 +18,7 @@ export class CanvasView implements Observer {
 
     public updateBecauseOfMovementInModel(model: Model, mousePosition: Coordinate): void {
         const selectedShape: MeassuringShape = model.selectedShape;
-        if (selectedShape !== null) {
+        if (selectedShape) {
             selectedShape.designatedPainterDrawMovement(mousePosition);
         } else {
             this.canvasAssistant.clearTheMovementCanvas();

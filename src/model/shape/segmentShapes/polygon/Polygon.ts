@@ -21,7 +21,7 @@ export class Polygon implements InteractiveShape, SegmentShape {
         this._movePoint = null;
         this.currentState = new OpenState(this);
 
-        const verticesGiven: boolean = (vertices !== undefined && vertices !== null);
+        const verticesGiven: boolean = !!vertices;
         if (verticesGiven) {
             vertices.forEach((coordinate) => this.handleLeftClick(coordinate));
             this.handleLeftClick(vertices[0]);

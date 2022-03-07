@@ -32,7 +32,7 @@ export class Segment {
 
     doesNotIntersectAnyOfTheseSegments(segmentArrayIn: Segment[]): boolean {
         for (const segment of segmentArrayIn) {
-            if (MathUtil.calculateIntersect(segment, this) !== null) {
+            if (MathUtil.calculateIntersect(segment, this)) {
                 return false;
             }
         }
@@ -40,7 +40,7 @@ export class Segment {
     }
 
     intersectsThisSegment(segment: Segment): boolean {
-        if (MathUtil.calculateIntersect(this, segment) !== null) {
+        if (MathUtil.calculateIntersect(this, segment)) {
             return true;
         }
         return false;
