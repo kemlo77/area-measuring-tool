@@ -13,29 +13,37 @@ export class Model implements Subject {
     private shapes: MeassuringShape[] = [];
     private _shapeFactory: ShapeFactory = new ConcreteShapeFactory();
 
-
-
-    get listOfShapes(): MeassuringShape[] {
-        return this.shapes.slice();
-    }
-
     set shapeFactory(shapeFactory: ShapeFactory) {
         this._shapeFactory = shapeFactory;
     }
 
+    get allShapes(): MeassuringShape[] {
+        return this.shapes.slice();
+    }
+
+    get areaShapes(): MeassuringShape[] {
+        return this.shapes.filter((it) => it.hasArea);
+    }
+
+    get lengthShapes(): MeassuringShape[] {
+        return this.shapes.filter((it) => !it.hasArea);
+    }
+
     addShape(name: string): void {
-        if (this.noShapeIsSelected()) {
-            const newShape: MeassuringShape = this._shapeFactory.getShape(name);
-            if (newShape !== null) {
-                this.shapes.push(newShape);
-            }
+        //It shall not be possible to add a shape while another is selected
+        if (this.selectedShape) {
+            return;
         }
+        const newShape: MeassuringShape = this._shapeFactory.getShape(name);
+        if (newShape) {
+            this.shapes.push(newShape);
+        }
+
     }
 
     removeSelectedShape(): void {
-        const selectedShape: MeassuringShape = this.getSelectedShape();
-        if (selectedShape !== null) {
-            this.removeShapeFromList(selectedShape);
+        if (this.selectedShape) {
+            this.removeShapeFromList(this.selectedShape);
             const dummyCoordinate: Coordinate = { x: 0, y: 0 };
             this.notifyOfModelChange(dummyCoordinate);
         }
@@ -46,11 +54,37 @@ export class Model implements Subject {
         this.shapes.splice(index, 1);
     }
 
+    reactToMouseMovement(mousePosition: Coordinate): void {
+        this.notifyOfMouseMovement(mousePosition);
+    }
+
+    reactToRightClick(coordinate: Coordinate): void {
+        if (this.selectedShape) {
+            this.selectedShape.handleRightClick(coordinate);
+            this.notifyOfModelChange(coordinate);
+        }
+    }
+
+    reactToLeftMouseDown(coordinate: Coordinate): void {
+        if (this.selectedShape) {
+            this.selectedShape.handleLeftMouseDown(coordinate);
+            this.notifyOfModelChange(coordinate);
+        }
+    }
+
+    reactToLeftMouseUp(coordinate: Coordinate): void {
+        if (this.selectedShape) {
+            this.selectedShape.handleLeftMouseUp(coordinate);
+            this.notifyOfModelChange(coordinate);
+        }
+    }
+
     reactToLeftClick(coordinate: Coordinate): void {
-        if (this.noShapeIsSelected()) {
-            this.trySelectingAnyShapeByLeftClick(coordinate);
+        if (this.selectedShape) {
+            this.selectedShape.handleLeftClick(coordinate);
         } else {
-            this.getSelectedShape().handleLeftClick(coordinate);
+            this.trySelectingAnyShapeByLeftClick(coordinate);
+
         }
         // Always updating visuals since it is not known if a shape was selected/deselected
         this.notifyOfModelChange(coordinate);
@@ -65,54 +99,13 @@ export class Model implements Subject {
         }
     }
 
-    reactToMouseMovement(mousePosition: Coordinate): void {
-        this.notifyOfMouseMovement(mousePosition);
-    }
-
-    //TODO: skriva om dom här fyra följande eftersom det är svårläst?
-    reactToRightClick(coordinate: Coordinate): void {
-        const action: ShapeAction = (shape, coordinate) => shape.handleRightClick(coordinate);
-        this.anySelectedShapeReactsToMouseEvent(coordinate, action);
-    }
-
-    reactToLeftMouseDown(coordinate: Coordinate): void {
-        const action: ShapeAction = (shape, coordinate) => shape.handleLeftMouseDown(coordinate);
-        this.anySelectedShapeReactsToMouseEvent(coordinate, action);
-    }
-
-    reactToLeftMouseUp(coordinate: Coordinate): void {
-        const action: ShapeAction = (shape, coordinate) => shape.handleLeftMouseUp(coordinate);
-        this.anySelectedShapeReactsToMouseEvent(coordinate, action);
-    }
-
-    private anySelectedShapeReactsToMouseEvent(coordinate: Coordinate, action: ShapeAction): void {
-        const selectedShape: MeassuringShape = this.getSelectedShape();
-        if (selectedShape !== null) {
-            action(selectedShape, coordinate);
-            this.notifyOfModelChange(coordinate);
-        }
-    }
-
-
-    noShapeIsSelected(): boolean {
-        return this.shapes.every((it) => { return !it.isSelected; });
-    }
-
-    getSelectedShape(): MeassuringShape {
+    get selectedShape(): MeassuringShape {
         for (const shape of this.shapes) {
             if (shape.isSelected) {
                 return shape;
             }
         }
         return null;
-    }
-
-    onlyAreaShapes(): MeassuringShape[] {
-        return this.shapes.filter((it) => it.hasArea);
-    }
-
-    onlyLengthShapes(): MeassuringShape[] {
-        return this.shapes.filter((it) => !it.hasArea);
     }
 
 

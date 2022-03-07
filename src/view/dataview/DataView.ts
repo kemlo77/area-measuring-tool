@@ -31,7 +31,7 @@ export class DataView implements Observer {
     }
 
     private addAreaTotalParagraph(model: Model): void {
-        const areaTotal: number = model.onlyAreaShapes()
+        const areaTotal: number = model.areaShapes
             .reduce((sum, it) => sum + it.area, 0);
         const scaledAndRoundedArea: string =
             this.convertToRoundedNumberString(areaTotal * this.scaleFactor * this.scaleFactor);
@@ -40,14 +40,14 @@ export class DataView implements Observer {
     }
 
     private addAreaShapeDivs(model: Model): void {
-        model.onlyAreaShapes()
+        model.areaShapes
             .forEach((areaShape) => {
                 this.dataDiv.appendChild(this.generateAreaShapeDiv(areaShape));
             });
     }
 
     private addLenghtShapeDivs(model: Model): void {
-        model.onlyLengthShapes()
+        model.lengthShapes
             .forEach((lengthShape) => {
                 this.dataDiv.appendChild(this.generateLengthShapeDiv(lengthShape));
             });

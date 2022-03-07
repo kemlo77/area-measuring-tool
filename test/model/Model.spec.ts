@@ -25,99 +25,99 @@ describe('Model', () => {
         model.shapeFactory = new MockShapeFactory();
     });
 
-    it('listOfShapes', () => {
+    it('allShapes', () => {
 
-        expect(model.listOfShapes.length).to.equal(0);
+        expect(model.allShapes.length).to.equal(0);
         model.addShape('Polygon');
-        expect(model.listOfShapes.length).to.equal(1);
+        expect(model.allShapes.length).to.equal(1);
     });
 
     it('addShape()', () => {
-        expect(model.noShapeIsSelected()).to.equal(true);
+        expect(model.selectedShape).to.be.null;
         model.addShape('Polygon');
-        expect(model.noShapeIsSelected()).to.equal(false);
+        expect(model.selectedShape).to.not.be.null;
     });
 
     it('addShape() - using shape name that does not exist', () => {
-        expect(model.noShapeIsSelected()).to.equal(true);
+        expect(model.selectedShape).to.be.null;
         model.addShape('dragon');
-        expect(model.noShapeIsSelected()).to.equal(true);
+        expect(model.selectedShape).to.be.null;
     });
 
     it('addShape() - try to add while another shape is selected', () => {
         model.addShape('Polygon');
-        expect(model.noShapeIsSelected()).to.equal(false);
-        expect(model.listOfShapes.length).to.equal(1);
+        expect(model.selectedShape).to.not.be.null;
+        expect(model.allShapes.length).to.equal(1);
         model.addShape('Polygon');
-        expect(model.noShapeIsSelected()).to.equal(false);
-        expect(model.listOfShapes.length).to.equal(1);
+        expect(model.selectedShape).to.not.be.null;
+        expect(model.allShapes.length).to.equal(1);
     });
 
     it('removeSelectedShape()', () => {
         model.addShape('Polygon');
-        expect(model.listOfShapes.length).to.equal(1);
+        expect(model.allShapes.length).to.equal(1);
         model.removeSelectedShape();
-        expect(model.listOfShapes.length).to.equal(0);
+        expect(model.allShapes.length).to.equal(0);
     });
 
     it('draw shape and deselect it', () => {
         drawPolygonShape(model);
-        expect(model.noShapeIsSelected()).to.equal(false);
+        expect(model.selectedShape).to.not.be.null;
         model.reactToLeftClick({ x: 1, y: 1 }); //clicking elsewhere
-        expect(model.noShapeIsSelected()).to.equal(true);
+        expect(model.selectedShape).to.be.null;
     });
 
     it('fail to reselect a shape', () => {
         drawPolygonShapeAndDeselect(model);
-        expect(model.noShapeIsSelected()).to.equal(true);
+        expect(model.selectedShape).to.be.null;
         model.reactToLeftClick({ x: 1, y: 1 }); //clicking elsewhere
-        expect(model.noShapeIsSelected()).to.equal(true);
+        expect(model.selectedShape).to.be.null;
     });
 
     it('reselecting a drawn shape', () => {
         drawPolygonShapeAndDeselect(model);
-        expect(model.noShapeIsSelected()).to.equal(true);
+        expect(model.selectedShape).to.be.null;
         model.reactToLeftClick({ x: 100, y: 100 });
-        expect(model.noShapeIsSelected()).to.equal(false);
+        expect(model.selectedShape).to.not.be.null;
     });
 
     it('try to remove shape, but no one is selected', () => {
         drawPolygonShapeAndDeselect(model);
-        expect(model.noShapeIsSelected()).to.equal(true);
-        expect(model.listOfShapes.length).to.equal(1);
+        expect(model.selectedShape).to.be.null;
+        expect(model.allShapes.length).to.equal(1);
         model.removeSelectedShape();
-        expect(model.listOfShapes.length).to.equal(1);
+        expect(model.allShapes.length).to.equal(1);
     });
 
 
-    it('onlyAreaShapes() - empty', () => {
+    it('areaShapes - empty', () => {
         model.addShape('Line');
-        expect(model.onlyAreaShapes().length).to.equal(0);
+        expect(model.areaShapes.length).to.equal(0);
     });
 
-    it('onlyAreaShapes() - one', () => {
+    it('areaShapes - one', () => {
         model.addShape('Polygon');
-        expect(model.onlyAreaShapes().length).to.equal(1);
+        expect(model.areaShapes.length).to.equal(1);
     });
 
-    it('onlyLengthShapes() - one', () => {
+    it('lengthShapes - one', () => {
         model.addShape('Line');
-        expect(model.onlyLengthShapes().length).to.equal(1);
+        expect(model.lengthShapes.length).to.equal(1);
     });
 
-    it('onlyLengthShapes() - empty', () => {
+    it('lengthShapes - empty', () => {
         model.addShape('Polygon');
-        expect(model.onlyLengthShapes().length).to.equal(0);
+        expect(model.lengthShapes.length).to.equal(0);
     });
 
     it('draw a line, then deselect it', () => {
         model.addShape('Line');
         model.reactToLeftMouseDown({ x: 100, y: 100 });
         model.reactToLeftMouseUp({ x: 200, y: 200 });
-        expect(model.noShapeIsSelected()).to.equal(false);
+        expect(model.selectedShape).to.not.be.null;
         model.reactToLeftMouseDown({ x: 300, y: 300 });
-        expect(model.noShapeIsSelected()).to.equal(true);
-        expect(model.listOfShapes.length).to.equal(1);
+        expect(model.selectedShape).to.be.null;
+        expect(model.allShapes.length).to.equal(1);
     });
 
 });

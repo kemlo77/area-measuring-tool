@@ -11,13 +11,13 @@ export class CanvasView implements Observer {
     public updateBecauseModelHasChanged(model: Model): void {
         this.canvasAssistant.clearTheStillCanvas();
         this.canvasAssistant.clearTheMovementCanvas();
-        for (const shape of model.listOfShapes) {
+        for (const shape of model.allShapes) {
             shape.designatedPainterDrawStill();
         }
     }
 
     public updateBecauseOfMovementInModel(model: Model, mousePosition: Coordinate): void {
-        const selectedShape: MeassuringShape = model.getSelectedShape();
+        const selectedShape: MeassuringShape = model.selectedShape;
         if (selectedShape !== null) {
             selectedShape.designatedPainterDrawMovement(mousePosition);
         } else {
