@@ -135,11 +135,11 @@ export class Polygon implements InteractiveShape, SegmentShape {
     }
 
     get verticesExceptMovePoint(): Point[] {
-        if (this.movePoint === null) {
-            return this._vertices;
-        } else {
+        if (this.movePoint) {
             return this._vertices
                 .filter((vertex) => vertex !== this.movePoint);
+        } else {
+            return this._vertices;
         }
     }
 
