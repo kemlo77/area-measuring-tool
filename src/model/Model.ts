@@ -1,4 +1,4 @@
-import { Subject } from '../controller/Subject';
+import { Subject } from './Subject';
 import { Observer } from '../view/Observer';
 import { ConcreteShapeFactory } from './ConcreteShapeFactory';
 import { MeassuringShape } from './MeassuringShape';
