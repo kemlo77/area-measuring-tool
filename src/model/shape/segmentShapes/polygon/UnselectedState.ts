@@ -4,7 +4,7 @@ import { PolygonState } from './PolygonState';
 import { Point } from '../../Point';
 import { ClosedState } from './ClosedState';
 import { Coordinate } from '../../Coordinate';
-import { MathUtil } from '../MathUtil';
+import { MathService } from '../Math.service';
 import { Segment } from '../Segment';
 
 export class UnselectedState implements PolygonState {
@@ -27,7 +27,7 @@ export class UnselectedState implements PolygonState {
     private anySegmentClicked(pointClicked: Point): boolean {
         for (const segment of this.polygon.segments) {
             const distance: number =
-                MathUtil.distanceBetweenPointAndPointProjectedOnSegment(segment, pointClicked);
+                MathService.distanceBetweenPointAndPointProjectedOnSegment(segment, pointClicked);
             if (distance < Polygon.interactDistance) {
                 return true;
             }

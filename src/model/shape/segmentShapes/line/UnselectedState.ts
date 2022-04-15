@@ -1,5 +1,5 @@
 import { Coordinate } from '../../Coordinate';
-import { MathUtil } from '../MathUtil';
+import { MathService } from '../Math.service';
 import { Point } from '../../Point';
 import { CompleteState } from '../../segmentShapes/line/CompleteState';
 import { Line } from './Line';
@@ -25,7 +25,7 @@ export class UnselectedState implements LineState {
 
     private theSegmentIsClicked(pointClicked: Point): boolean {
         const distance: number =
-            MathUtil.distanceBetweenPointAndPointProjectedOnSegment(this.calculateSegment(), pointClicked);
+            MathService.distanceBetweenPointAndPointProjectedOnSegment(this.calculateSegment(), pointClicked);
         return distance < Line.interactDistance;
     }
 

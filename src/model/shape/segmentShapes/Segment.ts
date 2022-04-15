@@ -1,5 +1,5 @@
 import { Point } from '../Point';
-import { MathUtil } from './MathUtil';
+import { MathService } from './Math.service';
 
 export class Segment {
     private _p1: Point;
@@ -32,7 +32,7 @@ export class Segment {
 
     doesNotIntersectAnyOfTheseSegments(segmentArrayIn: Segment[]): boolean {
         for (const segment of segmentArrayIn) {
-            if (MathUtil.calculateIntersect(segment, this)) {
+            if (MathService.calculateIntersect(segment, this)) {
                 return false;
             }
         }
@@ -40,7 +40,7 @@ export class Segment {
     }
 
     intersectsThisSegment(segment: Segment): boolean {
-        if (MathUtil.calculateIntersect(this, segment)) {
+        if (MathService.calculateIntersect(this, segment)) {
             return true;
         }
         return false;

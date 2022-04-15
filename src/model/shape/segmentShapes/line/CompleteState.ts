@@ -3,7 +3,7 @@ import { Point } from '../../Point';
 import { Line } from './Line';
 import { LineState } from './LineState';
 import { MoveState } from './MoveState';
-import { MathUtil } from '../MathUtil';
+import { MathService } from '../Math.service';
 import { UnselectedState } from './UnselectedState';
 import { Segment } from '../Segment';
 
@@ -34,7 +34,7 @@ export class CompleteState implements LineState {
 
     private theSegmentIsClicked(pointClicked: Point): boolean {
         const distance: number =
-            MathUtil.distanceBetweenPointAndPointProjectedOnSegment(this.calculateSegment(), pointClicked);
+            MathService.distanceBetweenPointAndPointProjectedOnSegment(this.calculateSegment(), pointClicked);
         return distance < Line.interactDistance;
     }
 
