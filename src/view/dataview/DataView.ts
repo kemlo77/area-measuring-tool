@@ -2,13 +2,18 @@ import { MeassuringShape } from '../../model/MeassuringShape';
 import { Model } from '../../model/Model';
 import { Coordinate } from '../../model/shape/Coordinate';
 import { Observer } from '../Observer';
+import { ViewScaler } from './ViewScaler';
 
 export class DataView implements Observer {
 
     private dataDiv: HTMLElement = document.getElementById('data');
-    private scaleFactor = 0.1;
     private areaInputs: HTMLInputElement[] = [];
     private lengthInputs: HTMLInputElement[] = [];
+    private viewScaler: ViewScaler;
+
+    constructor() {
+        this.viewScaler = new ViewScaler();
+    }
 
     updateBecauseModelHasChanged(model: Model): void {
         this.removeAllChildNodes(this.dataDiv);
@@ -33,10 +38,9 @@ export class DataView implements Observer {
     private addAreaTotalParagraph(model: Model): void {
         const areaTotal: number = model.areaShapes
             .reduce((sum, it) => sum + it.area, 0);
-        const scaledAndRoundedArea: string =
-            this.convertToRoundedNumberString(areaTotal * this.scaleFactor * this.scaleFactor);
+        const scaledAndRoundedArea: string = this.viewScaler.adjustAreaAccordingToScale(areaTotal);
         this.dataDiv.appendChild(this.generateParagraph('Area total: ' + scaledAndRoundedArea));
-        this.dataDiv.appendChild(this.generateParagraph('Scale factor: ' + this.scaleFactor));
+        this.dataDiv.appendChild(this.generateParagraph('Scale factor: ' + this.viewScaler.scaleFactor));
     }
 
     private addAreaShapeDivs(model: Model): void {
@@ -69,7 +73,7 @@ export class DataView implements Observer {
         nameInput.addEventListener('input', (event) => { lengthShape.name = (<HTMLInputElement>event.target).value; });
         div.appendChild(nameInput);
 
-        const shapeLength: string = this.convertToRoundedNumberString(lengthShape.length * this.scaleFactor);
+        const shapeLength: string = this.viewScaler.adjustLengthAccordingToScale(lengthShape.length);
         const lengthInput: HTMLInputElement = this.generateNumberInput(shapeLength);
         lengthInput.setAttribute('data-pixellength', lengthShape.length.toString());
         lengthInput.addEventListener('input', (event) => {
@@ -90,7 +94,7 @@ export class DataView implements Observer {
         nameInput.addEventListener('input', (event) => { areaShape.name = (<HTMLInputElement>event.target).value; });
         div.appendChild(nameInput);
 
-        const area: string = this.convertToRoundedNumberString(areaShape.area * this.scaleFactor * this.scaleFactor);
+        const area: string = this.viewScaler.adjustAreaAccordingToScale(areaShape.area);
         const areaInput: HTMLInputElement = this.generateNumberInput(area);
         areaInput.setAttribute('data-pixelarea', areaShape.area.toString());
         areaInput.classList.add('area');
@@ -100,8 +104,7 @@ export class DataView implements Observer {
         div.appendChild(areaInput);
         this.areaInputs.push(areaInput);
 
-        const length: string =
-            this.convertToRoundedNumberString(areaShape.length * this.scaleFactor);
+        const length: string = this.viewScaler.adjustLengthAccordingToScale(areaShape.length);
         const perimeterInput: HTMLInputElement = this.generateNumberInput(length);
         perimeterInput.setAttribute('data-pixellength', areaShape.length.toString());
         perimeterInput.classList.add('length');
@@ -128,28 +131,16 @@ export class DataView implements Observer {
         return inputElement;
     }
 
-    private convertToRoundedNumberString(givenNumber: number): string {
-        const roundedNumber: number = Math.round(givenNumber * 1000) / 1000;
-        return roundedNumber.toString();
-    }
-
     private areaInputChanged(inputElement: HTMLInputElement, area: number): void {
-        this.updateScaleGivenArea(Number(inputElement.value), area);
+        this.viewScaler.updateScaleGivenArea(Number(inputElement.value), area);
         this.updateAllNumberInputsAfterScaleChangeExceptGivenElement(inputElement);
     }
 
     private lengthInputChanged(inputElement: HTMLInputElement, length: number): void {
-        this.updateScaleGivenLength(Number(inputElement.value), length);
+        this.viewScaler.updateScaleGivenLength(Number(inputElement.value), length);
         this.updateAllNumberInputsAfterScaleChangeExceptGivenElement(inputElement);
     }
 
-    private updateScaleGivenLength(givenLength: number, length: number): void {
-        this.scaleFactor = Math.abs(givenLength / length);
-    }
-
-    private updateScaleGivenArea(givenArea: number, shapeArea: number): void {
-        this.scaleFactor = Math.sqrt(Math.abs(givenArea / shapeArea));
-    }
 
     private updateAllNumberInputsAfterScaleChangeExceptGivenElement(inputNotUpdated: HTMLInputElement): void {
         this.areaInputs
@@ -172,15 +163,13 @@ export class DataView implements Observer {
 
     private recalculateDisplayedAreaValueAccordingToNewFactor(input: HTMLInputElement): void {
         const pixelArea: number = Number(input.getAttribute('data-pixelarea'));
-        const scaledAndRoundedArea: string =
-            this.convertToRoundedNumberString(pixelArea * this.scaleFactor * this.scaleFactor);
+        const scaledAndRoundedArea: string = this.viewScaler.adjustAreaAccordingToScale(pixelArea);
         input.value = scaledAndRoundedArea;
     }
 
     private recalculateDisplayedLengthValueAccordingToNewFactor(input: HTMLInputElement): void {
         const pixelArea: number = Number(input.getAttribute('data-pixellength'));
-        const scaledAndRoundedLength: string =
-            this.convertToRoundedNumberString(pixelArea * this.scaleFactor);
+        const scaledAndRoundedLength: string = this.viewScaler.adjustLengthAccordingToScale(pixelArea);
         input.value = scaledAndRoundedLength;
     }
 
