@@ -2,7 +2,7 @@ import { Point } from '../Point';
 import { Segment } from './Segment';
 import { Vector } from '../Vector';
 
-export module MathUtil {
+export module MathService {
 	// Checking if two segments AB and CD intersect
 	export function calculateIntersect(segmentAB: Segment, segmentCD: Segment): Point {
 		// inspiration på http://alienryderflex.com/intersect/

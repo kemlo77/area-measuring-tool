@@ -3,7 +3,7 @@ import { MoveState } from './MoveState';
 import { PolygonState } from './PolygonState';
 import { Point } from '../../Point';
 import { OpenState } from './OpenState';
-import { MathUtil } from '../MathUtil';
+import { MathService } from '../Math.service';
 import { Coordinate } from '../../Coordinate';
 import { UnselectedState } from './UnselectedState';
 import { Segment } from '../Segment';
@@ -60,7 +60,7 @@ export class ClosedState implements PolygonState {
         else {
             const segmentClicked: Segment = this.nearestSegmentWithinDistance(pointClicked, Polygon.interactDistance);
             if (segmentClicked) {
-                const candidateVertex: Point = MathUtil.projectPointOntoSegment(segmentClicked, pointClicked);
+                const candidateVertex: Point = MathService.projectPointOntoSegment(segmentClicked, pointClicked);
                 if (this.notToCloseToNeighborsOnSegment(segmentClicked, candidateVertex)) {
                     this.polygon.insertVertex(candidateVertex, segmentClicked);
                     this.beginMovingThisVertex(candidateVertex, pointClicked);
@@ -130,7 +130,7 @@ export class ClosedState implements PolygonState {
 
         for (const segment of this.polygon.segments) {
             const distance: number =
-                MathUtil.distanceBetweenPointAndPointProjectedOnSegment(segment, candidatePoint);
+                MathService.distanceBetweenPointAndPointProjectedOnSegment(segment, candidatePoint);
 
             if (distance < minDistanceIn) {
                 if (distance < smallestRecordedDistance) {
