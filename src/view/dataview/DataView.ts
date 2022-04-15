@@ -7,13 +7,8 @@ import { ViewScaler } from './ViewScaler';
 export class DataView implements Observer {
 
     private dataDiv: HTMLElement = document.getElementById('data');
-    private areaInputs: HTMLInputElement[] = [];
-    private lengthInputs: HTMLInputElement[] = [];
-    private viewScaler: ViewScaler;
-
-    constructor() {
-        this.viewScaler = new ViewScaler();
-    }
+    private numberInputs: HTMLInputElement[] = [];
+    private viewScaler: ViewScaler = new ViewScaler();
 
     updateBecauseModelHasChanged(model: Model): void {
         this.removeAllChildNodes(this.dataDiv);
@@ -31,8 +26,7 @@ export class DataView implements Observer {
         while (parent.firstChild) {
             parent.removeChild(parent.firstChild);
         }
-        this.areaInputs = [];
-        this.lengthInputs = [];
+        this.numberInputs = [];
     }
 
 
@@ -75,7 +69,7 @@ export class DataView implements Observer {
 
         const lengthInput: HTMLInputElement = this.createLengthInput(lengthShape);
         div.appendChild(lengthInput);
-        this.lengthInputs.push(lengthInput);
+        this.numberInputs.push(lengthInput);
         return div;
     }
 
@@ -87,11 +81,11 @@ export class DataView implements Observer {
 
         const perimeterInput: HTMLInputElement = this.createLengthInput(areaShape);
         div.appendChild(perimeterInput);
-        this.lengthInputs.push(perimeterInput);
+        this.numberInputs.push(perimeterInput);
 
         const areaInput: HTMLInputElement = this.createAreaInput(areaShape);
         div.appendChild(areaInput);
-        this.areaInputs.push(areaInput);
+        this.numberInputs.push(areaInput);
 
         return div;
     }
@@ -111,13 +105,24 @@ export class DataView implements Observer {
         return createdNameInput;
     }
 
+    private createTextInput(value: string): HTMLInputElement {
+        const inputElement: HTMLInputElement = document.createElement('input');
+        inputElement.setAttribute('type', 'text');
+        inputElement.setAttribute('value', value);
+        return inputElement;
+    }
+
     private createLengthInput(shape: MeassuringShape): HTMLInputElement {
         const length: string = this.viewScaler.adjustLengthAccordingToScale(shape.length);
         const createdLengthInput: HTMLInputElement = this.createNumberInput(length);
-        createdLengthInput.setAttribute('data-pixellength', shape.length.toString());
-        //createdLengthInput.classList.add('length');
         createdLengthInput.addEventListener('input', (event) => {
-            this.lengthInputChanged((<HTMLInputElement>event.target), shape.length);
+            const changedInputElement: HTMLInputElement = <HTMLInputElement>event.target;
+            const enteredLength: number = Number(changedInputElement.value);
+            this.viewScaler.updateScaleGivenLength(enteredLength, shape.length);
+            this.updateAllNumberInputsAfterScaleChangeExceptGivenElement(changedInputElement);
+        });
+        createdLengthInput.addEventListener('scalechange', (event: CustomEvent) => {
+            createdLengthInput.value = this.viewScaler.adjustLengthAccordingToScale(shape.length);
         });
         return createdLengthInput;
     }
@@ -125,20 +130,19 @@ export class DataView implements Observer {
     private createAreaInput(shape: MeassuringShape): HTMLInputElement {
         const area: string = this.viewScaler.adjustAreaAccordingToScale(shape.area);
         const createdAreaInput: HTMLInputElement = this.createNumberInput(area);
-        createdAreaInput.setAttribute('data-pixelarea', shape.area.toString());
-        //createdAreaInput.classList.add('area');
         createdAreaInput.addEventListener('input', (event) => {
-            this.areaInputChanged((<HTMLInputElement>event.target), shape.area);
+            const changedInputElement: HTMLInputElement = <HTMLInputElement>event.target;
+            const enteredArea: number = Number(changedInputElement.value);
+            this.viewScaler.updateScaleGivenArea(enteredArea, shape.area);
+            this.updateAllNumberInputsAfterScaleChangeExceptGivenElement(changedInputElement);
+        });
+        createdAreaInput.addEventListener('scalechange', (event: CustomEvent) => {
+            createdAreaInput.value = this.viewScaler.adjustAreaAccordingToScale(shape.area);
         });
         return createdAreaInput;
     }
 
-    private createTextInput(value: string): HTMLInputElement {
-        const inputElement: HTMLInputElement = document.createElement('input');
-        inputElement.setAttribute('type', 'text');
-        inputElement.setAttribute('value', value);
-        return inputElement;
-    }
+
 
     private createNumberInput(value: string): HTMLInputElement {
         const inputElement: HTMLInputElement = document.createElement('input');
@@ -147,49 +151,12 @@ export class DataView implements Observer {
         return inputElement;
     }
 
-
-    private areaInputChanged(changedInputElement: HTMLInputElement, area: number): void {
-        this.viewScaler.updateScaleGivenArea(Number(changedInputElement.value), area);
-        this.updateAllNumberInputsAfterScaleChangeExceptGivenElement(changedInputElement);
-    }
-
-    private lengthInputChanged(changedInputElement: HTMLInputElement, length: number): void {
-        this.viewScaler.updateScaleGivenLength(Number(changedInputElement.value), length);
-        this.updateAllNumberInputsAfterScaleChangeExceptGivenElement(changedInputElement);
-    }
-
-
     private updateAllNumberInputsAfterScaleChangeExceptGivenElement(elementNotToBeUpdated: HTMLInputElement): void {
-        this.areaInputs
+        this.numberInputs
             .filter((input) => { return input !== elementNotToBeUpdated; })
             .forEach((input) => {
-                this.recalculateDisplayedAreaValueAccordingToNewFactor(input);
+                input.dispatchEvent(new CustomEvent('scalechange'));
             });
-
-        this.lengthInputs
-            .filter((input) => { return input !== elementNotToBeUpdated; })
-            .forEach((input) => {
-                this.recalculateDisplayedLengthValueAccordingToNewFactor(input);
-            });
-
-        //TODO
-        //det valda elementet borde få en svart ram
-        //ta bort svarta ramar på alla andra.
-        // eller ändra klass och ta bort den klassen på andra.
     }
-
-    private recalculateDisplayedAreaValueAccordingToNewFactor(input: HTMLInputElement): void {
-        const pixelArea: number = Number(input.getAttribute('data-pixelarea'));
-        const scaledAndRoundedArea: string = this.viewScaler.adjustAreaAccordingToScale(pixelArea);
-        input.value = scaledAndRoundedArea;
-    }
-
-    private recalculateDisplayedLengthValueAccordingToNewFactor(input: HTMLInputElement): void {
-        const pixelArea: number = Number(input.getAttribute('data-pixellength'));
-        const scaledAndRoundedLength: string = this.viewScaler.adjustLengthAccordingToScale(pixelArea);
-        input.value = scaledAndRoundedLength;
-    }
-
-    //TODO: ta bort förekomster av data-pixellength och data-pixelarea sen när möjligt
 
 }
