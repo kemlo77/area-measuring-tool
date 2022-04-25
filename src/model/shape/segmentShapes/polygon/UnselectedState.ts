@@ -55,11 +55,11 @@ export class UnselectedState implements PolygonState {
     }
 
     calculateStillSegments(): Segment[] {
-        return this.closedState.calculateStillSegments();
+        return this.calculateSegments();
     }
 
     calculateMovingSegments(mousePosition: Coordinate): Segment[] {
-        return this.closedState.calculateMovingSegments(mousePosition);
+        return [];
     }
 
 }

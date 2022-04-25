@@ -102,7 +102,7 @@ export class MoveState implements PolygonState {
     }
 
     calculateStillSegments(): Segment[] {
-        return this.polygon.segments
+        return this.calculateSegments()
             .filter((segment) => segment.doesNotContainThisVertex(this.polygon.movePoint));
     }
 
