@@ -8,8 +8,8 @@ export class CanvasView implements Observer {
 
     private filterCanvas: CanvasWraper = new CanvasWraper('filterLayer');
     private imageCanvas: CanvasWraper = new CanvasWraper('imageLayer');
-    private movementCanvas: CanvasWraper = new CanvasWraper('foreground');
-    private stillCanvas: CanvasWraper = new CanvasWraper('background');
+    private movementCanvas: CanvasWraper = new CanvasWraper('movementLayer');
+    private stillCanvas: CanvasWraper = new CanvasWraper('stillLayer');
     private theDivThatHoldsCanvases: HTMLDivElement = document.querySelector('div#viewport') as HTMLDivElement;
 
     public updateBecauseModelHasChanged(model: Model): void {

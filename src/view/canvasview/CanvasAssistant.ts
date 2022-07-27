@@ -1,9 +1,9 @@
 import { Coordinate } from '../../model/shape/Coordinate';
 
 export class CanvasAssistant {
-    private canvasBackground: HTMLCanvasElement = document.getElementById('background') as HTMLCanvasElement;
+    private canvasBackground: HTMLCanvasElement = document.getElementById('stillLayer') as HTMLCanvasElement;
     private _stillCanvasCtx: CanvasRenderingContext2D = this.canvasBackground.getContext('2d');
-    private canvasForeground: HTMLCanvasElement = document.getElementById('foreground') as HTMLCanvasElement;
+    private canvasForeground: HTMLCanvasElement = document.getElementById('movementLayer') as HTMLCanvasElement;
     private _movementCanvasCtx: CanvasRenderingContext2D = this.canvasForeground.getContext('2d');
 
     get stillCanvasCtx(): CanvasRenderingContext2D {
@@ -12,14 +12,6 @@ export class CanvasAssistant {
 
     get movementCanvasCtx(): CanvasRenderingContext2D {
         return this._movementCanvasCtx;
-    }
-
-    clearTheStillCanvas(): void {
-        this.stillCanvasCtx.clearRect(0, 0, this.canvasBackground.width, this.canvasBackground.height);
-    }
-
-    clearTheMovementCanvas(): void {
-        this.movementCanvasCtx.clearRect(0, 0, this.canvasBackground.width, this.canvasBackground.height);
     }
 
     drawLine(p1: Coordinate, p2: Coordinate, width: number, lineColor: string, ctx: CanvasRenderingContext2D): void {

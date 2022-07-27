@@ -14,15 +14,15 @@ const controller: Controller = new Controller(model);
 const router: Router = new Router(controller);
 const imageDrop: ImageDrop = new ImageDrop(canvasView);
 
-document.getElementById('foreground')
+document.getElementById('movementLayer')
     .addEventListener('click', (event) => router.canvasLeftClicked(event, (event.target as Element).id));
-document.getElementById('foreground')
+document.getElementById('movementLayer')
     .addEventListener('mousemove', (event) => router.canvasMouseMovement(event, (event.target as Element).id));
-document.getElementById('foreground')
+document.getElementById('movementLayer')
     .addEventListener('mousedown', (event) => router.canvasMouseDown(event, (event.target as Element).id));
-document.getElementById('foreground')
+document.getElementById('movementLayer')
     .addEventListener('mouseup', (event) => router.canvasMouseUp(event, (event.target as Element).id));
-document.getElementById('foreground')
+document.getElementById('movementLayer')
     .addEventListener('contextmenu', (event) => router.canvasRightClicked(event, (event.target as Element).id));
 document.getElementById('addPositivePolygon')
     .addEventListener('click', () => router.addShape('PositivePolygonArea'));

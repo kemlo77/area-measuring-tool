@@ -36,11 +36,11 @@ canvas {
     z-index: 2;
 }
 
-#background {
+#stillLayer {
     z-index: 3;
 }
 
-#foreground {
+#movementLayer {
     z-index: 4;
 }
 
