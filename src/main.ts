@@ -12,7 +12,7 @@ model.subscribe(canvasView);
 model.subscribe(new DataView());
 const controller: Controller = new Controller(model);
 const router: Router = new Router(controller);
-const imageDrop: ImageDrop = new ImageDrop();
+const imageDrop: ImageDrop = new ImageDrop(canvasView);
 
 document.getElementById('foreground')
     .addEventListener('click', (event) => router.canvasLeftClicked(event, (event.target as Element).id));
@@ -36,8 +36,8 @@ document.getElementById('addSymmetryLine')
     .addEventListener('click', () => router.addShape('SymmetryLine'));
 
 
-addEventListener('load', () => imageDrop.adjustCanvas());
-addEventListener('resize', () => imageDrop.delayedAdjustCanvas());
+addEventListener('load', () => canvasView.adjustCanvas());
+addEventListener('resize', () => canvasView.delayedAdjustCanvas());
 document.getElementById('viewport')
     .addEventListener('drop', (event) => imageDrop.dropHandler(event));
 document.getElementById('viewport')
