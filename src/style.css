@@ -18,9 +18,7 @@ canvas {
 }
 
 #viewport {
-    height: 83%;
-    width: 100%;
-    background-color: burlywood;
+    margin-bottom: 12px;
 }
 
 #viewport canvas {

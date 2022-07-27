@@ -1,6 +1,5 @@
 import { Coordinate } from '../../model/shape/Coordinate';
 import { Model } from '../../model/Model';
-import { CanvasAssistant } from './CanvasAssistant';
 import { MeassuringShape } from '../../model/MeassuringShape';
 import { Observer } from '../Observer';
 import { CanvasWraper } from './canvaswrapper';
@@ -9,11 +8,13 @@ export class CanvasView implements Observer {
 
     private filterCanvas: CanvasWraper = new CanvasWraper('filterLayer');
     private imageCanvas: CanvasWraper = new CanvasWraper('imageLayer');
-    private canvasAssistant: CanvasAssistant = new CanvasAssistant();
+    private movementCanvas: CanvasWraper = new CanvasWraper('foreground');
+    private stillCanvas: CanvasWraper = new CanvasWraper('background');
+    private theDivThatHoldsCanvases: HTMLDivElement = document.querySelector('div#viewport') as HTMLDivElement;
 
     public updateBecauseModelHasChanged(model: Model): void {
-        this.canvasAssistant.clearTheStillCanvas();
-        this.canvasAssistant.clearTheMovementCanvas();
+        this.stillCanvas.clearCanvas();
+        this.movementCanvas.clearCanvas();
         for (const shape of model.allShapes) {
             shape.designatedPainterDrawStill();
         }
@@ -24,13 +25,12 @@ export class CanvasView implements Observer {
         if (selectedShape) {
             selectedShape.designatedPainterDrawMovement(mousePosition);
         } else {
-            this.canvasAssistant.clearTheMovementCanvas();
+            this.movementCanvas.clearCanvas();
         }
     }
 
     public clearTheMovementCanvas(): void {
-        this.canvasAssistant.clearTheMovementCanvas();
-
+        this.movementCanvas.clearCanvas();
     }
 
     public adjustFilterOpacity(percentage: number): void {
@@ -46,14 +46,17 @@ export class CanvasView implements Observer {
     }
 
     public adjustCanvas(): void {
-        const canvases: NodeListOf<HTMLCanvasElement> = document.querySelectorAll('div#viewport canvas');
-        canvases.forEach((canvas) => {
-            canvas.width = window.innerWidth * 0.9;
-            canvas.height = window.innerHeight * 0.8;
-        });
+        this.filterCanvas.updateCanvasWhenWindowSizeChanges();
+        this.imageCanvas.updateCanvasWhenWindowSizeChanges();
+        this.movementCanvas.updateCanvasWhenWindowSizeChanges();
+        this.stillCanvas.updateCanvasWhenWindowSizeChanges();
 
         this.imageCanvas.redrawImageToCanvas();
+        this.setTheHeightOfTheDiv(this.filterCanvas.height);
+    }
 
+    private setTheHeightOfTheDiv(newHeight: number): void {
+        this.theDivThatHoldsCanvases.style.height = newHeight + 'px';
     }
 
     public delayedAdjustCanvas: any = this.debounce((): void => this.adjustCanvas(), 500);

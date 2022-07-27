@@ -9,6 +9,9 @@ export class CanvasWraper {
         this._canvasCtx = this._canvasElement.getContext('2d');
     }
 
+    get height(): number {
+        return this._canvasElement.height;
+    }
 
     public adjustOpacity(value: number): void {
         const percentage: number = 1 - value / 100;
@@ -39,5 +42,12 @@ export class CanvasWraper {
             this._canvasCtx.drawImage(this._image, 0, 0, this._image.width, this._image.height,
                 0, 0, this._canvasElement.clientWidth, this._canvasElement.clientHeight);
         }
+    }
+
+
+
+    updateCanvasWhenWindowSizeChanges(): void {
+        this._canvasElement.width = window.innerWidth - 32;
+        this._canvasElement.height = window.innerHeight - 32;
     }
 }
