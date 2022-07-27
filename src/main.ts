@@ -7,7 +7,8 @@ import { DataView } from './view/dataview/DataView';
 import { Router } from './Router';
 
 const model: Model = new Model();
-model.subscribe(new CanvasView());
+const canvasView: CanvasView = new CanvasView();
+model.subscribe(canvasView);
 model.subscribe(new DataView());
 const controller: Controller = new Controller(model);
 const router: Router = new Router(controller);
@@ -42,4 +43,6 @@ document.getElementById('viewport')
 document.getElementById('viewport')
     .addEventListener('dragover', (event) => imageDrop.dragOverHandler(event));
 document.getElementById('opacitySlider')
-    .addEventListener('change', (event) => imageDrop.adjustOpacity(Number((event.target as HTMLInputElement).value)));
+    .addEventListener('change', (event) => {
+        canvasView.adjustFilterOpacity(Number((event.target as HTMLInputElement).value));
+    });

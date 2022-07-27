@@ -5,37 +5,43 @@ export class ImageDrop {
     private filterCanvas: HTMLCanvasElement = document.querySelector('canvas#filterLayer');
     private imageContext: CanvasRenderingContext2D = this.imageCanvas.getContext('2d');
 
-    public dropHandler(ev: DragEvent): void {
-        ev.preventDefault();
-        const file: File = ev.dataTransfer.files[0];
+    public dropHandler(event: DragEvent): void {
+        event.stopPropagation();
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'copy';
+        const files: FileList = event.dataTransfer.files;
+        console.log('number of files: ' + files.length);
+        const file: File = files[0];
         if (this.fileIsImageType(file)) {
             this.imageFile = file;
             this.readImageFileAndDrawToCanvas(file);
         } else {
             alert(file.type + ' is not supported');
-            this.imageFile = null;   // TODO: Ok att rensa tidigare bild?
+            this.imageFile = null;   // TODO: popup... Ok att rensa tidigare bild?
             this.clearImageCanvas(); // -- // --
         }
     }
 
     private fileIsImageType(file: File): boolean {
         const fileType: string = file.type;
+        console.log('file.type: ' + file.type);
         const imageTypes: Array<string> = ['image/png', 'image/gif', 'image/bmp', 'image/jpeg'];
         return imageTypes.includes(fileType);
     }
 
     private readImageFileAndDrawToCanvas(file: File): void {
         const reader: FileReader = new FileReader();
-        reader.readAsDataURL(file);
+
         reader.onload = (): void => {
             const image: HTMLImageElement = new Image();
-            console.log('image.width:    ' + image.width);
-            console.log('image.height:   ' + image.height);
+            //console.log('image.width:    ' + image.width);
+            //console.log('image.height:   ' + image.height);
             image.src = reader.result.toString();
             image.onload = (): void => {
                 this.drawImageToCanvas(image);
             };
         };
+        reader.readAsDataURL(file);
     }
 
     private clearImageCanvas(): void {
@@ -43,12 +49,16 @@ export class ImageDrop {
     }
 
     private drawImageToCanvas(image: HTMLImageElement): void {
+        console.log('image.width x height:    ' + image.width + ' x ' + image.height);
+        //console.log('image.height:   ' + image.height);
         this.imageContext.drawImage(image, 0, 0, image.width, image.height,
             0, 0, this.imageCanvas.clientWidth, this.imageCanvas.clientHeight);
     }
 
-    public dragOverHandler(ev: DragEvent): void {
-        ev.preventDefault();
+    public dragOverHandler(event: DragEvent): void {
+        event.stopPropagation();
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'copy';
     }
 
     public adjustCanvas(): void {
@@ -78,10 +88,6 @@ export class ImageDrop {
         };
     }
 
-    public adjustOpacity(value: number): void {
-        const percentage: number = 1 - value / 100;
-        this.filterCanvas.style.opacity = percentage.toString();
-    }
 }
 
 

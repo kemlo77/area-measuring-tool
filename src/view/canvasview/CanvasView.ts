@@ -3,9 +3,11 @@ import { Model } from '../../model/Model';
 import { CanvasAssistant } from './CanvasAssistant';
 import { MeassuringShape } from '../../model/MeassuringShape';
 import { Observer } from '../Observer';
+import { CanvasWraper } from './canvaswrapper';
 
 export class CanvasView implements Observer {
 
+    private filterCanvas: CanvasWraper = new CanvasWraper('filterLayer');
     private canvasAssistant: CanvasAssistant = new CanvasAssistant();
 
     public updateBecauseModelHasChanged(model: Model): void {
@@ -28,5 +30,9 @@ export class CanvasView implements Observer {
     public clearTheMovementCanvas(): void {
         this.canvasAssistant.clearTheMovementCanvas();
 
+    }
+
+    public adjustFilterOpacity(percentage: number): void {
+        this.filterCanvas.adjustOpacity(percentage);
     }
 }
