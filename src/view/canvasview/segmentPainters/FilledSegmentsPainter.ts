@@ -13,14 +13,15 @@ export class FilledSegmentsPainter extends AbstractSegmentsPainter {
     drawStill(segmentShape: SegmentShape, color: string): void {
         const stillSegments: Segment[] = segmentShape.getStillSegments();
 
-        if(segmentShape.isClosed && !segmentShape.isMoving) {
-            this.fillPolygon(stillSegments, color);
+        if (segmentShape.isClosed && !segmentShape.isMoving) {
+            const firstPoints: Point[] = stillSegments.map(segment => segment.p1);
+            this._stillCanvas.fillPolygon(firstPoints, color);
         }
 
         this.drawStillSegments(stillSegments, this.lineWidth, color);
 
         if (segmentShape.isSelected) {
-            this.drawEndPointsOnSegments(stillSegments, color, this.stillCanvasCtx);
+            this.drawStillPoints(stillSegments, color);
         }
     }
 
@@ -29,24 +30,7 @@ export class FilledSegmentsPainter extends AbstractSegmentsPainter {
 
         this.clearUsedPartOfCanvas();
         this.drawMovingSegments(movingSegments, this.lineWidth, color);
-        this.drawEndPointsOnSegments(movingSegments, color, this.movementCanvasCtx);
-    }
-
-    private fillPolygon(segments: Segment[], color: string): void {
-        const firstPoints: Point[] = segments.map((segment: Segment) => {return segment.p1;});
-
-        const ctx: CanvasRenderingContext2D = this.stillCanvasCtx;
-        ctx.fillStyle = 'rgba(' + color + ',0.1)';
-        ctx.beginPath();
-        const startPoint: Point = firstPoints.shift();
-        ctx.moveTo(startPoint.x, startPoint.y);
-        for (const point of firstPoints) {
-            ctx.lineTo(point.x, point.y);
-        }
-        ctx.closePath();
-        ctx.fill();
-
-
+        this.drawMovingPoints(movingSegments, color);
     }
 
 

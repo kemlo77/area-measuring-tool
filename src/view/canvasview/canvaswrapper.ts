@@ -1,3 +1,5 @@
+import { Coordinate } from '../../model/shape/Coordinate';
+
 export class CanvasWraper {
 
     private _canvasElement: HTMLCanvasElement;
@@ -22,6 +24,10 @@ export class CanvasWraper {
         this._canvasCtx.clearRect(0, 0, this._canvasElement.width, this._canvasElement.height);
     }
 
+    public clearPartOfCanvas(xOffset: number, yOffset: number, width: number, height: number): void {
+        this._canvasCtx.clearRect(xOffset, yOffset, width, height);
+    }
+
     public setImageInCanvas(image: HTMLImageElement): void {
         this._image = image;
         this.drawImageToCanvas();
@@ -44,10 +50,43 @@ export class CanvasWraper {
         }
     }
 
-
-
     updateCanvasWhenWindowSizeChanges(): void {
         this._canvasElement.width = window.innerWidth - 32;
         this._canvasElement.height = window.innerHeight - 32;
+    }
+
+    drawLine(p1: Coordinate, p2: Coordinate, width: number, lineColor: string): void {
+        this._canvasCtx.strokeStyle = 'rgba(' + lineColor + ',1)';
+        this._canvasCtx.beginPath();
+        this._canvasCtx.lineWidth = width;
+        this._canvasCtx.moveTo(p1.x, p1.y);
+        this._canvasCtx.lineTo(p2.x, p2.y);
+        this._canvasCtx.closePath();
+        this._canvasCtx.stroke();
+    }
+
+    drawDot(dot2paint: Coordinate, diam: number, rgbIn: string): void {
+        this._canvasCtx.fillStyle = 'rgba(' + rgbIn + ',1)';
+        this._canvasCtx.beginPath();
+        this._canvasCtx.arc(dot2paint.x, dot2paint.y, diam, 0, Math.PI * 2, true);
+        this._canvasCtx.closePath();
+        this._canvasCtx.fill();
+    }
+
+    drawHollowDot(dot2paint: Coordinate, outerColor: string): void {
+        this.drawDot(dot2paint, 4, outerColor);
+        this.drawDot(dot2paint, 2, '255,255,255');
+    }
+
+    fillPolygon(vertices: Coordinate[], color: string): void {
+        this._canvasCtx.fillStyle = 'rgba(' + color + ',0.1)';
+        this._canvasCtx.beginPath();
+        const startPoint: Coordinate = vertices.shift();
+        this._canvasCtx.moveTo(startPoint.x, startPoint.y);
+        for (const point of vertices) {
+            this._canvasCtx.lineTo(point.x, point.y);
+        }
+        this._canvasCtx.closePath();
+        this._canvasCtx.fill();
     }
 }

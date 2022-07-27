@@ -14,7 +14,7 @@ export class RegularSegmentsPainter extends AbstractSegmentsPainter {
 
         this.drawStillSegments(stillSegments, this.lineWidth, color);
         if (segmentShape.isSelected) {
-            this.drawEndPointsOnSegments(stillSegments, color, this.stillCanvasCtx);
+            this.drawStillPoints(stillSegments, color);
         }
     }
 
@@ -23,7 +23,7 @@ export class RegularSegmentsPainter extends AbstractSegmentsPainter {
 
         this.clearUsedPartOfCanvas();
         this.drawMovingSegments(movingSegments, this.lineWidth, color);
-        this.drawEndPointsOnSegments(movingSegments, color, this.movementCanvasCtx);
+        this.drawMovingPoints(movingSegments, color);
     }
 
 

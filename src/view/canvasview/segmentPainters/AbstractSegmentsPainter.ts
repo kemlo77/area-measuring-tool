@@ -1,12 +1,15 @@
 import { Coordinate } from '../../../model/shape/Coordinate';
-import { CanvasAssistant } from '../CanvasAssistant';
 import { SegmentsPainter } from './SegmentsPainter';
 import { Point } from '../../../model/shape/Point';
 import { SegmentShape } from '../../../model/shape/segmentShapes/SegmentShape';
 import { Segment } from '../../../model/shape/segmentShapes/Segment';
 import { Vector } from '../../../model/shape/Vector';
+import { CanvasWraper } from '../canvaswrapper';
 
-export abstract class AbstractSegmentsPainter extends CanvasAssistant implements SegmentsPainter {
+export abstract class AbstractSegmentsPainter implements SegmentsPainter {
+
+    protected _movementCanvas: CanvasWraper = new CanvasWraper('movementLayer');
+    protected _stillCanvas: CanvasWraper = new CanvasWraper('stillLayer');
 
     private recentlyPaintedMovingSegments: Segment[] = [];
 
@@ -15,14 +18,14 @@ export abstract class AbstractSegmentsPainter extends CanvasAssistant implements
 
     drawStillSegments(segments: Segment[], width: number, color: string): void {
         segments.forEach((it) => {
-            this.drawLine(it.p1, it.p2, width, color, this.stillCanvasCtx);
+            this._stillCanvas.drawLine(it.p1, it.p2, width, color);
         });
 
     }
 
     drawMovingSegments(segments: Segment[], width: number, color: string): void {
         segments.forEach((it) => {
-            this.drawLine(it.p1, it.p2, width, color, this.movementCanvasCtx);
+            this._movementCanvas.drawLine(it.p1, it.p2, width, color);
         });
         this.addSegmentsToRecentlyPaintedSegments(segments);
     }
@@ -44,9 +47,15 @@ export abstract class AbstractSegmentsPainter extends CanvasAssistant implements
         return Array.from(uniquePoints);
     }
 
-    drawEndPointsOnSegments(segments: Segment[], color: string, ctx: CanvasRenderingContext2D): void {
+
+    drawStillPoints(segments: Segment[], color: string): void {
         const uniqueEndpoints: Point[] = this.extractUniqueEndpoints(segments);
-        uniqueEndpoints.forEach((it) => { this.drawHollowDot(it, color, ctx); });
+        uniqueEndpoints.forEach((it) => { this._stillCanvas.drawHollowDot(it, color); });
+    }
+
+    drawMovingPoints(segments: Segment[], color: string): void {
+        const uniqueEndpoints: Point[] = this.extractUniqueEndpoints(segments);
+        uniqueEndpoints.forEach((it) => { this._movementCanvas.drawHollowDot(it, color); });
     }
 
     private maxValue(numbers: number[]): number {
@@ -80,12 +89,7 @@ export abstract class AbstractSegmentsPainter extends CanvasAssistant implements
             const yOffset: number = oldYMin - 4;
             const width: number = oldXMax - oldXMin + 8;
             const height: number = oldYMax - oldYMin + 8;
-            this.movementCanvasCtx.clearRect(xOffset, yOffset, width, height);
-
-            //TODO: tre rader för att se "used part of canvas"
-            //this.movementCanvasCtx.beginPath();
-            //this.movementCanvasCtx.rect(xOffset, yOffset, width, height);
-            //this.movementCanvasCtx.stroke();
+            this._movementCanvas.clearPartOfCanvas(xOffset, yOffset, width, height);
 
             this.recentlyPaintedMovingSegments = [];
         }

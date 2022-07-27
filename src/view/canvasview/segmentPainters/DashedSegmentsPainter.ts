@@ -16,7 +16,7 @@ export class DashedSegmentsPainter extends AbstractSegmentsPainter {
             this.drawStillSegments(this.generateDashes(it), 1, color);
         });
         if (segmentShape.isSelected) {
-            this.drawEndPointsOnSegments(stillSegments, color, this.stillCanvasCtx);
+            this.drawStillPoints(stillSegments, color);
         }
     }
 
@@ -28,7 +28,7 @@ export class DashedSegmentsPainter extends AbstractSegmentsPainter {
         movingSegments.forEach((it) => {
             this.drawMovingSegments(this.generateDashes(it), 1, color);
         });
-        this.drawEndPointsOnSegments(movingSegments, color, this.movementCanvasCtx);
+        this.drawMovingPoints(movingSegments, color);
     }
 
     private generateDashes(segment: Segment): Segment[] {
@@ -42,7 +42,7 @@ export class DashedSegmentsPainter extends AbstractSegmentsPainter {
         let distanceTravelled: number = 0;
         while (distanceTravelled + period < segment.length) {
             distanceTravelled += period;
-            if((segment.length - distanceTravelled) > lengthOfDashes) {
+            if ((segment.length - distanceTravelled) > lengthOfDashes) {
                 const newPoint: Point = this.jumpToNewPoint(segment.p1, direction, distanceTravelled);
                 segments.push(this.generateDash(newPoint, direction, lengthOfDashes));
             }

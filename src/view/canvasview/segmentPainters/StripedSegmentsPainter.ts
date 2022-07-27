@@ -17,7 +17,7 @@ export class StripedSegmentsPainter extends AbstractSegmentsPainter {
             this.drawStillSegments(this.generateRulerLines(it), 1, '0,0,0');
         });
         if (segmentShape.isSelected) {
-            this.drawEndPointsOnSegments(stillSegments, '0,0,0', this.stillCanvasCtx);
+            this.drawStillPoints(stillSegments, '0,0,0');
         }
     }
 
@@ -30,7 +30,7 @@ export class StripedSegmentsPainter extends AbstractSegmentsPainter {
         movingSegments.forEach((it) => {
             this.drawMovingSegments(this.generateRulerLines(it), 1, '0,0,0');
         });
-        this.drawEndPointsOnSegments(movingSegments, '0,0,0', this.movementCanvasCtx);
+        this.drawMovingPoints(movingSegments, '0,0,0');
     }
 
     private generateRulerLines(segment: Segment): Segment[] {
