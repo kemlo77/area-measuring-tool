@@ -21,6 +21,8 @@ https://kemlo77.github.io/createPolygon/index.html
 
 * Singleton Pattern, no longer used
 
+* Template Method Pattern used in painters
+
 # Interesting techniques
 
 Using 4 canvas layers:

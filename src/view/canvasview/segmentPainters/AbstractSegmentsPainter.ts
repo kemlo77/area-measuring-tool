@@ -3,50 +3,61 @@ import { SegmentsPainter } from './SegmentsPainter';
 import { Point } from '../../../model/shape/Point';
 import { SegmentShape } from '../../../model/shape/segmentShapes/SegmentShape';
 import { Segment } from '../../../model/shape/segmentShapes/Segment';
-import { Vector } from '../../../model/shape/Vector';
-import { CanvasWraper } from '../canvaswrapper';
+import { CanvasWrapper } from '../canvaswrapper';
 
 export abstract class AbstractSegmentsPainter implements SegmentsPainter {
 
-    protected _movementCanvas: CanvasWraper = new CanvasWraper('movementLayer');
-    protected _stillCanvas: CanvasWraper = new CanvasWraper('stillLayer');
+    protected _movementCanvas: CanvasWrapper = new CanvasWrapper('movementLayer');
+    protected _stillCanvas: CanvasWrapper = new CanvasWrapper('stillLayer');
     protected black: string = '0,0,0';
     protected yellow: string = '255,255,0';
+    protected lineWidth: number = 3;
 
     private segmentsRecentlyPaintedInMovementLayer: Segment[] = [];
 
-    abstract drawStill(segmentShape: SegmentShape, color: string): void;
-    abstract drawMovement(segmentShape: SegmentShape, color: string, mousePosition: Coordinate): void;
+    drawStill(segmentShape: SegmentShape, color: string): void {
+        const stillSegments: Segment[] = segmentShape.getStillSegments();
 
-    drawSegmentsInCanvas(segments: Segment[], width: number, color: string, canvas: CanvasWraper): void {
+        if (segmentShape.isClosed && !segmentShape.isMoving) {
+            const firstPoints: Point[] = stillSegments.map(segment => segment.p1);
+            this.fillPolygonInCanvas(firstPoints, color, this._stillCanvas);
+        }
+
+        this.drawSegmentsInCanvas(stillSegments, color, this._stillCanvas);
+
+        if (segmentShape.isSelected) {
+            this.drawEndpointsInCanvas(stillSegments, color, this._stillCanvas);
+        }
+    }
+
+    drawMovement(segmentShape: SegmentShape, color: string, mousePosition: Coordinate): void {
+        const movingSegments: Segment[] = segmentShape.getMovingSegments(mousePosition);
+
+        this.clearUsedPartOfCanvas();
+
+        this.drawSegmentsInCanvas(movingSegments, color, this._movementCanvas);
+
+        this.addToSegmentsRecentlyPaintedInMovementCanvas(movingSegments);
+
+        this.drawEndpointsInCanvas(movingSegments, color, this._movementCanvas);
+    }
+
+    protected fillPolygonInCanvas(points: Point[], color: string, canvas: CanvasWrapper): void {
+        //
+    }
+
+    protected drawSegmentsInCanvas(segments: Segment[], color: string, canvas: CanvasWrapper): void {
         segments.forEach((it) => {
-            canvas.drawLine(it.p1, it.p2, width, color);
+            canvas.drawLine(it.p1, it.p2, this.lineWidth, color);
         });
     }
 
-    drawDashedSegmentsInCanvas(
-        segments: Segment[],
-        width: number,
-        color: string,
-        pattern: number[],
-        canvas: CanvasWraper
-    ): void {
-        segments.forEach((it) => {
-            canvas.drawDashedLine(it.p1, it.p2, width, color, pattern);
-        });
-
-    }
-
-    drawEndpointsInCanvas(segments: Segment[], color: string, canvas: CanvasWraper): void {
+    protected drawEndpointsInCanvas(segments: Segment[], color: string, canvas: CanvasWrapper): void {
         const uniqueEndpoints: Point[] = this.extractUniqueEndpoints(segments);
         uniqueEndpoints.forEach((it) => { canvas.drawHollowDot(it, color); });
     }
 
-    fillPolygonInStillLayer(points: Point[], color: string): void {
-        this._stillCanvas.fillPolygon(points, color);
-    }
-
-    extractUniqueEndpoints(segments: Segment[]): Point[] {
+    private extractUniqueEndpoints(segments: Segment[]): Point[] {
         const uniquePoints: Set<Point> = new Set<Point>();
         for (const segment of segments) {
             if (!uniquePoints.has(segment.p1)) {
@@ -59,11 +70,11 @@ export abstract class AbstractSegmentsPainter implements SegmentsPainter {
         return Array.from(uniquePoints);
     }
 
-    addToSegmentsRecentlyPaintedInMovementLayer(segments: Segment[]): void {
+    private addToSegmentsRecentlyPaintedInMovementCanvas(segments: Segment[]): void {
         this.segmentsRecentlyPaintedInMovementLayer = this.segmentsRecentlyPaintedInMovementLayer.concat(segments);
     }
 
-    clearUsedPartOfCanvas(): void {
+    private clearUsedPartOfCanvas(): void {
         if (this.segmentsRecentlyPaintedInMovementLayer.length > 0) {
             let oldXMin: number = 0;
             let oldXMax: number = 1;
@@ -98,12 +109,6 @@ export abstract class AbstractSegmentsPainter implements SegmentsPainter {
 
     private minValue(numbers: number[]): number {
         return numbers.reduce((previous, current) => Math.min(previous, current));
-    }
-
-    protected jumpToNewPoint(fromPoint: Point, direction: Vector, distance: number): Point {
-        const newPointX: number = fromPoint.x + direction.x * distance;
-        const newPointY: number = fromPoint.y + direction.y * distance;
-        return new Point(newPointX, newPointY);
     }
 
 }

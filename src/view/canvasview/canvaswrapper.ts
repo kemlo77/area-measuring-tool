@@ -1,6 +1,6 @@
 import { Coordinate } from '../../model/shape/Coordinate';
 
-export class CanvasWraper {
+export class CanvasWrapper {
 
     private _canvasElement: HTMLCanvasElement;
     private _canvasCtx: CanvasRenderingContext2D;
@@ -70,6 +70,7 @@ export class CanvasWraper {
         this._canvasCtx.beginPath();
         this._canvasCtx.setLineDash(pattern);
         this._canvasCtx.lineWidth = width;
+        this._canvasCtx.lineCap = 'butt';
         this._canvasCtx.moveTo(p1.x, p1.y);
         this._canvasCtx.lineTo(p2.x, p2.y);
         this._canvasCtx.stroke();

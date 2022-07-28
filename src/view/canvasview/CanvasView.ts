@@ -2,14 +2,14 @@ import { Coordinate } from '../../model/shape/Coordinate';
 import { Model } from '../../model/Model';
 import { MeassuringShape } from '../../model/MeassuringShape';
 import { Observer } from '../Observer';
-import { CanvasWraper } from './canvaswrapper';
+import { CanvasWrapper } from './canvaswrapper';
 
 export class CanvasView implements Observer {
 
-    private filterCanvas: CanvasWraper = new CanvasWraper('filterLayer');
-    private imageCanvas: CanvasWraper = new CanvasWraper('imageLayer');
-    private movementCanvas: CanvasWraper = new CanvasWraper('movementLayer');
-    private stillCanvas: CanvasWraper = new CanvasWraper('stillLayer');
+    private filterCanvas: CanvasWrapper = new CanvasWrapper('filterLayer');
+    private imageCanvas: CanvasWrapper = new CanvasWrapper('imageLayer');
+    private movementCanvas: CanvasWrapper = new CanvasWrapper('movementLayer');
+    private stillCanvas: CanvasWrapper = new CanvasWrapper('stillLayer');
     private theDivThatHoldsCanvases: HTMLDivElement = document.querySelector('div#viewport') as HTMLDivElement;
 
     public updateBecauseModelHasChanged(model: Model): void {
