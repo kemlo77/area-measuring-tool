@@ -59,10 +59,21 @@ export class CanvasWraper {
         this._canvasCtx.strokeStyle = 'rgba(' + lineColor + ',1)';
         this._canvasCtx.beginPath();
         this._canvasCtx.lineWidth = width;
+        this._canvasCtx.lineCap = 'round';
         this._canvasCtx.moveTo(p1.x, p1.y);
         this._canvasCtx.lineTo(p2.x, p2.y);
-        this._canvasCtx.closePath();
         this._canvasCtx.stroke();
+    }
+
+    drawDashedLine(p1: Coordinate, p2: Coordinate, width: number, lineColor: string, pattern: number[]): void {
+        this._canvasCtx.strokeStyle = 'rgba(' + lineColor + ',1)';
+        this._canvasCtx.beginPath();
+        this._canvasCtx.setLineDash(pattern);
+        this._canvasCtx.lineWidth = width;
+        this._canvasCtx.moveTo(p1.x, p1.y);
+        this._canvasCtx.lineTo(p2.x, p2.y);
+        this._canvasCtx.stroke();
+        this._canvasCtx.setLineDash([]);
     }
 
     drawDot(dot2paint: Coordinate, diam: number, rgbIn: string): void {

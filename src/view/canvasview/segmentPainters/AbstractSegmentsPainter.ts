@@ -10,28 +10,40 @@ export abstract class AbstractSegmentsPainter implements SegmentsPainter {
 
     protected _movementCanvas: CanvasWraper = new CanvasWraper('movementLayer');
     protected _stillCanvas: CanvasWraper = new CanvasWraper('stillLayer');
+    protected black: string = '0,0,0';
+    protected yellow: string = '255,255,0';
 
-    private recentlyPaintedMovingSegments: Segment[] = [];
+    private segmentsRecentlyPaintedInMovementLayer: Segment[] = [];
 
     abstract drawStill(segmentShape: SegmentShape, color: string): void;
     abstract drawMovement(segmentShape: SegmentShape, color: string, mousePosition: Coordinate): void;
 
-    drawStillSegments(segments: Segment[], width: number, color: string): void {
+    drawSegmentsInCanvas(segments: Segment[], width: number, color: string, canvas: CanvasWraper): void {
         segments.forEach((it) => {
-            this._stillCanvas.drawLine(it.p1, it.p2, width, color);
+            canvas.drawLine(it.p1, it.p2, width, color);
+        });
+    }
+
+    drawDashedSegmentsInCanvas(
+        segments: Segment[],
+        width: number,
+        color: string,
+        pattern: number[],
+        canvas: CanvasWraper
+    ): void {
+        segments.forEach((it) => {
+            canvas.drawDashedLine(it.p1, it.p2, width, color, pattern);
         });
 
     }
 
-    drawMovingSegments(segments: Segment[], width: number, color: string): void {
-        segments.forEach((it) => {
-            this._movementCanvas.drawLine(it.p1, it.p2, width, color);
-        });
-        this.addSegmentsToRecentlyPaintedSegments(segments);
+    drawEndpointsInCanvas(segments: Segment[], color: string, canvas: CanvasWraper): void {
+        const uniqueEndpoints: Point[] = this.extractUniqueEndpoints(segments);
+        uniqueEndpoints.forEach((it) => { canvas.drawHollowDot(it, color); });
     }
 
-    addSegmentsToRecentlyPaintedSegments(segments: Segment[]): void {
-        this.recentlyPaintedMovingSegments = this.recentlyPaintedMovingSegments.concat(segments);
+    fillPolygonInStillLayer(points: Point[], color: string): void {
+        this._stillCanvas.fillPolygon(points, color);
     }
 
     extractUniqueEndpoints(segments: Segment[]): Point[] {
@@ -47,34 +59,19 @@ export abstract class AbstractSegmentsPainter implements SegmentsPainter {
         return Array.from(uniquePoints);
     }
 
-
-    drawStillPoints(segments: Segment[], color: string): void {
-        const uniqueEndpoints: Point[] = this.extractUniqueEndpoints(segments);
-        uniqueEndpoints.forEach((it) => { this._stillCanvas.drawHollowDot(it, color); });
-    }
-
-    drawMovingPoints(segments: Segment[], color: string): void {
-        const uniqueEndpoints: Point[] = this.extractUniqueEndpoints(segments);
-        uniqueEndpoints.forEach((it) => { this._movementCanvas.drawHollowDot(it, color); });
-    }
-
-    private maxValue(numbers: number[]): number {
-        return numbers.reduce((previous, current) => Math.max(previous, current));
-    }
-
-    private minValue(numbers: number[]): number {
-        return numbers.reduce((previous, current) => Math.min(previous, current));
+    addToSegmentsRecentlyPaintedInMovementLayer(segments: Segment[]): void {
+        this.segmentsRecentlyPaintedInMovementLayer = this.segmentsRecentlyPaintedInMovementLayer.concat(segments);
     }
 
     clearUsedPartOfCanvas(): void {
-        if (this.recentlyPaintedMovingSegments.length > 0) {
+        if (this.segmentsRecentlyPaintedInMovementLayer.length > 0) {
             let oldXMin: number = 0;
             let oldXMax: number = 1;
             let oldYMin: number = 0;
             let oldYMax: number = 1;
 
             const coordinates: Coordinate[] = [];
-            this.recentlyPaintedMovingSegments.forEach((segment) => {
+            this.segmentsRecentlyPaintedInMovementLayer.forEach((segment) => {
                 coordinates.push(segment.p1);
                 coordinates.push(segment.p2);
             });
@@ -91,8 +88,16 @@ export abstract class AbstractSegmentsPainter implements SegmentsPainter {
             const height: number = oldYMax - oldYMin + 8;
             this._movementCanvas.clearPartOfCanvas(xOffset, yOffset, width, height);
 
-            this.recentlyPaintedMovingSegments = [];
+            this.segmentsRecentlyPaintedInMovementLayer = [];
         }
+    }
+
+    private maxValue(numbers: number[]): number {
+        return numbers.reduce((previous, current) => Math.max(previous, current));
+    }
+
+    private minValue(numbers: number[]): number {
+        return numbers.reduce((previous, current) => Math.min(previous, current));
     }
 
     protected jumpToNewPoint(fromPoint: Point, direction: Vector, distance: number): Point {

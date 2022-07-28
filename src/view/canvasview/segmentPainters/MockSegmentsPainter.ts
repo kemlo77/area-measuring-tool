@@ -14,12 +14,4 @@ export class MockSegmentsPainter implements SegmentsPainter {
         //
     }
 
-    clearTheStillCanvas(): void {
-        //
-    }
-
-    clearTheMovementCanvas(): void {
-        //
-    }
-
 }

@@ -12,9 +12,10 @@ export class RegularSegmentsPainter extends AbstractSegmentsPainter {
     drawStill(segmentShape: SegmentShape, color: string): void {
         const stillSegments: Segment[] = segmentShape.getStillSegments();
 
-        this.drawStillSegments(stillSegments, this.lineWidth, color);
+        this.drawSegmentsInCanvas(stillSegments, this.lineWidth, color, this._stillCanvas);
+
         if (segmentShape.isSelected) {
-            this.drawStillPoints(stillSegments, color);
+            this.drawEndpointsInCanvas(stillSegments, color, this._stillCanvas);
         }
     }
 
@@ -22,8 +23,12 @@ export class RegularSegmentsPainter extends AbstractSegmentsPainter {
         const movingSegments: Segment[] = segmentShape.getMovingSegments(mousePosition);
 
         this.clearUsedPartOfCanvas();
-        this.drawMovingSegments(movingSegments, this.lineWidth, color);
-        this.drawMovingPoints(movingSegments, color);
+
+        this.drawSegmentsInCanvas(movingSegments, this.lineWidth, color, this._movementCanvas);
+
+        this.addToSegmentsRecentlyPaintedInMovementLayer(movingSegments);
+
+        this.drawEndpointsInCanvas(movingSegments, color, this._movementCanvas);
     }
 
 

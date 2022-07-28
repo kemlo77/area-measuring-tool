@@ -5,7 +5,6 @@ import { SegmentShape } from '../../../model/shape/segmentShapes/SegmentShape';
 import { AbstractSegmentsPainter } from './AbstractSegmentsPainter';
 
 
-
 export class FilledSegmentsPainter extends AbstractSegmentsPainter {
 
     private lineWidth: number = 3;
@@ -15,13 +14,13 @@ export class FilledSegmentsPainter extends AbstractSegmentsPainter {
 
         if (segmentShape.isClosed && !segmentShape.isMoving) {
             const firstPoints: Point[] = stillSegments.map(segment => segment.p1);
-            this._stillCanvas.fillPolygon(firstPoints, color);
+            this.fillPolygonInStillLayer(firstPoints, color);
         }
 
-        this.drawStillSegments(stillSegments, this.lineWidth, color);
+        this.drawSegmentsInCanvas(stillSegments, this.lineWidth, color, this._stillCanvas);
 
         if (segmentShape.isSelected) {
-            this.drawStillPoints(stillSegments, color);
+            this.drawEndpointsInCanvas(stillSegments, color, this._stillCanvas);
         }
     }
 
@@ -29,10 +28,12 @@ export class FilledSegmentsPainter extends AbstractSegmentsPainter {
         const movingSegments: Segment[] = segmentShape.getMovingSegments(mousePosition);
 
         this.clearUsedPartOfCanvas();
-        this.drawMovingSegments(movingSegments, this.lineWidth, color);
-        this.drawMovingPoints(movingSegments, color);
+
+        this.drawSegmentsInCanvas(movingSegments, this.lineWidth, color, this._movementCanvas);
+
+        this.addToSegmentsRecentlyPaintedInMovementLayer(movingSegments);
+
+        this.drawEndpointsInCanvas(movingSegments, color, this._movementCanvas);
     }
-
-
 
 }
