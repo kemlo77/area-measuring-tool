@@ -34,10 +34,12 @@ document.getElementById('removeSelectedShape')
     .addEventListener('click', () => router.removeSelectedShape());
 document.getElementById('addSymmetryLine')
     .addEventListener('click', () => router.addShape('SymmetryLine'));
+document.getElementById('toggleZoomSetting')
+    .addEventListener('click', () => canvasView.toggleZoomSetting());
 
 
-addEventListener('load', () => canvasView.adjustCanvas());
-addEventListener('resize', () => canvasView.delayedAdjustCanvas());
+addEventListener('load', () => canvasView.updateBecauseWindowIsResized());
+addEventListener('resize', () => canvasView.delayedUpdateBecauseWindowIsResized());
 document.getElementById('viewport')
     .addEventListener('drop', (event) => imageDrop.dropHandler(event));
 document.getElementById('viewport')

@@ -6,10 +6,10 @@ import { CanvasWrapper } from './canvaswrapper';
 
 export class CanvasView implements Observer {
 
-    private filterCanvas: CanvasWrapper = new CanvasWrapper('filterLayer');
-    private imageCanvas: CanvasWrapper = new CanvasWrapper('imageLayer');
     private movementCanvas: CanvasWrapper = new CanvasWrapper('movementLayer');
     private stillCanvas: CanvasWrapper = new CanvasWrapper('stillLayer');
+    private filterCanvas: CanvasWrapper = new CanvasWrapper('filterLayer');
+    private imageCanvas: CanvasWrapper = new CanvasWrapper('imageLayer');
     private theDivThatHoldsCanvases: HTMLDivElement = document.querySelector('div#viewport') as HTMLDivElement;
 
     public updateBecauseModelHasChanged(model: Model): void {
@@ -45,7 +45,11 @@ export class CanvasView implements Observer {
         this.imageCanvas.resetImage();
     }
 
-    public adjustCanvas(): void {
+    public toggleZoomSetting(): void {
+        this.imageCanvas.toogleZoomSetting();
+    }
+
+    public updateBecauseWindowIsResized(): void {
         this.filterCanvas.updateCanvasWhenWindowSizeChanges();
         this.imageCanvas.updateCanvasWhenWindowSizeChanges();
         this.movementCanvas.updateCanvasWhenWindowSizeChanges();
@@ -59,7 +63,8 @@ export class CanvasView implements Observer {
         this.theDivThatHoldsCanvases.style.height = newHeight + 'px';
     }
 
-    public delayedAdjustCanvas: any = this.debounce((): void => this.adjustCanvas(), 500);
+    public delayedUpdateBecauseWindowIsResized: any = 
+        this.debounce((): void => this.updateBecauseWindowIsResized(), 500);
 
     private debounce<F extends Function>(func: F, wait: number): F {
         let timeoutID: number;
