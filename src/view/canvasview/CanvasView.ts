@@ -11,17 +11,26 @@ export class CanvasView implements Observer {
     private filterCanvas: CanvasWrapper = new CanvasWrapper('filterLayer');
     private imageCanvas: CanvasWrapper = new CanvasWrapper('imageLayer');
     private theDivThatHoldsCanvases: HTMLDivElement = document.querySelector('div#viewport') as HTMLDivElement;
+    private _model: Model;
 
-    public updateBecauseModelHasChanged(model: Model): void {
+    constructor(model: Model) {
+        this._model = model;
+    }
+
+    public updateBecauseModelHasChanged(): void {
+        this.redrawModel();
+    }
+
+    private redrawModel(): void {
         this.stillCanvas.clearCanvas();
         this.movementCanvas.clearCanvas();
-        for (const shape of model.allShapes) {
+        for (const shape of this._model.allShapes) {
             shape.designatedPainterDrawStill();
         }
     }
 
-    public updateBecauseOfMovementInModel(model: Model, mousePosition: Coordinate): void {
-        const selectedShape: MeassuringShape = model.selectedShape;
+    public updateBecauseOfMovementInModel(mousePosition: Coordinate): void {
+        const selectedShape: MeassuringShape = this._model.selectedShape;
         if (selectedShape) {
             selectedShape.designatedPainterDrawMovement(mousePosition);
         } else {
@@ -45,8 +54,13 @@ export class CanvasView implements Observer {
         this.imageCanvas.resetImage();
     }
 
+    public convertCanvasCoordinateToImageCoordinate(coordinate: Coordinate): Coordinate {
+        return this.imageCanvas.convertCoordinateInCanvasToCoordinateInImage(coordinate);
+    }
+
     public toggleZoomSetting(): void {
         this.imageCanvas.toogleZoomSetting();
+        this.redrawModel();
     }
 
     public updateBecauseWindowIsResized(): void {
@@ -54,9 +68,11 @@ export class CanvasView implements Observer {
         this.imageCanvas.updateCanvasWhenWindowSizeChanges();
         this.movementCanvas.updateCanvasWhenWindowSizeChanges();
         this.stillCanvas.updateCanvasWhenWindowSizeChanges();
+        this.imageCanvas.setScaleAndOffsets();
 
         this.imageCanvas.redrawImageToCanvas();
         this.setTheHeightOfTheDiv(this.filterCanvas.height);
+        this.redrawModel();
     }
 
     private setTheHeightOfTheDiv(newHeight: number): void {

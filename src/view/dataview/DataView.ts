@@ -9,15 +9,20 @@ export class DataView implements Observer {
     private dataDiv: HTMLElement = document.getElementById('data');
     private numberInputs: HTMLInputElement[] = [];
     private viewScaler: ViewScaler = new ViewScaler();
+    private _model: Model;
 
-    updateBecauseModelHasChanged(model: Model): void {
-        this.removeAllChildNodes(this.dataDiv);
-        this.addAreaTotalParagraph(model);
-        this.addAreaShapeDivs(model);
-        this.addLenghtShapeDivs(model);
+    constructor(model: Model) {
+        this._model = model;
     }
 
-    updateBecauseOfMovementInModel(model: Model, mousePosition: Coordinate): void {
+    updateBecauseModelHasChanged(): void {
+        this.removeAllChildNodes(this.dataDiv);
+        this.addAreaTotalParagraph(this._model);
+        this.addAreaShapeDivs(this._model);
+        this.addLenghtShapeDivs(this._model);
+    }
+
+    updateBecauseOfMovementInModel(mousePosition: Coordinate): void {
         //
     }
 

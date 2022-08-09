@@ -7,10 +7,10 @@ export class CanvasWrapper {
     private _image: HTMLImageElement;
 
     //TODO: borde dessa vara static?
-    private scaleFactor: number;
-    private xOffset: number;
-    private yOffset: number;
-    private currentZoomSettingNr = 1;
+    private static scaleFactor: number;
+    private static xOffset: number;
+    private static yOffset: number;
+    private static currentZoomSettingNr = 1;
 
     constructor(canvasId: string) {
         this._canvasElement = document.getElementById(canvasId) as HTMLCanvasElement;
@@ -30,8 +30,15 @@ export class CanvasWrapper {
         this._canvasCtx.clearRect(0, 0, this._canvasElement.width, this._canvasElement.height);
     }
 
-    public clearPartOfCanvas(xOffset: number, yOffset: number, width: number, height: number): void {
-        this._canvasCtx.clearRect(xOffset, yOffset, width, height);
+    public clearPartOfCanvas(upperLeft: Coordinate, lowerRight: Coordinate): void {
+        const convertedUpperLeft: Coordinate = this.convertCoordinateInImageToCoordinateInCanvas(upperLeft);
+        const convertedLowerRight: Coordinate = this.convertCoordinateInImageToCoordinateInCanvas(lowerRight);
+        this._canvasCtx.clearRect(
+            convertedUpperLeft.x - 10, 
+            convertedUpperLeft.y - 10, 
+            (convertedLowerRight.x - convertedUpperLeft.x) * CanvasWrapper.scaleFactor + 20, 
+            (convertedLowerRight.y - convertedUpperLeft.y) * CanvasWrapper.scaleFactor + 20
+        );
     }
 
     public setImageInCanvas(image: HTMLImageElement): void {
@@ -42,12 +49,12 @@ export class CanvasWrapper {
 
     setScaleAndOffsets(): void {
         if(!this._image) {
-            this.scaleFactor = 1;
-            this.xOffset = 0;
-            this.yOffset = 0;
+            CanvasWrapper.scaleFactor = 1;
+            CanvasWrapper.xOffset = 0;
+            CanvasWrapper.yOffset = 0;
             return;
         }
-        this.calculateScale[this.currentZoomSettingNr]();
+        this.calculateScale[CanvasWrapper.currentZoomSettingNr]();
         this.calculateOffset();
     }
 
@@ -56,32 +63,46 @@ export class CanvasWrapper {
         (): void => this.zoomToFitWidthOrHeightScale(),
         (): void => this.oneToOneScale(),
         (): void => this.doubleSizeScale(),
-    ]
+    ];
+
+    convertCoordinateInCanvasToCoordinateInImage(canvasCoordinate: Coordinate): Coordinate {
+        const xPart: number = (canvasCoordinate.x - CanvasWrapper.xOffset) / CanvasWrapper.scaleFactor;
+        const yPart: number = (canvasCoordinate.y - CanvasWrapper.yOffset) / CanvasWrapper.scaleFactor;
+        return {x: xPart, y: yPart};
+    }
+
+    convertCoordinateInImageToCoordinateInCanvas(imageCoordinate: Coordinate): Coordinate {
+        const xPart: number = (imageCoordinate.x * CanvasWrapper.scaleFactor) + CanvasWrapper.xOffset;
+        const yPart: number = (imageCoordinate.y * CanvasWrapper.scaleFactor) + CanvasWrapper.yOffset;
+        return {x: xPart, y: yPart};
+    }
 
     toogleZoomSetting(): void {
-        this.currentZoomSettingNr = (this.currentZoomSettingNr + 1) % this.calculateScale.length;
+        CanvasWrapper.currentZoomSettingNr = (CanvasWrapper.currentZoomSettingNr + 1) % this.calculateScale.length;
         this.setScaleAndOffsets();
         this.drawImageToCanvas();
     }
 
     private calculateOffset(): void {
-        this.xOffset = - 0.5 * (this.scaleFactor * this._image.width - this._canvasElement.clientWidth);
-        this.yOffset = - 0.5 * (this.scaleFactor * this._image.height - this._canvasElement.clientHeight);
+        CanvasWrapper.xOffset = 
+            - 0.5 * (CanvasWrapper.scaleFactor * this._image.width - this._canvasElement.clientWidth);
+        CanvasWrapper.yOffset = 
+            - 0.5 * (CanvasWrapper.scaleFactor * this._image.height - this._canvasElement.clientHeight);
     }
 
     zoomExtentsScale(): void {
         if (this.theImageIsWiderThanTheCanvas()) {
-            this.scaleFactor = this._canvasElement.clientWidth / this._image.width;
+            CanvasWrapper.scaleFactor = this._canvasElement.clientWidth / this._image.width;
         } else {
-            this.scaleFactor = this._canvasElement.clientHeight / this._image.height;
+            CanvasWrapper.scaleFactor = this._canvasElement.clientHeight / this._image.height;
         }
     }
 
     zoomToFitWidthOrHeightScale(): void {
         if (this.theImageIsWiderThanTheCanvas()) {
-            this.scaleFactor = this._canvasElement.clientHeight / this._image.height;
+            CanvasWrapper.scaleFactor = this._canvasElement.clientHeight / this._image.height;
         } else {
-            this.scaleFactor = this._canvasElement.clientWidth / this._image.width;
+            CanvasWrapper.scaleFactor = this._canvasElement.clientWidth / this._image.width;
         }
     }
 
@@ -92,11 +113,11 @@ export class CanvasWrapper {
     }
 
     oneToOneScale(): void {
-        this.scaleFactor = 1;
+        CanvasWrapper.scaleFactor = 1;
     }
 
     doubleSizeScale(): void {
-        this.scaleFactor = 2;
+        CanvasWrapper.scaleFactor = 2;
     }
 
     public resetImage(): void {
@@ -119,10 +140,10 @@ export class CanvasWrapper {
                 0, 
                 this._image.width, 
                 this._image.height,
-                this.xOffset, 
-                this.yOffset, 
-                this._image.width * this.scaleFactor, 
-                this._image.height * this.scaleFactor
+                CanvasWrapper.xOffset, 
+                CanvasWrapper.yOffset, 
+                this._image.width * CanvasWrapper.scaleFactor, 
+                this._image.height * CanvasWrapper.scaleFactor
             );
         }
     }
@@ -130,35 +151,40 @@ export class CanvasWrapper {
     updateCanvasWhenWindowSizeChanges(): void {
         this._canvasElement.width = window.innerWidth - 32;
         this._canvasElement.height = window.innerHeight - 32;
-        this.setScaleAndOffsets();
+        //this.setScaleAndOffsets();
     }
 
     drawLine(p1: Coordinate, p2: Coordinate, width: number, lineColor: string): void {
+        const convertedP1: Coordinate = this.convertCoordinateInImageToCoordinateInCanvas(p1);
+        const convertedP2: Coordinate = this.convertCoordinateInImageToCoordinateInCanvas(p2);
         this._canvasCtx.strokeStyle = 'rgba(' + lineColor + ',1)';
         this._canvasCtx.beginPath();
         this._canvasCtx.lineWidth = width;
         this._canvasCtx.lineCap = 'round';
-        this._canvasCtx.moveTo(p1.x, p1.y);
-        this._canvasCtx.lineTo(p2.x, p2.y);
+        this._canvasCtx.moveTo(convertedP1.x, convertedP1.y);
+        this._canvasCtx.lineTo(convertedP2.x, convertedP2.y);
         this._canvasCtx.stroke();
     }
 
     drawDashedLine(p1: Coordinate, p2: Coordinate, width: number, lineColor: string, pattern: number[]): void {
+        const convertedP1: Coordinate = this.convertCoordinateInImageToCoordinateInCanvas(p1);
+        const convertedP2: Coordinate = this.convertCoordinateInImageToCoordinateInCanvas(p2);
         this._canvasCtx.strokeStyle = 'rgba(' + lineColor + ',1)';
         this._canvasCtx.beginPath();
         this._canvasCtx.setLineDash(pattern);
         this._canvasCtx.lineWidth = width;
         this._canvasCtx.lineCap = 'butt';
-        this._canvasCtx.moveTo(p1.x, p1.y);
-        this._canvasCtx.lineTo(p2.x, p2.y);
+        this._canvasCtx.moveTo(convertedP1.x, convertedP1.y);
+        this._canvasCtx.lineTo(convertedP2.x, convertedP2.y);
         this._canvasCtx.stroke();
         this._canvasCtx.setLineDash([]);
     }
 
     drawDot(dot2paint: Coordinate, diam: number, rgbIn: string): void {
+        const convertedDot: Coordinate = this.convertCoordinateInImageToCoordinateInCanvas(dot2paint);
         this._canvasCtx.fillStyle = 'rgba(' + rgbIn + ',1)';
         this._canvasCtx.beginPath();
-        this._canvasCtx.arc(dot2paint.x, dot2paint.y, diam, 0, Math.PI * 2, true);
+        this._canvasCtx.arc(convertedDot.x, convertedDot.y, diam, 0, Math.PI * 2, true);
         this._canvasCtx.closePath();
         this._canvasCtx.fill();
     }
@@ -169,11 +195,12 @@ export class CanvasWrapper {
     }
 
     fillPolygon(vertices: Coordinate[], color: string): void {
+        const convertedVertices: Coordinate[] = vertices.map(v => this.convertCoordinateInImageToCoordinateInCanvas(v));
         this._canvasCtx.fillStyle = 'rgba(' + color + ',0.1)';
         this._canvasCtx.beginPath();
-        const startPoint: Coordinate = vertices.shift();
+        const startPoint: Coordinate = convertedVertices.shift();
         this._canvasCtx.moveTo(startPoint.x, startPoint.y);
-        for (const point of vertices) {
+        for (const point of convertedVertices) {
             this._canvasCtx.lineTo(point.x, point.y);
         }
         this._canvasCtx.closePath();

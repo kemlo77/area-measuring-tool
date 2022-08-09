@@ -76,10 +76,6 @@ export abstract class AbstractSegmentsPainter implements SegmentsPainter {
 
     private clearUsedPartOfCanvas(): void {
         if (this.segmentsRecentlyPaintedInMovementLayer.length > 0) {
-            let oldXMin: number = 0;
-            let oldXMax: number = 1;
-            let oldYMin: number = 0;
-            let oldYMax: number = 1;
 
             const coordinates: Coordinate[] = [];
             this.segmentsRecentlyPaintedInMovementLayer.forEach((segment) => {
@@ -88,16 +84,14 @@ export abstract class AbstractSegmentsPainter implements SegmentsPainter {
             });
             const xCoordinates: number[] = coordinates.map((coordinate) => coordinate.x);
             const yCoordinates: number[] = coordinates.map((coordinate) => coordinate.y);
-            oldXMax = this.maxValue(xCoordinates);
-            oldXMin = this.minValue(xCoordinates);
-            oldYMax = this.maxValue(yCoordinates);
-            oldYMin = this.minValue(yCoordinates);
+            const xMax: number = this.maxValue(xCoordinates);
+            const xMin: number = this.minValue(xCoordinates);
+            const yMax: number = this.maxValue(yCoordinates);
+            const yMin: number = this.minValue(yCoordinates);
 
-            const xOffset: number = oldXMin - 4;
-            const yOffset: number = oldYMin - 4;
-            const width: number = oldXMax - oldXMin + 8;
-            const height: number = oldYMax - oldYMin + 8;
-            this._movementCanvas.clearPartOfCanvas(xOffset, yOffset, width, height);
+            const upperLeft: Coordinate = {x: xMin, y: yMin};
+            const lowerRight: Coordinate = {x: xMax, y: yMax};
+            this._movementCanvas.clearPartOfCanvas(upperLeft, lowerRight);
 
             this.segmentsRecentlyPaintedInMovementLayer = [];
         }

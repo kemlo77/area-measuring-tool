@@ -118,13 +118,13 @@ export class Model implements Subject {
     }
 
     notifyOfMouseMovement(mousePosition: Coordinate): void {
-        this._listeners.forEach((observer) => { observer.updateBecauseOfMovementInModel(this, mousePosition); });
+        this._listeners.forEach((observer) => { observer.updateBecauseOfMovementInModel(mousePosition); });
     }
 
     notifyOfModelChange(mousePosition: Coordinate): void {
         this._listeners.forEach((observer) => {
-            observer.updateBecauseModelHasChanged(this);
-            observer.updateBecauseOfMovementInModel(this, mousePosition);
+            observer.updateBecauseModelHasChanged();
+            observer.updateBecauseOfMovementInModel(mousePosition);
         });
     }
 }
