@@ -3,7 +3,7 @@ import { SegmentsPainter } from './SegmentsPainter';
 import { Point } from '../../../model/shape/Point';
 import { SegmentShape } from '../../../model/shape/segmentShapes/SegmentShape';
 import { Segment } from '../../../model/shape/segmentShapes/Segment';
-import { CanvasWrapper } from '../canvaswrapper';
+import { CanvasWrapper } from '../CanvasWrapper';
 
 export abstract class AbstractSegmentsPainter implements SegmentsPainter {
 
@@ -89,8 +89,8 @@ export abstract class AbstractSegmentsPainter implements SegmentsPainter {
             const yMax: number = this.maxValue(yCoordinates);
             const yMin: number = this.minValue(yCoordinates);
 
-            const upperLeft: Coordinate = {x: xMin, y: yMin};
-            const lowerRight: Coordinate = {x: xMax, y: yMax};
+            const upperLeft: Coordinate = { x: xMin, y: yMin };
+            const lowerRight: Coordinate = { x: xMax, y: yMax };
             this._movementCanvas.clearPartOfCanvas(upperLeft, lowerRight);
 
             this.segmentsRecentlyPaintedInMovementLayer = [];

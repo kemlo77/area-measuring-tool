@@ -2,7 +2,7 @@ import { Coordinate } from '../../model/shape/Coordinate';
 import { Model } from '../../model/Model';
 import { MeassuringShape } from '../../model/MeassuringShape';
 import { Observer } from '../Observer';
-import { CanvasWrapper } from './canvaswrapper';
+import { CanvasWrapper } from './CanvasWrapper';
 
 export class CanvasView implements Observer {
 
@@ -79,7 +79,7 @@ export class CanvasView implements Observer {
         this.theDivThatHoldsCanvases.style.height = newHeight + 'px';
     }
 
-    public delayedUpdateBecauseWindowIsResized: any = 
+    public delayedUpdateBecauseWindowIsResized: any =
         this.debounce((): void => this.updateBecauseWindowIsResized(), 500);
 
     private debounce<F extends Function>(func: F, wait: number): F {

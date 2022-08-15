@@ -1,5 +1,5 @@
 import { Point } from '../../../model/shape/Point';
-import { CanvasWrapper } from '../canvaswrapper';
+import { CanvasWrapper } from '../CanvasWrapper';
 import { AbstractSegmentsPainter } from './AbstractSegmentsPainter';
 
 

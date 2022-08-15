@@ -6,7 +6,6 @@ export class CanvasWrapper {
     private _canvasCtx: CanvasRenderingContext2D;
     private _image: HTMLImageElement;
 
-    //TODO: borde dessa vara static?
     private static scaleFactor: number;
     private static xOffset: number;
     private static yOffset: number;
@@ -34,10 +33,10 @@ export class CanvasWrapper {
         const convertedUpperLeft: Coordinate = this.convertCoordinateInImageToCoordinateInCanvas(upperLeft);
         const convertedLowerRight: Coordinate = this.convertCoordinateInImageToCoordinateInCanvas(lowerRight);
         this._canvasCtx.clearRect(
-            convertedUpperLeft.x - 10, 
-            convertedUpperLeft.y - 10, 
-            (convertedLowerRight.x - convertedUpperLeft.x) * CanvasWrapper.scaleFactor + 20, 
-            (convertedLowerRight.y - convertedUpperLeft.y) * CanvasWrapper.scaleFactor + 20
+            convertedUpperLeft.x - 10,
+            convertedUpperLeft.y - 10,
+            (convertedLowerRight.x - convertedUpperLeft.x) + 20,
+            (convertedLowerRight.y - convertedUpperLeft.y) + 20
         );
     }
 
@@ -48,7 +47,7 @@ export class CanvasWrapper {
     }
 
     setScaleAndOffsets(): void {
-        if(!this._image) {
+        if (!this._image) {
             CanvasWrapper.scaleFactor = 1;
             CanvasWrapper.xOffset = 0;
             CanvasWrapper.yOffset = 0;
@@ -68,13 +67,13 @@ export class CanvasWrapper {
     convertCoordinateInCanvasToCoordinateInImage(canvasCoordinate: Coordinate): Coordinate {
         const xPart: number = (canvasCoordinate.x - CanvasWrapper.xOffset) / CanvasWrapper.scaleFactor;
         const yPart: number = (canvasCoordinate.y - CanvasWrapper.yOffset) / CanvasWrapper.scaleFactor;
-        return {x: xPart, y: yPart};
+        return { x: xPart, y: yPart };
     }
 
     convertCoordinateInImageToCoordinateInCanvas(imageCoordinate: Coordinate): Coordinate {
         const xPart: number = (imageCoordinate.x * CanvasWrapper.scaleFactor) + CanvasWrapper.xOffset;
         const yPart: number = (imageCoordinate.y * CanvasWrapper.scaleFactor) + CanvasWrapper.yOffset;
-        return {x: xPart, y: yPart};
+        return { x: xPart, y: yPart };
     }
 
     toogleZoomSetting(): void {
@@ -84,9 +83,9 @@ export class CanvasWrapper {
     }
 
     private calculateOffset(): void {
-        CanvasWrapper.xOffset = 
+        CanvasWrapper.xOffset =
             - 0.5 * (CanvasWrapper.scaleFactor * this._image.width - this._canvasElement.clientWidth);
-        CanvasWrapper.yOffset = 
+        CanvasWrapper.yOffset =
             - 0.5 * (CanvasWrapper.scaleFactor * this._image.height - this._canvasElement.clientHeight);
     }
 
@@ -135,14 +134,14 @@ export class CanvasWrapper {
         if (this._image) {
             console.log('image.width x height:    ' + this._image.width + ' x ' + this._image.height);
             this._canvasCtx.drawImage(
-                this._image, 
-                0, 
-                0, 
-                this._image.width, 
+                this._image,
+                0,
+                0,
+                this._image.width,
                 this._image.height,
-                CanvasWrapper.xOffset, 
-                CanvasWrapper.yOffset, 
-                this._image.width * CanvasWrapper.scaleFactor, 
+                CanvasWrapper.xOffset,
+                CanvasWrapper.yOffset,
+                this._image.width * CanvasWrapper.scaleFactor,
                 this._image.height * CanvasWrapper.scaleFactor
             );
         }

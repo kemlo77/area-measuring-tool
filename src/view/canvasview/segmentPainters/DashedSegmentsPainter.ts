@@ -1,5 +1,5 @@
 import { Segment } from '../../../model/shape/segmentShapes/Segment';
-import { CanvasWrapper } from '../canvaswrapper';
+import { CanvasWrapper } from '../CanvasWrapper';
 import { AbstractSegmentsPainter } from './AbstractSegmentsPainter';
 
 export class DashedSegmentsPainter extends AbstractSegmentsPainter {
