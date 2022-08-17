@@ -55,11 +55,26 @@ export class CanvasView implements Observer {
     }
 
     public convertCanvasCoordinateToImageCoordinate(coordinate: Coordinate): Coordinate {
-        return this.imageCanvas.convertCoordinateInCanvasToCoordinateInImage(coordinate);
+        return this.imageCanvas.canvasCoordinateToImageCoordinate(coordinate);
     }
 
-    public toggleZoomSetting(): void {
-        this.imageCanvas.toogleZoomSetting();
+    public zoomToFit(): void {
+        this.imageCanvas.zoomExtents();
+        this.redrawModel();
+    }
+
+    public zoomActualSize(): void {
+        this.imageCanvas.zoomActualSize();
+        this.redrawModel();
+    }
+
+    public zoomIn(): void {
+        this.imageCanvas.zoomIn();
+        this.redrawModel();
+    }
+
+    public zoomOut(): void {
+        this.imageCanvas.zoomOut();
         this.redrawModel();
     }
 
@@ -70,7 +85,7 @@ export class CanvasView implements Observer {
         this.stillCanvas.adaptCanvasSizeToWindowSize();
         this.setTheHeightOfTheDiv(this.filterCanvas.height);
 
-        this.imageCanvas.setScaleAndOffsets();
+        this.imageCanvas.recalculateOffsets();
         this.imageCanvas.redrawImageToCanvas();
         this.redrawModel();
     }

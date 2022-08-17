@@ -34,8 +34,14 @@ document.getElementById('removeSelectedShape')
     .addEventListener('click', () => router.removeSelectedShape());
 document.getElementById('addSymmetryLine')
     .addEventListener('click', () => router.addShape('SymmetryLine'));
-document.getElementById('toggleZoomSetting')
-    .addEventListener('click', () => canvasView.toggleZoomSetting());
+document.getElementById('zoomToFit')
+    .addEventListener('click', () => canvasView.zoomToFit());
+document.getElementById('zoomActualSize')
+    .addEventListener('click', () => canvasView.zoomActualSize());
+document.getElementById('zoomIn')
+    .addEventListener('click', () => canvasView.zoomIn());
+document.getElementById('zoomOut')
+    .addEventListener('click', () => canvasView.zoomOut());
 
 
 addEventListener('load', () => canvasView.updateBecauseWindowIsResized());
