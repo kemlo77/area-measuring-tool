@@ -20,6 +20,10 @@ export class CanvasWrapper {
         return this._canvasElement.height;
     }
 
+    get width(): number {
+        return this._canvasElement.width;
+    }
+
     public adjustOpacity(value: number): void {
         const percentage: number = 1 - value / 100;
         this._canvasElement.style.opacity = percentage.toString();
@@ -30,14 +34,11 @@ export class CanvasWrapper {
     }
 
     public clearPartOfCanvas(upperLeft: Coordinate, lowerRight: Coordinate): void {
-        const convertedUpperLeft: Coordinate = this.convertCoordinateInImageToCoordinateInCanvas(upperLeft);
-        const convertedLowerRight: Coordinate = this.convertCoordinateInImageToCoordinateInCanvas(lowerRight);
-        this._canvasCtx.clearRect(
-            convertedUpperLeft.x - 10,
-            convertedUpperLeft.y - 10,
-            (convertedLowerRight.x - convertedUpperLeft.x) + 20,
-            (convertedLowerRight.y - convertedUpperLeft.y) + 20
-        );
+        const p1: Coordinate = this.convertCoordinateInImageToCoordinateInCanvas(upperLeft);
+        const p2: Coordinate = this.convertCoordinateInImageToCoordinateInCanvas(lowerRight);
+        const width: number = p2.x - p1.x;
+        const height: number = p2.y - p1.y;
+        this._canvasCtx.clearRect(p1.x - 10, p1.y - 10, width + 20, height + 20);
     }
 
     public setImageInCanvas(image: HTMLImageElement): void {
@@ -147,7 +148,7 @@ export class CanvasWrapper {
         }
     }
 
-    updateCanvasWhenWindowSizeChanges(): void {
+    adaptCanvasSizeToWindowSize(): void {
         this._canvasElement.width = window.innerWidth - 32;
         this._canvasElement.height = window.innerHeight - 32;
         //this.setScaleAndOffsets();

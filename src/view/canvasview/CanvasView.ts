@@ -64,14 +64,14 @@ export class CanvasView implements Observer {
     }
 
     public updateBecauseWindowIsResized(): void {
-        this.filterCanvas.updateCanvasWhenWindowSizeChanges();
-        this.imageCanvas.updateCanvasWhenWindowSizeChanges();
-        this.movementCanvas.updateCanvasWhenWindowSizeChanges();
-        this.stillCanvas.updateCanvasWhenWindowSizeChanges();
-        this.imageCanvas.setScaleAndOffsets();
-
-        this.imageCanvas.redrawImageToCanvas();
+        this.filterCanvas.adaptCanvasSizeToWindowSize();
+        this.imageCanvas.adaptCanvasSizeToWindowSize();
+        this.movementCanvas.adaptCanvasSizeToWindowSize();
+        this.stillCanvas.adaptCanvasSizeToWindowSize();
         this.setTheHeightOfTheDiv(this.filterCanvas.height);
+
+        this.imageCanvas.setScaleAndOffsets();
+        this.imageCanvas.redrawImageToCanvas();
         this.redrawModel();
     }
 
