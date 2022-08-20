@@ -1,5 +1,5 @@
 import { Segment } from '../../../model/shape/segmentShapes/Segment';
-import { CanvasWrapper } from '../CanvasWrapper';
+import { DrawingCanvasWrapper } from '../DrawingCanvasWrapper';
 import { AbstractSegmentsPainter } from './AbstractSegmentsPainter';
 
 export class StripedSegmentsPainter extends AbstractSegmentsPainter {
@@ -7,7 +7,7 @@ export class StripedSegmentsPainter extends AbstractSegmentsPainter {
     protected lineWidth: number = 4;
     private dashPattern: number[] = [5, 7];
 
-    protected drawSegmentsInCanvas(segments: Segment[], color: string, canvas: CanvasWrapper): void {
+    protected drawSegmentsInCanvas(segments: Segment[], color: string, canvas: DrawingCanvasWrapper): void {
         super.drawSegmentsInCanvas(segments, this.yellow, canvas);
 
         segments.forEach((it) => {
@@ -15,7 +15,7 @@ export class StripedSegmentsPainter extends AbstractSegmentsPainter {
         });
     }
 
-    protected drawEndpointsInCanvas(segments: Segment[], color: string, canvas: CanvasWrapper): void {
+    protected drawEndpointsInCanvas(segments: Segment[], color: string, canvas: DrawingCanvasWrapper): void {
         super.drawEndpointsInCanvas(segments, this.black, canvas);
     }
 

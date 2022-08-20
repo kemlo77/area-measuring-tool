@@ -4,11 +4,12 @@ import { Point } from '../../../model/shape/Point';
 import { SegmentShape } from '../../../model/shape/segmentShapes/SegmentShape';
 import { Segment } from '../../../model/shape/segmentShapes/Segment';
 import { CanvasWrapper } from '../CanvasWrapper';
+import { DrawingCanvasWrapper } from '../DrawingCanvasWrapper';
 
 export abstract class AbstractSegmentsPainter implements SegmentsPainter {
 
-    protected _movementCanvas: CanvasWrapper = new CanvasWrapper('movementLayer');
-    protected _stillCanvas: CanvasWrapper = new CanvasWrapper('stillLayer');
+    protected _movementCanvas: DrawingCanvasWrapper = new DrawingCanvasWrapper('movementLayer');
+    protected _stillCanvas: DrawingCanvasWrapper = new DrawingCanvasWrapper('stillLayer');
     protected black: string = '0,0,0';
     protected yellow: string = '255,255,0';
     protected lineWidth: number = 3;
@@ -46,13 +47,13 @@ export abstract class AbstractSegmentsPainter implements SegmentsPainter {
         //
     }
 
-    protected drawSegmentsInCanvas(segments: Segment[], color: string, canvas: CanvasWrapper): void {
+    protected drawSegmentsInCanvas(segments: Segment[], color: string, canvas: DrawingCanvasWrapper): void {
         segments.forEach((it) => {
             canvas.drawLine(it.p1, it.p2, this.lineWidth, color);
         });
     }
 
-    protected drawEndpointsInCanvas(segments: Segment[], color: string, canvas: CanvasWrapper): void {
+    protected drawEndpointsInCanvas(segments: Segment[], color: string, canvas: DrawingCanvasWrapper): void {
         const uniqueEndpoints: Point[] = this.extractUniqueEndpoints(segments);
         uniqueEndpoints.forEach((it) => { canvas.drawHollowDot(it, color); });
     }

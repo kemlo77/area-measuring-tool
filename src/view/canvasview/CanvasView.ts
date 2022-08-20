@@ -4,11 +4,12 @@ import { MeassuringShape } from '../../model/MeassuringShape';
 import { Observer } from '../Observer';
 import { CanvasWrapper } from './CanvasWrapper';
 import { ImageCanvasWrapper } from './ImageCanvsaWrapper';
+import { DrawingCanvasWrapper } from './DrawingCanvasWrapper';
 
 export class CanvasView implements Observer {
 
-    private movementCanvas: CanvasWrapper = new CanvasWrapper('movementLayer');
-    private stillCanvas: CanvasWrapper = new CanvasWrapper('stillLayer');
+    private movementCanvas: DrawingCanvasWrapper = new DrawingCanvasWrapper('movementLayer');
+    private stillCanvas: DrawingCanvasWrapper = new DrawingCanvasWrapper('stillLayer');
     private filterCanvas: CanvasWrapper = new CanvasWrapper('filterLayer');
     private imageCanvas: ImageCanvasWrapper = new ImageCanvasWrapper('imageLayer');
     private theDivThatHoldsCanvases: HTMLDivElement = document.querySelector('div#viewport') as HTMLDivElement;
@@ -84,7 +85,7 @@ export class CanvasView implements Observer {
         this.stillCanvas.adaptCanvasToWindowResize();
         this.filterCanvas.adaptCanvasToWindowResize();
         this.imageCanvas.adaptCanvasToWindowResize();
-        this.setTheHeightOfTheDiv(this.filterCanvas.height);
+        this.setTheHeightOfTheDiv(this.movementCanvas.height);
 
         this.redrawModel();
     }
