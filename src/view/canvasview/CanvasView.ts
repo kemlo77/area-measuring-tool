@@ -3,13 +3,14 @@ import { Model } from '../../model/Model';
 import { MeassuringShape } from '../../model/MeassuringShape';
 import { Observer } from '../Observer';
 import { CanvasWrapper } from './CanvasWrapper';
+import { ImageCanvasWrapper } from './ImageCanvsaWrapper';
 
 export class CanvasView implements Observer {
 
     private movementCanvas: CanvasWrapper = new CanvasWrapper('movementLayer');
     private stillCanvas: CanvasWrapper = new CanvasWrapper('stillLayer');
     private filterCanvas: CanvasWrapper = new CanvasWrapper('filterLayer');
-    private imageCanvas: CanvasWrapper = new CanvasWrapper('imageLayer');
+    private imageCanvas: ImageCanvasWrapper = new ImageCanvasWrapper('imageLayer');
     private theDivThatHoldsCanvases: HTMLDivElement = document.querySelector('div#viewport') as HTMLDivElement;
     private _model: Model;
 
@@ -55,11 +56,11 @@ export class CanvasView implements Observer {
     }
 
     public convertCanvasCoordinateToImageCoordinate(coordinate: Coordinate): Coordinate {
-        return this.imageCanvas.canvasCoordinateToImageCoordinate(coordinate);
+        return this.imageCanvas.canvasToImage(coordinate);
     }
 
     public zoomToFit(): void {
-        this.imageCanvas.zoomExtents();
+        this.imageCanvas.zoomToFit();
         this.redrawModel();
     }
 
@@ -79,14 +80,12 @@ export class CanvasView implements Observer {
     }
 
     public updateBecauseWindowIsResized(): void {
-        this.filterCanvas.adaptCanvasSizeToWindowSize();
-        this.imageCanvas.adaptCanvasSizeToWindowSize();
-        this.movementCanvas.adaptCanvasSizeToWindowSize();
-        this.stillCanvas.adaptCanvasSizeToWindowSize();
+        this.movementCanvas.adaptCanvasToWindowResize();
+        this.stillCanvas.adaptCanvasToWindowResize();
+        this.filterCanvas.adaptCanvasToWindowResize();
+        this.imageCanvas.adaptCanvasToWindowResize();
         this.setTheHeightOfTheDiv(this.filterCanvas.height);
 
-        this.imageCanvas.recalculateOffsets();
-        this.imageCanvas.redrawImageToCanvas();
         this.redrawModel();
     }
 
