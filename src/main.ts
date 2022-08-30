@@ -42,6 +42,14 @@ document.getElementById('zoomIn')
     .addEventListener('click', () => canvasView.zoomIn());
 document.getElementById('zoomOut')
     .addEventListener('click', () => canvasView.zoomOut());
+document.getElementById('panRight')
+    .addEventListener('click', () => canvasView.panRight());
+document.getElementById('panLeft')
+    .addEventListener('click', () => canvasView.panLeft());
+document.getElementById('panUp')
+    .addEventListener('click', () => canvasView.panUp());
+document.getElementById('panDown')
+    .addEventListener('click', () => canvasView.panDown());
 
 
 addEventListener('load', () => canvasView.updateBecauseWindowIsResized());

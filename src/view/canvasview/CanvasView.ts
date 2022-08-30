@@ -80,6 +80,26 @@ export class CanvasView implements Observer {
         this.redrawModel();
     }
 
+    public panRight(): void {
+        this.imageCanvas.panRight();
+        this.redrawModel();
+    }
+
+    public panLeft(): void {
+        this.imageCanvas.panLeft();
+        this.redrawModel();
+    }
+
+    public panUp(): void {
+        this.imageCanvas.panUp();
+        this.redrawModel();
+    }
+
+    public panDown(): void {
+        this.imageCanvas.panDown();
+        this.redrawModel();
+    }
+
     public updateBecauseWindowIsResized(): void {
         this.movementCanvas.adaptCanvasToWindowResize();
         this.stillCanvas.adaptCanvasToWindowResize();
