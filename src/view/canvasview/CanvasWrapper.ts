@@ -1,13 +1,11 @@
 import { Coordinate } from '../../model/shape/Coordinate';
+import { ScaleFactorAndOffset } from './ScaleFactorAndOffset';
 
 export class CanvasWrapper {
 
     protected _canvasElement: HTMLCanvasElement;
     protected _canvasCtx: CanvasRenderingContext2D;
-    protected static _scaleFactor: number;
-    protected static _xOffset: number;
-    protected static _yOffset: number;
-
+    protected static scaleAndOffset: ScaleFactorAndOffset = new ScaleFactorAndOffset();
 
     constructor(canvasId: string) {
         this._canvasElement = document.getElementById(canvasId) as HTMLCanvasElement;
@@ -32,15 +30,19 @@ export class CanvasWrapper {
     }
 
     canvasToImage(canvasCoordinate: Coordinate): Coordinate {
-        const xPart: number = (canvasCoordinate.x - CanvasWrapper._xOffset) / CanvasWrapper._scaleFactor;
-        const yPart: number = (canvasCoordinate.y - CanvasWrapper._yOffset) / CanvasWrapper._scaleFactor;
-        return { x: xPart, y: yPart };
+        return CanvasWrapper.scaleAndOffset.canvasToImage(canvasCoordinate);
     }
 
     imageToCanvas(imageCoordinate: Coordinate): Coordinate {
-        const xPart: number = (imageCoordinate.x * CanvasWrapper._scaleFactor) + CanvasWrapper._xOffset;
-        const yPart: number = (imageCoordinate.y * CanvasWrapper._scaleFactor) + CanvasWrapper._yOffset;
-        return { x: xPart, y: yPart };
+        return CanvasWrapper.scaleAndOffset.imageToCanvas(imageCoordinate);
+    }
+
+    toImageScale(canvasLength: number): number {
+        return CanvasWrapper.scaleAndOffset.toImageScale(canvasLength);
+    }
+
+    toCanvasScale(imageLength: number): number {
+        return CanvasWrapper.scaleAndOffset.toCanvasScale(imageLength);
     }
 
 

@@ -3,7 +3,7 @@ import { Model } from '../../model/Model';
 import { MeassuringShape } from '../../model/MeassuringShape';
 import { Observer } from '../Observer';
 import { CanvasWrapper } from './CanvasWrapper';
-import { ImageCanvasWrapper } from './ImageCanvsaWrapper';
+import { ImageCanvasWrapper } from './ImageCanvasWrapper';
 import { DrawingCanvasWrapper } from './DrawingCanvasWrapper';
 
 export class CanvasView implements Observer {

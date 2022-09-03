@@ -24,15 +24,15 @@ export class ImageFocusPoint {
         this._y = this._image.height / 2;
     }
 
-    public alignHorizontalPartOfFocusToCenterOfImage(): void {
+    public centerHorizontally(): void {
         this._x = this._image.width / 2;
     }
 
-    public alignVerticalPartOfFocusToCenterOfImage(): void {
+    public centerVertically(): void {
         this._y = this._image.height / 2;
     }
 
-    public moveCurrentFocusHorizontally(distance: number): void {
+    public moveHorizontally(distance: number): void {
         this._x += distance;
         if (this._x < 0) {
             this._x = 0;
@@ -42,7 +42,7 @@ export class ImageFocusPoint {
         }
     }
 
-    public moveCurrentFocusVertically(distance: number): void {
+    public moveVertically(distance: number): void {
         this._y += distance;
         if (this._y < 0) {
             this._y = 0;
