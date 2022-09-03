@@ -58,14 +58,17 @@ export class ImageCanvasWrapper extends CanvasWrapper {
     private moveFocusPointToTheLeft(): void { this._imageFocusPoint.moveHorizontally(-this.stepsize); };
     private moveFocusPointUpwards(): void { this._imageFocusPoint.moveVertically(-this.stepsize); };
     private moveFocusPointDownwards(): void { this._imageFocusPoint.moveVertically(this.stepsize); };
+    private oneToOneScale(): void { CanvasWrapper.scaleAndOffset.oneToOneScale(); }
+    private doubleScaleFactor(): void { CanvasWrapper.scaleAndOffset.doubleScaleFactor(); }
+    private halfScaleFactor(): void { CanvasWrapper.scaleAndOffset.halfScaleFactor() }
 
     panRight(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.moveFocusPointToTheRight()); }
     panLeft(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.moveFocusPointToTheLeft()); }
     panUp(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.moveFocusPointUpwards()); }
     panDown(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.moveFocusPointDownwards()); }
-    zoomActualSize(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => CanvasWrapper.scaleAndOffset.oneToOneScale()); }
-    zoomIn(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => CanvasWrapper.scaleAndOffset.doubleScaleFactor()); }
-    zoomOut(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => CanvasWrapper.scaleAndOffset.halfScaleFactor()); }
+    zoomActualSize(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.oneToOneScale()); }
+    zoomIn(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.doubleScaleFactor()); }
+    zoomOut(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.halfScaleFactor()); }
     zoomToFit(): void {
         this.adjustFocusCalculateOffsetAndRedrawImageAfter(
             () => {
@@ -117,10 +120,12 @@ export class ImageCanvasWrapper extends CanvasWrapper {
 
 
     private calculateAndSetOffsets(): void {
-        CanvasWrapper.scaleAndOffset.xOffset = 
-            this.width / 2 - this.toCanvasScale(this._imageFocusPoint.x);
-        CanvasWrapper.scaleAndOffset.yOffset = 
-            this.height / 2 - this.toCanvasScale(this._imageFocusPoint.y);
+        const scaledImageWidthLeftOfFocusPoint: number = this.toCanvasScale(this._imageFocusPoint.x);
+        const scaledImageHeightAboveFocusPoint: number = this.toCanvasScale(this._imageFocusPoint.y);
+        const canvasWidthLeftOfCenter: number = this.width / 2;
+        const canvasHeightAboveCenter: number = this.height / 2;
+        CanvasWrapper.scaleAndOffset.xOffset = canvasWidthLeftOfCenter - scaledImageWidthLeftOfFocusPoint;
+        CanvasWrapper.scaleAndOffset.yOffset = canvasHeightAboveCenter - scaledImageHeightAboveFocusPoint;
     }
 
     private adjustFocuspointHorizontally(): void {
@@ -159,7 +164,6 @@ export class ImageCanvasWrapper extends CanvasWrapper {
         return this.width / 2 - scaledLeftDistance;
     }
 
-    
     private adjustFocuspointVertically(): void {
         if (this.scaledImageIsShorterThanCanvas()) {
             this._imageFocusPoint.centerVertically();

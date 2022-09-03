@@ -37,11 +37,11 @@ export class CanvasWrapper {
         return CanvasWrapper.scaleAndOffset.imageToCanvas(imageCoordinate);
     }
 
-    toImageScale(canvasLength: number): number {
+    protected toImageScale(canvasLength: number): number {
         return CanvasWrapper.scaleAndOffset.toImageScale(canvasLength);
     }
 
-    toCanvasScale(imageLength: number): number {
+    protected toCanvasScale(imageLength: number): number {
         return CanvasWrapper.scaleAndOffset.toCanvasScale(imageLength);
     }
 

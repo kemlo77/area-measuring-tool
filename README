@@ -31,10 +31,6 @@ Using 4 canvas layers:
 * Background layer for non moving shapes. May contain a lot of elements that are not redrawn so much.
 * Foreground layer for moving shapes. Few elements that are redrawn the most.
 
-# TODO
+Using Gauss shoelace formula to calculate area of non complex polygons.
 
-* Behövs filter-layer, jag kanske kan ändra opacity på still-layer istället
 
-* Behövs Router? eller borde jag döpa om den klassen?
-
-* Zoom-hanteringen i canvaswrapper borde kanske ligga i en egen klass? Refaktorisera iaf.
