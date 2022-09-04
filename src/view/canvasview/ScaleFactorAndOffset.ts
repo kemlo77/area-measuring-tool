@@ -26,6 +26,10 @@ export class ScaleFactorAndOffset {
         this._yOffset = height;
     }
 
+    get scaleFactor(): number {
+        return this._scaleFactor;
+    }
+
     oneToOneScale(): void {
         this._scaleFactor = 1;
     }

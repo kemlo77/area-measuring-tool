@@ -12,7 +12,7 @@ export class ImageCanvasWrapper extends CanvasWrapper {
     }
 
     private get stepsize(): number {
-        return this._image.width * 0.1;
+        return this._image.width * 0.1 / CanvasWrapper.scaleAndOffset.scaleFactor;
     }
 
     //overriding super class method
@@ -80,9 +80,9 @@ export class ImageCanvasWrapper extends CanvasWrapper {
 
     private adjustScalefactorForImageToFit(): void {
         if (this.theImageIsProportionallyWiderThanTheCanvas()) {
-            CanvasWrapper.scaleAndOffset.calculateNewScaleFactor(this.width,this._image.width);
+            CanvasWrapper.scaleAndOffset.calculateNewScaleFactor(this.width, this._image.width);
         } else {
-            CanvasWrapper.scaleAndOffset.calculateNewScaleFactor(this.height,this._image.height);
+            CanvasWrapper.scaleAndOffset.calculateNewScaleFactor(this.height, this._image.height);
         }
     }
 
@@ -154,7 +154,7 @@ export class ImageCanvasWrapper extends CanvasWrapper {
 
     private distanceBetweenImageAndRightEdge(): number {
         const imageWidthRightOfFocusPoint: number = this._image.width - this._imageFocusPoint.x;
-        const scaledRightDistance: number =this.toCanvasScale(imageWidthRightOfFocusPoint);
+        const scaledRightDistance: number = this.toCanvasScale(imageWidthRightOfFocusPoint);
         return this.width / 2 - scaledRightDistance;
     }
 
