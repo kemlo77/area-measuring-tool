@@ -25,7 +25,19 @@ export class ImageCanvasWrapper extends CanvasWrapper {
     public setImageInCanvas(image: HTMLImageElement): void {
         this._image = image;
         this._imageFocusPoint = new ImageFocusPoint(image);
+        if(this.imageIsNarrowerThanCanvas() && this.imageIsShorterThanCanvas()) {
+            this.zoomActualSize();
+            return;
+        }
         this.zoomToFit();
+    }
+
+    private imageIsNarrowerThanCanvas(): boolean {
+        return this.width > this._image.width;
+    }
+
+    private imageIsShorterThanCanvas(): boolean {
+        return this.height > this._image.height;
     }
 
     public resetImage(): void {
