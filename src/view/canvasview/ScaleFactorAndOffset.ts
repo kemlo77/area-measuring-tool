@@ -1,14 +1,50 @@
 import { Coordinate } from '../../model/shape/Coordinate';
+import { ImageCanvasWrapper } from './ImageCanvasWrapper';
 
 export class ScaleFactorAndOffset {
 
     private _scaleFactor: number = 1;
     private _xOffset: number = 0;
     private _yOffset: number = 0;
+    private _zoomToFitScaleFactor: number;
+    private _canvas: ImageCanvasWrapper;
+    private _image: HTMLImageElement;
 
-    calculateNewScaleFactor(canvasDist: number, imageDist: number): void {
-        this._scaleFactor = canvasDist / imageDist;
+    constructor(image?: HTMLImageElement, canvas?: ImageCanvasWrapper) {
+        this._image = image;
+        this._canvas = canvas;
+        this.calculateZoomToFitScaleFactor();
     }
+
+    private calculateZoomToFitScaleFactor(): void {
+        if (this.thereIsNoImageOrCanvas()) {
+            this._zoomToFitScaleFactor = 1;
+            return;
+        }
+
+        if (this.theImageIsProportionallyWiderThanTheCanvas()) {
+            this._zoomToFitScaleFactor = this._canvas.width / this._image.width;
+            return;
+        }
+
+        this._zoomToFitScaleFactor = this._canvas.height / this._image.height;
+        return;
+    }
+
+    private thereIsNoImageOrCanvas(): boolean {
+        return !(this._image && this._canvas);
+    }
+
+    private theImageIsProportionallyWiderThanTheCanvas(): boolean {
+        const imageRatio: number = this._image.width / this._image.height;
+        const canvasRatio: number = this._canvas.width / this._canvas.height;
+        return imageRatio > canvasRatio;
+    }
+
+    canvasHasBeenResized(): void {
+        this.calculateZoomToFitScaleFactor();
+    }
+
 
     get xOffset(): number {
         return this._xOffset;
@@ -35,23 +71,21 @@ export class ScaleFactorAndOffset {
     }
 
     doubleScaleFactor(): void {
-        if (this._scaleFactor < 4) {
-            this._scaleFactor *= 2;
+        this._scaleFactor *= 2;
+        if (this._scaleFactor > 4) {
+            this._scaleFactor = 4;
         }
-        //TODO: om man försöker minska över, sätt till 4
     }
 
     halfScaleFactor(): void {
-        if (this._scaleFactor > 0.25) {
-            this._scaleFactor /= 2;
+        this._scaleFactor /= 2;
+        if (this._scaleFactor < 0.25) {
+            this._scaleFactor = 0.25;
         }
-        //TODO: om man försöker minska under 1/4, sätt till 1/4
     }
 
-    resetScaleAndOffsets(): void {
-        this._scaleFactor = 1;
-        this._xOffset = 0;
-        this._yOffset = 0;
+    toFitScaleFactor(): void {
+        this._scaleFactor = this._zoomToFitScaleFactor;
     }
 
     canvasToImage(canvasCoordinate: Coordinate): Coordinate {
