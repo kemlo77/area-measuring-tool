@@ -20,8 +20,10 @@ export class ImageCanvasWrapper extends CanvasWrapper {
     adaptCanvasToWindowResize(): void {
         super.adaptCanvasToWindowResize();
         CanvasWrapper.scaleAndOffset.canvasHasBeenResized();
-        this.adjustFocusPointAndRecalculateOffsets();
-        this.drawImageToCanvas();
+        if (this._image) {
+            this.adjustFocusPointAndRecalculateOffsets();
+            this.drawImageToCanvas();
+        }
     }
 
     public setImageInCanvas(image: HTMLImageElement): void {
@@ -76,7 +78,7 @@ export class ImageCanvasWrapper extends CanvasWrapper {
     private oneToOneScale(): void { CanvasWrapper.scaleAndOffset.oneToOneScale(); }
     private doubleScaleFactor(): void { CanvasWrapper.scaleAndOffset.doubleScaleFactor(); }
     private halfScaleFactor(): void { CanvasWrapper.scaleAndOffset.halfScaleFactor(); }
-    private adjustScalefactorForImageToFit(): void { CanvasWrapper.scaleAndOffset.toFitScaleFactor(); }
+    private adjustScaleForImageToFit(): void { CanvasWrapper.scaleAndOffset.toFitScaleFactor(); }
 
     panRight(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.moveFocusPointToTheRight()); }
     panLeft(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.moveFocusPointToTheLeft()); }
@@ -85,14 +87,7 @@ export class ImageCanvasWrapper extends CanvasWrapper {
     zoomActualSize(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.oneToOneScale()); }
     zoomIn(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.doubleScaleFactor()); }
     zoomOut(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.halfScaleFactor()); }
-    zoomToFit(): void {
-        this.adjustFocusCalculateOffsetAndRedrawImageAfter(
-            () => {
-                this.adjustScalefactorForImageToFit();
-                this._imageFocusPoint.focusCenterOfImage();
-            }
-        );
-    }
+    zoomToFit(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.adjustScaleForImageToFit()); }
 
 
     private adjustFocusCalculateOffsetAndRedrawImageAfter(panOrZoomAction: any): void {
@@ -107,14 +102,7 @@ export class ImageCanvasWrapper extends CanvasWrapper {
 
 
     private adjustFocusPointAndRecalculateOffsets(desiredNewImageFocusPoint?: Coordinate): void {
-        if (this.thereIsNoImage()) {
-            //TODO: Is this really needed
-            CanvasWrapper.scaleAndOffset = new ScaleFactorAndOffset();
-            return;
-        }
-
         this._imageFocusPoint.ifValidMoveFocusPointHere(desiredNewImageFocusPoint);
-
         this.adjustFocuspointHorizontally();
         this.adjustFocuspointVertically();
 

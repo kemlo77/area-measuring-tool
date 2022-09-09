@@ -7,8 +7,8 @@ export class ScaleFactorAndOffset {
     private _xOffset: number = 0;
     private _yOffset: number = 0;
     private _zoomToFitScaleFactor: number;
-    private _canvas: ImageCanvasWrapper;
     private _image: HTMLImageElement;
+    private _canvas: ImageCanvasWrapper;
 
     constructor(image?: HTMLImageElement, canvas?: ImageCanvasWrapper) {
         this._image = image;
@@ -28,7 +28,6 @@ export class ScaleFactorAndOffset {
         }
 
         this._zoomToFitScaleFactor = this._canvas.height / this._image.height;
-        return;
     }
 
     private thereIsNoImageOrCanvas(): boolean {
