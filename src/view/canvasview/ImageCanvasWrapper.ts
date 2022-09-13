@@ -76,8 +76,8 @@ export class ImageCanvasWrapper extends CanvasWrapper {
     private moveFocusPointUpwards(): void { this._imageFocusPoint.moveVertically(-this.stepsize); };
     private moveFocusPointDownwards(): void { this._imageFocusPoint.moveVertically(this.stepsize); };
     private oneToOneScale(): void { CanvasWrapper.scaleAndOffset.oneToOneScale(); }
-    private doubleScaleFactor(): void { CanvasWrapper.scaleAndOffset.doubleScaleFactor(); }
-    private halfScaleFactor(): void { CanvasWrapper.scaleAndOffset.halfScaleFactor(); }
+    private increaseScaleFactor(): void { CanvasWrapper.scaleAndOffset.increaseScaleFactor(); }
+    private decreaseScaleFactor(): void { CanvasWrapper.scaleAndOffset.decreaseScaleFactor(); }
     private adjustScaleForImageToFit(): void { CanvasWrapper.scaleAndOffset.toFitScaleFactor(); }
 
     panRight(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.moveFocusPointToTheRight()); }
@@ -85,17 +85,26 @@ export class ImageCanvasWrapper extends CanvasWrapper {
     panUp(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.moveFocusPointUpwards()); }
     panDown(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.moveFocusPointDownwards()); }
     zoomActualSize(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.oneToOneScale()); }
-    zoomIn(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.doubleScaleFactor()); }
-    zoomOut(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.halfScaleFactor()); }
+    zoomIn(canvasCoordinate?: Coordinate): void {
+        if (CanvasWrapper.scaleAndOffset.maxScaleFactorReached) {
+            return;
+        }
+        let imageCoordinate: Coordinate = null;
+        if (canvasCoordinate) {
+            imageCoordinate = this.canvasToImage(canvasCoordinate);
+        }
+        this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.increaseScaleFactor(), imageCoordinate);
+    }
+    zoomOut(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.decreaseScaleFactor()); }
     zoomToFit(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.adjustScaleForImageToFit()); }
 
 
-    private adjustFocusCalculateOffsetAndRedrawImageAfter(panOrZoomAction: any): void {
+    private adjustFocusCalculateOffsetAndRedrawImageAfter(panOrZoomAction: any, imageCoordinate?: Coordinate): void {
         if (this.thereIsNoImage()) {
             return;
         }
         panOrZoomAction();
-        this.adjustFocusPointAndRecalculateOffsets();
+        this.adjustFocusPointAndRecalculateOffsets(imageCoordinate);
         this.drawImageToCanvas();
     }
 
@@ -110,8 +119,6 @@ export class ImageCanvasWrapper extends CanvasWrapper {
     }
 
 
-
-    //TODO: feature envy? Borde kanske ligga i ScaleFactorAndOffset
     private calculateAndSetOffsets(): void {
         const scaledImageWidthLeftOfFocusPoint: number = this.toCanvasScale(this._imageFocusPoint.x);
         const scaledImageHeightAboveFocusPoint: number = this.toCanvasScale(this._imageFocusPoint.y);

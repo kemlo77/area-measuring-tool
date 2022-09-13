@@ -56,8 +56,8 @@ export class CanvasView implements Observer {
         this.imageCanvas.resetImage();
     }
 
-    public convertCanvasCoordinateToImageCoordinate(coordinate: Coordinate): Coordinate {
-        return this.imageCanvas.canvasToImage(coordinate);
+    public convertCanvasCoordinateToImageCoordinate(canvasCoordinate: Coordinate): Coordinate {
+        return this.imageCanvas.canvasToImage(canvasCoordinate);
     }
 
     public zoomToFit(): void {
@@ -70,8 +70,8 @@ export class CanvasView implements Observer {
         this.redrawModel();
     }
 
-    public zoomIn(): void {
-        this.imageCanvas.zoomIn();
+    public zoomIn(canvasCoordinate?: Coordinate): void {
+        this.imageCanvas.zoomIn(canvasCoordinate);
         this.redrawModel();
     }
 

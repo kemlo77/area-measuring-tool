@@ -4,6 +4,8 @@ import { ImageCanvasWrapper } from './ImageCanvasWrapper';
 export class ScaleFactorAndOffset {
 
     private _scaleFactor: number = 1;
+    private readonly _maxScaleFactor: number = 4;
+    private readonly _minScaleFactor: number = 0.25;
     private _xOffset: number = 0;
     private _yOffset: number = 0;
     private _zoomToFitScaleFactor: number;
@@ -65,21 +67,25 @@ export class ScaleFactorAndOffset {
         return this._scaleFactor;
     }
 
+    get maxScaleFactorReached(): boolean {
+        return this._scaleFactor === this._maxScaleFactor;
+    }
+
     oneToOneScale(): void {
         this._scaleFactor = 1;
     }
 
-    doubleScaleFactor(): void {
-        this._scaleFactor *= 2;
-        if (this._scaleFactor > 4) {
-            this._scaleFactor = 4;
+    increaseScaleFactor(): void {
+        this._scaleFactor *= 1.25;
+        if (this._scaleFactor > this._maxScaleFactor) {
+            this._scaleFactor = this._maxScaleFactor;
         }
     }
 
-    halfScaleFactor(): void {
-        this._scaleFactor /= 2;
-        if (this._scaleFactor < 0.25) {
-            this._scaleFactor = 0.25;
+    decreaseScaleFactor(): void {
+        this._scaleFactor /= 1.25;
+        if (this._scaleFactor < this._minScaleFactor) {
+            this._scaleFactor = this._minScaleFactor;
         }
     }
 
