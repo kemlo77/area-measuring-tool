@@ -85,24 +85,29 @@ export class ImageCanvasWrapper extends CanvasWrapper {
     panUp(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.moveFocusPointUpwards()); }
     panDown(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.moveFocusPointDownwards()); }
     zoomActualSize(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.oneToOneScale()); }
-    zoomIn(canvasCoordinate?: Coordinate): void {
+    zoomIn(mousePositionOnCanvas?: Coordinate): void {
         if (CanvasWrapper.scaleAndOffset.maxScaleFactorReached) {
             return;
         }
-        let imageCoordinate: Coordinate = null;
-        if (canvasCoordinate) {
-            imageCoordinate = this.canvasToImage(canvasCoordinate);
-        }
-        this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.increaseScaleFactor(), imageCoordinate);
+
+        this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.increaseScaleFactor(), mousePositionOnCanvas);
     }
     zoomOut(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.decreaseScaleFactor()); }
     zoomToFit(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.adjustScaleForImageToFit()); }
 
 
-    private adjustFocusCalculateOffsetAndRedrawImageAfter(panOrZoomAction: any, imageCoordinate?: Coordinate): void {
+    private adjustFocusCalculateOffsetAndRedrawImageAfter(
+        panOrZoomAction: any,
+        mouseCanvasPosition?: Coordinate
+    ): void {
         if (this.thereIsNoImage()) {
             return;
         }
+        let imageCoordinate: Coordinate = null;
+        if (mouseCanvasPosition) {
+            imageCoordinate = this.canvasToImage(mouseCanvasPosition);
+        }
+
         panOrZoomAction();
         this.adjustFocusPointAndRecalculateOffsets(imageCoordinate);
         this.drawImageToCanvas();

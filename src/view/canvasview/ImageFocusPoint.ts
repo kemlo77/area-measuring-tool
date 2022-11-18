@@ -53,13 +53,13 @@ export class ImageFocusPoint {
     }
 
     public ifValidMoveFocusPointHere(coordinate: Coordinate): void {
-        if (this.newImageFocusPointIsValid(coordinate)) {
+        if (this.coordinateIsWithinImageBounds(coordinate)) {
             this._x = coordinate.x;
             this._y = coordinate.y;
         }
     }
 
-    private newImageFocusPointIsValid(coordinate?: Coordinate): boolean {
+    private coordinateIsWithinImageBounds(coordinate?: Coordinate): boolean {
         if (!coordinate) {
             return false;
         }
