@@ -24,10 +24,6 @@ export class SegmentedMeassuringShape extends MeassuringShape {
         return this._hasArea;
     }
 
-    set hasArea(hasArea: boolean) {
-        this._hasArea = hasArea;
-    }
-
     get area(): number {
         return this._interactiveSegmentShape.area * this.areaValueSign;
     }

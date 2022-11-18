@@ -1,11 +1,12 @@
 import { AreaValueSign } from './AreaValueSign';
+import { Color } from './Color';
 import { Coordinate } from './shape/Coordinate';
 
 export abstract class MeassuringShape {
 
     private static initializedObjects: number = 0;
     private _name: string;
-    private _color: string = '0,0,0';
+    private _color: Color = new Color(0, 0, 0);
     private _areaValueSign: AreaValueSign = AreaValueSign.POSITIVE;
 
     constructor() {
@@ -20,12 +21,11 @@ export abstract class MeassuringShape {
         this._name = newName;
     }
 
-    get color(): string {
+    get color(): Color {
         return this._color;
     }
 
-    set color(color: string) {
-        // TODO: kolla att strängen som kommer har rätt format
+    set color(color: Color) {
         this._color = color;
     }
 

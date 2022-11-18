@@ -1,3 +1,4 @@
+import { Color } from '../../model/Color';
 import { Coordinate } from '../../model/shape/Coordinate';
 import { CanvasWrapper } from './CanvasWrapper';
 
@@ -11,10 +12,10 @@ export class DrawingCanvasWrapper extends CanvasWrapper {
         this._canvasCtx.clearRect(p1.x - 10, p1.y - 10, width + 20, height + 20);
     }
 
-    drawLine(p1: Coordinate, p2: Coordinate, width: number, lineColor: string): void {
+    drawLine(p1: Coordinate, p2: Coordinate, width: number, lineColor: Color): void {
         const convertedP1: Coordinate = this.imageToCanvas(p1);
         const convertedP2: Coordinate = this.imageToCanvas(p2);
-        this._canvasCtx.strokeStyle = 'rgba(' + lineColor + ',1)';
+        this._canvasCtx.strokeStyle = lineColor.toRgbaString();
         this._canvasCtx.beginPath();
         this._canvasCtx.lineWidth = width;
         this._canvasCtx.lineCap = 'round';
@@ -23,10 +24,10 @@ export class DrawingCanvasWrapper extends CanvasWrapper {
         this._canvasCtx.stroke();
     }
 
-    drawDashedLine(p1: Coordinate, p2: Coordinate, width: number, lineColor: string, pattern: number[]): void {
+    drawDashedLine(p1: Coordinate, p2: Coordinate, width: number, lineColor: Color, pattern: number[]): void {
         const convertedP1: Coordinate = this.imageToCanvas(p1);
         const convertedP2: Coordinate = this.imageToCanvas(p2);
-        this._canvasCtx.strokeStyle = 'rgba(' + lineColor + ',1)';
+        this._canvasCtx.strokeStyle = lineColor.toRgbString();
         this._canvasCtx.beginPath();
         this._canvasCtx.setLineDash(pattern);
         this._canvasCtx.lineWidth = width;
@@ -37,23 +38,25 @@ export class DrawingCanvasWrapper extends CanvasWrapper {
         this._canvasCtx.setLineDash([]);
     }
 
-    private drawDot(dot2paint: Coordinate, diam: number, rgbIn: string): void {
-        this._canvasCtx.fillStyle = 'rgba(' + rgbIn + ',1)';
+    private drawDot(dot2paint: Coordinate, diam: number, rgbIn: Color): void {
+        this._canvasCtx.fillStyle = rgbIn.toRgbString();
         this._canvasCtx.beginPath();
         this._canvasCtx.arc(dot2paint.x, dot2paint.y, diam, 0, Math.PI * 2, true);
         this._canvasCtx.closePath();
         this._canvasCtx.fill();
     }
 
-    drawHollowDot(dot2paint: Coordinate, outerColor: string): void {
+    drawHollowDot(dot2paint: Coordinate, outerColor: Color): void {
         const convertedDot: Coordinate = this.imageToCanvas(dot2paint);
         this.drawDot(convertedDot, 4, outerColor);
-        this.drawDot(convertedDot, 2, '255,255,255');
+        this.drawDot(convertedDot, 2, Color.white);
     }
 
-    fillPolygon(vertices: Coordinate[], color: string): void {
+    fillPolygon(vertices: Coordinate[], color: Color): void {
         const convertedVertices: Coordinate[] = vertices.map(v => this.imageToCanvas(v));
-        this._canvasCtx.fillStyle = 'rgba(' + color + ',0.1)';
+        //TODO: this should probably be a function in Color-class
+        const colorWithAlphaAtTenPercent: string = `rgba(${color.red}, ${color.green}, ${color.blue}, 0.1)`;
+        this._canvasCtx.fillStyle = colorWithAlphaAtTenPercent;
         this._canvasCtx.beginPath();
         const startPoint: Coordinate = convertedVertices.shift();
         this._canvasCtx.moveTo(startPoint.x, startPoint.y);

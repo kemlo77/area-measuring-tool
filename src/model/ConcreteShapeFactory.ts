@@ -1,5 +1,4 @@
 import { MeassuringShape } from './MeassuringShape';
-
 import { Line } from './shape/segmentShapes/line/Line';
 import { Polygon } from './shape/segmentShapes/polygon/Polygon';
 import { FilledSegmentsPainter } from '../view/canvasview/segmentPainters/FilledSegmentsPainter';
@@ -9,6 +8,7 @@ import { SegmentedMeassuringShapeBuilder } from './SegmentedMeassuringShapeBuild
 import { DashedSegmentsPainter } from '../view/canvasview/segmentPainters/DashedSegmentsPainter';
 import { ShapeFactory } from './ShapeFactory';
 import { RegularSegmentsPainter } from '../view/canvasview/segmentPainters/RegularSegmentsPainter';
+import { Color } from './Color';
 
 export class ConcreteShapeFactory implements ShapeFactory {
 
@@ -18,21 +18,27 @@ export class ConcreteShapeFactory implements ShapeFactory {
             return new SegmentedMeassuringShapeBuilder(new Polygon(), true)
                 .designatedPainter(new RegularSegmentsPainter())
                 .build();
-        } else if (name === 'NegativePolygonArea') {
+        }
+
+        if (name === 'NegativePolygonArea') {
             return new SegmentedMeassuringShapeBuilder(new Polygon, true)
-                .color('128,0,0')
+                .color(new Color(128, 0, 0))
                 .areaValueSign(AreaValueSign.NEGATIVE)
                 .designatedPainter(new FilledSegmentsPainter())
                 .build();
-        } else if (name === 'Ruler') {
+        }
+
+        if (name === 'Ruler') {
             return new SegmentedMeassuringShapeBuilder(new Line(), false)
-                .color('255,255,0')
+                .color(new Color(255, 255, 0))
                 .designatedPainter(new StripedSegmentsPainter())
                 .build();
-        } else if (name === 'SymmetryLine') {
+        }
+
+        if (name === 'SymmetryLine') {
             return new SegmentedMeassuringShapeBuilder(new Line(), false)
                 .designatedPainter(new DashedSegmentsPainter())
-                .color('0,80,120')
+                .color(new Color(0, 80, 120))
                 .build();
         }
 
