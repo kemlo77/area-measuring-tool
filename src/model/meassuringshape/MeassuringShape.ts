@@ -5,13 +5,20 @@ import { Coordinate } from './shape/Coordinate';
 
 export abstract class MeassuringShape {
 
-    private static initializedObjects: number = 0;
     private _name: Name;
-    private _color: Color = new Color(0, 0, 0);
-    private _areaValueSign: AreaValueSign = AreaValueSign.POSITIVE;
+    private _color: Color;
+    private _areaValueSign: AreaValueSign;
+    private _id: number;
 
     constructor() {
-        this._name = new Name('Shape_' + MeassuringShape.initializedObjects++);
+        this._name = new Name('Shape');
+        this._color = new Color(0, 0, 0);
+        this._areaValueSign = AreaValueSign.POSITIVE;
+        this._id = Date.now();
+    }
+
+    get id(): number {
+        return this._id;
     }
 
     get name(): Name {

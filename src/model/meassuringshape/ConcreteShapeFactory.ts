@@ -14,18 +14,23 @@ import { Name } from './Name';
 
 export class ConcreteShapeFactory implements ShapeFactory {
 
+    private static createdPositivePolygons: number = 1;
+    private static createdNegativePolygons: number = 1;
+    private static createdRulers: number = 1;
+    private static createdSymmetryLines: number = 1;
+
     getShape(name: string): MeassuringShape {
 
         if (name === 'PositivePolygonArea') {
             return new SegmentedMeassuringShapeBuilder(new Polygon(), true)
-                .name(new Name('positive polygon area'))
+                .name(new Name('positive polygon area ' + ConcreteShapeFactory.createdPositivePolygons++))
                 .designatedPainter(new RegularSegmentsPainter())
                 .build();
         }
 
         if (name === 'NegativePolygonArea') {
             return new SegmentedMeassuringShapeBuilder(new Polygon, true)
-                .name(new Name('negative polygon area'))
+                .name(new Name('negative polygon area ' + ConcreteShapeFactory.createdNegativePolygons++))
                 .color(new Color(128, 0, 0))
                 .areaValueSign(AreaValueSign.NEGATIVE)
                 .designatedPainter(new FilledSegmentsPainter())
@@ -34,7 +39,7 @@ export class ConcreteShapeFactory implements ShapeFactory {
 
         if (name === 'Ruler') {
             return new SegmentedMeassuringShapeBuilder(new Line(), false)
-                .name(new Name('ruler'))
+                .name(new Name('ruler ' + ConcreteShapeFactory.createdRulers++))
                 .color(new Color(255, 255, 0))
                 .designatedPainter(new StripedSegmentsPainter())
                 .build();
@@ -42,7 +47,7 @@ export class ConcreteShapeFactory implements ShapeFactory {
 
         if (name === 'SymmetryLine') {
             return new SegmentedMeassuringShapeBuilder(new Line(), false)
-                .name(new Name('symmetry line'))
+                .name(new Name('symmetry line ' + ConcreteShapeFactory.createdSymmetryLines++))
                 .designatedPainter(new DashedSegmentsPainter())
                 .color(new Color(0, 80, 120))
                 .build();
