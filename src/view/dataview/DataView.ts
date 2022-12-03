@@ -3,6 +3,7 @@ import { Model } from '../../model/Model';
 import { Coordinate } from '../../model/meassuringshape/shape/Coordinate';
 import { Observer } from '../Observer';
 import { ViewScaler } from './ViewScaler';
+import { Name } from '../../model/meassuringshape/Name';
 
 export class DataView implements Observer {
 
@@ -105,8 +106,19 @@ export class DataView implements Observer {
     }
 
     private createNameInput(shape: MeassuringShape): HTMLInputElement {
-        const createdNameInput: HTMLInputElement = this.createTextInput(shape.name);
-        createdNameInput.addEventListener('input', (event) => { shape.name = (<HTMLInputElement>event.target).value; });
+        const createdNameInput: HTMLInputElement = this.createTextInput(shape.name.value);
+        createdNameInput.addEventListener('input', (event) => {
+            const currentValue: string = (<HTMLInputElement>event.target).value.trim();
+            if (currentValue.length > 40) {
+                alert('Max name length is 40 characters');
+                return;
+            }
+            if (currentValue.length == 0) {
+                shape.name = new Name('default name');
+                return;
+            }
+            shape.name = new Name(currentValue);
+        });
         return createdNameInput;
     }
 

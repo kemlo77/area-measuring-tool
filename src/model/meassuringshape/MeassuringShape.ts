@@ -1,23 +1,24 @@
 import { AreaValueSign } from './AreaValueSign';
 import { Color } from './Color';
+import { Name } from './Name';
 import { Coordinate } from './shape/Coordinate';
 
 export abstract class MeassuringShape {
 
     private static initializedObjects: number = 0;
-    private _name: string;
+    private _name: Name;
     private _color: Color = new Color(0, 0, 0);
     private _areaValueSign: AreaValueSign = AreaValueSign.POSITIVE;
 
     constructor() {
-        this._name = 'Shape_' + MeassuringShape.initializedObjects++;
+        this._name = new Name('Shape_' + MeassuringShape.initializedObjects++);
     }
 
-    get name(): string {
+    get name(): Name {
         return this._name;
     }
 
-    set name(newName: string) {
+    set name(newName: Name) {
         this._name = newName;
     }
 

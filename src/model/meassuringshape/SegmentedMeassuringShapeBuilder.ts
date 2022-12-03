@@ -1,6 +1,7 @@
 import { SegmentsPainter } from '../../view/canvasview/segmentPainters/SegmentsPainter';
 import { AreaValueSign } from './AreaValueSign';
 import { Color } from './Color';
+import { Name } from './Name';
 import { SegmentedMeassuringShape } from './SegmentedMeassuringShape';
 import { InteractiveSegmentShape } from './shape/segmentShapes/InteractiveSegmentShape';
 
@@ -19,6 +20,11 @@ export class SegmentedMeassuringShapeBuilder {
 
     color(color: Color): SegmentedMeassuringShapeBuilder {
         this._segmentMeassuringShape.color = color;
+        return this;
+    }
+
+    name(name: Name): SegmentedMeassuringShapeBuilder {
+        this._segmentMeassuringShape.name = name;
         return this;
     }
 
