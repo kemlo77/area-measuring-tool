@@ -1,5 +1,6 @@
 import { expect } from 'chai';
-import { Polygon } from '../../../../../src/model/shape/segmentShapes/polygon/Polygon';
+import { Polygon } from '../../../../../../src/model/meassuringshape/shape/segmentShapes/polygon/Polygon';
+
 
 let rectangle: Polygon;
 
@@ -37,7 +38,7 @@ describe('Polygon', () => {
     });
 
     it('constructor with argument null', () => {
-        const rectangle: Polygon = new Polygon(null);
+        const rectangle: Polygon = new Polygon(undefined);
         expect(rectangle.isClosed).to.equal(false);
         expect(rectangle.numberOfVertices).to.equal(0);
     });

@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { Line } from '../../../../../src/model/shape/segmentShapes/line/Line';
-import { Point } from '../../../../../src/model/shape/Point';
+import { Point } from '../../../../../../src/model/meassuringshape/shape/Point';
+import { Line } from '../../../../../../src/model/meassuringshape/shape/segmentShapes/line/Line';
 
 
 describe('Line', () => {

@@ -1,11 +1,11 @@
-import { Coordinate } from '../../../model/shape/Coordinate';
+import { Coordinate } from '../../../model/meassuringshape/shape/Coordinate';
 import { SegmentsPainter } from './SegmentsPainter';
-import { Point } from '../../../model/shape/Point';
-import { SegmentShape } from '../../../model/shape/segmentShapes/SegmentShape';
-import { Segment } from '../../../model/shape/segmentShapes/Segment';
+import { Point } from '../../../model/meassuringshape/shape/Point';
+import { SegmentShape } from '../../../model/meassuringshape/shape/segmentShapes/SegmentShape';
+import { Segment } from '../../../model/meassuringshape/shape/segmentShapes/Segment';
 import { CanvasWrapper } from '../CanvasWrapper';
 import { DrawingCanvasWrapper } from '../DrawingCanvasWrapper';
-import { Color } from '../../../model/Color';
+import { Color } from '../../../model/meassuringshape/Color';
 
 export abstract class AbstractSegmentsPainter implements SegmentsPainter {
 

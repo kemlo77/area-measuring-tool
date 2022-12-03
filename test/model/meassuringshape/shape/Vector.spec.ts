@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { Point } from '../../../src/model/shape/Point';
-import { Vector } from '../../../src/model/shape/Vector';
+import { Point } from '../../../../src/model/meassuringshape/shape/Point';
+import { Vector } from '../../../../src/model/meassuringshape/shape/Vector';
 
 
 describe('Vector', () => {

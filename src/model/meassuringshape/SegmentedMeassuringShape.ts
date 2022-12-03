@@ -1,4 +1,4 @@
-import { SegmentsPainter } from '../view/canvasview/segmentPainters/SegmentsPainter';
+import { SegmentsPainter } from '../../view/canvasview/segmentPainters/SegmentsPainter';
 import { MeassuringShape } from './MeassuringShape';
 import { Coordinate } from './shape/Coordinate';
 import { InteractiveSegmentShape } from './shape/segmentShapes/InteractiveSegmentShape';

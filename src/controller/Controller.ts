@@ -1,5 +1,5 @@
 import { Model } from '../model/Model';
-import { Coordinate } from '../model/shape/Coordinate';
+import { Coordinate } from '../model/meassuringshape/shape/Coordinate';
 import { CanvasView } from '../view/canvasview/CanvasView';
 
 export class Controller {

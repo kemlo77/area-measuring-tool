@@ -1,6 +1,6 @@
-import { Coordinate } from '../../model/shape/Coordinate';
+import { Coordinate } from '../../model/meassuringshape/shape/Coordinate';
 import { Model } from '../../model/Model';
-import { MeassuringShape } from '../../model/MeassuringShape';
+import { MeassuringShape } from '../../model/meassuringshape/MeassuringShape';
 import { Observer } from '../Observer';
 import { CanvasWrapper } from './CanvasWrapper';
 import { ImageCanvasWrapper } from './ImageCanvasWrapper';

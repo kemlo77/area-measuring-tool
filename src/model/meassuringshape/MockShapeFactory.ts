@@ -1,9 +1,10 @@
 import { MeassuringShape } from './MeassuringShape';
 import { Polygon } from './shape/segmentShapes/polygon/Polygon';
-import { MockSegmentsPainter } from '../view/canvasview/segmentPainters/MockSegmentsPainter';
+import { MockSegmentsPainter } from '../../view/canvasview/segmentPainters/MockSegmentsPainter';
 import { SegmentedMeassuringShapeBuilder } from './SegmentedMeassuringShapeBuilder';
 import { ShapeFactory } from './ShapeFactory';
 import { Line } from './shape/segmentShapes/line/Line';
+
 
 export class MockShapeFactory implements ShapeFactory {
 

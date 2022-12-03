@@ -1,13 +1,12 @@
 import { expect } from 'chai';
-import { Model } from '../../src/model/Model';
-import { MockShapeFactory } from '../../src/model/MockShapeFactory';
-import { SegmentedMeassuringShapeBuilder } from '../../src/model/SegmentedMeassuringShapeBuilder';
-import { AreaValueSign } from '../../src/model/AreaValueSign';
-import { MockSegmentsPainter } from '../../src/view/canvasview/segmentPainters/MockSegmentsPainter';
-import { SegmentedMeassuringShape } from '../../src/model/SegmentedMeassuringShape';
-import { Polygon } from '../../src/model/shape/segmentShapes/polygon/Polygon';
-import { InteractiveSegmentShape } from '../../src/model/shape/segmentShapes/InteractiveSegmentShape';
-import { Color } from '../../src/model/Color';
+import { SegmentedMeassuringShapeBuilder } from '../../../src/model/meassuringshape/SegmentedMeassuringShapeBuilder';
+import { AreaValueSign } from '../../../src/model/meassuringshape/AreaValueSign';
+import { MockSegmentsPainter } from '../../../src/view/canvasview/segmentPainters/MockSegmentsPainter';
+import { SegmentedMeassuringShape } from '../../../src/model/meassuringshape/SegmentedMeassuringShape';
+import { Polygon } from '../../../src/model/meassuringshape/shape/segmentShapes/polygon/Polygon';
+import { InteractiveSegmentShape }
+    from '../../../src/model/meassuringshape/shape/segmentShapes/InteractiveSegmentShape';
+import { Color } from '../../../src/model/meassuringshape/Color';
 
 
 describe('SegmentedMeassuringShapeBuilder', () => {

@@ -1,8 +1,9 @@
-import { SegmentsPainter } from '../view/canvasview/segmentPainters/SegmentsPainter';
+import { SegmentsPainter } from '../../view/canvasview/segmentPainters/SegmentsPainter';
 import { AreaValueSign } from './AreaValueSign';
 import { Color } from './Color';
 import { SegmentedMeassuringShape } from './SegmentedMeassuringShape';
 import { InteractiveSegmentShape } from './shape/segmentShapes/InteractiveSegmentShape';
+
 
 export class SegmentedMeassuringShapeBuilder {
     private readonly _segmentMeassuringShape: SegmentedMeassuringShape;

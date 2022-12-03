@@ -3,7 +3,7 @@
     "ts"
   ],
   "reporter": "spec",
-  "files": "test/**/*.ts",
+  "files": "test/**/*.spec.ts",
   "require": [
     "ts-node/register",
     "source-map-support/register"

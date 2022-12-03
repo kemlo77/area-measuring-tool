@@ -1,6 +1,6 @@
-import { Color } from '../../../model/Color';
-import { Coordinate } from '../../../model/shape/Coordinate';
-import { SegmentShape } from '../../../model/shape/segmentShapes/SegmentShape';
+import { Color } from '../../../model/meassuringshape/Color';
+import { Coordinate } from '../../../model/meassuringshape/shape/Coordinate';
+import { SegmentShape } from '../../../model/meassuringshape/shape/segmentShapes/SegmentShape';
 
 export interface SegmentsPainter {
     drawStill(segmentShape: SegmentShape, color: Color): void;

@@ -1,5 +1,6 @@
 import { expect } from 'chai';
-import { Polygon } from '../../../../../src/model/shape/segmentShapes/polygon/Polygon';
+import { Polygon } from '../../../../../../src/model/meassuringshape/shape/segmentShapes/polygon/Polygon';
+
 
 
 describe('Polygon - unselected', () => {

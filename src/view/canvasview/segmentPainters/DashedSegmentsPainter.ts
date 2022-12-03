@@ -1,5 +1,5 @@
-import { Color } from '../../../model/Color';
-import { Segment } from '../../../model/shape/segmentShapes/Segment';
+import { Color } from '../../../model/meassuringshape/Color';
+import { Segment } from '../../../model/meassuringshape/shape/segmentShapes/Segment';
 import { DrawingCanvasWrapper } from '../DrawingCanvasWrapper';
 import { AbstractSegmentsPainter } from './AbstractSegmentsPainter';
 

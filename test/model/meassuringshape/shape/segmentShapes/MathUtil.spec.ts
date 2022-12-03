@@ -1,8 +1,7 @@
 import { expect } from 'chai';
-import { Point } from '../../../../src/model/shape/Point';
-import { MathService } from '../../../../src/model/shape/segmentShapes/Math.service';
-import { Segment } from '../../../../src/model/shape/segmentShapes/Segment';
-
+import { Point } from '../../../../../src/model/meassuringshape/shape/Point';
+import { MathService } from '../../../../../src/model/meassuringshape/shape/segmentShapes/Math.service';
+import { Segment } from '../../../../../src/model/meassuringshape/shape/segmentShapes/Segment';
 
 describe('MathService', () => {
 

@@ -1,4 +1,4 @@
-import { Coordinate } from './model/shape/Coordinate';
+import { Coordinate } from './model/meassuringshape/shape/Coordinate';
 import { Controller } from './controller/Controller';
 
 export class Router {

@@ -1,7 +1,6 @@
 import { expect } from 'chai';
-import { Line } from '../../../../../src/model/shape/segmentShapes/line/Line';
-import { Segment } from '../../../../../src/model/shape/segmentShapes/Segment';
-
+import { Line } from '../../../../../../src/model/meassuringshape/shape/segmentShapes/line/Line';
+import { Segment } from '../../../../../../src/model/meassuringshape/shape/segmentShapes/Segment';
 
 
 function getLineInStateUnselected(): Line {

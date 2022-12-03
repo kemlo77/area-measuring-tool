@@ -1,5 +1,5 @@
-import { Color } from '../../model/Color';
-import { Coordinate } from '../../model/shape/Coordinate';
+import { Color } from '../../model/meassuringshape/Color';
+import { Coordinate } from '../../model/meassuringshape/shape/Coordinate';
 import { CanvasWrapper } from './CanvasWrapper';
 
 export class DrawingCanvasWrapper extends CanvasWrapper {

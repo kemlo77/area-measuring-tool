@@ -1,6 +1,6 @@
-import { MeassuringShape } from '../../model/MeassuringShape';
+import { MeassuringShape } from '../../model/meassuringshape/MeassuringShape';
 import { Model } from '../../model/Model';
-import { Coordinate } from '../../model/shape/Coordinate';
+import { Coordinate } from '../../model/meassuringshape/shape/Coordinate';
 import { Observer } from '../Observer';
 import { ViewScaler } from './ViewScaler';
 

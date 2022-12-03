@@ -1,9 +1,9 @@
 import { Subject } from './Subject';
 import { Observer } from '../view/Observer';
-import { ConcreteShapeFactory } from './ConcreteShapeFactory';
-import { MeassuringShape } from './MeassuringShape';
-import { Coordinate } from './shape/Coordinate';
-import { ShapeFactory } from './ShapeFactory';
+import { ConcreteShapeFactory } from './meassuringshape/ConcreteShapeFactory';
+import { MeassuringShape } from './meassuringshape/MeassuringShape';
+import { Coordinate } from './meassuringshape/shape/Coordinate';
+import { ShapeFactory } from './meassuringshape/ShapeFactory';
 
 type ShapeAction = (shape: MeassuringShape, coordinate: Coordinate) => void;
 

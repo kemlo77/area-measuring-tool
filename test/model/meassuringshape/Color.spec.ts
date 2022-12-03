@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { Color } from '../../src/model/Color';
+import { Color } from '../../../src/model/meassuringshape/Color';
 
 describe('Color', () => {
 

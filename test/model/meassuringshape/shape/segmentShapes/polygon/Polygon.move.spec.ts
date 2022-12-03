@@ -1,7 +1,8 @@
 import { expect } from 'chai';
-import { Polygon } from '../../../../../src/model/shape/segmentShapes/polygon/Polygon';
-import { Point } from '../../../../../src/model/shape/Point';
-import { Segment } from '../../../../../src/model/shape/segmentShapes/Segment';
+import { Point } from '../../../../../../src/model/meassuringshape/shape/Point';
+import { Polygon } from '../../../../../../src/model/meassuringshape/shape/segmentShapes/polygon/Polygon';
+import { Segment } from '../../../../../../src/model/meassuringshape/shape/segmentShapes/Segment';
+
 
 describe('Polygon - move', () => {
 

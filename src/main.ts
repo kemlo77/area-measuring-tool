@@ -5,7 +5,7 @@ import { Controller } from './controller/Controller';
 import { CanvasView } from './view/canvasview/CanvasView';
 import { DataView } from './view/dataview/DataView';
 import { Router } from './Router';
-import { Coordinate } from './model/shape/Coordinate';
+import { Coordinate } from './model/meassuringshape/shape/Coordinate';
 
 const model: Model = new Model();
 const canvasView: CanvasView = new CanvasView(model);

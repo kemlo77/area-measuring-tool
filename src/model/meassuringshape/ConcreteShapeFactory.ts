@@ -1,14 +1,15 @@
 import { MeassuringShape } from './MeassuringShape';
 import { Line } from './shape/segmentShapes/line/Line';
 import { Polygon } from './shape/segmentShapes/polygon/Polygon';
-import { FilledSegmentsPainter } from '../view/canvasview/segmentPainters/FilledSegmentsPainter';
-import { StripedSegmentsPainter } from '../view/canvasview/segmentPainters/StripedSegmentsPainter';
-import { AreaValueSign } from './AreaValueSign';
+import { FilledSegmentsPainter } from '../../view/canvasview/segmentPainters/FilledSegmentsPainter';
+import { StripedSegmentsPainter } from '../../view/canvasview/segmentPainters/StripedSegmentsPainter';
+import { AreaValueSign } from '../meassuringshape/AreaValueSign';
 import { SegmentedMeassuringShapeBuilder } from './SegmentedMeassuringShapeBuilder';
-import { DashedSegmentsPainter } from '../view/canvasview/segmentPainters/DashedSegmentsPainter';
+import { DashedSegmentsPainter } from '../../view/canvasview/segmentPainters/DashedSegmentsPainter';
 import { ShapeFactory } from './ShapeFactory';
-import { RegularSegmentsPainter } from '../view/canvasview/segmentPainters/RegularSegmentsPainter';
+import { RegularSegmentsPainter } from '../../view/canvasview/segmentPainters/RegularSegmentsPainter';
 import { Color } from './Color';
+
 
 export class ConcreteShapeFactory implements ShapeFactory {
 
