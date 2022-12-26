@@ -33,15 +33,15 @@ describe('Model', () => {
     });
 
     it('addShape()', () => {
-        expect(model.selectedShape).to.be.null;
+        expect(model.selectedShape).to.be.undefined;
         model.addShape('Polygon');
-        expect(model.selectedShape).to.not.be.null;
+        expect(model.selectedShape).to.not.be.undefined;
     });
 
     it('addShape() - using shape name that does not exist', () => {
-        expect(model.selectedShape).to.be.null;
+        expect(model.selectedShape).to.be.undefined;
         model.addShape('dragon');
-        expect(model.selectedShape).to.be.null;
+        expect(model.selectedShape).to.be.undefined;
     });
 
     it('addShape() - try to add while another shape is selected', () => {
@@ -62,28 +62,28 @@ describe('Model', () => {
 
     it('draw shape and deselect it', () => {
         drawPolygonShape(model);
-        expect(model.selectedShape).to.not.be.null;
+        expect(model.selectedShape).to.not.be.undefined;
         model.reactToLeftClick({ x: 1, y: 1 }); //clicking elsewhere
-        expect(model.selectedShape).to.be.null;
+        expect(model.selectedShape).to.be.undefined;
     });
 
     it('fail to reselect a shape', () => {
         drawPolygonShapeAndDeselect(model);
-        expect(model.selectedShape).to.be.null;
+        expect(model.selectedShape).to.be.undefined;
         model.reactToLeftClick({ x: 1, y: 1 }); //clicking elsewhere
-        expect(model.selectedShape).to.be.null;
+        expect(model.selectedShape).to.be.undefined;
     });
 
     it('reselecting a drawn shape', () => {
         drawPolygonShapeAndDeselect(model);
-        expect(model.selectedShape).to.be.null;
+        expect(model.selectedShape).to.be.undefined;
         model.reactToLeftClick({ x: 100, y: 100 });
-        expect(model.selectedShape).to.not.be.null;
+        expect(model.selectedShape).to.not.be.undefined;
     });
 
     it('try to remove shape, but no one is selected', () => {
         drawPolygonShapeAndDeselect(model);
-        expect(model.selectedShape).to.be.null;
+        expect(model.selectedShape).to.be.undefined;
         expect(model.allShapes.length).to.equal(1);
         model.removeSelectedShape();
         expect(model.allShapes.length).to.equal(1);
@@ -114,9 +114,9 @@ describe('Model', () => {
         model.addShape('Line');
         model.reactToLeftMouseDown({ x: 100, y: 100 });
         model.reactToLeftMouseUp({ x: 200, y: 200 });
-        expect(model.selectedShape).to.not.be.null;
+        expect(model.selectedShape).to.not.be.undefined;
         model.reactToLeftMouseDown({ x: 300, y: 300 });
-        expect(model.selectedShape).to.be.null;
+        expect(model.selectedShape).to.be.undefined;
         expect(model.allShapes.length).to.equal(1);
     });
 

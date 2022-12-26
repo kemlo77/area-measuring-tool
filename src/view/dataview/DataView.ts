@@ -76,6 +76,10 @@ export class DataView implements Observer {
         const lengthInput: HTMLInputElement = this.createLengthInput(lengthShape);
         div.appendChild(lengthInput);
         this.numberInputs.push(lengthInput);
+
+        const deleteButton: HTMLInputElement = this.createDeleteButton(lengthShape);
+        div.appendChild(deleteButton);
+
         return div;
     }
 
@@ -92,6 +96,9 @@ export class DataView implements Observer {
         const areaInput: HTMLInputElement = this.createAreaInput(areaShape);
         div.appendChild(areaInput);
         this.numberInputs.push(areaInput);
+
+        const deleteButton: HTMLInputElement = this.createDeleteButton(areaShape);
+        div.appendChild(deleteButton);
 
         return div;
     }
@@ -157,6 +164,16 @@ export class DataView implements Observer {
             createdAreaInput.value = this.viewScaler.adjustAreaAccordingToScale(shape.area);
         });
         return createdAreaInput;
+    }
+
+    private createDeleteButton(shape: MeassuringShape): HTMLInputElement {
+        const createdDeleteButton: HTMLInputElement = document.createElement('input');
+        createdDeleteButton.setAttribute('type', 'button');
+        createdDeleteButton.setAttribute('value', 'X');
+        createdDeleteButton.addEventListener('click', () => {
+            this._model.removeShapeById(shape.id);
+        });
+        return createdDeleteButton;
     }
 
 
