@@ -15,9 +15,10 @@ export class ShapeStorage {
 
     removeShapeById(id: number): void {
         const shapeWithId: MeassuringShape | undefined = this.getShapeById(id);
-        if (shapeWithId) {
-            this.removeFromArray(shapeWithId);
+        if (!shapeWithId) {
+            throw new Error('The id does not exist in storage');
         }
+        this.removeFromArray(shapeWithId);
     }
 
     getSelectedShape(): MeassuringShape | undefined {
@@ -36,7 +37,6 @@ export class ShapeStorage {
         if (index > -1) {
             this.shapes.splice(index, 1);
         }
-
     }
 
     getAllShapes(): MeassuringShape[] {
@@ -51,7 +51,4 @@ export class ShapeStorage {
         return this.shapes.filter(shape => !shape.hasArea);
     }
 
-    getShapesByArrowFunction(arrowFunction: (arg: MeassuringShape) => boolean): MeassuringShape[] {
-        return this.shapes.filter(arrowFunction);
-    }
 }
