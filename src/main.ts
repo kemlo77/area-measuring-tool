@@ -61,6 +61,6 @@ function wheelMovement(event: WheelEvent, canvasId: string): void {
         canvasView.zoomIn(mousePosition);
     }
     if (event.deltaY > 0) {
-        canvasView.zoomOut();
+        canvasView.zoomOut(mousePosition);
     }
 }

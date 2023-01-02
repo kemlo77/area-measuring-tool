@@ -20,6 +20,10 @@ export class CanvasWrapper {
         return this._canvasElement.width;
     }
 
+    get canvasCenter(): Coordinate {
+        return { x: (this.width / 2), y: (this.height / 2) };
+    }
+
     public adjustOpacity(value: number): void {
         const percentage: number = 1 - value / 100;
         this._canvasElement.style.opacity = percentage.toString();

@@ -75,8 +75,8 @@ export class CanvasView implements Observer {
         this.redrawModel();
     }
 
-    public zoomOut(): void {
-        this.imageCanvas.zoomOut();
+    public zoomOut(canvasCoordinate?: Coordinate): void {
+        this.imageCanvas.zoomOut(canvasCoordinate);
         this.redrawModel();
     }
 

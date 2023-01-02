@@ -21,7 +21,7 @@ export class ImageCanvasWrapper extends CanvasWrapper {
         super.adaptCanvasToWindowResize();
         CanvasWrapper.scaleAndOffset.canvasHasBeenResized();
         if (this._image) {
-            this.adjustFocusPointAndRecalculateOffsets();
+            this.calculateImageOffsetToAlignImageFocusPointWith(this.canvasCenter);
             this.drawImageToCanvas();
         }
     }
@@ -80,20 +80,23 @@ export class ImageCanvasWrapper extends CanvasWrapper {
     private decreaseScaleFactor(): void { CanvasWrapper.scaleAndOffset.decreaseScaleFactor(); }
     private adjustScaleForImageToFit(): void { CanvasWrapper.scaleAndOffset.toFitScaleFactor(); }
 
-    panRight(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.moveFocusPointToTheRight()); }
-    panLeft(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.moveFocusPointToTheLeft()); }
-    panUp(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.moveFocusPointUpwards()); }
-    panDown(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.moveFocusPointDownwards()); }
-    zoomActualSize(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.oneToOneScale()); }
-    zoomIn(mousePositionOnCanvas?: Coordinate): void {
-        if (CanvasWrapper.scaleAndOffset.maxScaleFactorReached) {
-            return;
-        }
+    panRight(): void { this.calculateOffsetAndRedrawImageAfter(() => this.moveFocusPointToTheRight()); }
+    panLeft(): void { this.calculateOffsetAndRedrawImageAfter(() => this.moveFocusPointToTheLeft()); }
+    panUp(): void { this.calculateOffsetAndRedrawImageAfter(() => this.moveFocusPointUpwards()); }
+    panDown(): void { this.calculateOffsetAndRedrawImageAfter(() => this.moveFocusPointDownwards()); }
 
+
+    zoomIn(mousePositionOnCanvas?: Coordinate): void {
         this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.increaseScaleFactor(), mousePositionOnCanvas);
     }
-    zoomOut(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.decreaseScaleFactor()); }
-    zoomToFit(): void { this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.adjustScaleForImageToFit()); }
+    zoomOut(mousePositionOnCanvas?: Coordinate): void {
+        this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.decreaseScaleFactor(), mousePositionOnCanvas);
+    }
+
+    zoomActualSize(): void { this.centerImageFocusCalculateOffsetAndRedrawImageAfter(() => this.oneToOneScale()); }
+    zoomToFit(): void {
+        this.centerImageFocusCalculateOffsetAndRedrawImageAfter(() => this.adjustScaleForImageToFit());
+    }
 
 
     private adjustFocusCalculateOffsetAndRedrawImageAfter(
@@ -103,106 +106,49 @@ export class ImageCanvasWrapper extends CanvasWrapper {
         if (this.thereIsNoImage()) {
             return;
         }
-        let imageCoordinate: Coordinate = null;
+        let canvasFocusPosition: Coordinate = this.canvasCenter;
+
         if (mouseCanvasPosition) {
-            imageCoordinate = this.canvasToImage(mouseCanvasPosition);
+            canvasFocusPosition = mouseCanvasPosition;
         }
 
+        const imageFocusPosition: Coordinate = this.canvasToImage(canvasFocusPosition);
         panOrZoomAction();
-        this.adjustFocusPointAndRecalculateOffsets(imageCoordinate);
+        this._imageFocusPoint.moveFocusPointHere(imageFocusPosition);
+        this.calculateImageOffsetToAlignImageFocusPointWith(canvasFocusPosition);
+        this.drawImageToCanvas();
+    }
+
+    private centerImageFocusCalculateOffsetAndRedrawImageAfter(
+        panOrZoomAction: any
+    ): void {
+        if (this.thereIsNoImage()) {
+            return;
+        }
+        panOrZoomAction();
+        this._imageFocusPoint.focusCenterOfImage();
+        this.calculateImageOffsetToAlignImageFocusPointWith(this.canvasCenter);
+        this.drawImageToCanvas();
+    }
+
+    private calculateOffsetAndRedrawImageAfter(
+        panOrZoomAction: any
+    ): void {
+        if (this.thereIsNoImage()) {
+            return;
+        }
+        panOrZoomAction();
+        this.calculateImageOffsetToAlignImageFocusPointWith(this.canvasCenter);
         this.drawImageToCanvas();
     }
 
 
-
-    private adjustFocusPointAndRecalculateOffsets(desiredNewImageFocusPoint?: Coordinate): void {
-        this._imageFocusPoint.ifValidMoveFocusPointHere(desiredNewImageFocusPoint);
-        this.adjustFocuspointHorizontally();
-        this.adjustFocuspointVertically();
-
-        this.calculateAndSetOffsets();
-    }
-
-
-    private calculateAndSetOffsets(): void {
+    private calculateImageOffsetToAlignImageFocusPointWith(pointOnCanvas: Coordinate): void {
         const scaledImageWidthLeftOfFocusPoint: number = this.toCanvasScale(this._imageFocusPoint.x);
         const scaledImageHeightAboveFocusPoint: number = this.toCanvasScale(this._imageFocusPoint.y);
-        const canvasWidthLeftOfCenter: number = this.width / 2;
-        const canvasHeightAboveCenter: number = this.height / 2;
-        CanvasWrapper.scaleAndOffset.xOffset = canvasWidthLeftOfCenter - scaledImageWidthLeftOfFocusPoint;
-        CanvasWrapper.scaleAndOffset.yOffset = canvasHeightAboveCenter - scaledImageHeightAboveFocusPoint;
-    }
 
-    private adjustFocuspointHorizontally(): void {
-        if (this.scaledImageIsNarrowerThanCanvas()) {
-            this._imageFocusPoint.centerHorizontally();
-            return;
-        }
-
-        if (this.distanceBetweenImageAndRightEdge() > 0) {
-            const adjustmentNeeded: number = this.toImageScale(this.distanceBetweenImageAndRightEdge());
-            this._imageFocusPoint.moveHorizontally(- adjustmentNeeded);
-            return;
-        }
-
-        if (this.distanceBetweenImageAndLeftEdge() > 0) {
-            const adjustmentNeeded: number = this.toImageScale(this.distanceBetweenImageAndLeftEdge());
-            this._imageFocusPoint.moveHorizontally(adjustmentNeeded);
-            return;
-        }
-    }
-
-    private scaledImageIsNarrowerThanCanvas(): boolean {
-        const scaledImageWidth: number = this.toCanvasScale(this._image.width);
-        return scaledImageWidth <= this.width;
-    }
-
-    private distanceBetweenImageAndRightEdge(): number {
-        const imageWidthRightOfFocusPoint: number = this._image.width - this._imageFocusPoint.x;
-        const scaledRightDistance: number = this.toCanvasScale(imageWidthRightOfFocusPoint);
-        return this.width / 2 - scaledRightDistance;
-    }
-
-    private distanceBetweenImageAndLeftEdge(): number {
-        const imageWidthLeftOfFocusPoint: number = this._imageFocusPoint.x;
-        const scaledLeftDistance: number = this.toCanvasScale(imageWidthLeftOfFocusPoint);
-        return this.width / 2 - scaledLeftDistance;
-    }
-
-    private adjustFocuspointVertically(): void {
-        if (this.scaledImageIsShorterThanCanvas()) {
-            this._imageFocusPoint.centerVertically();
-            return;
-        }
-
-        if (this.distanceBetweenImageAndBottomEdge() > 0) {
-            const adjustmentNeeded: number = this.toImageScale(this.distanceBetweenImageAndBottomEdge());
-            this._imageFocusPoint.moveVertically(- adjustmentNeeded);
-            return;
-        }
-
-        if (this.distanceBetweenImageAndTopEdge() > 0) {
-            const adjustmentNeeded: number = this.toImageScale(this.distanceBetweenImageAndTopEdge());
-            this._imageFocusPoint.moveVertically(adjustmentNeeded);
-            return;
-        }
-    }
-
-    private scaledImageIsShorterThanCanvas(): boolean {
-        const scaledImageHeight: number = this.toCanvasScale(this._image.height);
-        return scaledImageHeight <= this.height;
-    }
-
-    private distanceBetweenImageAndTopEdge(): number {
-        const imageHeightAboveFocusPoint: number = this._imageFocusPoint.y;
-        const scaledUpperDistance: number = this.toCanvasScale(imageHeightAboveFocusPoint);
-        return this.height / 2 - scaledUpperDistance;
-    }
-
-    private distanceBetweenImageAndBottomEdge(): number {
-        const imageHeightBelowFocusPoint: number = this._image.height - this._imageFocusPoint.y;
-        const scaledLowerDistance: number = this.toCanvasScale(imageHeightBelowFocusPoint);
-        return this.height / 2 - scaledLowerDistance;
+        CanvasWrapper.scaleAndOffset.xOffset = pointOnCanvas.x - scaledImageWidthLeftOfFocusPoint;
+        CanvasWrapper.scaleAndOffset.yOffset = pointOnCanvas.y - scaledImageHeightAboveFocusPoint;
     }
 
 }
