@@ -13,7 +13,7 @@ export class ImageCanvasWrapper extends CanvasWrapper {
     }
 
     private get stepsize(): number {
-        return this._image.width * 0.1 / CanvasWrapper.scaleAndOffset.scaleFactor;
+        return this._image.width * 0.05 / CanvasWrapper.scaleAndOffset.scaleFactor;
     }
 
     //overriding super class method
@@ -71,10 +71,23 @@ export class ImageCanvasWrapper extends CanvasWrapper {
 
     }
 
-    private moveFocusPointToTheRight(): void { this._imageFocusPoint.moveHorizontally(this.stepsize); };
-    private moveFocusPointToTheLeft(): void { this._imageFocusPoint.moveHorizontally(-this.stepsize); };
-    private moveFocusPointUpwards(): void { this._imageFocusPoint.moveVertically(-this.stepsize); };
-    private moveFocusPointDownwards(): void { this._imageFocusPoint.moveVertically(this.stepsize); };
+    private moveFocusPointToTheRight(): void {
+        this._imageFocusPoint.moveFocusPointHere(this.canvasToImage(this.canvasCenter));
+        this._imageFocusPoint.moveHorizontally(this.stepsize);
+    };
+    private moveFocusPointToTheLeft(): void {
+        this._imageFocusPoint.moveFocusPointHere(this.canvasToImage(this.canvasCenter));
+        this._imageFocusPoint.moveHorizontally(-this.stepsize);
+    };
+    private moveFocusPointUpwards(): void {
+        this._imageFocusPoint.moveFocusPointHere(this.canvasToImage(this.canvasCenter));
+        this._imageFocusPoint.moveVertically(-this.stepsize);
+    };
+    private moveFocusPointDownwards(): void {
+        this._imageFocusPoint.moveFocusPointHere(this.canvasToImage(this.canvasCenter));
+        this._imageFocusPoint.moveVertically(this.stepsize);
+    };
+
     private oneToOneScale(): void { CanvasWrapper.scaleAndOffset.oneToOneScale(); }
     private increaseScaleFactor(): void { CanvasWrapper.scaleAndOffset.increaseScaleFactor(); }
     private decreaseScaleFactor(): void { CanvasWrapper.scaleAndOffset.decreaseScaleFactor(); }
@@ -93,7 +106,10 @@ export class ImageCanvasWrapper extends CanvasWrapper {
         this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.decreaseScaleFactor(), mousePositionOnCanvas);
     }
 
-    zoomActualSize(): void { this.centerImageFocusCalculateOffsetAndRedrawImageAfter(() => this.oneToOneScale()); }
+    zoomActualSize(): void {
+        this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.oneToOneScale());
+    }
+
     zoomToFit(): void {
         this.centerImageFocusCalculateOffsetAndRedrawImageAfter(() => this.adjustScaleForImageToFit());
     }
