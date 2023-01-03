@@ -16,6 +16,11 @@ export class ImageCanvasWrapper extends CanvasWrapper {
         return this._image.width * 0.05 / CanvasWrapper.scaleAndOffset.scaleFactor;
     }
 
+    private panScaleOrZoomStrategy: () => void = this.zoomToFit;
+    private moveImageFocusStrategy: () => void = this.doNothing;
+    private calculateOffsetStrategy: () => void =
+        (): void => this.calculateImageOffsetToAlignImageFocusPointWith(this.canvasCenter);
+
     //overriding super class method
     adaptCanvasToWindowResize(): void {
         super.adaptCanvasToWindowResize();
@@ -93,68 +98,109 @@ export class ImageCanvasWrapper extends CanvasWrapper {
     private decreaseScaleFactor(): void { CanvasWrapper.scaleAndOffset.decreaseScaleFactor(); }
     private adjustScaleForImageToFit(): void { CanvasWrapper.scaleAndOffset.toFitScaleFactor(); }
 
-    panRight(): void { this.calculateOffsetAndRedrawImageAfter(() => this.moveFocusPointToTheRight()); }
-    panLeft(): void { this.calculateOffsetAndRedrawImageAfter(() => this.moveFocusPointToTheLeft()); }
-    panUp(): void { this.calculateOffsetAndRedrawImageAfter(() => this.moveFocusPointUpwards()); }
-    panDown(): void { this.calculateOffsetAndRedrawImageAfter(() => this.moveFocusPointDownwards()); }
-
-
-    zoomIn(mousePositionOnCanvas?: Coordinate): void {
-        this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.increaseScaleFactor(), mousePositionOnCanvas);
+    panRight(): void {
+        this.panScaleOrZoomStrategy = this.moveFocusPointToTheRight;
+        this.moveImageFocusStrategy = this.doNothing;
+        this.calculateOffsetStrategy = this.alignImageFocusPointWithCanvasCenter;
+        this.panScaleOrZoomThenRedrawImage();
     }
-    zoomOut(mousePositionOnCanvas?: Coordinate): void {
-        this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.decreaseScaleFactor(), mousePositionOnCanvas);
+
+    panLeft(): void {
+        this.panScaleOrZoomStrategy = this.moveFocusPointToTheLeft;
+        this.moveImageFocusStrategy = this.doNothing;
+        this.calculateOffsetStrategy = this.alignImageFocusPointWithCanvasCenter;
+        this.panScaleOrZoomThenRedrawImage();
+    }
+
+    panUp(): void {
+        this.panScaleOrZoomStrategy = this.moveFocusPointUpwards;
+        this.moveImageFocusStrategy = this.doNothing;
+        this.calculateOffsetStrategy = this.alignImageFocusPointWithCanvasCenter;
+        this.panScaleOrZoomThenRedrawImage();
+    }
+
+    panDown(): void {
+        this.panScaleOrZoomStrategy = this.moveFocusPointDownwards;
+        this.moveImageFocusStrategy = this.doNothing;
+        this.calculateOffsetStrategy = this.alignImageFocusPointWithCanvasCenter;
+        this.panScaleOrZoomThenRedrawImage();
+    }
+
+
+    zoomIn(mouseCanvasPosition?: Coordinate): void {
+        this.panScaleOrZoomStrategy = this.increaseScaleFactor;
+
+        if (mouseCanvasPosition) {
+            const mousePositionOnImage: Coordinate = this.canvasToImage(mouseCanvasPosition);
+            this.moveImageFocusStrategy = (): void => this.thisCoordinateOnImageIsFocused(mousePositionOnImage);
+            this.calculateOffsetStrategy = (): void => this.alignImageFocusPointWithCanvasCoord(mouseCanvasPosition);
+        } else {
+            const imageFocusPosition: Coordinate = this.canvasToImage(this.canvasCenter);
+            this.moveImageFocusStrategy = (): void => this.thisCoordinateOnImageIsFocused(imageFocusPosition);
+            this.calculateOffsetStrategy = this.alignImageFocusPointWithCanvasCenter;
+        }
+        this.panScaleOrZoomThenRedrawImage();
+    }
+
+    zoomOut(mouseCanvasPosition?: Coordinate): void {
+        this.panScaleOrZoomStrategy = this.decreaseScaleFactor;
+
+        if (mouseCanvasPosition) {
+            const mousePositionOnImage: Coordinate = this.canvasToImage(mouseCanvasPosition);
+            this.moveImageFocusStrategy = (): void => this.thisCoordinateOnImageIsFocused(mousePositionOnImage);
+            this.calculateOffsetStrategy = (): void => this.alignImageFocusPointWithCanvasCoord(mouseCanvasPosition);
+        } else {
+            const imageFocusPosition: Coordinate = this.canvasToImage(this.canvasCenter);
+            this.moveImageFocusStrategy = (): void => this.thisCoordinateOnImageIsFocused(imageFocusPosition);
+            this.calculateOffsetStrategy = this.alignImageFocusPointWithCanvasCenter;
+        }
+        this.panScaleOrZoomThenRedrawImage();
     }
 
     zoomActualSize(): void {
-        this.adjustFocusCalculateOffsetAndRedrawImageAfter(() => this.oneToOneScale());
+        this.panScaleOrZoomStrategy = this.oneToOneScale;
+        const imageFocusPosition: Coordinate = this.canvasToImage(this.canvasCenter);
+        this.moveImageFocusStrategy = (): void => this.thisCoordinateOnImageIsFocused(imageFocusPosition);
+        this.calculateOffsetStrategy = this.alignImageFocusPointWithCanvasCenter;
+        this.panScaleOrZoomThenRedrawImage();
     }
 
     zoomToFit(): void {
-        this.centerImageFocusCalculateOffsetAndRedrawImageAfter(() => this.adjustScaleForImageToFit());
+        this.panScaleOrZoomStrategy = this.adjustScaleForImageToFit;
+        this.moveImageFocusStrategy = this.imageCenterIsFocused;
+        this.calculateOffsetStrategy = this.alignImageFocusPointWithCanvasCenter;
+        this.panScaleOrZoomThenRedrawImage();
     }
 
-
-    private adjustFocusCalculateOffsetAndRedrawImageAfter(
-        panOrZoomAction: any,
-        mouseCanvasPosition?: Coordinate
-    ): void {
-        if (this.thereIsNoImage()) {
-            return;
-        }
-        let canvasFocusPosition: Coordinate = this.canvasCenter;
-
-        if (mouseCanvasPosition) {
-            canvasFocusPosition = mouseCanvasPosition;
-        }
-
-        const imageFocusPosition: Coordinate = this.canvasToImage(canvasFocusPosition);
-        panOrZoomAction();
-        this._imageFocusPoint.moveFocusPointHere(imageFocusPosition);
-        this.calculateImageOffsetToAlignImageFocusPointWith(canvasFocusPosition);
-        this.drawImageToCanvas();
+    private doNothing(): void {
+        //
     }
 
-    private centerImageFocusCalculateOffsetAndRedrawImageAfter(
-        panOrZoomAction: any
-    ): void {
-        if (this.thereIsNoImage()) {
-            return;
-        }
-        panOrZoomAction();
+    private imageCenterIsFocused(): void {
         this._imageFocusPoint.focusCenterOfImage();
-        this.calculateImageOffsetToAlignImageFocusPointWith(this.canvasCenter);
-        this.drawImageToCanvas();
     }
 
-    private calculateOffsetAndRedrawImageAfter(
-        panOrZoomAction: any
-    ): void {
+    private thisCoordinateOnImageIsFocused(coordinate: Coordinate): void {
+        this._imageFocusPoint.moveFocusPointHere(coordinate);
+    }
+
+    private alignImageFocusPointWithCanvasCenter(): void {
+        this.calculateImageOffsetToAlignImageFocusPointWith(this.canvasCenter);
+    }
+
+    private alignImageFocusPointWithCanvasCoord(mousePosition: Coordinate): void {
+        this.calculateImageOffsetToAlignImageFocusPointWith(mousePosition);
+    }
+
+
+    private panScaleOrZoomThenRedrawImage(): void {
         if (this.thereIsNoImage()) {
             return;
         }
-        panOrZoomAction();
-        this.calculateImageOffsetToAlignImageFocusPointWith(this.canvasCenter);
+        this.panScaleOrZoomStrategy();
+        this.moveImageFocusStrategy();
+
+        this.calculateOffsetStrategy();
         this.drawImageToCanvas();
     }
 
