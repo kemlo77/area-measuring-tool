@@ -67,6 +67,10 @@ export class ScaleFactorAndOffset {
         return this._scaleFactor;
     }
 
+    get minScaleFactorReached(): boolean {
+        return this._scaleFactor === this._minScaleFactor;
+    }
+
     get maxScaleFactorReached(): boolean {
         return this._scaleFactor === this._maxScaleFactor;
     }
