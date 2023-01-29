@@ -1,16 +1,17 @@
 import { Subject } from './Subject';
 import { Observer } from '../view/Observer';
-import { ConcreteShapeFactory } from './ConcreteShapeFactory';
-import { MeassuringShape } from './MeassuringShape';
-import { Coordinate } from './shape/Coordinate';
-import { ShapeFactory } from './ShapeFactory';
+import { ConcreteShapeFactory } from './meassuringshape/ConcreteShapeFactory';
+import { MeassuringShape } from './meassuringshape/MeassuringShape';
+import { Coordinate } from './meassuringshape/shape/Coordinate';
+import { ShapeFactory } from './meassuringshape/ShapeFactory';
+import { ShapeStorage } from './ShapeStorage';
 
 type ShapeAction = (shape: MeassuringShape, coordinate: Coordinate) => void;
 
 export class Model implements Subject {
 
     private _listeners: Set<Observer> = new Set();
-    private shapes: MeassuringShape[] = [];
+    private _shapeStorage = new ShapeStorage();
     private _shapeFactory: ShapeFactory = new ConcreteShapeFactory();
 
     set shapeFactory(shapeFactory: ShapeFactory) {
@@ -18,15 +19,15 @@ export class Model implements Subject {
     }
 
     get allShapes(): MeassuringShape[] {
-        return this.shapes.slice();
+        return this._shapeStorage.getAllShapes();
     }
 
     get areaShapes(): MeassuringShape[] {
-        return this.shapes.filter((it) => it.hasArea);
+        return this._shapeStorage.getAreaShapes();
     }
 
     get lengthShapes(): MeassuringShape[] {
-        return this.shapes.filter((it) => !it.hasArea);
+        return this._shapeStorage.getLengthShapes();
     }
 
     addShape(name: string): void {
@@ -36,22 +37,21 @@ export class Model implements Subject {
         }
         const newShape: MeassuringShape = this._shapeFactory.getShape(name);
         if (newShape) {
-            this.shapes.push(newShape);
+            this._shapeStorage.add(newShape);
         }
 
     }
 
     removeSelectedShape(): void {
-        if (this.selectedShape) {
-            this.removeShapeFromList(this.selectedShape);
-            const dummyCoordinate: Coordinate = { x: 0, y: 0 };
-            this.notifyOfModelChange(dummyCoordinate);
-        }
+        this._shapeStorage.removeSelectedShape();
+        const dummyCoordinate: Coordinate = { x: 0, y: 0 };
+        this.notifyOfModelChange(dummyCoordinate);
     }
 
-    private removeShapeFromList(shape: MeassuringShape): void {
-        const index: number = this.shapes.indexOf(shape);
-        this.shapes.splice(index, 1);
+    removeShapeById(id: number): void {
+        this._shapeStorage.removeShapeById(id);
+        const dummyCoordinate: Coordinate = { x: 0, y: 0 };
+        this.notifyOfModelChange(dummyCoordinate);
     }
 
     reactToMouseMovement(mousePosition: Coordinate): void {
@@ -91,7 +91,7 @@ export class Model implements Subject {
     }
 
     private trySelectingAnyShapeByLeftClick(coordinate: Coordinate): void {
-        for (const shape of this.shapes) {
+        for (const shape of this._shapeStorage.getAllShapes()) {
             shape.handleLeftClick(coordinate);
             if (shape.isSelected) {
                 break;
@@ -100,12 +100,7 @@ export class Model implements Subject {
     }
 
     get selectedShape(): MeassuringShape {
-        for (const shape of this.shapes) {
-            if (shape.isSelected) {
-                return shape;
-            }
-        }
-        return null;
+        return this._shapeStorage.getSelectedShape();
     }
 
 
@@ -118,13 +113,13 @@ export class Model implements Subject {
     }
 
     notifyOfMouseMovement(mousePosition: Coordinate): void {
-        this._listeners.forEach((observer) => { observer.updateBecauseOfMovementInModel(this, mousePosition); });
+        this._listeners.forEach((observer) => { observer.updateBecauseOfMovementInModel(mousePosition); });
     }
 
     notifyOfModelChange(mousePosition: Coordinate): void {
         this._listeners.forEach((observer) => {
-            observer.updateBecauseModelHasChanged(this);
-            observer.updateBecauseOfMovementInModel(this, mousePosition);
+            observer.updateBecauseModelHasChanged();
+            observer.updateBecauseOfMovementInModel(mousePosition);
         });
     }
 }

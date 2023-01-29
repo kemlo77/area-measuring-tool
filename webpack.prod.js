@@ -8,11 +8,6 @@ const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = merge(common, {
     mode: 'production',
-    output: {
-        filename: 'bundle.[contenthash].js',
-        path: path.resolve(__dirname, 'dist'),
-        clean: true
-    },
     plugins: [
         new MiniCssExtractPlugin({ filename: 'style.[contenthash].css' })
     ],
@@ -26,8 +21,14 @@ module.exports = merge(common, {
     },
     optimization: {
         minimizer: [
-          new CssMinimizerPlugin(),
-          new TerserPlugin(),
+            new CssMinimizerPlugin(),
+            new TerserPlugin(),
         ],
-      },
+    },
+    output: {
+        filename: 'bundle.[contenthash].js',
+        path: path.resolve(__dirname, 'dist'),
+        clean: true,
+        assetModuleFilename: 'images/[name].[ext]'
+    },
 });

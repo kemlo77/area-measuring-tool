@@ -1,4 +1,4 @@
-import { Coordinate } from './shape/Coordinate';
+import { Coordinate } from './meassuringshape/shape/Coordinate';
 import { Observer } from '../view/Observer';
 
 export interface Subject {

@@ -21,6 +21,8 @@ https://kemlo77.github.io/createPolygon/index.html
 
 * Singleton Pattern, no longer used
 
+* Template Method Pattern used in painters
+
 # Interesting techniques
 
 Using 4 canvas layers:
@@ -28,3 +30,7 @@ Using 4 canvas layers:
 * Filter layer for toning down the image
 * Background layer for non moving shapes. May contain a lot of elements that are not redrawn so much.
 * Foreground layer for moving shapes. Few elements that are redrawn the most.
+
+Using Gauss shoelace formula to calculate area of non complex polygons.
+
+

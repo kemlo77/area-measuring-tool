@@ -1,23 +1,29 @@
-import { MeassuringShape } from '../../model/MeassuringShape';
+import { MeassuringShape } from '../../model/meassuringshape/MeassuringShape';
 import { Model } from '../../model/Model';
-import { Coordinate } from '../../model/shape/Coordinate';
+import { Coordinate } from '../../model/meassuringshape/shape/Coordinate';
 import { Observer } from '../Observer';
+import { ViewScaler } from './ViewScaler';
+import { Name } from '../../model/meassuringshape/Name';
 
 export class DataView implements Observer {
 
     private dataDiv: HTMLElement = document.getElementById('data');
-    private scaleFactor = 0.1;
-    private areaInputs: HTMLInputElement[] = [];
-    private lengthInputs: HTMLInputElement[] = [];
+    private numberInputs: HTMLInputElement[] = [];
+    private viewScaler: ViewScaler = new ViewScaler();
+    private _model: Model;
 
-    updateBecauseModelHasChanged(model: Model): void {
-        this.removeAllChildNodes(this.dataDiv);
-        this.addAreaTotalParagraph(model);
-        this.addAreaShapeDivs(model);
-        this.addLenghtShapeDivs(model);
+    constructor(model: Model) {
+        this._model = model;
     }
 
-    updateBecauseOfMovementInModel(model: Model, mousePosition: Coordinate): void {
+    updateBecauseModelHasChanged(): void {
+        this.removeAllChildNodes(this.dataDiv);
+        this.addAreaTotalParagraph(this._model);
+        this.addAreaShapeDivs(this._model);
+        this.addLenghtShapeDivs(this._model);
+    }
+
+    updateBecauseOfMovementInModel(mousePosition: Coordinate): void {
         //
     }
 
@@ -26,18 +32,24 @@ export class DataView implements Observer {
         while (parent.firstChild) {
             parent.removeChild(parent.firstChild);
         }
-        this.areaInputs = [];
-        this.lengthInputs = [];
+        this.numberInputs = [];
     }
+
 
     private addAreaTotalParagraph(model: Model): void {
         const areaTotal: number = model.areaShapes
             .reduce((sum, it) => sum + it.area, 0);
-        const scaledAndRoundedArea: string =
-            this.convertToRoundedNumberString(areaTotal * this.scaleFactor * this.scaleFactor);
+        const scaledAndRoundedArea: string = this.viewScaler.adjustAreaAccordingToScale(areaTotal);
         this.dataDiv.appendChild(this.generateParagraph('Area total: ' + scaledAndRoundedArea));
-        this.dataDiv.appendChild(this.generateParagraph('Scale factor: ' + this.scaleFactor));
+        this.dataDiv.appendChild(this.generateParagraph('Scale factor: ' + this.viewScaler.scaleFactor));
     }
+
+    private generateParagraph(paragraphtext: string): HTMLParagraphElement {
+        const p: HTMLParagraphElement = document.createElement('p');
+        p.textContent = paragraphtext;
+        return p;
+    }
+
 
     private addAreaShapeDivs(model: Model): void {
         model.areaShapes
@@ -53,136 +65,132 @@ export class DataView implements Observer {
             });
     }
 
-    private generateParagraph(paragraphtext: string): HTMLParagraphElement {
-        const p: HTMLParagraphElement = document.createElement('p');
-        p.textContent = paragraphtext;
-        return p;
-    }
+
 
     private generateLengthShapeDiv(lengthShape: MeassuringShape): HTMLDivElement {
-        const div: HTMLDivElement = document.createElement('div');
-        if (lengthShape.isSelected) {
-            div.classList.add('selected');
-        }
+        const div: HTMLDivElement = this.createDiv(lengthShape.isSelected);
 
-        const nameInput: HTMLInputElement = this.generateTextInput(lengthShape.name);
-        nameInput.addEventListener('input', (event) => { lengthShape.name = (<HTMLInputElement>event.target).value; });
+        const nameInput: HTMLInputElement = this.createNameInput(lengthShape);
         div.appendChild(nameInput);
 
-        const shapeLength: string = this.convertToRoundedNumberString(lengthShape.length * this.scaleFactor);
-        const lengthInput: HTMLInputElement = this.generateNumberInput(shapeLength);
-        lengthInput.setAttribute('data-pixellength', lengthShape.length.toString());
-        lengthInput.addEventListener('input', (event) => {
-            this.lengthInputChanged((<HTMLInputElement>event.target), lengthShape.length);
-        });
+        const lengthInput: HTMLInputElement = this.createLengthInput(lengthShape);
         div.appendChild(lengthInput);
-        this.lengthInputs.push(lengthInput);
+        this.numberInputs.push(lengthInput);
+
+        const deleteButton: HTMLInputElement = this.createDeleteButton(lengthShape);
+        div.appendChild(deleteButton);
+
         return div;
     }
 
     private generateAreaShapeDiv(areaShape: MeassuringShape): HTMLDivElement {
-        const div: HTMLDivElement = document.createElement('div');
-        if (areaShape.isSelected) {
-            div.classList.add('selected');
-        }
+        const div: HTMLDivElement = this.createDiv(areaShape.isSelected);
 
-        const nameInput: HTMLInputElement = this.generateTextInput(areaShape.name);
-        nameInput.addEventListener('input', (event) => { areaShape.name = (<HTMLInputElement>event.target).value; });
+        const nameInput: HTMLInputElement = this.createNameInput(areaShape);
         div.appendChild(nameInput);
 
-        const area: string = this.convertToRoundedNumberString(areaShape.area * this.scaleFactor * this.scaleFactor);
-        const areaInput: HTMLInputElement = this.generateNumberInput(area);
-        areaInput.setAttribute('data-pixelarea', areaShape.area.toString());
-        areaInput.classList.add('area');
-        areaInput.addEventListener('input', (event) => {
-            this.areaInputChanged((<HTMLInputElement>event.target), areaShape.area);
-        });
-        div.appendChild(areaInput);
-        this.areaInputs.push(areaInput);
-
-        const length: string =
-            this.convertToRoundedNumberString(areaShape.length * this.scaleFactor);
-        const perimeterInput: HTMLInputElement = this.generateNumberInput(length);
-        perimeterInput.setAttribute('data-pixellength', areaShape.length.toString());
-        perimeterInput.classList.add('length');
-        perimeterInput.addEventListener('input', (event) => {
-            this.lengthInputChanged((<HTMLInputElement>event.target), areaShape.length);
-        });
+        const perimeterInput: HTMLInputElement = this.createLengthInput(areaShape);
         div.appendChild(perimeterInput);
-        this.lengthInputs.push(perimeterInput);
+        this.numberInputs.push(perimeterInput);
+
+        const areaInput: HTMLInputElement = this.createAreaInput(areaShape);
+        div.appendChild(areaInput);
+        this.numberInputs.push(areaInput);
+
+        const deleteButton: HTMLInputElement = this.createDeleteButton(areaShape);
+        div.appendChild(deleteButton);
 
         return div;
     }
 
-    private generateTextInput(value: string): HTMLInputElement {
+
+    private createDiv(isSelected: boolean): HTMLDivElement {
+        const createdDiv: HTMLDivElement = document.createElement('div');
+        if (isSelected) {
+            createdDiv.classList.add('selected');
+        }
+        return createdDiv;
+    }
+
+    private createNameInput(shape: MeassuringShape): HTMLInputElement {
+        const createdNameInput: HTMLInputElement = this.createTextInput(shape.name.value);
+        createdNameInput.addEventListener('input', (event) => {
+            const currentValue: string = (<HTMLInputElement>event.target).value.trim();
+            if (currentValue.length > 40) {
+                alert('Max name length is 40 characters');
+                return;
+            }
+            if (currentValue.length == 0) {
+                shape.name = new Name('default name');
+                return;
+            }
+            shape.name = new Name(currentValue);
+        });
+        return createdNameInput;
+    }
+
+    private createTextInput(value: string): HTMLInputElement {
         const inputElement: HTMLInputElement = document.createElement('input');
         inputElement.setAttribute('type', 'text');
         inputElement.setAttribute('value', value);
         return inputElement;
     }
 
-    private generateNumberInput(value: string): HTMLInputElement {
+    private createLengthInput(shape: MeassuringShape): HTMLInputElement {
+        const length: string = this.viewScaler.adjustLengthAccordingToScale(shape.length);
+        const createdLengthInput: HTMLInputElement = this.createNumberInput(length);
+        createdLengthInput.addEventListener('input', (event) => {
+            const changedInputElement: HTMLInputElement = <HTMLInputElement>event.target;
+            const enteredLength: number = Number(changedInputElement.value);
+            this.viewScaler.updateScaleGivenLength(enteredLength, shape.length);
+            this.updateAllNumberInputsAfterScaleChangeExceptGivenElement(changedInputElement);
+        });
+        createdLengthInput.addEventListener('scalechange', (event: CustomEvent) => {
+            createdLengthInput.value = this.viewScaler.adjustLengthAccordingToScale(shape.length);
+        });
+        return createdLengthInput;
+    }
+
+    private createAreaInput(shape: MeassuringShape): HTMLInputElement {
+        const area: string = this.viewScaler.adjustAreaAccordingToScale(shape.area);
+        const createdAreaInput: HTMLInputElement = this.createNumberInput(area);
+        createdAreaInput.addEventListener('input', (event) => {
+            const changedInputElement: HTMLInputElement = <HTMLInputElement>event.target;
+            const enteredArea: number = Number(changedInputElement.value);
+            this.viewScaler.updateScaleGivenArea(enteredArea, shape.area);
+            this.updateAllNumberInputsAfterScaleChangeExceptGivenElement(changedInputElement);
+        });
+        createdAreaInput.addEventListener('scalechange', (event: CustomEvent) => {
+            createdAreaInput.value = this.viewScaler.adjustAreaAccordingToScale(shape.area);
+        });
+        return createdAreaInput;
+    }
+
+    private createDeleteButton(shape: MeassuringShape): HTMLInputElement {
+        const createdDeleteButton: HTMLInputElement = document.createElement('input');
+        createdDeleteButton.setAttribute('type', 'button');
+        createdDeleteButton.setAttribute('value', 'X');
+        createdDeleteButton.addEventListener('click', () => {
+            this._model.removeShapeById(shape.id);
+        });
+        return createdDeleteButton;
+    }
+
+
+
+    private createNumberInput(value: string): HTMLInputElement {
         const inputElement: HTMLInputElement = document.createElement('input');
         inputElement.setAttribute('type', 'number');
         inputElement.setAttribute('value', value);
         return inputElement;
     }
 
-    private convertToRoundedNumberString(givenNumber: number): string {
-        const roundedNumber: number = Math.round(givenNumber * 1000) / 1000;
-        return roundedNumber.toString();
-    }
-
-    private areaInputChanged(inputElement: HTMLInputElement, area: number): void {
-        this.updateScaleGivenArea(Number(inputElement.value), area);
-        this.updateAllNumberInputsAfterScaleChangeExceptGivenElement(inputElement);
-    }
-
-    private lengthInputChanged(inputElement: HTMLInputElement, length: number): void {
-        this.updateScaleGivenLength(Number(inputElement.value), length);
-        this.updateAllNumberInputsAfterScaleChangeExceptGivenElement(inputElement);
-    }
-
-    private updateScaleGivenLength(givenLength: number, length: number): void {
-        this.scaleFactor = Math.abs(givenLength / length);
-    }
-
-    private updateScaleGivenArea(givenArea: number, shapeArea: number): void {
-        this.scaleFactor = Math.sqrt(Math.abs(givenArea / shapeArea));
-    }
-
-    private updateAllNumberInputsAfterScaleChangeExceptGivenElement(inputNotUpdated: HTMLInputElement): void {
-        this.areaInputs
-            .filter((input) => { return input !== inputNotUpdated; })
+    private updateAllNumberInputsAfterScaleChangeExceptGivenElement(elementNotToBeUpdated: HTMLInputElement): void {
+        this.numberInputs
+            .filter((input) => { return input !== elementNotToBeUpdated; })
             .forEach((input) => {
-                this.recalculateDisplayedAreaValueAccordingToNewFactor(input);
+                input.dispatchEvent(new CustomEvent('scalechange'));
             });
-
-        this.lengthInputs
-            .filter((input) => { return input !== inputNotUpdated; })
-            .forEach((input) => {
-                this.recalculateDisplayedLengthValueAccordingToNewFactor(input);
-            });
-
-        //TODO
-        //det valda elementet borde få en svart ram
-        //ta bort svarta ramar på alla andra.
-        // eller ändra klass och ta bort den klassen på andra.
     }
-
-    private recalculateDisplayedAreaValueAccordingToNewFactor(input: HTMLInputElement): void {
-        const pixelArea: number = Number(input.getAttribute('data-pixelarea'));
-        const scaledAndRoundedArea: string =
-            this.convertToRoundedNumberString(pixelArea * this.scaleFactor * this.scaleFactor);
-        input.value = scaledAndRoundedArea;
-    }
-
-    private recalculateDisplayedLengthValueAccordingToNewFactor(input: HTMLInputElement): void {
-        const pixelArea: number = Number(input.getAttribute('data-pixellength'));
-        const scaledAndRoundedLength: string =
-            this.convertToRoundedNumberString(pixelArea * this.scaleFactor);
-        input.value = scaledAndRoundedLength;
-    }
-
 
 }

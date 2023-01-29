@@ -1,59 +1,23 @@
-import { Coordinate } from '../../../model/shape/Coordinate';
-import { Point } from '../../../model/shape/Point';
-import { Segment } from '../../../model/shape/segmentShapes/Segment';
-import { SegmentShape } from '../../../model/shape/segmentShapes/SegmentShape';
-import { Vector } from '../../../model/shape/Vector';
+import { Color } from '../../../model/meassuringshape/Color';
+import { Segment } from '../../../model/meassuringshape/shape/segmentShapes/Segment';
+import { DrawingCanvasWrapper } from '../DrawingCanvasWrapper';
 import { AbstractSegmentsPainter } from './AbstractSegmentsPainter';
 
 export class StripedSegmentsPainter extends AbstractSegmentsPainter {
 
-    private lineWidth: number = 3;
+    protected lineWidth: number = 4;
+    private dashPattern: number[] = [5, 7];
 
-    drawStill(segmentShape: SegmentShape, color: string): void {
-        const stillSegments: Segment[] = segmentShape.getStillSegments();
+    protected drawSegmentsInCanvas(segments: Segment[], color: Color, canvas: DrawingCanvasWrapper): void {
+        super.drawSegmentsInCanvas(segments, Color.yellow, canvas);
 
-        this.drawStillSegments(stillSegments, this.lineWidth, color);
-        stillSegments.forEach((it) => {
-            this.drawStillSegments(this.generateRulerLines(it), 1, '0,0,0');
+        segments.forEach((it) => {
+            canvas.drawDashedLine(it.p1, it.p2, this.lineWidth, Color.black, this.dashPattern);
         });
-        if (segmentShape.isSelected) {
-            this.drawEndPointsOnSegments(stillSegments, '0,0,0', this.stillCanvasCtx);
-        }
     }
 
-
-    drawMovement(segmentShape: SegmentShape, color: string, mousePosition: Coordinate): void {
-        const movingSegments: Segment[] = segmentShape.getMovingSegments(mousePosition);
-
-        this.clearUsedPartOfCanvas();
-        this.drawMovingSegments(movingSegments, this.lineWidth, color);
-        movingSegments.forEach((it) => {
-            this.drawMovingSegments(this.generateRulerLines(it), 1, '0,0,0');
-        });
-        this.drawEndPointsOnSegments(movingSegments, '0,0,0', this.movementCanvasCtx);
-    }
-
-    private generateRulerLines(segment: Segment): Segment[] {
-        const segments: Segment[] = [];
-        const vector: Vector = new Vector(segment.p1, segment.p2);
-        const direction: Vector = vector.generateUnitVector();
-        const perpendicular: Vector = vector.generatePerpendicularUnitVector();
-        const distanceBetweenLines: number = 15;
-        let distanceTravelled: number = 0;
-        while (distanceTravelled + distanceBetweenLines < segment.length) {
-            distanceTravelled += distanceBetweenLines;
-            const newPoint: Point = this.jumpToNewPoint(segment.p1, direction, distanceTravelled);
-            segments.push(this.generateRulerLine(newPoint, perpendicular));
-        }
-        segments.push(this.generateRulerLine(segment.p1, perpendicular));
-        segments.push(this.generateRulerLine(segment.p2, perpendicular));
-        return segments;
-    }
-
-    private generateRulerLine(point: Point, direction: Vector): Segment {
-        const point1: Point = this.jumpToNewPoint(point, direction, this.lineWidth / 2);
-        const point2: Point = this.jumpToNewPoint(point, direction, -this.lineWidth / 2);
-        return new Segment(point1, point2);
+    protected drawEndpointsInCanvas(segments: Segment[], color: Color, canvas: DrawingCanvasWrapper): void {
+        super.drawEndpointsInCanvas(segments, Color.black, canvas);
     }
 
 }

@@ -1,4 +1,4 @@
-import { Coordinate } from './model/shape/Coordinate';
+import { Coordinate } from './model/meassuringshape/shape/Coordinate';
 import { Controller } from './controller/Controller';
 
 export class Router {
@@ -52,7 +52,7 @@ export class Router {
 		return event.button === 0;
 	}
 
-	private getMouseCoordinate(event: MouseEvent, elementId: string): Coordinate {
+	getMouseCoordinate(event: MouseEvent, elementId: string): Coordinate {
 		const rect: DOMRect = document.getElementById(elementId).getBoundingClientRect();
 		const x: number = event.clientX - rect.left;
 		const y: number = event.clientY - rect.top;

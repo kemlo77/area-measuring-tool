@@ -12,15 +12,26 @@
     <button id="addNegativePolygon">Add negative polygon</button>
     <button id="addRuler">Add ruler</button>
     <button id="addSymmetryLine">Add symmetry line</button>
-    <br>
     <button id="removeSelectedShape">Remove selected shape</button>
+    <br>
+    <button id="zoomToFit">Zoom to fit</button>
+    <button id="zoomActualSize">1:1</button>
+    <button id="zoomIn">zoom in</button>
+    <button id="zoomOut">zoom out</button>
+    <button id="panLeft">&larr;</button>
+    <button id="panRight">&rarr;</button>
+    <button id="panUp">&uarr;</button>
+    <button id="panDown">&darr;</button>
+
     <br><br>
     <input type="range" min="0" max="100" value="50" class="slider" id="opacitySlider"><br>
     <div id="viewport">
+        <canvas id="movementLayer"></canvas>
+        <canvas id="stillLayer"></canvas>
         <canvas id="filterLayer"></canvas>
         <canvas id="imageLayer"></canvas>
-        <canvas id="background"></canvas>
-        <canvas id="foreground"></canvas>
+
+
     </div>
     <div id="data">Area total: 0</div>
 </body>

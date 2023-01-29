@@ -10,11 +10,6 @@ module.exports = merge(common, {
     devServer: {
         port: 5600
     },
-    output: {
-        filename: 'bundle.js',
-        path: path.resolve(__dirname, 'dist'),
-        clean: true
-    },
     plugins: [
         new MiniCssExtractPlugin({ filename: 'style.css' })
     ],
@@ -25,6 +20,12 @@ module.exports = merge(common, {
                 use: [MiniCssExtractPlugin.loader, 'css-loader']
             }
         ],
-    }
+    },
+    output: {
+        filename: 'bundle.js',
+        path: path.resolve(__dirname, 'dist'),
+        clean: true,
+        assetModuleFilename: 'images/[name].[ext]'
+    },
 
 });
