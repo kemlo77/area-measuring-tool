@@ -171,7 +171,11 @@ export class ImageCanvasWrapper extends CanvasWrapper {
     zoomActualSize(): void {
         this.scaleStrategy = this.oneToOneScale;
         const imageFocusPosition: Coordinate = this.canvasToImage(this.canvasCenter);
-        this.imageFocusPointStrategy = (): void => this.thisCoordinateOnImageIsFocused(imageFocusPosition);
+        if (this.imageIsNarrowerThanCanvas() && this.imageIsShorterThanCanvas()) {
+            this.imageFocusPointStrategy = this.imageCenterIsFocused;
+        } else {
+            this.imageFocusPointStrategy = (): void => this.thisCoordinateOnImageIsFocused(imageFocusPosition);
+        }
         this.calculateOffsetStrategy = this.alignImageFocusPointWithCanvasCenter;
         this.changeScaleOrMoveThenRedrawImage();
     }
