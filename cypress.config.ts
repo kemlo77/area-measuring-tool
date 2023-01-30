@@ -1,15 +1,12 @@
-import { defineConfig } from 'cypress'
+import { defineConfig } from 'cypress';
 
 export default defineConfig({
-  viewportWidth: 1920,
-  viewportHeight: 1680,
   e2e: {
-    // We've imported your old cypress plugins here.
-    // You may want to clean this up later by importing these.
     setupNodeEvents(on, config) {
-      return require('./cypress/plugins/index.js')(on, config)
+      // implement node event listeners here
     },
-    baseUrl: 'http://localhost:5600',
-    excludeSpecPattern: ['**/1-getting-started/*', '**/2-advanced-examples/*'],
+    'baseUrl': 'http://localhost:5600',
+    'viewportWidth': 1920,
+    'viewportHeight': 1080
   },
-})
+});
