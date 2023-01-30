@@ -36,7 +36,7 @@ describe('Drawing polygons', () => {
 
     it('draw a shape and remove it', () => {
         drawPositiveSquare();
-        cy.get('#foreground').click(100, 100);
+        cy.get('#movementLayer').click(100, 100);
         cy.get('button').contains('Remove selected shape').click();
         cy.get('div[id="data"]').should('contain.text', 'Area total: 0');
         cy.get('div[id="data"]').find('div').should('have.length', 0);
@@ -44,36 +44,36 @@ describe('Drawing polygons', () => {
 
     function drawPositiveSquare(): void {
         cy.get('button').contains('Add positive polygon').click();
-        cy.get('#foreground').click(100, 100);
-        cy.get('#foreground').click(200, 100);
-        cy.get('#foreground').click(200, 200);
-        cy.get('#foreground').click(100, 200);
-        cy.get('#foreground').click(100, 100);
-        cy.get('#foreground').click(1, 1);
+        cy.get('#movementLayer').click(100, 100);
+        cy.get('#movementLayer').click(200, 100);
+        cy.get('#movementLayer').click(200, 200);
+        cy.get('#movementLayer').click(100, 200);
+        cy.get('#movementLayer').click(100, 100);
+        cy.get('#movementLayer').click(1, 1);
     }
 
     function drawNegativeSquare(): void {
         cy.get('button').contains('Add negative polygon').click();
-        cy.get('#foreground').click(110, 110);
-        cy.get('#foreground').click(190, 110);
-        cy.get('#foreground').click(190, 190);
-        cy.get('#foreground').click(110, 190);
-        cy.get('#foreground').click(110, 110);
-        cy.get('#foreground').click(1, 1);
+        cy.get('#movementLayer').click(110, 110);
+        cy.get('#movementLayer').click(190, 110);
+        cy.get('#movementLayer').click(190, 190);
+        cy.get('#movementLayer').click(110, 190);
+        cy.get('#movementLayer').click(110, 110);
+        cy.get('#movementLayer').click(1, 1);
     }
 
     function drawRuler(): void {
         cy.get('button').contains('Add ruler').click();
-        cy.get('#foreground').click(100, 90);
-        cy.get('#foreground').click(200, 90);
-        cy.get('#foreground').click(1, 1);
+        cy.get('#movementLayer').click(100, 90);
+        cy.get('#movementLayer').click(200, 90);
+        cy.get('#movementLayer').click(1, 1);
     }
 
     function drawSymmetryLine(): void {
         cy.get('button').contains('Add symmetry line').click();
-        cy.get('#foreground').click(100, 80);
-        cy.get('#foreground').click(200, 80);
-        cy.get('#foreground').click(1, 1);
+        cy.get('#movementLayer').click(100, 80);
+        cy.get('#movementLayer').click(200, 80);
+        cy.get('#movementLayer').click(1, 1);
     }
 
 

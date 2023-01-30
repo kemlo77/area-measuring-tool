@@ -13,7 +13,6 @@ export class ImageDrop {
         event.preventDefault();
         event.dataTransfer.dropEffect = 'copy';
         const files: FileList = event.dataTransfer.files;
-        //console.log('number of files: ' + files.length);
         const file: File = files[0];
         if (this.fileIsImageType(file)) {
             this.readImageFileAndDrawToCanvas(file);
