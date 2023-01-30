@@ -12,7 +12,7 @@ export class CanvasView implements Observer {
     private stillCanvas: DrawingCanvasWrapper = new DrawingCanvasWrapper('stillLayer');
     private filterCanvas: CanvasWrapper = new CanvasWrapper('filterLayer');
     private imageCanvas: ImageCanvasWrapper = new ImageCanvasWrapper('imageLayer');
-    private theDivThatHoldsCanvases: HTMLDivElement = document.querySelector('div#viewport') as HTMLDivElement;
+    private theDivThatHoldsCanvases: HTMLDivElement = document.querySelector('div#viewport');
     private _model: Model;
 
     constructor(model: Model) {
