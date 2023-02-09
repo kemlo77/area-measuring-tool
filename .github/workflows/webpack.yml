@@ -35,12 +35,25 @@ jobs:
   cypress-run:
     needs: build
     runs-on: ubuntu-latest
+    container: cypress/browsers:latest
     steps:
       - name: Checkout repository code
         uses: actions/checkout@v3
-      - name: Cypress run
+
+      - name: Cypress on Chrome
         uses: cypress-io/github-action@v5
         with:
           start: npm run startDevServer
+          browser: chrome
+
+      - name: Cypress on Firefox
+        uses: cypress-io/github-action@v5
+        with:
+          start: npm run startDevServer
+          browser: firefox
       
-    
+      - name: Cypress on Edge
+        uses: cypress-io/github-action@v5
+        with:
+          start: npm run startDevServer
+          browser: edge
