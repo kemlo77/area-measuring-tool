@@ -32,7 +32,8 @@ jobs:
     - name: Build
       run: npm run build 
 
-  cypress-run:
+  cypress-run-chrome:
+    name: Cypress-tests in Chrome
     needs: build
     runs-on: ubuntu-latest
     container: cypress/browsers:latest
@@ -46,11 +47,31 @@ jobs:
           start: npm run startDevServer
           browser: chrome
 
+  cypress-run-firefox:
+    name: Cypress-tests in Firefox
+    needs: build
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:latest
+      options: --user 1001
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v3
+
       - name: Cypress on Firefox
         uses: cypress-io/github-action@v5
         with:
           start: npm run startDevServer
           browser: firefox
+
+  cypress-run-edge:
+    name: Cypress-tests in Edge
+    needs: build
+    runs-on: ubuntu-latest
+    container: cypress/browsers:latest
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v3
       
       - name: Cypress on Edge
         uses: cypress-io/github-action@v5
