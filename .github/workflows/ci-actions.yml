@@ -1,0 +1,80 @@
+name: CI-actions
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x]
+
+    steps:
+    - name: Checkout repository code
+      uses: actions/checkout@v3
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Install dependencies
+      run: npm install
+      
+    - name: Testing
+      run: npm test
+        
+    - name: Build
+      run: npm run build 
+
+  cypress-run-chrome:
+    name: Cypress-tests in Chrome
+    needs: build
+    runs-on: ubuntu-latest
+    container: cypress/browsers:latest
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v3
+
+      - name: Cypress on Chrome
+        uses: cypress-io/github-action@v5
+        with:
+          start: npm run startDevServer
+          browser: chrome
+
+  cypress-run-firefox:
+    name: Cypress-tests in Firefox
+    needs: build
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:latest
+      options: --user 1001
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v3
+
+      - name: Cypress on Firefox
+        uses: cypress-io/github-action@v5
+        with:
+          start: npm run startDevServer
+          browser: firefox
+
+  cypress-run-edge:
+    name: Cypress-tests in Edge
+    needs: build
+    runs-on: ubuntu-latest
+    container: cypress/browsers:latest
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v3
+      
+      - name: Cypress on Edge
+        uses: cypress-io/github-action@v5
+        with:
+          start: npm run startDevServer
+          browser: edge

@@ -5,8 +5,8 @@
     "author": "Fredrik Kemling",
     "scripts": {
         "eslint": "eslint --ext=ts 'src/**'",
-        "build": "webpack-dev-server --config webpack.dev.js",
-        "build:forProd": "webpack --config webpack.prod.js",
+        "startDevServer": "webpack-dev-server --config webpack.dev.js",
+        "build": "webpack --config webpack.prod.js",
         "cypress:open": "npx cypress open",
         "e2e": "npx cypress run",
         "test": "mocha --recursive",
