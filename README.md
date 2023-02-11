@@ -1,36 +1,14 @@
-A small project on how to add and modify a non complex polygon using the canvas in html5....
+# Area measuring Tool
+
+## General info
+The area measuring tool is a web application run in the users browser. The user can open an image and measure an area. A requisite is that a reference length is entered. Then the user can trace the perimeter of the area in question with a polygon. The user is prevented from entering a complex polygon. The area is calculated using the Gauss shoelace formula.
+
+## Technologies
+
+The project is developed in TypeScript. The Canvas element is used to show image and graphical elements (such as polygons and rulers).
+
+## Demo
 
 Check it out at:
-https://kemlo77.github.io/createPolygon/index.html
-
-
-
-# Patterns used or explored in this project so far
-
-* Builder Pattern (SegmentedMeassuringShapeBuilder)
-
-* Factory Method Pattern (ShapeFactory and ConcreteShapeFactory)
-
-* Model View Controller Pattern
-
-* Observer Pattern (Controller is Subject, CanvasView and DataView are Observers)
-
-* State pattern (used inLine and Polygon)
-
-* Strategy Pattern (SegmentedMeassuringShape has a designated painter)
-
-* Singleton Pattern, no longer used
-
-* Template Method Pattern used in painters
-
-# Interesting techniques
-
-Using 4 canvas layers:
-* Image layer for displaying background image
-* Filter layer for toning down the image
-* Background layer for non moving shapes. May contain a lot of elements that are not redrawn so often.
-* Foreground layer for moving shapes. Few elements that are redrawn the most.
-
-Using Gauss shoelace formula to calculate area of non complex polygons.
-
+http://kemlo77.github.io/area-measuring-tool/
 
